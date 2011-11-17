@@ -1,30 +1,53 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Matisse</title>
+        <title>Matisse..</title>
         <link rel="stylesheet" href="/stylesheets/style.css">
         <script src="/socket.io/socket.io.js"></script>
         <script src="/javascripts/com.js"></script>
         <script src="/javascripts/jquery-1.7.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('#sendmsg').click(function(){
-                    //We use matisse.sendDrawMsg to send the drawing data to all other clients.
-                    matisse.sendDrawMsg($('#data').val());
-                });
-            });
-
-            //We shouldd override the matisse.onDraw function to process the data recieved from other clients
-            matisse.onDraw = function(data){
-                $('#msgs').append('<div>' + data + '<div>');
-            }
-        </script>
+		<script src="/javascripts/fabric_all.js"></script>
+         <script src="/javascripts/shapes.js"></script>
     </head>
     <body>
-        <h1>Matisse</h1>
-        <p>Welcome to Matisse</p>
-        <label>data:<input id="data" type="text" value="{shape:'circle',radius:'10'}"/></label>
-        <input id="sendmsg" type="button" name="send" value="send"/>
-        <div id="msgs"></div>
-    </body>
+        <h1>Pramati's White Board</h1>
+        <p>Welcome to Matisse..</p>
+       	<script src="/javascripts/Delicious_500.font.js"></script>
+       <div class="toolbar">
+         <!--<button type="button" id="drawing-mode">Enter Drawing mode</button> -->
+         <table width="100%">
+            <tr>
+               <td>
+                  
+                  <img name="img0" id="drawing-mode" src="images/nobrush.png" onclick="swapBold(this)" alt="brush" />
+                  <img name="img2" id="rectangleicon" src="images/rectangle.png" alt="rectangle" />
+                  <img id="circleicon" src="images/circle.png" alt="circle" />
+                  <img id="texticon" src="images/text.png" alt="text" />
+                   <img name="img1" id="deleteicon" src="images/delete.png" alt="delete" />
+                  <label title="color" >&nbsp;Color&nbsp;</label>
+                  <select id="color">
+                     <option value="#AAAAAA">#AAAAAA</option>
+                     <option value="#666666">#666666</option>
+                     <option value="#000000">#000000</option>
+                     <option value="#9BA16C">#9BA16C</option>
+                     <option value="#CC8F2B">#CC8F2B</option>
+                     <option value="#63631D">#63631D</option>
+                     <option value="#FFFFFF">#FFFFFF</option>
+                  </select>
+                  <label title="textedit" >&nbsp;Text&nbsp;</label>
+                  <textarea  id="text"  cols="20" rows="2" style="resize: none;"></textarea>
+               </td>
+            </tr>
+         </table>
+      </div>
+      <div class="canvasstyle">
+         <canvas id="c" width="600" height="500"></canvas>
+        
+         <script src="/javascripts/main.js"></script>
+         <script src="/javascripts/shapes.js"></script>
+            <label for="debug">trace</label>
+          <textarea name="debug" id="debug" cols="45" rows="5"></textarea>
+       
+      </div>
+      </body>
 </html>

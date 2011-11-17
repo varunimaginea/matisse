@@ -1,8 +1,58 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
+padding:50px;
 }
 
 a {
-  color: #00B7FF;
+color:#00B7FF;
+}
+
+.toolbar {
+border:1px solid #ccc;
+display:inline-block;
+vertical-align:top;
+white-space:nowrap;
+width:600px;
+}
+
+.canvasstyle {
+border:1px solid #ccc;
+vertical-align:top;
+white-space:nowrap;
+width:600px;
+}
+
+h2 span {
+font-weight:400;
+font-size:25px;
+color:#39F;
+}
+
+pre {
+background:#eef;
+display:inline-block;
+padding-right:15px;
+margin-left:15px;
+}
+
+p {
+margin-top:3px;
+margin-bottom:3px;
+}
+
+#log1 {
+display:inline-block;
+width:200px;
+height:200px;
+overflow-y:auto;
+font-family:monospace;
+font-size:11px;
+}
+
+.hidden {
+visibility:hidden;
+}
+
+.unhidden {
+visibility:visible;
 }
