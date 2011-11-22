@@ -1,67 +1,112 @@
 // JavaScript Document
 /**
-*
-*
-*/
-function registerAction(action, drawCommand) {
-	actions[action] = drawCommand;
-}
+ *
+ *
+ */
 
+var tools = {};
+function registerTool(toolname, tooldesc) {
+    tools[toolname] = tooldesc;
+}
 
 /**
  * Adds Rectangle to canvas
- * @property _width, _height, _left, _top, _fill, _angle
+ * @property args
  * @type null
  */
+registerTool("rect", {
+    displayName: "Rectangle",
+    displayIcon: "rect.png",
+	 displayIcon2: "norectangle.jpg",
+    toolAction: function (args) {
+        var rect = new fabric.Rect({
+            width: args.width,
+            height: args.height,
+            left: args.left,
+            top: args.top,
+            fill: args.fillColor
+        });
+        rect.uid = args.uid;
+        canvas.add(rect);
+        canvas.setActiveObject(rect);
+    }
+});
 
-function addRectangle(_width, _height, _left, _top, _fill, _angle, _uid) {
-    var rect = new fabric.Rect({
-        width: _width,
-        height: _height,
-        left: _left,
-        top: _top,
-        fill: _fill
-    });
-    rect.uid = _uid;
-    canvas.add(rect);
-    canvas.setActiveObject(rect);
+/**
+ * Adds Circle to canvas
+ * @property args
+ * @type null
+ */
+registerTool("circle", {
+    displayName: "Circle",
+    displayIcon: "circle.png",
+	displayIcon2: "nocircle.png",
+    toolAction: function addCircle(args) {
+        var cir = new fabric.Circle({
+            radius: args.radius,
+            left: args.left,
+            top: args.top,
+            fill: args.fillColor,
+            opacity: args.opacity,
+            angle: args.angle
+        });
+        cir.uid = args.uid;
+        canvas.add(cir);
+        canvas.setActiveObject(cir);
+    }
+
+});
+
+
+/**
+ * Adds Text to canvas
+ * @property args
+ * @type null
+ */
+registerTool("text", {
+    displayName: "Text",
+    displayIcon: "text.png",
+	displayIcon2: "notext.png",
+    toolAction: function addText(args) {
+        var text = 'HTML5 IS FUN...';
+        var textSample = new fabric.Text(text, {
+            left: args.left,
+            top: args.top,
+            fontFamily: args.fontFamily,
+            angle: args.angle,
+            fill: args.fillColor,
+        });
+        //alert(textSample)
+        textSample.uid = args.uid;
+        canvas.add(textSample);
+    }
+});
+
+
+
+/**
+ * Grabs all the shape elements and creates a tool icon for each shape to add in the toolbar
+ *
+ */
+function addTools()
+{
+	var toolsDiv = document.getElementById('toolsdiv')
+	for (i in tools)
+	{
+		var el = document.createElement('div');
+		var img = document.createElement('img');
+		img.setAttribute('src', 'images/'+tools[i].displayIcon);
+		img.setAttribute('id', tools[i].displayName);
+		img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
+		img.onclick = handleClick;
+		//alert(img.src)
+		el.appendChild(img);
+		toolsDiv.appendChild(el);
+	}
+	
+	document.getElementById("drawing-mode").onclick = drawingButtonListener;
+	handleMouseEvents()
 }
 
-registerAction("rect", addRectangle);
+$(document).ready(addTools());
 
-
-function addCircle(_radius, _left, _top, _fill, _opacity, _angle, _uid) {
-    var cir = new fabric.Circle({
-        radius: _radius,
-        left: _left,
-        top: _top,
-        fill: _fill,
-        opacity: _opacity,
-        angle: _angle
-    });
-    cir.uid = _uid;
-    canvas.add(cir);
-    canvas.setActiveObject(cir);
-}
-
-registerAction("circle", addCircle);
-
-
-function addText(_uid) {
-    var text = 'HTML5 IS FUN...';
-    var textSample = new fabric.Text(text, {
-        left: 100,
-        top: 50,
-        fontFamily: 'delicious_500',
-        angle: 0,
-        fill: fillColor,
-        scaleX: 0.5,
-        scaleY: 0.5,
-        height: 20
-
-    });
-	alert(textSample)
-    textSample.uid = _uid;
-    canvas.add(textSample);
-}
-registerAction("text", addText);

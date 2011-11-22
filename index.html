@@ -1,52 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Matisse..</title>
-        <link rel="stylesheet" href="/stylesheets/style.css">
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/javascripts/com.js"></script>
-        <script src="/javascripts/jquery-1.7.min.js"></script>
-		<script src="/javascripts/fabric_all.js"></script>
-         <script src="/javascripts/shapes.js"></script>
-    </head>
-    <body>
-        <h1>Pramati's White Board</h1>
-        <p>Welcome to Matisse..</p>
-       	<script src="/javascripts/Delicious_500.font.js"></script>
-       <div class="toolbar">
-         <!--<button type="button" id="drawing-mode">Enter Drawing mode</button> -->
-         <table width="100%">
-            <tr>
-               <td>
-                  <img name="img0" id="drawing-mode" src="images/nobrush.png" onclick="swapBold(this)" alt="brush" />
-                  <img name="img2" id="rectangleicon" src="images/rectangle.png" alt="rectangle" />
-                  <img id="circleicon" src="images/circle.png" alt="circle" />
-                  <img id="texticon" src="images/text.png" alt="text" />
-                   <img name="img1" id="deleteicon" src="images/delete.png" alt="delete" />
-                  <label title="color" >&nbsp;Color&nbsp;</label>
-                  <select id="color">
-                     <option value="#AAAAAA">#AAAAAA</option>
-                     <option value="#666666">#666666</option>
-                     <option value="#000000">#000000</option>
-                     <option value="#9BA16C">#9BA16C</option>
-                     <option value="#CC8F2B">#CC8F2B</option>
-                     <option value="#63631D">#63631D</option>
-                     <option value="#FFFFFF">#FFFFFF</option>
-                  </select>
-                  <label title="textedit" >&nbsp;Text&nbsp;</label>
-                  <textarea  id="text"  cols="20" rows="2" style="resize: none;"></textarea>
-               </td>
-            </tr>
-         </table>
-      </div>
-      <div class="canvasstyle">
-         <canvas id="c" width="600" height="500"></canvas>
-        
-         <script src="/javascripts/main.js"></script>
-         <script src="/javascripts/shapes.js"></script>
-            <label for="debug">trace</label>
-          <textarea name="debug" id="debug" cols="45" rows="5"></textarea>
-       
-      </div>
-      </body>
+   <head>
+      <title>Pramati White Board</title>
+      <link rel="stylesheet" href="/stylesheets/style.css" />
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="/javascripts/com.js"></script>
+      <script src="/javascripts/jquery-1.7.min.js"></script>
+      <script src="/javascripts/fabric_all.js"></script>
+      <script src="/javascripts/shapes.js"></script>
+      <script type="text/javascript" src="/javascripts/jquery.metadata.min.js"></script>
+      <script type="text/javascript" src="/javascripts/jquery.swapimage.min.js"></script>
+      <script type="text/javascript">
+         $.swapImage(".swapImage");    
+      </script>
+      </script>
+   </head>
+   <body bgcolor="#F8F8F8">
+      <h1>Pramati's White Board</h1>
+      <script src="/javascripts/Delicious_500.font.js"></script>
+      <table width="645">
+         <tr>
+            <td width="33" valign="top">
+               <div id="toolsdiv" class="toolbar" align="center" bgcolor="#CCCCFF" />
+               <div>
+                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
+                     <tr align="center">
+                        <td width="100%" height="100%" bgcolor="#666666" ><font color="#FFFFFF">Tools</font></td>
+                     </tr>
+                  </table>
+                  <div> <img name="img0" id="drawing-mode" src="images/nobrush.png" onclick="swapBold(this)" alt="brush" /></div>
+               </div>
+            </td>
+            <td width="600">
+               <div class="canvasstyle" id="canvasId">
+                  <canvas id="c" width="600" height="500" margin:"10px"></canvas>
+               </div>
+            </td>
+            <td bgcolor="#eeeeee" valign="top" id="righttd">
+               <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
+                  <tr align="center">
+                     <td width="100%" height="100%" bgcolor="#666666">&nbsp;&nbsp;</td>
+                  </tr>
+               </table>
+               <label for="chat">Chat with otheres:</label>
+               <input type="text" id="chat" value="type some thing" /></input>
+               <label for="chattext"> aaaaaa</label>
+               <textarea id="chattext" value="hello"></textarea>
+            </td>
+         </tr>
+      </table>
+      <script src="/javascripts/main.js"></script>
+      <script src="/javascripts/shapes.js"></script>
+   </body>
 </html>
