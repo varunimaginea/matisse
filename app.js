@@ -4,6 +4,7 @@
  */
 
 var express = require('express')
+, Resource = require('express-resource')
   , routes = require('./routes')
 
 var app = module.exports = express.createServer()
@@ -34,11 +35,24 @@ app.configure('production', function(){
 app.get('/', routes.index);
 
 app.get('/html', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var string_length = 8;
+    var randomstring = '';
+    for (var i=0; i<string_length; i++) {
+	var rnum = Math.floor(Math.random() * chars.length);
+	randomstring += chars.substring(rnum,rnum+1);
+    }
+    res.writeHead(302, {
+	'Location': randomstring
+    });
+    res.end();
 });
 
-
-
+app.resource({
+  show: function(req, res){
+    res.sendfile(__dirname + '/index.html');
+  }
+});
 
 app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
