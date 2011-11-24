@@ -48,7 +48,7 @@ var canvas = new fabric.Canvas('c', {
 observe('object:modified');
  canvas.observe('path:created', function() {
     //updateComplexity();
-	alert('path created');
+	//alert('path created');
 	matisse.sendDrawMsg({
                 action: "drawpath",
                 args: [{_freeDrawingXPoints:xPoints, _freeDrawingYPoints:yPoints}]
@@ -117,7 +117,7 @@ function observe(eventName) {
 function modifyObject(arr) {
     var obj = getObjectById(arr[0]);
   
-   alert(obj.type)
+  // alert(obj.type)
     obj.set("left", arr[1]);
     obj.set("top", arr[2]);
     obj.set("scaleX", arr[3]);
@@ -165,7 +165,7 @@ function getRandomColor() {
 function handleClick(e) {
 	document.getElementById("c").style.cursor='default'
 	drawShape = true;
-	alert(e.target.id)
+	//alert(e.target.id)
 	switch(e.target.id)
 	{
 		case "Rectangle":
