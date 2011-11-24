@@ -97,7 +97,7 @@ function addTools()
 		var img = document.createElement('img');
 		img.setAttribute('src', 'images/'+tools[i].displayIcon);
 		img.setAttribute('id', tools[i].displayName);
-		img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
+		//img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
 		img.onclick = handleClick;
 		//alert(img.src)
 		el.appendChild(img);

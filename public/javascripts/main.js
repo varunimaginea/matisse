@@ -94,7 +94,6 @@ function observe(eventName) {
                 args: [obj.uid, obj.getLeft(), obj.getTop(), obj.getScaleX(), obj.getScaleY(), obj.getAngle(), obj.fillColor, obj.text]
             })
 
-            //(document.getElementById("debug")).value = "object:modified";
         }
         if (eventName === "selection:cleared") {
             //var obj = e.memo.target;
