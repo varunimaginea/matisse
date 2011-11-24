@@ -105,6 +105,7 @@ function addTools()
 	}
 	
 	document.getElementById("drawing-mode").onclick = drawingButtonListener;
+	document.getElementById("chatbutton").onclick = chatButtonListener;
 	handleMouseEvents()
 }
 

@@ -57,3 +57,7 @@ visibility:hidden;
 .unhidden {
 visibility:visible;
 }
+
+textarea {
+    resize: none;
+}

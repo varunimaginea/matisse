@@ -29,6 +29,10 @@ matisse.onDraw = function (data) {
 	if(data.action == "drawpath") {
 	   drawPath(data.args[0])
 	}
+	if(data.action == "chat") {
+		var txt=document.createTextNode(data.args[0].text)
+		$("#chattext").append(txt);
+	}
     if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
 
 }
@@ -112,7 +116,7 @@ function observe(eventName) {
 
 function modifyObject(arr) {
     var obj = getObjectById(arr[0]);
-   if(obj.type =="path") return;
+  
    alert(obj.type)
     obj.set("left", arr[1]);
     obj.set("top", arr[2]);
@@ -159,6 +163,7 @@ function getRandomColor() {
 // called when 'rectangle button' clicked
 
 function handleClick(e) {
+	document.getElementById("c").style.cursor='default'
 	drawShape = true;
 	alert(e.target.id)
 	switch(e.target.id)
@@ -207,6 +212,17 @@ function deleteButtonListener(e) {
     deleteObjects();
 }
 
+function chatButtonListener(e) {
+	var msg = $("#chat").val();
+	msg = "from $:"+msg+"\n";
+	//alert(msg);
+	var txt=document.createTextNode(msg)
+	$("#chattext").append(txt);
+	matisse.sendDrawMsg({
+                action: "chat",
+                args: [{text:msg}]
+            });
+}
 //called when 'drawing button' clicked and mode is triggered from drawing-mode to non drawing mode and vice-versa
 
 
@@ -214,11 +230,12 @@ function drawingButtonListener(e) {
     var drawingModeEl = document.getElementById('drawing-mode');
     canvas.isDrawingMode = !canvas.isDrawingMode;
     this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
-
+	
     if (canvas.isDrawingMode) {
-
-        drawingModeEl.className = 'is-drawing';
+		document.getElementById("c").style.cursor='crosshair'
+		drawingModeEl.className = 'is-drawing';
     } else {
+		document.getElementById("c").style.cursor='default'
         // drawingModeEl.innerHTML = 'Enter drawing mode';
         drawingModeEl.className = '';
     }
@@ -258,6 +275,7 @@ function handleMouseEvents() {
             points.y = event.pageY-135; //offset
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
+			
             tools[action].toolAction.apply(this, shapeArgs);
             matisse.sendDrawMsg({
                 action: action,
@@ -265,6 +283,12 @@ function handleMouseEvents() {
             });
             drawShape = false;
         }
+		if (canvas.isDrawingMode) {
+			xPoints = [];
+			yPoints = [];
+			xPoints.push(event.pageX-100);
+			yPoints.push(event.pageY-135);
+		}
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
@@ -278,8 +302,8 @@ function handleMouseEvents() {
     $("#canvasId").mouseup(function () {
         //alert(msg);
 		//$("#chattext").value = msg;
-		var txt=document.createTextNode(msg)
-		$("#chattext").append(txt)
+		//var txt=document.createTextNode(msg)
+		//$("#chattext").append(txt)
 		
 		//$("#righttd").append("<div>" + msg + "</div>");
     });
@@ -368,7 +392,7 @@ function unhide(divID, className) {
 
 function drawPath(args) {
       
-      canvas.contextTop.closePath();
+     // canvas.contextTop.closePath();
       
       canvas._isCurrentlyDrawing = false;
       
@@ -404,7 +428,7 @@ function drawPath(args) {
        
       p.fill = null;
       p.stroke = fillColor;
-      p.strokeWidth = 2;
+      p.strokeWidth = 1;
       canvas.add(p);
       p.set("left", minX + (maxX - minX) / 2).set("top", minY + (maxY - minY) / 2).setCoords();
       canvas.renderAll();
