@@ -18,6 +18,9 @@ See index.html in this directory for a vanilla html example.
 ### How to Run this app?
 To run this application you need to install [http://nodejs.org](node.js) and also install npm.
 
+###Modules Installation instructions
+npm install express-resource
+
 Then you can run 
 
 >
