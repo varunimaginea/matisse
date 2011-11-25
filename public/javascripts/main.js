@@ -10,7 +10,8 @@ var utilMax = fabric.util.array.max;
 var points = {};
 var drawShape = false;
 var action, shapeArgs;
-var xPoints = [], yPoints = [];
+var xPoints = [],
+    yPoints = [];
 var currTool;
 
 /**
@@ -22,18 +23,18 @@ matisse.onDraw = function (data) {
     //(document.getElementById("debug")).value = actions[data.action]+'\n'+data.args;
     //alert(data.args.join());
     if (data.action == "modified") {
-        modifyObject(data.args)
+        modifyObject(data.args[0])
     }
     if (data.action == "modifyColor") {
-        modifyColor(data.args[0].obj, data.args[0].fillColor);
+        modifyColorOnOther(data.args[0]);
     }
-	if(data.action == "drawpath") {
-	   drawPath(data.args[0])
-	}
-	if(data.action == "chat") {
-		var txt=document.createTextNode(data.args[0].text)
-		$("#chattext").append(txt);
-	}
+    if (data.action == "drawpath") {
+        drawPath(data.args[0])
+    }
+    if (data.action == "chat") {
+        var txt = document.createTextNode(data.args[0].text)
+        $("#chattext").append(txt);
+    }
     if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
 
 }
@@ -47,16 +48,19 @@ var canvas = new fabric.Canvas('c', {
 
 //
 observe('object:modified');
- canvas.observe('path:created', function() {
+canvas.observe('path:created', function () {
     //updateComplexity();
-	//alert('path created');
-	matisse.sendDrawMsg({
-                action: "drawpath",
-                args: [{_freeDrawingXPoints:xPoints, _freeDrawingYPoints:yPoints}]
-            });
-			xPoints =[];
-			yPoints =[];
-  });
+    //alert('path created');
+    matisse.sendDrawMsg({
+        action: "drawpath",
+        args: [{
+            _freeDrawingXPoints: xPoints,
+            _freeDrawingYPoints: yPoints
+        }]
+    });
+    xPoints = [];
+    yPoints = [];
+});
 // observe('object:moved');  // not invoked when object is moved.
 //observe('selection:cleared');
 //observe('mouse:down') //observe('object:moved'); //observe('object:scaled'); 1/*observe('group:modified');observe('group:selected');observe('before:group:destroyed');observe('after:group:destroyed');*/
@@ -90,9 +94,13 @@ function observe(eventName) {
         //alert(eventName);
         if (eventName == "object:modified") {
             var obj = e.memo.target;
+            //alert(obj.angle);
             matisse.sendDrawMsg({
                 action: "modified",
-                args: [obj.uid, obj.getLeft(), obj.getTop(), obj.getScaleX(), obj.getScaleY(), obj.getAngle(), obj.fillColor, obj.text]
+                args: [{
+                    uid: obj.uid,
+                    object: obj
+                }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
 
         }
@@ -114,18 +122,18 @@ function observe(eventName) {
 }
 
 
-function modifyObject(arr) {
-    var obj = getObjectById(arr[0]);
-  
-  // alert(obj.type)
-    obj.set("left", arr[1]);
-    obj.set("top", arr[2]);
-    obj.set("scaleX", arr[3]);
-    obj.set("scaleY", arr[4]);
-    obj.set("angle", arr[5]);
-    if (obj.type == "text") obj.text = arr[6];
-    canvas.setActiveObject(obj);
+function modifyObject(args) {
+    var obj = getObjectById(args.uid);
+    var recObj = args.object;
+    obj.set("left", recObj.left);
+    obj.set("top", recObj.top);
+    obj.set("scaleX", recObj.scaleX);
+    obj.set("scaleY", recObj.scaleY);
+
+    if (obj.type == "text") obj.text = recObj.text;
+    obj.set("angle", recObj.angle);
     canvas.renderAll()
+    canvas.setActiveObject(obj);
 }
 
 
@@ -163,95 +171,93 @@ function getRandomColor() {
 // called when 'rectangle button' clicked
 
 function handleClick(e) {
-	resetCurrTool();
-	currTool = e.target;
-	currTool.setAttribute('width', "100%");
-	currTool.setAttribute('height', "100%");
-	currTool.setAttribute('border', "2px");	
-	document.getElementById("c").style.cursor='default'
-	drawShape = true;
-	//alert(e.target.id)
-	switch(e.target.id)
-	{
-		case "Rectangle":
-			action = "rect"
-			shapeArgs = [{
-				width: 100,
-				height: 50,
-				fillColor: fillColor,
-				strokeColor:0x000000,
-				angle: 0,
-				uid: uniqid()
-			}];
-		break;
-		case "Circle":
-			action = "circle"
-			shapeArgs = [{
-				radius: 20,
-				width: 100,
-				height: 50,
-				fillColor: fillColor,
-				angle: 0,
-				uid: uniqid()
-			}];
-		break;
-		case "Text":
-			action = "text"
-			shapeArgs = [{
-				fontFamily: 'delicious_500',
-				width: 100,
-				height: 50,
-				fillColor: fillColor,
-				angle: 0,
-				uid: uniqid()
-			}];
-		break;
-		case "Draw":
-		drawShape = false;
-		//var drawingModeEl = document.getElementById('drawing-mode');
-		canvas.isDrawingMode = !canvas.isDrawingMode;
-		this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
-		
-		if (canvas.isDrawingMode) {
-			document.getElementById("c").style.cursor='crosshair'
-			//drawingModeEl.className = 'is-drawing';
-		} else {
-			document.getElementById("c").style.cursor='default'
-			// drawingModeEl.innerHTML = 'Enter drawing mode';
-			//drawingModeEl.className = '';
-		}
-		break;
-	}
+    resetCurrTool();
+    currTool = e.target;
+    currTool.setAttribute('width', "100%");
+    currTool.setAttribute('height', "100%");
+    currTool.setAttribute('border', "2px");
+    document.getElementById("c").style.cursor = 'default'
+    drawShape = true;
+    //alert(e.target.id)
+    switch (e.target.id) {
+    case "Rectangle":
+        action = "rect"
+        shapeArgs = [{
+            width: 100,
+            height: 50,
+            fillColor: fillColor,
+            strokeColor: 0x000000,
+            angle: 0,
+            uid: uniqid()
+        }];
+        break;
+    case "Circle":
+        action = "circle"
+        shapeArgs = [{
+            radius: 20,
+            width: 100,
+            height: 50,
+            fillColor: fillColor,
+            angle: 0,
+            uid: uniqid()
+        }];
+        break;
+    case "Text":
+        action = "text"
+        shapeArgs = [{
+            fontFamily: 'delicious_500',
+            width: 100,
+            height: 50,
+            fillColor: fillColor,
+            angle: 0,
+            uid: uniqid()
+        }];
+        break;
+    case "Draw":
+        drawShape = false;
+        //var drawingModeEl = document.getElementById('drawing-mode');
+        canvas.isDrawingMode = !canvas.isDrawingMode;
+        this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
+
+        if (canvas.isDrawingMode) {
+            document.getElementById("c").style.cursor = 'crosshair'
+            //drawingModeEl.className = 'is-drawing';
+        } else {
+            document.getElementById("c").style.cursor = 'default'
+            // drawingModeEl.innerHTML = 'Enter drawing mode';
+            //drawingModeEl.className = '';
+        }
+        break;
+    }
 }
 
 
 //called when 'delete button' clicked
-
 
 function deleteButtonListener(e) {
     deleteObjects();
 }
 
 function chatButtonListener(e) {
-	var msg = $("#chat").val();
-	msg = "from $:"+msg+"\n";
-	//alert(msg);
-	var txt=document.createTextNode(msg)
-	$("#chattext").append(txt);
-	matisse.sendDrawMsg({
-                action: "chat",
-                args: [{text:msg}]
-            });
+    var msg = $("#chat").val();
+    msg = "from $:" + msg + "\n";
+    //alert(msg);
+    var txt = document.createTextNode(msg)
+    $("#chattext").append(txt);
+    matisse.sendDrawMsg({
+        action: "chat",
+        args: [{
+            text: msg
+        }]
+    });
 }
 //called when 'drawing button' clicked and mode is triggered from drawing-mode to non drawing mode and vice-versa
 
-
 function drawingButtonListener(e) {
-    
+
 }
 
 // Listener for Color section - because canvas.observe does not trigger modify event when color is changed.
-
 
 function colorSelectListener(e) {
     // Determine which option was selected
@@ -278,14 +284,14 @@ function colorSelectListener(e) {
 function handleMouseEvents() {
     var msg = "";
     $("#canvasId").mousedown(function (event) {
-		resetCurrTool();
+        resetCurrTool();
         msg = "==================\n";
         if (drawShape) {
-            points.x = event.pageX-100; //offset
-            points.y = event.pageY-135; //offset
+            points.x = event.pageX - 100; //offset
+            points.y = event.pageY - 135; //offset
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
-			
+
             tools[action].toolAction.apply(this, shapeArgs);
             matisse.sendDrawMsg({
                 action: action,
@@ -293,39 +299,38 @@ function handleMouseEvents() {
             });
             drawShape = false;
         }
-		if (canvas.isDrawingMode) {
-			xPoints = [];
-			yPoints = [];
-			xPoints.push(event.pageX-100);
-			yPoints.push(event.pageY-135);
-			
-		}
+        if (canvas.isDrawingMode) {
+            xPoints = [];
+            yPoints = [];
+            xPoints.push(event.pageX - 100);
+            yPoints.push(event.pageY - 135);
+
+        }
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
         if (canvas.isDrawingMode) {
-		xPoints.push(event.pageX-100);
-		yPoints.push(event.pageY-135);
+            xPoints.push(event.pageX - 100);
+            yPoints.push(event.pageY - 135);
             msg += event.pageX + ", " + event.pageY + "\n :";
-            
+
         }
     });
     $("#canvasId").mouseup(function () {
         //alert(msg);
-		//$("#chattext").value = msg;
-		//var txt=document.createTextNode(msg)
-		//$("#chattext").append(txt)
-		
-		//$("#righttd").append("<div>" + msg + "</div>");
+        //$("#chattext").value = msg;
+        //var txt=document.createTextNode(msg)
+        //$("#chattext").append(txt)
+        //$("#righttd").append("<div>" + msg + "</div>");
     });
 }
 
 function resetCurrTool() {
-if(currTool) {
-	currTool.setAttribute('width', "80%");
-	currTool.setAttribute('height', "80%");
-	currTool.setAttribute('border', "0");	
-	}
+    if (currTool) {
+        currTool.setAttribute('width', "80%");
+        currTool.setAttribute('height', "80%");
+        currTool.setAttribute('border', "0");
+    }
 }
 
 
@@ -337,9 +342,15 @@ if(currTool) {
  */
 
 function modifyColor(obj, fillColor) {
+if(obj == undefined) return;
     if (obj.type != "path") obj.set("fill", fillColor);
 }
 
+function modifyColorOnOther(args) {
+	var obj = getObjectById(args.uid);
+    if (obj.type != "path") obj.set("fill", args.fillColor);
+	canvas.renderAll();
+}
 /*(function() {
   var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
   s.async = true;
@@ -395,6 +406,7 @@ if (textEl) {
  * @property null
  * @type string
  */
+
 function uniqid() {
     var newDate = new Date;
     //  alert(newDate.getTime());
@@ -410,46 +422,66 @@ function unhide(divID, className) {
 }
 
 function drawPath(args) {
-      
-     // canvas.contextTop.closePath();
-      
-      canvas._isCurrentlyDrawing = false;
-      
-      var minX = utilMin(args._freeDrawingXPoints),
-          minY = utilMin(args._freeDrawingYPoints),
-          maxX = utilMax(args._freeDrawingXPoints),
-          maxY = utilMax(args._freeDrawingYPoints),
-          ctx = canvas.contextTop,
-          path = [ ],
-          xPoint,
-          yPoint,
-          xPoints = args._freeDrawingXPoints,
-          yPoints = args._freeDrawingYPoints;
-      
-      path.push('M ', xPoints[0] - minX, ' ', yPoints[0] - minY, ' ');
-      
-      for (var i = 1; xPoint = xPoints[i], yPoint = yPoints[i]; i++) {
+
+    // canvas.contextTop.closePath();
+    canvas._isCurrentlyDrawing = false;
+
+    var minX = utilMin(args._freeDrawingXPoints),
+        minY = utilMin(args._freeDrawingYPoints),
+        maxX = utilMax(args._freeDrawingXPoints),
+        maxY = utilMax(args._freeDrawingYPoints),
+        ctx = canvas.contextTop,
+        path = [],
+        xPoint, yPoint, xPoints = args._freeDrawingXPoints,
+        yPoints = args._freeDrawingYPoints;
+
+    path.push('M ', xPoints[0] - minX, ' ', yPoints[0] - minY, ' ');
+
+    for (var i = 1; xPoint = xPoints[i], yPoint = yPoints[i]; i++) {
         path.push('L ', xPoint - minX, ' ', yPoint - minY, ' ');
-      }
-      
-      // TODO (kangax): maybe remove Path creation from here, to decouple fabric.Canvas from fabric.Path, 
-      // and instead fire something like "drawing:completed" event with path string
-      
-      path = path.join('');
-      
-      if (path === "M 0 0 L 0 0 ") {
+    }
+
+    // TODO (kangax): maybe remove Path creation from here, to decouple fabric.Canvas from fabric.Path, 
+    // and instead fire something like "drawing:completed" event with path string
+    path = path.join('');
+
+    if (path === "M 0 0 L 0 0 ") {
         // do not create 0 width/height paths, as they are rendered inconsistently across browsers
         // Firefox 4, for example, renders a dot, whereas Chrome 10 renders nothing
         return;
-      }
-
-      var p = new fabric.Path(path);
-       
-      p.fill = null;
-      p.stroke = fillColor;
-      p.strokeWidth = 1;
-      canvas.add(p);
-      p.set("left", minX + (maxX - minX) / 2).set("top", minY + (maxY - minY) / 2).setCoords();
-      canvas.renderAll();
-      //this.fire('path:created', { path: p });
     }
+
+    var p = new fabric.Path(path);
+
+    p.fill = null;
+    p.stroke = fillColor;
+    p.strokeWidth = 1;
+    canvas.add(p);
+    p.set("left", minX + (maxX - minX) / 2).set("top", minY + (maxY - minY) / 2).setCoords();
+    canvas.renderAll();
+    //this.fire('path:created', { path: p });
+}
+
+function colorHandler() {
+    $("#colors").on("click", "td", function () {
+        //alert($(this).attr('bgcolor'));//.toggleClass("chosen");
+        fillColor = $(this).attr('bgcolor');
+        $("#fColor").attr("bgcolor", fillColor);
+        if (canvas.getActiveObject()) {
+            // get currently selected object
+            var obj = canvas.getActiveObject();
+            // apply selected color for stroke
+            obj.set("stroke", fillColor);
+            modifyColor(obj, fillColor);
+            canvas.renderAll();
+            // TODO - send data to server
+			matisse.sendDrawMsg({
+            action: "modifyColor",
+            args: [{uid: obj.uid, fillColor:fillColor}]
+			})
+            //alert(obj.uid);
+            //delete obj;
+        }
+    });
+}
+colorHandler();
