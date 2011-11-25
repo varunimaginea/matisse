@@ -24,7 +24,8 @@ registerTool("rect", {
             height: args.height,
             left: args.left,
             top: args.top,
-            fill: args.fillColor
+            fill: args.fillColor,
+			stroke:args.strokeColor
         });
         rect.uid = args.uid;
         canvas.add(rect);
@@ -85,6 +86,21 @@ registerTool("text", {
 
 
 /**
+ * Adds Drawing to canvas
+ * @property args
+ * @type null
+ */
+registerTool("draw", {
+    displayName: "Draw",
+    displayIcon: "nobrush.png",
+	displayIcon2: "brush.png",
+    toolAction: null
+    
+});
+
+
+
+/**
  * Grabs all the shape elements and creates a tool icon for each shape to add in the toolbar
  *
  */
@@ -97,6 +113,8 @@ function addTools()
 		var img = document.createElement('img');
 		img.setAttribute('src', 'images/'+tools[i].displayIcon);
 		img.setAttribute('id', tools[i].displayName);
+		img.setAttribute('width', "80%");
+		img.setAttribute('height', "80%");
 		//img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
 		img.onclick = handleClick;
 		//alert(img.src)
@@ -104,7 +122,7 @@ function addTools()
 		toolsDiv.appendChild(el);
 	}
 	
-	document.getElementById("drawing-mode").onclick = drawingButtonListener;
+	//document.getElementById("drawing-mode").onclick = drawingButtonListener;
 	document.getElementById("chatbutton").onclick = chatButtonListener;
 	handleMouseEvents()
 }

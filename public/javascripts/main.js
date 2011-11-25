@@ -11,6 +11,7 @@ var points = {};
 var drawShape = false;
 var action, shapeArgs;
 var xPoints = [], yPoints = [];
+var currTool;
 
 /**
  *  Called when other users add, modify or delete any object
@@ -162,6 +163,11 @@ function getRandomColor() {
 // called when 'rectangle button' clicked
 
 function handleClick(e) {
+	resetCurrTool();
+	currTool = e.target;
+	currTool.setAttribute('width', "100%");
+	currTool.setAttribute('height', "100%");
+	currTool.setAttribute('border', "2px");	
 	document.getElementById("c").style.cursor='default'
 	drawShape = true;
 	//alert(e.target.id)
@@ -173,6 +179,7 @@ function handleClick(e) {
 				width: 100,
 				height: 50,
 				fillColor: fillColor,
+				strokeColor:0x000000,
 				angle: 0,
 				uid: uniqid()
 			}];
@@ -199,7 +206,21 @@ function handleClick(e) {
 				uid: uniqid()
 			}];
 		break;
+		case "Draw":
+		drawShape = false;
+		//var drawingModeEl = document.getElementById('drawing-mode');
+		canvas.isDrawingMode = !canvas.isDrawingMode;
+		this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
 		
+		if (canvas.isDrawingMode) {
+			document.getElementById("c").style.cursor='crosshair'
+			//drawingModeEl.className = 'is-drawing';
+		} else {
+			document.getElementById("c").style.cursor='default'
+			// drawingModeEl.innerHTML = 'Enter drawing mode';
+			//drawingModeEl.className = '';
+		}
+		break;
 	}
 }
 
@@ -226,18 +247,7 @@ function chatButtonListener(e) {
 
 
 function drawingButtonListener(e) {
-    var drawingModeEl = document.getElementById('drawing-mode');
-    canvas.isDrawingMode = !canvas.isDrawingMode;
-    this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
-	
-    if (canvas.isDrawingMode) {
-		document.getElementById("c").style.cursor='crosshair'
-		drawingModeEl.className = 'is-drawing';
-    } else {
-		document.getElementById("c").style.cursor='default'
-        // drawingModeEl.innerHTML = 'Enter drawing mode';
-        drawingModeEl.className = '';
-    }
+    
 }
 
 // Listener for Color section - because canvas.observe does not trigger modify event when color is changed.
@@ -268,6 +278,7 @@ function colorSelectListener(e) {
 function handleMouseEvents() {
     var msg = "";
     $("#canvasId").mousedown(function (event) {
+		resetCurrTool();
         msg = "==================\n";
         if (drawShape) {
             points.x = event.pageX-100; //offset
@@ -287,6 +298,7 @@ function handleMouseEvents() {
 			yPoints = [];
 			xPoints.push(event.pageX-100);
 			yPoints.push(event.pageY-135);
+			
 		}
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
@@ -306,6 +318,14 @@ function handleMouseEvents() {
 		
 		//$("#righttd").append("<div>" + msg + "</div>");
     });
+}
+
+function resetCurrTool() {
+if(currTool) {
+	currTool.setAttribute('width', "80%");
+	currTool.setAttribute('height', "80%");
+	currTool.setAttribute('border', "0");	
+	}
 }
 
 
