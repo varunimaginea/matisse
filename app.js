@@ -49,19 +49,52 @@ app.get('/html', function (req, res) {
 });
 
 app.resource({
-  show: function(req, res){
-    res.sendfile(__dirname + '/index.html');
-  }
+    show: function(req, res){
+      	res.sendfile(__dirname + '/index.html');
+    }
 });
 
 app.listen(8000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('eventConnect',{message:'welcome'});
-  socket.on('eventDraw',function(data){
-        socket.broadcast.emit("eventDraw",data);
-  });
+//    console.log("====================");
+//    console.log(socket);
+//    console.log("====================");
+    socket.emit('eventConnect',{message:'welcome'});
+    socket.on("setUrl",function(location,data){
+//	console.log("++++++++------------");
+//	console.log(location);
+//	console.log("++++++++-----------");
+	var url = location.pathname.replace("/", "");
+//	console.log("++++++++++++++++++++");
+//	console.log(url);
+//	console.log("++++++++++++++++++++");
+//	console.log("----------------------");
+//	console.log(data);
+//	console.log("----------------------");
+
+	socket.join(url);
+    });
+
+    socket.on('eventDraw',function(location,data){
+//	console.log("@@@@@@@@@@@@@@@@@@@@@");
+//	console.log(location);
+	var url = location.pathname.replace("/", "");
+//	console.log(url);
+//	console.log("@@@@@@@@@@@@@@@@@@@@@");
+//	console.log("%%%%%%%%%%%%%%%%%%%%%");
+//	console.log(data);
+//	console.log("%%%%%%%%%%%%%%%%%%%%%");
+	io.sockets.in(url).emit("eventDraw",data);
+    });
 });
 
+//io.sockets.on('connection', function (socket) {
+//  socket.emit('eventConnect',{message:'welcome'});
+  //socket.on('eventDraw',function(data){
+//      socket.join();
+//        socket.broadcast.emit("eventDraw",data);
+//  });
+//});
 
