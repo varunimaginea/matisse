@@ -21,6 +21,7 @@ var matisse = {
 	console.log(loc);
     }
 };
+
 var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
 
 socket.on("eventDraw", function(data){
