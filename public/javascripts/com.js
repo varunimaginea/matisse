@@ -6,18 +6,22 @@ var matisse = {
 		this.onDraw(data);
 	},
 	sendDrawMsg: function(data){
-		socket.emit("eventDraw",data);
+	        var loc = document.location;
+	        socket.emit("eventDraw",loc,data);
 	},
 	onDraw: function(data){
 		//Dummy method must override
 		console.log(data);
 	},
 	onConnect: function(data){
-		//Dummy method must override
-		console.log(data);
+	        var loc = document.location;
+	        socket.emit("setUrl",loc,data);
+	        //Dummy method must override
+	        console.log(data);
+ 	        console.log(loc);
 	}
 };
-var socket = io.connect('http://192.168.3.65'); //change it to server ip or local ip for testing from other machines
+var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
 socket.on("eventDraw", function(data){
 	console.log("new draw event received--");
 	matisse.drawHandler(data);
