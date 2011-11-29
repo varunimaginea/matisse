@@ -8,9 +8,7 @@
       <script src="/javascripts/jquery-1.7.min.js"></script>
       <script src="/javascripts/fabric_all.js"></script>
 		<!--      <script src="/javascripts/shapes.js"></script> --><!-- //already present at the bottom of the file though not a good practice -->
-      <script type="text/javascript" src="/javascripts/jquery.metadata.min.js"></script>
-      <script type="text/javascript" src="/javascripts/jquery.swapimage.min.js"></script>
-	  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
       <!-- <script type="text/javascript">
          $.swapImage(".swapImage");    
          </script>-->
@@ -19,7 +17,15 @@
    <body >
       <h1>Pramati's White Board</h1>
       <script src="/javascripts/Delicious_500.font.js"></script>
-      <table width="645">
+	  <div class="rnd">
+	  <div class="rnd2">
+		  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#6495ED">
+						 <tr align="center">
+							<td width="100%" height="20px" ></td>
+						 </tr>
+		  </table>
+	  </div>
+      <table width="800">
          <tr>
             <td width="33" valign="top">
                <div id="toolsdiv" class="toolbar" align="center" bgcolor="#CCCCFF" />
@@ -37,7 +43,7 @@
                   <canvas id="c" width="600" height="500" margin:"10px"></canvas>
                </div>
             </td>
-            <td bgcolor="#eeeeee" valign="top" id="righttd">
+            <td valign="top" id="righttd">
 			<div id="texteditor">
                <table width="100%" height="20px" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
                   <tr align="center">
@@ -82,11 +88,13 @@
                <label for="chattext">Chat</label>
                <textarea id="chattext" value="hello" rows="10"></textarea>
                <label for="chat">Type your message below: </label>
-               <input type="text" id="chat" value="type some thing" /></input><button id="chatbutton">OK</button>
+               <input type="text" id="chat" value="type some thing" />
+			   </input><button id="chatbutton">OK</button>
 			
             </td>
          </tr>
       </table>
+	  </div>
 	  <script src="/javascripts/main.js"></script>
 	  <script src="/javascripts/shapes.js"></script>
 	
