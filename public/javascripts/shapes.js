@@ -4,7 +4,7 @@
  *
  */
 
-var tools = {};
+
 function registerTool(toolname, tooldesc) {
     tools[toolname] = tooldesc;
 }
@@ -17,7 +17,7 @@ function registerTool(toolname, tooldesc) {
 registerTool("rect", {
     displayName: "Rectangle",
     displayIcon: "rect.png",
-	 displayIcon2: "norectangle.jpg",
+	displayIcon2: "norectangle.jpg",
     toolAction: function (args) {
         var rect = new fabric.Rect({
             width: args.width,
@@ -100,32 +100,5 @@ registerTool("draw", {
 
 
 
-/**
- * Grabs all the shape elements and creates a tool icon for each shape to add in the toolbar
- *
- */
-function addTools()
-{
-	var toolsDiv = document.getElementById('toolsdiv')
-	for (i in tools)
-	{
-		var el = document.createElement('div');
-		var img = document.createElement('img');
-		img.setAttribute('src', 'images/'+tools[i].displayIcon);
-		img.setAttribute('id', tools[i].displayName);
-		img.setAttribute('width', "80%");
-		img.setAttribute('height', "80%");
-		//img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
-		img.onclick = handleClick;
-		//alert(img.src)
-		el.appendChild(img);
-		toolsDiv.appendChild(el);
-	}
-	
-	//document.getElementById("drawing-mode").onclick = drawingButtonListener;
-	document.getElementById("chatbutton").onclick = chatButtonListener;
-	handleMouseEvents()
-}
 
-$(document).ready(addTools());
 

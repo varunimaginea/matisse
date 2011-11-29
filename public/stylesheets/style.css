@@ -1,6 +1,8 @@
 body {
 font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
-padding:50px;
+padding:0px;
+margin: 10px;
+bgcolor:"#F8F8F8"
 }
 
 a {

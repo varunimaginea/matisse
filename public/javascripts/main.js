@@ -3,16 +3,37 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
+// Globals
 var fillColor = "#AAAAAA";
-var getRandomInt = fabric.util.getRandomInt;
-var utilMin = fabric.util.array.min;
-var utilMax = fabric.util.array.max;
-var points = {};
+var points = {}, textEl, tools = {};
 var drawShape = false;
-var action, shapeArgs;
-var xPoints = [],
-    yPoints = [];
-var currTool;
+var action, shapeArgs, currTool;
+var xPoints = [],   yPoints = [];
+
+// create canvas object
+var canvas = new fabric.Canvas('c', {
+    backgroundColor: '#FFFFFF'
+    //HOVER_CURSOR: 'pointer'
+});
+
+$(document).ready(init);
+
+
+function init() {
+    addTools()
+    colorHandler();
+    // clear canvas
+    canvas.clear();
+    // remove currently selected object
+    canvas.remove(canvas.getActiveObject());
+    observe('object:modified');
+    observe('path:created');
+    observe('selection:cleared');
+    observe('object:moved');
+	textEl = document.getElementById('textarea');
+	textHandler();
+	document.onkeydown=keyDown;
+}
 
 /**
  *  Called when other users add, modify or delete any object
@@ -40,42 +61,6 @@ matisse.onDraw = function (data) {
 }
 
 
-// get fabric canvas
-var canvas = new fabric.Canvas('c', {
-    backgroundColor: '#FFFFFF'
-    //HOVER_CURSOR: 'pointer'
-});
-
-//
-observe('object:modified');
-canvas.observe('path:created', function () {
-    //updateComplexity();
-    //alert('path created');
-    matisse.sendDrawMsg({
-        action: "drawpath",
-        args: [{
-            _freeDrawingXPoints: xPoints,
-            _freeDrawingYPoints: yPoints
-        }]
-    });
-    xPoints = [];
-    yPoints = [];
-});
-// observe('object:moved');  // not invoked when object is moved.
-//observe('selection:cleared');
-//observe('mouse:down') //observe('object:moved'); //observe('object:scaled'); 1/*observe('group:modified');observe('group:selected');observe('before:group:destroyed');observe('after:group:destroyed');*/
-//observe('after:render');//observe('mouse:up');//observe('mouse:down');
-// clear canvas
-canvas.clear();
-
-// remove currently selected object
-canvas.remove(canvas.getActiveObject());
-//addText();
-/*canvas.add(new fabric.Path('M 0 100 a 100 100 0 1 1 200 0' , 
-{ stroke: 'red', strokeWidth: 5, fill: "none", width: 200, height: 
-100 })); */
-
-
 function getObjectById(id) {
     var obj;
     var objs = canvas.getObjects();
@@ -91,8 +76,10 @@ function getObjectById(id) {
 
 function observe(eventName) {
     canvas.observe(eventName, function (e) {
-        //alert(eventName);
-        if (eventName == "object:modified") {
+        // alert(eventName);
+        switch (eventName) {
+
+        case "object:modified":
             var obj = e.memo.target;
             //alert(obj.angle);
             matisse.sendDrawMsg({
@@ -103,42 +90,60 @@ function observe(eventName) {
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
 
-        }
-        if (eventName === "selection:cleared") {
+            break;
+
+        case "selection:cleared":
             //var obj = e.memo.target;
             matisse.sendDrawMsg({
                 action: "clearText",
                 args: []
             })
-            var textEl = document.getElementById('text');
+            var textEl = document.getElementById('textarea');
             textEl.value = "";
             //(document.getElementById("debug")).value = "selection cleared";
-        }
-        if (eventName === "mouse:down") {
+            break;
+        case 'path:created':
             //alert("mousedown"+canvas.isDrawingMode);
+            matisse.sendDrawMsg({
+                action: 'drawpath',
+                args: [{
+                    _freeDrawingXPoints: xPoints,
+                    _freeDrawingYPoints: yPoints
+                }]
+            });
+            xPoints = [];
+            yPoints = [];
+            break;
         }
-    });
-
+    })
 }
 
 
 function modifyObject(args) {
     var obj = getObjectById(args.uid);
-    var recObj = args.object;
-    obj.set("left", recObj.left);
-    obj.set("top", recObj.top);
-    obj.set("scaleX", recObj.scaleX);
-    obj.set("scaleY", recObj.scaleY);
-
-    if (obj.type == "text") obj.text = recObj.text;
-    obj.set("angle", recObj.angle);
-    canvas.renderAll()
-    canvas.setActiveObject(obj);
+	//canvas.setActiveObject(obj);
+	var recvdObj = args.object;
+    obj.set("left", recvdObj.left);
+    obj.set("top", recvdObj.top);
+    obj.set("scaleX", recvdObj.scaleX);
+    obj.set("scaleY", recvdObj.scaleY);
+    if (obj.type == "text") obj.text = recvdObj.text;
+    obj.set("angle", recvdObj.angle);
+	obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+	/*======================================================================================================*/
+	/*** for some reason below code not working for circle modification, hence commented and using above code
+	/*======================================================================================================
+	 for (var prop in recvdObj) {
+			  obj.set(prop, recvdObj[prop]);
+			  $("#chattext").append(prop);
+			}
+    	obj.setCoords();**/
+	canvas.renderAll();
 }
 
 
 function clearText() {
-    var textEl = document.getElementById('text');
+    var textEl = document.getElementById('textarea');
     textEl.value = "";
 }
 
@@ -163,6 +168,7 @@ function pad(str, length) {
  */
 
 function getRandomColor() {
+    var getRandomInt = fabric.util.getRandomInt;
     return (
     pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2));
 }
@@ -251,11 +257,7 @@ function chatButtonListener(e) {
         }]
     });
 }
-//called when 'drawing button' clicked and mode is triggered from drawing-mode to non drawing mode and vice-versa
 
-function drawingButtonListener(e) {
-
-}
 
 // Listener for Color section - because canvas.observe does not trigger modify event when color is changed.
 
@@ -342,22 +344,15 @@ function resetCurrTool() {
  */
 
 function modifyColor(obj, fillColor) {
-if(obj == undefined) return;
+    if (obj == undefined) return;
     if (obj.type != "path") obj.set("fill", fillColor);
 }
 
 function modifyColorOnOther(args) {
-	var obj = getObjectById(args.uid);
+    var obj = getObjectById(args.uid);
     if (obj.type != "path") obj.set("fill", args.fillColor);
-	canvas.renderAll();
+    canvas.renderAll();
 }
-/*(function() {
-  var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
-  s.async = true;
-  s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
-  t.parentNode.insertBefore(s, t);
-})();*/
-
 
 
 function deleteObjects() {
@@ -379,7 +374,7 @@ function deleteObjects() {
     }
 }
 
-var textEl = document.getElementById('text');
+function textHandler() {
 if (textEl) {
     textEl.onfocus = function () {
         var activeObject = canvas.getActiveObject();
@@ -396,8 +391,16 @@ if (textEl) {
                 activeObject.text = this.value;
             }
             canvas.renderAll();
+            matisse.sendDrawMsg({
+                action: "modified",
+                args: [{
+                    uid: activeObject.uid,
+                    object: activeObject
+                }]
+            });
         }
     };
+}
 }
 
 
@@ -425,7 +428,8 @@ function drawPath(args) {
 
     // canvas.contextTop.closePath();
     canvas._isCurrentlyDrawing = false;
-
+    var utilMin = fabric.util.array.min;
+    var utilMax = fabric.util.array.max;
     var minX = utilMin(args._freeDrawingXPoints),
         minY = utilMin(args._freeDrawingYPoints),
         maxX = utilMax(args._freeDrawingXPoints),
@@ -475,13 +479,63 @@ function colorHandler() {
             modifyColor(obj, fillColor);
             canvas.renderAll();
             // TODO - send data to server
-			matisse.sendDrawMsg({
-            action: "modifyColor",
-            args: [{uid: obj.uid, fillColor:fillColor}]
-			})
+            matisse.sendDrawMsg({
+                action: "modifyColor",
+                args: [{
+                    uid: obj.uid,
+                    fillColor: fillColor
+                }]
+            })
             //alert(obj.uid);
             //delete obj;
         }
     });
 }
-colorHandler();
+
+
+
+/**
+ * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
+ *
+ */
+
+function addTools() {
+    var toolsDiv = document.getElementById('toolsdiv')
+    for (i in tools) {
+        var el = document.createElement('div');
+        var img = document.createElement('img');
+        img.setAttribute('src', 'images/' + tools[i].displayIcon);
+        img.setAttribute('id', tools[i].displayName);
+        img.setAttribute('width', "80%");
+        img.setAttribute('height', "80%");
+        //img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
+        img.onclick = handleClick;
+        //alert(img.src)
+        el.appendChild(img);
+        toolsDiv.appendChild(el);
+    }
+
+    //document.getElementById("drawing-mode").onclick = drawingButtonListener;
+    document.getElementById("chatbutton").onclick = chatButtonListener;
+    handleMouseEvents()
+    $('#toolsdiv').draggable({
+        cursor: 'move'
+    });
+    $('#texteditor').draggable({
+        cursor: 'move'
+    });
+    $('#colorpicker').draggable({
+        cursor: 'move'
+    });
+}
+
+function keyDown(e) {
+	var evt=(e)?e:(window.event)?window.event:null;
+	if(evt){
+		var key=(evt.charCode)?evt.charCode:
+			((evt.keyCode)?evt.keyCode:((evt.which)?evt.which:0));
+		if(key=="46") {
+			deleteObjects();
+		}
+	}
+}
