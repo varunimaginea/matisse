@@ -68,9 +68,10 @@ io.sockets.on('connection', function (socket) {
     socket.emit('eventConnect',{message:'welcome'});
     socket.on("setUrl",function(location,data){
 //     console.log("++++++++------------");
+//     console.log(data);
 //     console.log(location);
-//     console.log("++++++++-----------");
-       var url = location.pathname.replace("/", "");
+//    console.log("++++++++-----------");
+       var url = location.replace("/", "");
 //     console.log("++++++++++++++++++++");
 //     console.log(url);
 //     console.log("++++++++++++++++++++");
@@ -84,7 +85,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('eventDraw',function(location,data){
 //     console.log("@@@@@@@@@@@@@@@@@@@@@");
 //     console.log(location);
-       var url = location.pathname.replace("/", "");
+       var url = location.replace("/", "");
 //     console.log(url);
 //     console.log("@@@@@@@@@@@@@@@@@@@@@");
 //     console.log("%%%%%%%%%%%%%%%%%%%%%");

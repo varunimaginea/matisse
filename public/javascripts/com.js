@@ -6,7 +6,7 @@ var matisse = {
 		this.onDraw(data);
 	},
 	sendDrawMsg: function(data){
-	        var loc = document.location;
+	        var loc = document.location.pathname;
 	        socket.emit("eventDraw",loc,data);
 	},
 	onDraw: function(data){
@@ -14,7 +14,7 @@ var matisse = {
 		console.log(data);
 	},
 	onConnect: function(data){
-	        var loc = document.location;
+	        var loc = document.location.pathname;
 	        socket.emit("setUrl",loc,data);
 	        //Dummy method must override
 	        console.log(data);
