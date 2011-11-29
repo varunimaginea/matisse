@@ -9,6 +9,7 @@ var points = {}, textEl, tools = {};
 var drawShape = false;
 var action, shapeArgs, currTool;
 var xPoints = [],   yPoints = [];
+var xOffset, yOffset;
 
 // create canvas object
 var canvas = new fabric.Canvas('c', {
@@ -20,7 +21,9 @@ $(document).ready(init);
 
 
 function init() {
-    addTools()
+	xOffset = getOffset(document.getElementById('canvasId')).left;
+	yOffset = getOffset(document.getElementById('canvasId')).top;
+	addTools()
     colorHandler();
     // clear canvas
     canvas.clear();
@@ -179,12 +182,14 @@ function getRandomColor() {
 function handleClick(e) {
     resetCurrTool();
     currTool = e.target;
-    currTool.setAttribute('width', "100%");
-    currTool.setAttribute('height', "100%");
     currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'default'
     drawShape = true;
     //alert(e.target.id)
+	if(e.target.id != "Draw") {
+		canvas.isDrawingMode = false;
+		document.getElementById("Draw").src =  'images/nobrush.png' 
+	}
     switch (e.target.id) {
     case "Rectangle":
         action = "rect"
@@ -234,6 +239,7 @@ function handleClick(e) {
             //drawingModeEl.className = '';
         }
         break;
+	
     }
 }
 
@@ -289,8 +295,8 @@ function handleMouseEvents() {
         resetCurrTool();
         msg = "==================\n";
         if (drawShape) {
-            points.x = event.pageX - 100; //offset
-            points.y = event.pageY - 135; //offset
+            points.x = event.pageX - xOffset; //offset
+            points.y = event.pageY - yOffset; //offset
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
 
@@ -304,34 +310,26 @@ function handleMouseEvents() {
         if (canvas.isDrawingMode) {
             xPoints = [];
             yPoints = [];
-            xPoints.push(event.pageX - 100);
-            yPoints.push(event.pageY - 135);
+            xPoints.push(event.pageX - xOffset);
+            yPoints.push(event.pageY - yOffset);
 
         }
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
         if (canvas.isDrawingMode) {
-            xPoints.push(event.pageX - 100);
-            yPoints.push(event.pageY - 135);
+            xPoints.push(event.pageX - xOffset);
+            yPoints.push(event.pageY - yOffset);
             msg += event.pageX + ", " + event.pageY + "\n :";
 
         }
     });
-    $("#canvasId").mouseup(function () {
-        //alert(msg);
-        //$("#chattext").value = msg;
-        //var txt=document.createTextNode(msg)
-        //$("#chattext").append(txt)
-        //$("#righttd").append("<div>" + msg + "</div>");
-    });
+  
 }
 
 function resetCurrTool() {
     if (currTool) {
-        currTool.setAttribute('width', "80%");
-        currTool.setAttribute('height', "80%");
-        currTool.setAttribute('border', "0");
+          currTool.setAttribute('border', "0");
     }
 }
 
@@ -506,8 +504,8 @@ function addTools() {
         var img = document.createElement('img');
         img.setAttribute('src', 'images/' + tools[i].displayIcon);
         img.setAttribute('id', tools[i].displayName);
-        img.setAttribute('width', "80%");
-        img.setAttribute('height', "80%");
+        //img.setAttribute('width', "80%");
+        //img.setAttribute('height', "80%");
         //img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
         img.onclick = handleClick;
         //alert(img.src)
@@ -538,4 +536,15 @@ function keyDown(e) {
 			deleteObjects();
 		}
 	}
+}
+
+function getOffset( el ) {
+    var _x = 0;
+    var _y = 0;
+    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
 }

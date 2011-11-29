@@ -5,6 +5,24 @@ margin: 10px;
 bgcolor:"#F8F8F8"
 }
 
+.rnd {
+border: solid 1px #6495ED;
+/*height: 20px;*/
+width: 851px;
+border-radius-topleft: 10px;
+-moz-border-radius-topleft: 10px;
+-webkit-border-top-left-radius: 10px;
+background-color: #CAE1FF;
+}
+
+.rnd2 {
+border: solid 1px #6495ED;
+/*height: 20px;*/
+width: 849px;
+border-radius-topleft: 12px;
+-moz-border-radius-topleft: 12px;
+-webkit-border-top-left-radius: 12px;
+}
 a {
 color:#00B7FF;
 }
