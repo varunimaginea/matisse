@@ -231,7 +231,7 @@ registerTool("Text", {
  * @property args
  * @type null
  */
-registerTool("draw", {
+registerTool("Draw", {
     displayName: "Draw",
     displayIcon: "nobrush.png",
 	displayIcon2: "brush.png",
