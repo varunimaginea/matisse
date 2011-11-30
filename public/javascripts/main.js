@@ -49,17 +49,19 @@ matisse.onDraw = function (data) {
     if (data.action == "modified") {
         modifyObject(data.args[0])
     }
-    if (data.action == "modifyColor") {
+    else if (data.action == "modifyColor") {
         modifyColorOnOther(data.args[0]);
     }
-    if (data.action == "drawpath") {
+    else if (data.action == "drawpath") {
         drawPath(data.args[0])
     }
-    if (data.action == "chat") {
+    else if (data.action == "chat") {
         var txt = document.createTextNode(data.args[0].text)
         $("#chattext").append(txt);
     }
-    if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
+	else {
+	   if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
+	}
 
 }
 
@@ -185,64 +187,32 @@ function handleClick(e) {
     currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'default'
     drawShape = true;
+	action = e.target.id;	
     //alert(e.target.id)
-	if(e.target.id != "Draw") {
+	if(action != "Draw") {
 		canvas.isDrawingMode = false;
 		document.getElementById("Draw").src =  'images/nobrush.png' 
+	} else {
+		drawShape = false;
+		canvas.isDrawingMode = !canvas.isDrawingMode;
+		this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
+		document.getElementById("c").style.cursor = (canvas.isDrawingMode) ?  'crosshair' :  'default';
+		return;
 	}
-    switch (e.target.id) {
-    case "Rectangle":
-        action = "rect"
-        shapeArgs = [{
-            width: 100,
-            height: 50,
-            fillColor: fillColor,
-            strokeColor: 0x000000,
-            angle: 0,
-            uid: uniqid()
-        }];
-        break;
-    case "Circle":
-        action = "circle"
-        shapeArgs = [{
-            radius: 20,
-            width: 100,
-            height: 50,
-            fillColor: fillColor,
-            angle: 0,
-            uid: uniqid()
-        }];
-        break;
-    case "Text":
-        action = "text"
-        shapeArgs = [{
-            fontFamily: 'delicious_500',
-            width: 100,
-            height: 50,
-            fillColor: fillColor,
-            angle: 0,
-            uid: uniqid()
-        }];
-        break;
-    case "Draw":
-        drawShape = false;
-        //var drawingModeEl = document.getElementById('drawing-mode');
-        canvas.isDrawingMode = !canvas.isDrawingMode;
-        this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
-
-        if (canvas.isDrawingMode) {
-            document.getElementById("c").style.cursor = 'crosshair'
-            //drawingModeEl.className = 'is-drawing';
-        } else {
-            document.getElementById("c").style.cursor = 'default'
-            // drawingModeEl.innerHTML = 'Enter drawing mode';
-            //drawingModeEl.className = '';
-        }
-        break;
-	
-    }
+	var obj = getDataFromArray(tools[e.target.id].properties);
+		obj.uid = uniqid();
+        shapeArgs = [obj];
+  
 }
 
+function getDataFromArray(arr) {
+var obj = {};
+	for(var i=0; i<arr.length; i++) {
+		obj[arr[i].name] = arr[i].defaultvalue;
+	}
+	alert(obj);
+	return obj;
+}
 
 //called when 'delete button' clicked
 
@@ -293,13 +263,11 @@ function handleMouseEvents() {
     var msg = "";
     $("#canvasId").mousedown(function (event) {
         resetCurrTool();
-        msg = "==================\n";
-        if (drawShape) {
+        if (!canvas.isDrawingMode && drawShape) {
             points.x = event.pageX - xOffset; //offset
             points.y = event.pageY - yOffset; //offset
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
-
             tools[action].toolAction.apply(this, shapeArgs);
             matisse.sendDrawMsg({
                 action: action,
@@ -356,13 +324,13 @@ function modifyColorOnOther(args) {
 function deleteObjects() {
     var activeObject = canvas.getActiveObject(),
         activeGroup = canvas.getActiveGroup();
-    matisse.sendDrawMsg({
-        shape: "delete",
-        uid: activeObject.uid
-
-    })
+	
     if (activeObject) {
         canvas.remove(activeObject);
+		matisse.sendDrawMsg({
+        shape: "delete",
+        uid: activeObject.uid
+		})
     } else if (activeGroup) {
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
@@ -504,11 +472,7 @@ function addTools() {
         var img = document.createElement('img');
         img.setAttribute('src', 'images/' + tools[i].displayIcon);
         img.setAttribute('id', tools[i].displayName);
-        //img.setAttribute('width', "80%");
-        //img.setAttribute('height', "80%");
-        //img.setAttribute('class', "swapImage {src: \'images/"+tools[i].displayIcon2+"\'}");
         img.onclick = handleClick;
-        //alert(img.src)
         el.appendChild(img);
         toolsDiv.appendChild(el);
     }
@@ -516,7 +480,7 @@ function addTools() {
     //document.getElementById("drawing-mode").onclick = drawingButtonListener;
     document.getElementById("chatbutton").onclick = chatButtonListener;
     handleMouseEvents()
-    $('#toolsdiv').draggable({
+    /*$('#toolsdiv').draggable({
         cursor: 'move'
     });
     $('#texteditor').draggable({
@@ -525,6 +489,14 @@ function addTools() {
     $('#colorpicker').draggable({
         cursor: 'move'
     });
+	
+	  for (i in tools) {
+		for( n in tools[i].properties)
+		{
+			document.getElementById("chattext").value+= tools[i].properties[n].type+"  :  ";
+			//tools[data.action].properties[data.type].apply(this, data.args);
+		}
+	  }*/
 }
 
 function keyDown(e) {

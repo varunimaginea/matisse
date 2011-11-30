@@ -14,7 +14,7 @@ function registerTool(toolname, tooldesc) {
  * @property args
  * @type null
  */
-registerTool("rect", {
+registerTool("Rectangle", {
     displayName: "Rectangle",
     displayIcon: "rect.png",
 	displayIcon2: "norectangle.jpg",
@@ -30,7 +30,58 @@ registerTool("rect", {
         rect.uid = args.uid;
         canvas.add(rect);
         canvas.setActiveObject(rect);
-    }
+    },
+	properties: [
+		{
+		name:'left',
+		type:'number', 
+		action:function(args){
+				args.obj.left = args.x},
+		defaultvalue:100		
+		},
+		{
+		name:'top',
+		type:'number',
+		action:function(args) {
+				args.obj.top = args.y},
+		defaultvalue:100		
+		},
+		{
+		name:'width',
+		type:'number',
+		action:function(args) {
+				args.obj.width = args.width},
+		defaultvalue:200		
+		},
+		{
+		name:'height',
+		type:'number',
+		action:function(args) {
+				args.obj.height = args.height},
+		defaultvalue:100		
+		},
+		{
+		name:'fillColor',
+		type:'string',
+		action:function(args) {
+				args.obj.fill = args.fillColor},
+		defaultvalue:'#FF0000'		
+		},
+		{
+		name:'strokeColor',
+		type:'string',
+		action:function(args) {
+				args.obj.strokeColor = args.strokeColor},
+		defaultvalue:'#00FF00'		
+		},
+		{
+		name:'angle',
+		type:'number',
+		action:function(args) {
+				args.obj.angle = args.angle},
+		defaultvalue:0	
+		}
+		]
 });
 
 /**
@@ -38,7 +89,7 @@ registerTool("rect", {
  * @property args
  * @type null
  */
-registerTool("circle", {
+registerTool("Circle", {
     displayName: "Circle",
     displayIcon: "circle.png",
 	displayIcon2: "nocircle.png",
@@ -54,7 +105,52 @@ registerTool("circle", {
         cir.uid = args.uid;
         canvas.add(cir);
         canvas.setActiveObject(cir);
-    }
+    },
+    properties: [
+		{
+		name:'left',
+		type:'number', 
+		action:function(args){
+				args.obj.left = args.x},
+		defaultvalue:100		
+		},
+		{
+		name:'top',
+		type:'number',
+		action:function(args) {
+				args.obj.top = args.y},
+		defaultvalue:100		
+		},
+		{
+		name:'radius',
+		type:'number',
+		action:function(args) {
+				args.obj.width = args.radius},
+		defaultvalue:20		
+		},
+		
+		{
+		name:'fillColor',
+		type:'string',
+		action:function(args) {
+				args.obj.fill = args.fillColor},
+		defaultvalue:'#FF0000'		
+		},
+		{
+		name:'strokeColor',
+		type:'string',
+		action:function(args) {
+				args.obj.strokeColor = args.strokeColor},
+		defaultvalue:'#00FF00'		
+		},
+		{
+		name:'angle',
+		type:'number',
+		action:function(args) {
+				args.obj.angle = args.angle},
+		defaultvalue:0	
+		}
+		]
 
 });
 
@@ -64,7 +160,7 @@ registerTool("circle", {
  * @property args
  * @type null
  */
-registerTool("text", {
+registerTool("Text", {
     displayName: "Text",
     displayIcon: "text.png",
 	displayIcon2: "notext.png",
@@ -80,7 +176,52 @@ registerTool("text", {
         //alert(textSample)
         textSample.uid = args.uid;
         canvas.add(textSample);
-    }
+    },
+	properties: [
+		{
+		name:'left',
+		type:'number', 
+		action:function(args){
+				args.obj.left = args.x},
+		defaultvalue:100		
+		},
+		{
+		name:'top',
+		type:'number',
+		action:function(args) {
+				args.obj.top = args.y},
+		defaultvalue:100		
+		},
+		{
+		name:'fontFamily',
+		type:'string',
+		action:function(args) {
+				args.obj.width = args.fontFamily},
+		defaultvalue:'delicious_500'		
+		},
+		
+		{
+		name:'fillColor',
+		type:'string',
+		action:function(args) {
+				args.obj.fill = args.fillColor},
+		defaultvalue:'#FF0000'		
+		},
+		{
+		name:'strokeColor',
+		type:'string',
+		action:function(args) {
+				args.obj.strokeColor = args.strokeColor},
+		defaultvalue:'#00FF00'		
+		},
+		{
+		name:'angle',
+		type:'number',
+		action:function(args) {
+				args.obj.angle = args.angle},
+		defaultvalue:0	
+		}
+		]
 });
 
 
