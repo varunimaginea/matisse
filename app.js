@@ -91,7 +91,15 @@ io.sockets.on('connection', function (socket) {
 //     console.log("%%%%%%%%%%%%%%%%%%%%%");
 //     console.log(data);
 //     console.log("%%%%%%%%%%%%%%%%%%%%%");
-       io.sockets.in(url).emit("eventDraw",data);
+	console.log("%%%%%%%%%%%%%%%%%%%%%");
+	console.log(io.sockets);
+	console.log("%%%%%%%%%%%%%%%%%%%%%");
+	console.log("@@@@@@@@@@@@@@@@@@@@@");
+	console.log(socket);
+	console.log("@@@@@@@@@@@@@@@@@@@@@");
+//	delete io.sockets(socket.id);
+	socket.broadcast.to(url).emit('eventDraw',data);
+  //     io.sockets.in(url).emit("eventDraw",data);
     });
  });
  
