@@ -14,8 +14,8 @@ function registerTool(toolname, tooldesc) {
  * @property args
  * @type null
  */
-registerTool("Rectangle", {
-    displayName: "Rectangle",
+registerTool("rect", {
+    displayName: "rect",
     displayIcon: "rect.png",
 	displayIcon2: "norectangle.jpg",
     toolAction: function (args) {
@@ -24,8 +24,11 @@ registerTool("Rectangle", {
             height: args.height,
             left: args.left,
             top: args.top,
-            fill: args.fillColor,
-			stroke:args.strokeColor
+            fill: args.fill,
+			stroke:args.stroke,
+			angle:args.angle,
+			scaleX:1,
+			scaleY:1
         });
         rect.uid = args.uid;
         canvas.add(rect);
@@ -36,49 +39,65 @@ registerTool("Rectangle", {
 		name:'left',
 		type:'number', 
 		action:function(args){
-				args.obj.left = args.x},
+				(args.obj).set("left", args.property);
+				},
 		defaultvalue:100		
 		},
 		{
 		name:'top',
 		type:'number',
 		action:function(args) {
-				args.obj.top = args.y},
+				(args.obj).set("top", args.property);
+				},
 		defaultvalue:100		
 		},
 		{
 		name:'width',
 		type:'number',
 		action:function(args) {
-				args.obj.width = args.width},
+				(args.obj).set("width", args.property/args.obj.scaleX);},
 		defaultvalue:200		
 		},
 		{
 		name:'height',
 		type:'number',
 		action:function(args) {
-				args.obj.height = args.height},
+				(args.obj).set("height", args.property/args.obj.scaleY);},
 		defaultvalue:100		
 		},
 		{
-		name:'fillColor',
+		name:'scaleX',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleX", args.property);},
+		defaultvalue:200		
+		},
+		{
+		name:'scaleY',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleY", args.property);},
+		defaultvalue:100		
+		},
+		{
+		name:'fill',
 		type:'string',
 		action:function(args) {
-				args.obj.fill = args.fillColor},
+				(args.obj).set("fill", args.property);},
 		defaultvalue:'#FF0000'		
 		},
 		{
-		name:'strokeColor',
+		name:'stroke',
 		type:'string',
 		action:function(args) {
-				args.obj.strokeColor = args.strokeColor},
+				(args.obj).set("stroke", args.property);},
 		defaultvalue:'#00FF00'		
 		},
 		{
 		name:'angle',
 		type:'number',
 		action:function(args) {
-				args.obj.angle = args.angle},
+				(args.obj).set("angle", args.property);},
 		defaultvalue:0	
 		}
 		]
@@ -89,8 +108,8 @@ registerTool("Rectangle", {
  * @property args
  * @type null
  */
-registerTool("Circle", {
-    displayName: "Circle",
+registerTool("circle", {
+    displayName: "circle",
     displayIcon: "circle.png",
 	displayIcon2: "nocircle.png",
     toolAction: function addCircle(args) {
@@ -98,7 +117,8 @@ registerTool("Circle", {
             radius: args.radius,
             left: args.left,
             top: args.top,
-            fill: args.fillColor,
+            fill: args.fill,
+			stroke: args.stroke,
             opacity: args.opacity,
             angle: args.angle
         });
@@ -111,43 +131,43 @@ registerTool("Circle", {
 		name:'left',
 		type:'number', 
 		action:function(args){
-				args.obj.left = args.x},
+				(args.obj).set("left", args.property);},
 		defaultvalue:100		
 		},
 		{
 		name:'top',
 		type:'number',
 		action:function(args) {
-				args.obj.top = args.y},
+				(args.obj).set("top", args.property);},
 		defaultvalue:100		
 		},
 		{
 		name:'radius',
 		type:'number',
 		action:function(args) {
-				args.obj.width = args.radius},
+				(args.obj).set("radius", args.property/args.obj.scaleX);},
 		defaultvalue:20		
 		},
 		
 		{
-		name:'fillColor',
+		name:'fill',
 		type:'string',
 		action:function(args) {
-				args.obj.fill = args.fillColor},
+				(args.obj).set("fill", args.property);},
 		defaultvalue:'#FF0000'		
 		},
 		{
-		name:'strokeColor',
+		name:'stroke',
 		type:'string',
 		action:function(args) {
-				args.obj.strokeColor = args.strokeColor},
+				(args.obj).set("stroke", args.property);},
 		defaultvalue:'#00FF00'		
 		},
 		{
 		name:'angle',
 		type:'number',
 		action:function(args) {
-				args.obj.angle = args.angle},
+				(args.obj).set("angle", args.property);},
 		defaultvalue:0	
 		}
 		]
@@ -160,8 +180,8 @@ registerTool("Circle", {
  * @property args
  * @type null
  */
-registerTool("Text", {
-    displayName: "Text",
+registerTool("text", {
+    displayName: "text",
     displayIcon: "text.png",
 	displayIcon2: "notext.png",
     toolAction: function addText(args) {
@@ -171,7 +191,8 @@ registerTool("Text", {
             top: args.top,
             fontFamily: args.fontFamily,
             angle: args.angle,
-            fill: args.fillColor,
+            fill: args.fill,
+			stroke: args.stroke
         });
         //alert(textSample)
         textSample.uid = args.uid;
@@ -182,43 +203,43 @@ registerTool("Text", {
 		name:'left',
 		type:'number', 
 		action:function(args){
-				args.obj.left = args.x},
+				(args.obj).set("left", args.property);},
 		defaultvalue:100		
 		},
 		{
 		name:'top',
 		type:'number',
 		action:function(args) {
-				args.obj.top = args.y},
+				(args.obj).set("top", args.property);},
 		defaultvalue:100		
 		},
 		{
 		name:'fontFamily',
 		type:'string',
 		action:function(args) {
-				args.obj.width = args.fontFamily},
+				(args.obj).set("fontFamily", args.property);},
 		defaultvalue:'delicious_500'		
 		},
 		
 		{
-		name:'fillColor',
+		name:'fill',
 		type:'string',
 		action:function(args) {
-				args.obj.fill = args.fillColor},
+				(args.obj).set("fill", args.property);},
 		defaultvalue:'#FF0000'		
 		},
 		{
-		name:'strokeColor',
+		name:'stroke',
 		type:'string',
 		action:function(args) {
-				args.obj.strokeColor = args.strokeColor},
+				(args.obj).set("stroke", args.property);},
 		defaultvalue:'#00FF00'		
 		},
 		{
 		name:'angle',
 		type:'number',
 		action:function(args) {
-				args.obj.angle = args.angle},
+				(args.obj).set("angle", args.property);},
 		defaultvalue:0	
 		}
 		]
@@ -231,8 +252,8 @@ registerTool("Text", {
  * @property args
  * @type null
  */
-registerTool("Draw", {
-    displayName: "Draw",
+registerTool("path", {
+    displayName: "path",
     displayIcon: "nobrush.png",
 	displayIcon2: "brush.png",
     toolAction: null

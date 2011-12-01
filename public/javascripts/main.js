@@ -33,6 +33,7 @@ function init() {
     observe('path:created');
     observe('selection:cleared');
     observe('object:moved');
+	observe('object:selected');
 	textEl = document.getElementById('textarea');
 	textHandler();
 	document.onkeydown=keyDown;
@@ -59,6 +60,11 @@ matisse.onDraw = function (data) {
         var txt = document.createTextNode(data.args[0].text)
         $("#chattext").append(txt);
     }
+	else if (data.action == "delete") {
+        var obj = getObjectById(data.args[0].uid);
+		console.log("=========================="+obj)
+		canvas.remove(obj);
+    }
 	else {
 	   if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
 	}
@@ -77,7 +83,13 @@ function getObjectById(id) {
     });
     return obj;
 }
-
+function updatePropertyPanel(obj) {
+	properties = getDataFromArray(tools[obj.type].properties);
+	jQuery.each(properties, function(i, val) {
+		console.log(">>>>>>>>>>>>>>>"+obj[i])
+		$('#'+i).val(obj[i]);
+	})
+}
 
 function observe(eventName) {
     canvas.observe(eventName, function (e) {
@@ -94,7 +106,7 @@ function observe(eventName) {
                     object: obj
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
-
+			updatePropertyPanel(obj);
             break;
 
         case "selection:cleared":
@@ -119,7 +131,12 @@ function observe(eventName) {
             xPoints = [];
             yPoints = [];
             break;
+		case 'object:selected' :
+			//alert('selected')
+			createPropertiesPanel(e.memo.target);
+			break;	
         }
+		
     })
 }
 
@@ -134,6 +151,8 @@ function modifyObject(args) {
     obj.set("scaleY", recvdObj.scaleY);
     if (obj.type == "text") obj.text = recvdObj.text;
     obj.set("angle", recvdObj.angle);
+	canvas.setActiveObject(obj)
+	updatePropertyPanel(obj)
 	obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
 	/*======================================================================================================*/
 	/*** for some reason below code not working for circle modification, hence commented and using above code
@@ -144,6 +163,7 @@ function modifyObject(args) {
 			}
     	obj.setCoords();**/
 	canvas.renderAll();
+	
 }
 
 
@@ -189,9 +209,9 @@ function handleClick(e) {
     drawShape = true;
 	action = e.target.id;	
     //alert(e.target.id)
-	if(action != "Draw") {
+	if(action != "path") {
 		canvas.isDrawingMode = false;
-		document.getElementById("Draw").src =  'images/nobrush.png' 
+		document.getElementById("path").src =  'images/nobrush.png' 
 	} else {
 		drawShape = false;
 		canvas.isDrawingMode = !canvas.isDrawingMode;
@@ -200,20 +220,34 @@ function handleClick(e) {
 		return;
 	}
 	var obj = getDataFromArray(tools[e.target.id].properties);
+		if(obj == "undefined") return;
 		obj.uid = uniqid();
         shapeArgs = [obj];
   
 }
 
 function getDataFromArray(arr) {
-var obj = {};
+	if(arr == undefined) return "undefined";	
+	var obj = {};
 	for(var i=0; i<arr.length; i++) {
 		obj[arr[i].name] = arr[i].defaultvalue;
 	}
-	alert(obj);
+	//alert(obj);
 	return obj;
 }
 
+
+function applyProperty(obj, prop, val) {	
+var arr = [{obj:canvas.getActiveObject(), property:val}]
+	for(var i=0; i < tools[obj].properties.length; i++)
+	{
+		if(tools[obj].properties[i].name == prop) {
+			tools[obj].properties[i].action.apply(this, arr);
+			canvas.renderAll();
+			canvas.getActiveObject().setCoords();
+		}
+	}
+}
 //called when 'delete button' clicked
 
 function deleteButtonListener(e) {
@@ -274,6 +308,7 @@ function handleMouseEvents() {
                 args: shapeArgs
             });
             drawShape = false;
+			
         }
         if (canvas.isDrawingMode) {
             xPoints = [];
@@ -328,8 +363,8 @@ function deleteObjects() {
     if (activeObject) {
         canvas.remove(activeObject);
 		matisse.sendDrawMsg({
-        shape: "delete",
-        uid: activeObject.uid
+        action: "delete",
+        args: [{uid: activeObject.uid}]
 		})
     } else if (activeGroup) {
         var objectsInGroup = activeGroup.getObjects();
@@ -444,7 +479,7 @@ function colorHandler() {
             obj.set("stroke", fillColor);
             modifyColor(obj, fillColor);
             canvas.renderAll();
-            // TODO - send data to server
+            // send data to server
             matisse.sendDrawMsg({
                 action: "modifyColor",
                 args: [{
@@ -458,7 +493,34 @@ function colorHandler() {
     });
 }
 
-
+function createPropertiesPanel(obj) {
+	objName  = obj.type;
+	if(objName == undefined) return;
+	properties = getDataFromArray(tools[objName].properties);
+	var props = {};
+	//alert(obj.width);
+	var inbox;
+	$('#prop').remove();
+	$('#texteditor').after('<div id="prop"><p>Properties</p></div>');
+	jQuery.each(properties, function(i, val) {
+	
+	inbox = "<input type='text' id='"+i+"'value='"+obj[i]+"'</input><br>";
+      $("#prop").append("<label for='"+i+"'>"+i+" : </label>"+inbox);//(" - " + val));
+	 
+	  $("#"+i).change(function(){
+		applyProperty(objName, i, $("#"+i).val());
+		matisse.sendDrawMsg({
+                action: "modifiedbyvalue",
+                args: [{
+                    uid: obj.uid,
+                    object: obj
+                }]
+            });
+	  });
+	 
+		// getDataFromArray(tools[obj].properties)[i].action.apply(this, $("#"+i).val())
+	});
+}
 
 /**
  * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
