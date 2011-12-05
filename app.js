@@ -74,10 +74,10 @@ io.sockets.on('connection', function (socket) {
 socket.emit('eventConnect',{message:'welcome'});
 socket.on("setUrl",function(location,data){
    var url = location.replace("/", "");
-    ko = new Date();
-    ji = ko.getTime();
+  //  ko = new Date();
+  //  ji = ko.getTime();
 //    socket.broadcast.emit("eventDraw",data);
-    redis_client.hset([url, socket.id+"#"+ji, data], redis.print);
+//    redis_client.hset([url, socket.id+"#"+ji, data], redis.print);
 
     //     console.log("++++++++------------");
     //     console.log(data);
@@ -92,11 +92,19 @@ socket.on("setUrl",function(location,data){
     
     socket.join(url);
     redis_client.hkeys(url, function (err, replies) {
+
 	console.log("++++++++++++++++++++");
         console.log(replies.length + " replies:");
 	console.log("++++++++++++++++++++");
         replies.forEach(function (reply, i) {
+
+//socket.emit("eventDraw",reply.data);
 	    console.log("    " + i + ": " + reply);
+redis_client.hgetall(reply, function (err, obj) {
+    console.dir(obj);
+    socket.emit("eventDraw",obj);
+    console.dir(obj);
+});
         });
 //	redis_client.quit();
     });
@@ -118,6 +126,23 @@ socket.on('eventDraw',function(location,data){
     //	console.log(socket);
     //	console.log("@@@@@@@@@@@@@@@@@@@@@");
     //	delete io.sockets(socket.id);
+    ko = new Date();
+    ji = ko.getTime();
+//    socket.broadcast.emit("eventDraw",data);
+    redis_client.hset([url, socket.id+"#"+ji, "test value"], redis.print);
+    redis_client.hmset(socket.id+"#"+ji, data,redis.print);
+
+    //     console.log("++++++++------------");
+    //     console.log(data);
+    //     console.log(location);
+    //    console.log("++++++++-----------");
+    //     console.log("++++++++++++++++++++");
+    //     console.log(url);
+    //     console.log("++++++++++++++++++++");
+    //     console.log("----------------------");
+    //     console.log(data);
+    //     console.log("----------------------");
+    
     socket.broadcast.to(url).emit('eventDraw',data);
     //io.sockets.in(url).emit("eventDraw",data);
 });
