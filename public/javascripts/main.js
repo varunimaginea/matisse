@@ -3,8 +3,8 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-// Globals
 var fillColor = "#AAAAAA";
+// Globals
 var points = {}, textEl, tools = {};
 var drawShape = false;
 var action, shapeArgs, currTool;
@@ -64,6 +64,7 @@ matisse.onDraw = function (data) {
         var obj = getObjectById(data.args[0].uid);
 		console.log("=========================="+obj)
 		canvas.remove(obj);
+		$('#prop').remove();
     }
 	else {
 	   if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
@@ -366,6 +367,7 @@ function deleteObjects() {
         action: "delete",
         args: [{uid: activeObject.uid}]
 		})
+		$('#prop').remove();
     } else if (activeGroup) {
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
