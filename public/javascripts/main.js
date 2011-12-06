@@ -5,12 +5,12 @@
  */
 var fillColor = "#AAAAAA";
 // Globals
-var points = {}, textEl, tools = {};
+var points = {}, textEl, palette = {};
 var drawShape = false;
 var action, shapeArgs, currTool;
 var xPoints = [],   yPoints = [];
 var xOffset, yOffset;
-
+var palletteName
 // create canvas object
 var canvas = new fabric.Canvas('c', {
     backgroundColor: '#FFFFFF'
@@ -68,7 +68,7 @@ matisse.onDraw = function (data) {
 		$('#prop').remove();
     }
 	else {
-	   if (tools[data.action] != undefined) tools[data.action].toolAction.apply(this, data.args);
+	   if (palette[data.pallette].shapes[data.action] != undefined) palette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
 	}
 
 }
@@ -86,9 +86,9 @@ function getObjectById(id) {
     return obj;
 }
 function updatePropertyPanel(obj) {
-	properties = getDefaultDataFromArray(tools[obj.name].properties);
+	if(obj.type = "path") return;
+	properties = getDefaultDataFromArray(palette["basic_shapes"].shapes[obj.name].properties);
 	jQuery.each(properties, function(i, val) {
-		console.log(">>>>>>>>>>>>>>>"+obj[i])
 		$('#'+i).val(obj[i]);
 	})
 }
@@ -215,10 +215,12 @@ function handleClick(e) {
     document.getElementById("c").style.cursor = 'default'
     drawShape = true;
 	action = e.target.id;	
+	palletteName = $(e.target).parent().attr('id');
+	console.log("pallette =============="+palletteName);
     //alert(e.target.id)
 	if(action != "path") {
 		canvas.isDrawingMode = false;
-		document.getElementById("path").src =  'images/nobrush.png' 
+		//document.getElementById("path").src =  'images/nobrush.png' 
 	} else {
 		drawShape = false;
 		canvas.isDrawingMode = !canvas.isDrawingMode;
@@ -226,8 +228,8 @@ function handleClick(e) {
 		document.getElementById("c").style.cursor = (canvas.isDrawingMode) ?  'crosshair' :  'default';
 		return;
 	}
-	var obj = getDefaultDataFromArray(tools[e.target.id].properties);
-		if(obj == "undefined") return;
+	var obj = getDefaultDataFromArray(palette[palletteName].shapes[e.target.id].properties);
+		console.log("OBJECT ="+obj)
 		obj.uid = uniqid();
         shapeArgs = [obj];
   
@@ -246,10 +248,10 @@ function getDefaultDataFromArray(arr) {
 
 function applyProperty(obj, prop, val) {	
 var arr = [{obj:canvas.getActiveObject(), property:val}]
-	for(var i=0; i < tools[obj].properties.length; i++)
+	for(var i=0; i < palette["basic_shapes"].shapes[obj].properties.length; i++)
 	{
-		if(tools[obj].properties[i].name == prop) {
-			tools[obj].properties[i].action.apply(this, arr);
+		if(palette["basic_shapes"].shapes[obj].properties[i].name == prop) {
+			palette["basic_shapes"].shapes[obj].properties[i].action.apply(this, arr);
 			canvas.renderAll();
 			canvas.getActiveObject().setCoords();
 		}
@@ -310,12 +312,14 @@ function handleMouseEvents() {
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
 			shapeArgs[0].name = action;
-            tools[action].toolAction.apply(this, shapeArgs);
+			shapeArgs[0].pallette = palletteName;
+            palette[palletteName].shapes[action].toolAction.apply(this, shapeArgs);
             matisse.sendDrawMsg({
+				pallette: palletteName,
                 action: action,
                 args: shapeArgs
             });
-            drawShape = false;
+           drawShape = false;
 			
         }
         if (canvas.isDrawingMode) {
@@ -503,19 +507,22 @@ function colorHandler() {
 }
 
 function createPropertiesPanel(obj) {
-	console.log(obj.name)
+	$('#prop').remove();
+	console.log(palletteName+"     "+obj.name)
 	objName  = obj.name;
+	palletteName = obj.pallette;
 	if(objName == undefined) return;
-	properties = getDefaultDataFromArray(tools[objName].properties);
+	properties = getDefaultDataFromArray(palette[palletteName].shapes[objName].properties);
 	var props = {};
 	//alert(obj.width);
-	var inbox;
-	$('#prop').remove();
-	$('#texteditor').after('<div id="prop"><p>Properties</p></div>');
+	var inputbox;
+	
+	$('#propdiv').after('<div id="prop"><p>Properties</p></div>');
 	jQuery.each(properties, function(i, val) {
 	
-	inbox = "<input type='text' width='20' class='inbox' id='"+i+"'value='"+obj[i]+"'</input><br>";
-      $("#prop").append("<label for='"+i+"'>"+i+" : </label>"+inbox);//(" - " + val));
+	inputbox = "<input type='text' id='"+i+"'value='"+obj[i]+"'</input><br>";
+      $("#prop").append("<label for='"+i+"'>"+i+" : </label>"+inputbox);//(" - " + val));
+	 
 	  $("#"+i).change(function(){
 	  if(!canvas.getActiveObject()) return;
 		applyProperty(objName, i, $("#"+i).val());
@@ -527,8 +534,9 @@ function createPropertiesPanel(obj) {
                 }]
             });
 	  });
+	   $("#"+i).addClass('inbox');
 	 
-		// getDataFromArray(tools[obj].properties)[i].action.apply(this, $("#"+i).val())
+		// getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
 	});
 }
 
@@ -539,16 +547,31 @@ function createPropertiesPanel(obj) {
 
 function addTools() {
     var toolsDiv = document.getElementById('toolsdiv')
-    for (i in tools) {
-        var el = document.createElement('div');
+	for (i in palette["basic_shapes"].shapes) {
+		var el = document.createElement('div');
+		el.setAttribute('id', 'basic_shapes');
         var img = document.createElement('img');
-        img.setAttribute('src', 'images/' + tools[i].displayIcon);
-        img.setAttribute('id', tools[i].displayName);
+        img.setAttribute('src', 'images/' + palette["basic_shapes"].shapes[i].displayIcon);
+        img.setAttribute('id', palette["basic_shapes"].shapes[i].displayName);
         img.onclick = handleClick;
         el.appendChild(img);
         toolsDiv.appendChild(el);
     }
-
+	var hr = document.createElement('hr')
+	toolsDiv.appendChild(hr)
+	var svgDiv = document.getElementById('svg')
+	for (i in palette["svg"].shapes) {
+		var el = document.createElement('div');
+		el.setAttribute('id', 'svg');
+        var img = document.createElement('img');
+        img.setAttribute('src', 'images/' + palette["svg"].shapes[i].displayIcon);
+        img.setAttribute('id', palette["svg"].shapes[i].displayName);
+        img.onclick = handleClick;
+        el.appendChild(img);
+        svgDiv.appendChild(el);
+    }
+	var hr = document.createElement('hr')
+	svgDiv.appendChild(hr)
     //document.getElementById("drawing-mode").onclick = drawingButtonListener;
     document.getElementById("chatbutton").onclick = chatButtonListener;
     handleMouseEvents()
@@ -611,6 +634,7 @@ function loadSVG(args) {
               angle: 0
             });
 			loadedObject.name = args.name;
+			loadedObject.pallette = args.pallette;
            // loadedObject.scaleToWidth(300).setCoords();
             canvas.add(loadedObject);
 			canvas.calcOffset();

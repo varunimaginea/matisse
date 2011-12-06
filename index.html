@@ -7,96 +7,39 @@
       <script src="/javascripts/com.js"></script>
       <script src="/javascripts/jquery-1.7.min.js"></script>
       <script src="/javascripts/fabric_all.js"></script>
-		<!--      <script src="/javascripts/shapes.js"></script> --><!-- //already present at the bottom of the file though not a good practice -->
-      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
-      <!-- <script type="text/javascript">
-         $.swapImage(".swapImage");    
-         </script>-->
-      </script>
-   </head>
-   <body >
-      <h1>Pramati's White Board</h1>
       <script src="/javascripts/Delicious_500.font.js"></script>
-	  <div class="rnd">
-	  <div class="rnd2">
-		  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#6495ED">
-						 <tr align="center">
-							<td width="100%" height="20px" ></td>
-						 </tr>
-		  </table>
-	  </div>
-      <table width="800">
-         <tr>
-            <td width="33" valign="top">
-               <div id="toolsdiv" class="toolbar" align="center" bgcolor="#CCCCFF" />
-               <div>
-                  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
-                     <tr align="center">
-                        <td width="100%" height="100%" bgcolor="#666666"><font color="#FFFFFF">Tools</font></td>
-                     </tr>
-                  </table>
-                  <!-- <div> <img name="img0" id="drawing-mode" src="images/nobrush.png" onclick="swapBold(this)" alt="brush" /></div>-->
-               </div>
-            </td>
-            <td width="600">
-               <div class="canvasstyle" id="canvasId">
-                  <canvas id="c" width="600" height="500" margin:"10px"></canvas>
-               </div>
-            </td>
-            <td valign="top" id="righttd">
-			<div id="texteditor">
-               <table width="100%" height="20px" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#666666">
-                  <tr align="center">
-                     <td width="100%" height="100%" bgcolor="#666666">&nbsp;&nbsp;</td>
-                  </tr>
-               </table>
-               <label for="textarea">Text editor</label>
-               <textarea id="textarea" rows="2"></textarea>
-			 </div>
-			<!-- <div id="colorpicker">
-			   <table width="200" border="0" cellspacing="2" cellpadding="2">
-              <tr>
-                 <td>Fill Color</td>
-              </tr>
-              <tr>
-                 <td id="fColor" bgcolor="#AAAAAA">&nbsp;</td>
-              </tr>
-            </table>
-
-               <table id="colors" width="200" border="0" cellspacing="2" cellpadding="2">
-                  <tr >
-					<td bgcolor="#AAAAAA">&nbsp;</td>
-                     <td bgcolor="#FF0000">&nbsp;</td>
-                     <td bgcolor="#00FF00">&nbsp;</td>
-                     <td bgcolor="#0000FF">&nbsp;</td>
-                     <td bgcolor="#FFFF00">&nbsp;</td>
-                     <td bgcolor="#00FFFF">&nbsp;</td>
-                     <td bgcolor="#CC0099">&nbsp;</td>
-                     <td bgcolor="#6600FF">&nbsp;</td>
-                     <td bgcolor="#0066FF">&nbsp;</td>
-					 <td bgcolor="#000000">&nbsp;</td>
-                  </tr>
-                  <tr>
-                     <td>&nbsp;</td>
-                     <td>&nbsp;</td>
-                     <td>&nbsp;</td>
-                     <td>&nbsp;</td>
-                  </tr>
-               </table>
-			   </div> -->
-               <label for="chattext">Chat</label>
-               <textarea id="chattext" value="hello" rows="2"></textarea>
-               <label for="chat">Type your message below: </label>
-               <input type="text" id="chat" value="type some thing" />
-			   </input><button id="chatbutton">OK</button>
-			
-            </td>
-         </tr>
-      </table>
-	  </div>
-	  <script src="/javascripts/main.js"></script>
-	  <script src="/javascripts/shapes.js"></script>
-	<div onclick="$('input[type=file]').click()" >CLICK SIMULATOR</div>
-       <div style="visibility:hidden"> <input type="file"></input></div>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+   </head>
+   <body>
+      <div id="outer">
+         <div id="header">
+            <p>Pramati's White Board</p>
+         </div>
+         <div id="left">
+            <div id="toolsdiv"><p>Basic Shapes</p></div>
+			<div id="svg"><p>SVG</p></div>
+         </div>
+         <div id="right">
+            <label for="textarea">Text editor</label><br>
+            <textarea id="textarea" rows="2"></textarea><br>
+            <label for="chattext">Chat</label><br>
+            <textarea id="chattext" value="hello" rows="2"></textarea><br>
+            <label for="chat">Type your message below: </label><br>
+            <input type="text" id="chat" value="type some thing" /><br>
+            </input><button id="chatbutton">OK</button>
+			<div id="propdiv"></div>
+         </div>
+         <div id="centrecontent">
+            <div id="canvasId">
+               <canvas id="c" width="600" height="500" margin:"10px"></canvas>
+            </div>
+         </div>
+         <div id="clearfooter"></div>
+         <!-- to clear footer --> 
+      </div>
+      <!-- end outer div -->
+      <div id="footer"> --Pramati Tech--</div>
+      <script src="/javascripts/main.js"></script>
+      <script src="/javascripts/shapes.js"></script>
    </body>
 </html>

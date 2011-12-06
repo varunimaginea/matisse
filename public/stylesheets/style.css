@@ -1,9 +1,4 @@
-body {
-font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
-padding:0px;
-margin: 10px;
-bgcolor:"#F8F8F8"
-}
+
 
 .rnd {
 border: solid 1px #6495ED;
@@ -36,12 +31,12 @@ background-color: #EAE9E4;
 width:100%;
 }
 
-.canvasstyle {
+/*.canvasstyle {
 border:1px solid #ccc;
 vertical-align:top;
 white-space:nowrap;
 width:600px;
-}
+}*/
 
 h2 span {
 font-weight:400;
@@ -85,4 +80,70 @@ padding: 2px
 
 textarea {
     resize: none;
+}
+
+html, body {height:100%}
+
+body {
+padding:0;
+margin:0;
+background:#F0F0F0 repeat-y left top;
+color: #FFFFFF;
+}
+#outer{ 
+min-height:100%;
+margin-left:200px;
+margin-right:300px;
+background:#F0F0F0;
+border-left:1px solid #fff;
+border-right:1px solid #fff;
+margin-bottom:-52px;
+color: #000000;
+}
+* html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
+
+#header{
+background:#125699;
+border-top:1px solid #fff;
+border-bottom:1px solid #fff;
+color: #fff;
+text-align:center;
+position:relative;
+margin:0 -300px;
+padding-top:56px;
+min-height:0;/* ie 7 haslayout fix */
+
+}
+#left {
+position:relative;/*ie needs this to show float */
+width:200px;/* same as the left margin on #outer*/
+float:left;
+margin-left:-120px;/*must be 1px less than width otherwise won't push footer down in older mozilla*/ 
+left:-2px;/* push column into position*/
+}
+#left p {padding-left:2px;padding-right:2px}
+#right p {padding-left:2px;padding-right:2px}
+
+#right {
+position:relative;/*ie needs this to show float */
+width:300px;/* same as right margin on #outer*/
+float:right;
+margin-right:-299px;/*must be 1px less than width otherwise won't push footer down in older mozilla*/ 
+left:2px;/* push column into position*/
+}
+
+#footer {
+width:100%;
+clear:both;
+height:50px;
+border-top:1px solid #fff;
+border-bottom:1px solid #fff;
+background-color: #125699;
+color: #000000;
+text-align:center;
+position:relative;
+}
+* html #footer {/*only ie gets this style*/
+\height:52px;/* for ie5 */
+he\ight:50px;/* for ie6 */
 }
