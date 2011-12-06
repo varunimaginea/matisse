@@ -14,8 +14,8 @@ function registerTool(toolname, tooldesc) {
  * @property args
  * @type null
  */
-registerTool("rect", {
-    displayName: "rect",
+registerTool("rectangle", {
+    displayName: "rectangle",
     displayIcon: "rect.png",
 	displayIcon2: "norectangle.jpg",
     toolAction: function (args) {
@@ -31,6 +31,7 @@ registerTool("rect", {
 			scaleY:1
         });
         rect.uid = args.uid;
+		rect.name = args.name;
         canvas.add(rect);
         canvas.setActiveObject(rect);
     },
@@ -123,6 +124,7 @@ registerTool("circle", {
             angle: args.angle
         });
         cir.uid = args.uid;
+		cir.name = args.name;
         canvas.add(cir);
         canvas.setActiveObject(cir);
     },
@@ -196,6 +198,7 @@ registerTool("text", {
         });
         //alert(textSample)
         textSample.uid = args.uid;
+		textSample.name = args.name;
         canvas.add(textSample);
     },
 	properties: [
@@ -262,5 +265,144 @@ registerTool("path", {
 
 
 
+/**
+ * Adds svg 36 to canvas
+ * @property args
+ * @type null
+ */
+registerTool("path-group1", {
+    displayName: "path-group1",
+    displayIcon: "svg.gif",
+	displayIcon2: "svg2.jpg",
+    toolAction: function (args) {
+		args.svg = '36.svg'
+		args.name = 'path-group1';
+		loadSVG(args);
+    },
+		
+	properties: [
+		{
+		name:'left',
+		type:'number', 
+		action:function(args){
+				(args.obj).set("left", args.property);
+				},
+		defaultvalue:100		
+		},
+		{
+		name:'top',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("top", args.property);
+				},
+		defaultvalue:100		
+		},
+		{
+		name:'width',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("width", args.property/args.obj.scaleX);},
+		defaultvalue:200		
+		},
+		{
+		name:'height',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("height", args.property/args.obj.scaleY);},
+		defaultvalue:100		
+		},
+		{
+		name:'scaleX',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleX", args.property);},
+		defaultvalue:200		
+		},
+		{
+		name:'scaleY',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleY", args.property);},
+		defaultvalue:100		
+		},
+		
+		{
+		name:'angle',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("angle", args.property);},
+		defaultvalue:0	
+		}
+		]
+});
 
+/**
+ * Adds svg 36 to canvas
+ * @property args
+ * @type null
+ */
+registerTool("path-group2", {
+    displayName: "path-group2",
+    displayIcon: "svg.gif",
+	displayIcon2: "svg2.jpg",
+    toolAction: function (args) {
+		args.svg = '17.svg';
+		args.name = 'path-group2';
+		loadSVG(args);
+    },
+	properties: [
+		{
+		name:'left',
+		type:'number', 
+		action:function(args){
+				(args.obj).set("left", args.property);
+				},
+		defaultvalue:100		
+		},
+		{
+		name:'top',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("top", args.property);
+				},
+		defaultvalue:100		
+		},
+		{
+		name:'width',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("width", args.property/args.obj.scaleX);},
+		defaultvalue:200		
+		},
+		{
+		name:'height',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("height", args.property/args.obj.scaleY);},
+		defaultvalue:100		
+		},
+		{
+		name:'scaleX',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleX", args.property);},
+		defaultvalue:200		
+		},
+		{
+		name:'scaleY',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("scaleY", args.property);},
+		defaultvalue:100		
+		},
+		
+		{
+		name:'angle',
+		type:'number',
+		action:function(args) {
+				(args.obj).set("angle", args.property);},
+		defaultvalue:0	
+		}
+		]
+});
 

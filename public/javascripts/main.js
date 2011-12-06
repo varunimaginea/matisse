@@ -37,6 +37,7 @@ function init() {
 	textEl = document.getElementById('textarea');
 	textHandler();
 	document.onkeydown=keyDown;
+	//loadSVG()
 }
 
 /**
@@ -85,7 +86,7 @@ function getObjectById(id) {
     return obj;
 }
 function updatePropertyPanel(obj) {
-	properties = getDataFromArray(tools[obj.type].properties);
+	properties = getDefaultDataFromArray(tools[obj.name].properties);
 	jQuery.each(properties, function(i, val) {
 		console.log(">>>>>>>>>>>>>>>"+obj[i])
 		$('#'+i).val(obj[i]);
@@ -95,10 +96,12 @@ function updatePropertyPanel(obj) {
 function observe(eventName) {
     canvas.observe(eventName, function (e) {
         // alert(eventName);
+		
         switch (eventName) {
-
+		
         case "object:modified":
             var obj = e.memo.target;
+			//if(obj.type == "path-group") 	return;
             //alert(obj.angle);
             matisse.sendDrawMsg({
                 action: "modified",
@@ -111,6 +114,7 @@ function observe(eventName) {
             break;
 
         case "selection:cleared":
+			$('#prop').remove();
             //var obj = e.memo.target;
             matisse.sendDrawMsg({
                 action: "clearText",
@@ -133,8 +137,10 @@ function observe(eventName) {
             yPoints = [];
             break;
 		case 'object:selected' :
+			var obj = e.memo.target;		
+		//	if(obj.type == "path-group") 	return;
 			//alert('selected')
-			createPropertiesPanel(e.memo.target);
+				createPropertiesPanel(e.memo.target);
 			break;	
         }
 		
@@ -220,14 +226,14 @@ function handleClick(e) {
 		document.getElementById("c").style.cursor = (canvas.isDrawingMode) ?  'crosshair' :  'default';
 		return;
 	}
-	var obj = getDataFromArray(tools[e.target.id].properties);
+	var obj = getDefaultDataFromArray(tools[e.target.id].properties);
 		if(obj == "undefined") return;
 		obj.uid = uniqid();
         shapeArgs = [obj];
   
 }
 
-function getDataFromArray(arr) {
+function getDefaultDataFromArray(arr) {
 	if(arr == undefined) return "undefined";	
 	var obj = {};
 	for(var i=0; i<arr.length; i++) {
@@ -303,6 +309,7 @@ function handleMouseEvents() {
             points.y = event.pageY - yOffset; //offset
             shapeArgs[0].left = points.x;
             shapeArgs[0].top = points.y;
+			shapeArgs[0].name = action;
             tools[action].toolAction.apply(this, shapeArgs);
             matisse.sendDrawMsg({
                 action: action,
@@ -496,9 +503,10 @@ function colorHandler() {
 }
 
 function createPropertiesPanel(obj) {
-	objName  = obj.type;
+	console.log(obj.name)
+	objName  = obj.name;
 	if(objName == undefined) return;
-	properties = getDataFromArray(tools[objName].properties);
+	properties = getDefaultDataFromArray(tools[objName].properties);
 	var props = {};
 	//alert(obj.width);
 	var inbox;
@@ -506,10 +514,10 @@ function createPropertiesPanel(obj) {
 	$('#texteditor').after('<div id="prop"><p>Properties</p></div>');
 	jQuery.each(properties, function(i, val) {
 	
-	inbox = "<input type='text' id='"+i+"'value='"+obj[i]+"'</input><br>";
+	inbox = "<input type='text' width='20' class='inbox' id='"+i+"'value='"+obj[i]+"'</input><br>";
       $("#prop").append("<label for='"+i+"'>"+i+" : </label>"+inbox);//(" - " + val));
-	 
 	  $("#"+i).change(function(){
+	  if(!canvas.getActiveObject()) return;
 		applyProperty(objName, i, $("#"+i).val());
 		matisse.sendDrawMsg({
                 action: "modifiedbyvalue",
@@ -583,4 +591,29 @@ function getOffset( el ) {
         el = el.offsetParent;
     }
     return { top: _y, left: _x };
+}
+
+function loadSVG(args) {
+			console.log("LOAD SVG  "+args.left)	
+		    fabric.loadSVGFromURL('images/svg/'+args.svg, function(objects, options) {
+         //   console.log("OBJECTS LENGTH :::"+objects.length)	
+            var loadedObject;
+            if (objects.length > 1) {
+              loadedObject = new fabric.PathGroup(objects, options);
+            }
+            else {
+              loadedObject = objects[0];
+            }
+            
+           loadedObject.set({
+              left: args.left,
+              top: args.top,
+              angle: 0
+            });
+			loadedObject.name = args.name;
+           // loadedObject.scaleToWidth(300).setCoords();
+            canvas.add(loadedObject);
+			canvas.calcOffset();
+          });
+        
 }

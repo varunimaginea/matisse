@@ -78,6 +78,11 @@ visibility:hidden;
 visibility:visible;
 }
 
+.inbox {
+width: 50px; 
+padding: 2px
+}
+
 textarea {
     resize: none;
 }
