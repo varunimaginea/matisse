@@ -31,13 +31,6 @@ background-color: #EAE9E4;
 width:100%;
 }
 
-/*.canvasstyle {
-border:1px solid #ccc;
-vertical-align:top;
-white-space:nowrap;
-width:600px;
-}*/
-
 h2 span {
 font-weight:400;
 font-size:25px;
@@ -54,8 +47,13 @@ margin-left:15px;
 p {
 margin-top:3px;
 margin-bottom:3px;
+font-family:Verdana, Georgia,Serif;
 }
 
+
+label {
+font-family:Verdana, Georgia,Serif;
+}
 #log1 {
 display:inline-block;
 width:200px;
@@ -103,25 +101,27 @@ color: #000000;
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
 
 #header{
-background:#125699;
-border-top:1px solid #fff;
-border-bottom:1px solid #fff;
+/*background:#125699;*/
+//border-top:1px solid #fff;
+//border-bottom:1px solid #fff;
 color: #fff;
 text-align:center;
 position:relative;
 margin:0 -300px;
-padding-top:56px;
+padding-top:0px;
 min-height:0;/* ie 7 haslayout fix */
+font-size:200%;
+text-decoration:none
 
 }
-#left {
+#leftdiv {
 position:relative;/*ie needs this to show float */
 width:200px;/* same as the left margin on #outer*/
 float:left;
-margin-left:-120px;/*must be 1px less than width otherwise won't push footer down in older mozilla*/ 
+margin-left:-199px;/*must be 1px less than width otherwise won't push footer down in older mozilla*/ 
 left:-2px;/* push column into position*/
 }
-#left p {padding-left:2px;padding-right:2px}
+#leftdiv p {padding-left:2px;padding-right:2px}
 #right p {padding-left:2px;padding-right:2px}
 
 #right {
@@ -138,12 +138,12 @@ clear:both;
 height:50px;
 border-top:1px solid #fff;
 border-bottom:1px solid #fff;
-background-color: #125699;
+//background-color: #125699;
 color: #000000;
 text-align:center;
 position:relative;
 }
 * html #footer {/*only ie gets this style*/
-\height:52px;/* for ie5 */
-he\ight:50px;/* for ie6 */
+height:52px;/* for ie5 */
+height:50px;/* for ie6 */
 }

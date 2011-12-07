@@ -323,10 +323,10 @@ registerpalette("svg", {
         },
         pathgroup2: {
             displayName: "pathgroup2",
-            displayIcon: "svg.gif",
+            displayIcon: "svg2.png",
             displayIcon2: "svg2.jpg",
             toolAction: function (args) {
-                args.svg = '17.svg'
+                args.svg = '17.svg';
                 args.name = 'pathgroup2';
                 loadSVG(args);
             },
