@@ -21,6 +21,10 @@ $(document).ready(init);
 
 
 function init() {
+	console.log($(document).width());
+	//$('#canvasId').attr('width', $(document).width());
+	
+	console.log($('#c').attr('width'));
 	xOffset = getOffset(document.getElementById('canvasId')).left;
 	yOffset = getOffset(document.getElementById('canvasId')).top;
 	addTools()
@@ -515,15 +519,16 @@ function createPropertiesPanel(obj) {
 	properties = getDefaultDataFromArray(palette[palletteName].shapes[objName].properties);
 	var props = {};
 	//alert(obj.width);
-	var inputbox;
+	
 	
 	$('#propdiv').after('<div id="prop"><p>Properties</p></div>');
 	jQuery.each(properties, function(i, val) {
-	
-	inputbox = "<input type='text' id='"+i+"'value='"+obj[i]+"'</input><br>";
-      $("#prop").append("<label for='"+i+"'>"+i+" : </label>"+inputbox);//(" - " + val));
-	 
-	  $("#"+i).change(function(){
+	  var inputTag = "<input type='text' id='"+i+"' value='"+obj[i]+"'</input><br>";
+	  var propDiv = $("#prop");
+      propDiv.append("<label for='"+i+"'>"+i+" : </label>"+inputTag);//(" - " + val));
+	  var inBox =  $("#"+i);
+	  inBox.addClass('inbox');
+	  inBox.change(function(){
 	  if(!canvas.getActiveObject()) return;
 		applyProperty(objName, i, $("#"+i).val());
 		matisse.sendDrawMsg({
@@ -534,7 +539,7 @@ function createPropertiesPanel(obj) {
                 }]
             });
 	  });
-	   $("#"+i).addClass('inbox');
+	  
 	 
 		// getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
 	});
@@ -546,34 +551,24 @@ function createPropertiesPanel(obj) {
  */
 
 function addTools() {
-    var toolsDiv = document.getElementById('toolsdiv')
-	for (i in palette["basic_shapes"].shapes) {
-		var el = document.createElement('div');
-		el.setAttribute('id', 'basic_shapes');
-        var img = document.createElement('img');
-        img.setAttribute('src', 'images/' + palette["basic_shapes"].shapes[i].displayIcon);
-        img.setAttribute('id', palette["basic_shapes"].shapes[i].displayName);
-        img.onclick = handleClick;
-        el.appendChild(img);
-        toolsDiv.appendChild(el);
-    }
-	var hr = document.createElement('hr')
-	toolsDiv.appendChild(hr)
-	var svgDiv = document.getElementById('svg')
-	for (i in palette["svg"].shapes) {
-		var el = document.createElement('div');
-		el.setAttribute('id', 'svg');
-        var img = document.createElement('img');
-        img.setAttribute('src', 'images/' + palette["svg"].shapes[i].displayIcon);
-        img.setAttribute('id', palette["svg"].shapes[i].displayName);
-        img.onclick = handleClick;
-        el.appendChild(img);
-        svgDiv.appendChild(el);
-    }
-	var hr = document.createElement('hr')
-	svgDiv.appendChild(hr)
+$('#left').draggable()
+	for (var i in palette["basic_shapes"].shapes) {
+		$('#toolsdiv').append("<div id='basic_shapes'></div>")
+		var dispName = palette["basic_shapes"].shapes[i].displayName;
+		var src = 'images/' + palette["basic_shapes"].shapes[i].displayIcon;
+		$('#basic_shapes').append("<img id='"+dispName+"' src='"+src+"'/><br>");
+		$('#'+dispName).click(handleClick);
+	}
+	for (var i in palette["svg"].shapes) {
+		$('#svgdiv').append("<div id='svg'></div>")
+		var dispName = palette["svg"].shapes[i].displayName;
+		var src = 'images/' + palette["svg"].shapes[i].displayIcon;
+		$('#svg').append("<img id='"+dispName+"' src='"+src+"'/><br>");
+		$('#'+dispName).click(handleClick);
+	}
+	$( "#accordion" ).accordion();
     //document.getElementById("drawing-mode").onclick = drawingButtonListener;
-    document.getElementById("chatbutton").onclick = chatButtonListener;
+    $('#chatbutton').click(chatButtonListener);
     handleMouseEvents()
     /*$('#toolsdiv').draggable({
         cursor: 'move'
