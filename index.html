@@ -3,8 +3,10 @@
    <head>
       <title>Pramati's White Board</title>
       <link rel="stylesheet" href="/stylesheets/style.css" />
+	  <link type="text/css" href="/stylesheets/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
       <script src="/socket.io/socket.io.js"></script>
       <script src="/javascripts/com.js"></script>
+
       <script src="/javascripts/jquery-1.7.min.js"></script>
       <script src="/javascripts/fabric_all.js"></script>
       <script src="/javascripts/Delicious_500.font.js"></script>
@@ -12,33 +14,53 @@
    </head>
    <body>
       <div id="outer">
-         <div id="header">
-            <p>Pramati's White Board</p>
+         <div id="header" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top" >
+            <p >MATISSE</p>
          </div>
-         <div id="left">
-            <div id="toolsdiv"><p>Basic Shapes</p></div>
-			<div id="svg"><p>SVG</p></div>
+         <div id="leftdiv">
+			<div id="accordion">
+				<h3><a href="#">Basic Shapes</a></h3>
+				<div id="toolsdiv"></div>
+				<h3><a href="#">SVGs</a></h3>
+				<div id="svgdiv"></div>
+			</div>
          </div>
-         <div id="right">
+         <div id="right" class="ui-widget-content">
+			<div>
             <label for="textarea">Text editor</label><br>
-            <textarea id="textarea" rows="2"></textarea><br>
+            <textarea id="textarea" rows="2" ></textarea><br>
+			</div>
+			<div>
             <label for="chattext">Chat</label><br>
             <textarea id="chattext" value="hello" rows="2"></textarea><br>
             <label for="chat">Type your message below: </label><br>
             <input type="text" id="chat" value="type some thing" /><br>
             </input><button id="chatbutton">OK</button>
+			</div>
 			<div id="propdiv"></div>
          </div>
-         <div id="centrecontent">
-            <div id="canvasId">
-               <canvas id="c" width="600" height="500" margin:"10px"></canvas>
-            </div>
+         <div id="canvasId" >
+               <canvas id="c" class="ui-corner-all" margin:"20px"></canvas>
          </div>
+        
          <div id="clearfooter"></div>
          <!-- to clear footer --> 
       </div>
       <!-- end outer div -->
-      <div id="footer"> --Pramati Tech--</div>
+      <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>
+	  <script type="text/javascript"> 
+	   //$('#canvasId').corner()
+	   $('#chatbutton').button();
+		function setCanvasSize() {
+			var wid = $(window).width()-520; // width of left and right panels
+			var ht =  $(window).height()-50; // footer height
+			$('#c').attr('width', "'"+wid+"'"); 
+			$('#c').attr('height', "'"+ht+"'");
+			
+		}
+		setCanvasSize();
+		
+	  </script>
       <script src="/javascripts/main.js"></script>
       <script src="/javascripts/shapes.js"></script>
    </body>
