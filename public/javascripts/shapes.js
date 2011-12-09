@@ -174,7 +174,7 @@ registerpalette("basic_shapes", {
             displayIcon: "text.png",
             displayIcon2: "notext.png",
             toolAction: function addText(args) {
-                var text = 'HTML5 IS FUN...';
+                var text = 'text text text...';
                 var textSample = new fabric.Text(text, {
                     left: args.left,
                     top: args.top,
@@ -188,6 +188,7 @@ registerpalette("basic_shapes", {
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
                 canvas.add(textSample);
+				
             },
             properties: [{
                 name: 'left',
@@ -326,7 +327,7 @@ registerpalette("svg", {
             displayIcon: "svg2.png",
             displayIcon2: "svg2.jpg",
             toolAction: function (args) {
-                args.svg = '17.svg';
+                args.svg = 'drawing.svg';
                 args.name = 'pathgroup2';
                 loadSVG(args);
             },
@@ -384,7 +385,69 @@ registerpalette("svg", {
                 defaultvalue: 0
             }]
         },
+		button: {
+            displayName: "button",
+            displayIcon: "button.png",
+            displayIcon2: "svg2.jpg",
+            toolAction: function (args) {
+                args.svg = 'button.svg';
+                args.name = 'pathgroup2';
+                loadSVG(args);
+            },
 
+            properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'width',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("width", args.property / args.obj.scaleX);
+                },
+                defaultvalue: 200
+            }, {
+                name: 'height',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("height", args.property / args.obj.scaleY);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 200
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 100
+            },
+
+            {
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+        }
 
     } //end of shapes
 } // end of svg
