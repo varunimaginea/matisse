@@ -3,22 +3,30 @@
    <head>
       <title>Pramati's White Board</title>
       <link rel="stylesheet" href="/stylesheets/style.css" />
-	  <link type="text/css" href="/stylesheets/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+	  <link type="text/css" href="/stylesheets/start/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
       <script src="/socket.io/socket.io.js"></script>
       <script src="/javascripts/com.js"></script>
-
       <script src="/javascripts/jquery-1.7.min.js"></script>
       <script src="/javascripts/fabric_all.js"></script>
       <script src="/javascripts/Delicious_500.font.js"></script>
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+	  <script type="text/javascript" src="javascripts/jscolor/jscolor.js"></script>
+	  <style type="text/css">
+      #c {
+        height: 100%; width: 100%; border: 1px solid #0066CC;
+      }
+    </style>
    </head>
    <body>
       <div id="outer">
-         <div id="header" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-top" >
-            <p >MATISSE</p>
+         <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
+			<img class = 'topicons' id='chaticon' src='images/chat_icon.gif'/>
+			<img class = 'topicons' id='propicon' src='images/properties_icon.jpg'/>&nbsp;&nbsp;
+			<img class = 'topicons' id='saveicon' src='images/save_edit.gif'/>
+			<p >MATISSE - the white board</p>
          </div>
-         <div id="leftdiv">
-			<div id="accordion">
+         <div id="leftdiv" >
+			<div id="accordion" >
 				<h3><a href="#">Basic Shapes</a></h3>
 				<div id="toolsdiv"></div>
 				<h3><a href="#">SVGs</a></h3>
@@ -26,37 +34,32 @@
 			</div>
          </div>
          <div id="right" class="ui-widget-content">
-			<div>
-            <label for="textarea">Text editor</label><br>
-            <textarea id="textarea" rows="2" ></textarea><br>
+			<div id='texteditdiv' title='Text Editor'>
+				<textarea id=textarea rows=2 ></textarea>
 			</div>
-			<div>
-            <label for="chattext">Chat</label><br>
-            <textarea id="chattext" value="hello" rows="2"></textarea><br>
-            <label for="chat">Type your message below: </label><br>
+			<div id='chatdialog' title="Chat">
+                  <textarea id="chattext" value="hello" rows="2"></textarea><br>
+			<br>
             <input type="text" id="chat" value="type some thing" /><br>
             </input><button id="chatbutton">OK</button>
 			</div>
-			<div id="propdiv"></div>
+			<div id="propdiv" title="Properties"></div>
          </div>
          <div id="canvasId" >
-               <canvas id="c" class="ui-corner-all" margin:"20px"></canvas>
+            <canvas id="c" class="ui-corner-all" ></canvas>
          </div>
-        
-         <div id="clearfooter"></div>
-         <!-- to clear footer --> 
-      </div>
+     </div>
       <!-- end outer div -->
-      <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>
+     <!-- <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>-->
 	  <script type="text/javascript"> 
+	  var myxOffset, myyoffset; 
 	   //$('#canvasId').corner()
 	   $('#chatbutton').button();
 		function setCanvasSize() {
-			var wid = $(window).width()-520; // width of left and right panels
-			var ht =  $(window).height()-50; // footer height
+			var wid = $(document).width()-204; // width of left panels
+			var ht =  $(document).height()// footer height
 			$('#c').attr('width', "'"+wid+"'"); 
 			$('#c').attr('height', "'"+ht+"'");
-			
 		}
 		setCanvasSize();
 		
