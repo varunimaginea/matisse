@@ -19,6 +19,7 @@ See index.html in this directory for a vanilla html example.
 1) To run this application you need to install [http://nodejs.org](node.js) and also install npm.
 1a) sudo apt-get install redis-server
 1b) npm install hiredis redis 
+1c) npm install nohm
 
 2) Change the "localhost" to your local machine ip in public/javascripts/com.js. 
 Code snippet:
