@@ -23,40 +23,50 @@ $(document).ready(init);
 
 
 function init() {
-    console.log($(document).width());
-    //$('#canvasId').attr('width', $(document).width());
-    console.log($('#c').attr('width'));
+
     xOffset = getOffset(document.getElementById('canvasId')).left;
     yOffset = getOffset(document.getElementById('canvasId')).top;
-    console.log('xOffest = ' + xOffset)
+
     addTools()
     colorHandler();
     // clear canvas
     canvas.clear();
     // remove currently selected object
     canvas.remove(canvas.getActiveObject());
-    observe('object:modified');
-    observe('path:created');
-    observe('selection:cleared');
-    observe('object:moved');
-    observe('object:selected');
     document.onkeydown = keyDown;
-    $('#chatdialog').dialog();
-    $('#chatdialog').dialog('close')
+    //	$('#texteditdiv').dialog();
+    $('#chaticon').click(openChatBox);
+    $('#propicon').click(openProp)
+    //loadSVG()
+    initTextEditWindow()
+    initChatWindow();
+    addObservers()
+}
 
-    $('#texteditdiv').dialog();
-    $('#texteditdiv').dialog('close');
-
+function initPropWindow() {
     $('#propdiv').dialog();
     $('#propdiv').dialog({
         resizable: false
     });
     $('#propdiv').dialog('close');
+}
 
-    //	$('#texteditdiv').dialog();
-    $('#chaticon').click(openChatBox);
-    $('#propicon').click(openProp)
-    //loadSVG()
+function initChatWindow() {
+    $('#chatdialog').dialog();
+    $('#chatdialog').dialog('close');
+}
+
+function initTextEditWindow() {
+    $('#texteditdiv').dialog();
+    $('#texteditdiv').dialog('close');
+}
+
+function addObservers() {
+    observe('object:modified');
+    observe('path:created');
+    observe('selection:cleared');
+    observe('object:moved');
+    observe('object:selected');
 }
 
 function openChatBox() {
@@ -74,6 +84,7 @@ function openChatBox() {
 }
 
 function openProp() {
+    if (canvas.getActiveObject() == undefined) return;
     var dialog_width = $("#chatdialog").dialog("option", "width");
     var win_width = $(window).width();
     $('#propdiv').dialog({
@@ -88,6 +99,8 @@ function openProp() {
  * 
  */
 matisse.onDraw = function (data) {
+    console.log(data.action + "\n");
+    if (data == undefined) return;
     //(document.getElementById("debug")).value = actions[data.action]+'\n'+data.args;
     //alert(data.args.join());
     if (data.action == "modified") {
@@ -108,7 +121,6 @@ matisse.onDraw = function (data) {
     }
 
 }
-
 
 function getObjectById(id) {
     var obj;
@@ -195,7 +207,8 @@ function modifyObject(args) {
     obj.set("scaleX", recvdObj.scaleX);
     obj.set("scaleY", recvdObj.scaleY);
     if (obj.type == "text") obj.text = recvdObj.text;
-    obj.set("angle", recvdObj.angle);
+    obj.setAngle(recvdObj.angle)
+    //  obj.set("angle", recvdObj.angle);
     canvas.setActiveObject(obj)
     updatePropertyPanel(obj)
     obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
@@ -549,7 +562,6 @@ function colorHandler() {
 }
 
 function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
-
     $('#prop').remove();
     console.log(palletteName + "     " + obj.name)
     objName = obj.name;
@@ -561,8 +573,8 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     $('#propdiv').append('<div id="prop"><table id="proptable"></table></div>');
     jQuery.each(properties, function (i, val) {
         console.log("=================" + i);
-        if (i === "fill") var inputTag = "<input class= 'color' id='" + i + "' value='" + obj[i] + "'><br>";
-        else var inputTag = "<input type='text' id='" + i + "' value='" + obj[i] + "'></input><br>";
+        if (i === "fill" || i === "stroke") var inputTag = "<input type='text' onKeyPress='return letternumber(event)' class= 'color' id='" + i + "' value='" + obj[i] + "'><br>";
+        else var inputTag = "<input type='text' onKeyPress='return numbersonly(this, event)' id='" + i + "' value='" + obj[i] + "'></input><br>";
         var propDiv = $("#proptable");
         propDiv.append("<tr><td><label for='" + i + "'>" + i + " </label>" + inputTag + "</td></tr>"); //(" - " + val));
         var inBox = $("#" + i);
@@ -680,4 +692,45 @@ function showTextEditor() {
     $('#texteditdiv').dialog();
     $('#texteditdiv').dialog('open');
     textHandler();
+}
+
+function numbersonly(myfield, e, dec) {
+    var key;
+    var keychar;
+
+    if (window.event) key = window.event.keyCode;
+    else if (e) key = e.which;
+    else return true;
+    keychar = String.fromCharCode(key);
+
+    // control keys
+    if ((key == null) || (key == 0) || (key == 8) || (key == 9) || (key == 13) || (key == 27)) return true;
+
+    // numbers
+    else if ((("0123456789").indexOf(keychar) > -1)) return true;
+
+    // decimal point jump
+    else if (dec && (keychar == ".")) {
+        myfield.form.elements[dec].focus();
+        return false;
+    } else return false;
+}
+
+
+function letternumber(e) {
+    var key;
+    var keychar;
+
+    if (window.event) key = window.event.keyCode;
+    else if (e) key = e.which;
+    else return true;
+    keychar = String.fromCharCode(key);
+    keychar = keychar.toLowerCase();
+
+    // control keys
+    if ((key == null) || (key == 0) || (key == 8) || (key == 9) || (key == 13) || (key == 27)) return true;
+
+    // alphas and numbers
+    else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1)) return true;
+    else return false;
 }
