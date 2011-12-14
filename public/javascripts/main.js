@@ -17,13 +17,14 @@ var palletteName
 var canvas = new fabric.Canvas('c', {
     backgroundColor: '#FFFFFF'
     //HOVER_CURSOR: 'pointer'
+	
 });
 
 $(document).ready(init);
 
 
 function init() {
-
+	setCanvasSize()
     xOffset = getOffset(document.getElementById('canvasId')).left;
     yOffset = getOffset(document.getElementById('canvasId')).top;
 
@@ -43,6 +44,14 @@ function init() {
     addObservers()
 }
 
+function setCanvasSize() {
+	var wid = $(document).width()-204; // width of left panels
+	var ht =  $(document).height()// footer height
+	$('#c').attr('width', "'"+wid+"'"); 
+	$('#c').attr('height', "'"+ht+"'");
+	canvas.setDimensions({width:wid, height:ht})
+}
+	
 function initPropWindow() {
     $('#propdiv').dialog();
     $('#propdiv').dialog({
