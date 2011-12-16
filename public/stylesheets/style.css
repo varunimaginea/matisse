@@ -59,7 +59,7 @@ color: #FFFFFF;
 font-size: 12px;
 }
 
-label {
+label { 
     width:60px;
     line-height:23px;
     padding-left:5px;
@@ -119,6 +119,10 @@ height:100%;
 #toolsdiv {
 height:300px;
 }
+#c {
+  height: 100%; width: 100%; border: 1px solid #3399CC;
+}
+
 
 #canvasId{
 position:absolute;
@@ -129,10 +133,6 @@ float:left;
 height:100%; 
 }
 
-/*#c{
-width:100%;/* same as the left margin on #outer
-height:100%; 
-}*/
 
 #leftdiv p {padding-left:2px;padding-right:2px}
 /*#right p {padding-left:2px;padding-right:2px}*/

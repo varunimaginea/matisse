@@ -5,7 +5,7 @@
  */
 
 function registerpalette(paletteName, paletteDesc) {
-    palette[paletteName] = paletteDesc;
+    App.palette[paletteName] = paletteDesc;
 }
 
 /***********************************
@@ -248,9 +248,6 @@ registerpalette("basic_shapes", {
     } // end of shapes
 } // end of basic shapes
 );
-
-
-
 
 /***********************************
 // SVG IMAGES
