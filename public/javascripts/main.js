@@ -18,28 +18,33 @@ App.yPoints = [];
 App.xOffset
 App.yOffset;
 App.palletteName;
+App.associateText = {};
 // create canvas object
 var canvas = new fabric.Canvas('c', {
     backgroundColor: '#FFFFFF'
     //HOVER_CURSOR: 'pointer'
 	
 }); 
+canvas.isSelectMode = false;
 $(document).ready(init);
 
 
 function init() {
+	 $("#c").gridBuilder({
+    color:          '#eee',    // color of the primary gridlines
+    secondaryColor: '#f9f9f9', // color of the secondary gridlines
+    vertical:       18,        // height of the vertical rhythm
+    horizontal:     18       // width of horizontal strokes
+			// width of the gutter between strokes
+  });
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
    App.yOffset = getOffset(document.getElementById('canvasId')).top;
 
     addTools();
     colorHandler();
-    // clear canvas
-    canvas.clear();
-    // remove currently selected object
-    canvas.remove(canvas.getActiveObject());
+    
     document.onkeydown = keyDown;
-    //	$('#texteditdiv').dialog();
     $('#chaticon').click(openChatBox);
     $('#propicon').click(openProp)
     //loadSVG()
@@ -114,9 +119,9 @@ function openProp() {
  */
 matisse.onDraw = function (data) {
     console.log(data.action + "\n");
-    if (data.action == undefined) return;
-    //(document.getElementById("debug")).value = actions[data.action]+'\n'+data.args;
-    //alert(data.args.join());
+    if (data.action == undefined) {
+		return;
+	}
     if (data.action == "modified") {
         modifyObject(data.args[0])
     } else if (data.action == "modifyColor") {
@@ -170,8 +175,13 @@ function observe(eventName) {
                     object: obj
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
+			if(App.associateText[obj.name]) {
+				App.associateText[obj.name].left = obj.left;
+				App.associateText[obj.name].top = obj.top;
+				App.associateText[obj.name].setAngle(obj.getAngle());
+			}
             updatePropertyPanel(obj);
-            break;
+        break;
 
         case "selection:cleared":
             $('#prop').remove();
@@ -182,10 +192,7 @@ function observe(eventName) {
                 action: "clearText",
                 args: []
             })
-			/*var App.palette = document.getElementById('textarea');
-            App.palette.value = "";*/
-            //if($('#texteditdiv') != undefined) $('#texteditdiv').remove();
-            break;
+		break;
         case 'path:created':
             //alert("mousedown"+canvas.isDrawingMode);
             matisse.sendDrawMsg({
@@ -197,14 +204,15 @@ function observe(eventName) {
             });
             App.xPoints = [];
             App.yPoints = [];
-            break;
+        break;
         case 'object:selected':
             var obj = e.memo.target;
             //	if(obj.type == "path-group") 	return;
             //alert('selected')
+			console.log("customName ="+e.memo.target.customName);
             if (e.memo.target.type == "text") showTextEditor();
             createPropertiesPanel(e.memo.target);
-            break;
+        break;
         }
 
     })
@@ -272,27 +280,27 @@ function getRandomColor() {
 // called when 'rectangle button' clicked
 
 function handleClick(e) {
+	canvas.isSelectMode = false;
     resetCurrTool();
     App.currTool = e.target;
     App.currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'default'
     App.drawShape = true;
     App.action = e.target.id;
-    palletteName = $(e.target).parent().attr('id');
-    console.log("pallette ==============" + palletteName);
+    App.palletteName = $(e.target).parent().attr('id');
+    console.log("pallette ==============" + App.palletteName);
+	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
+    var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
     //alert(e.target.id)
     if (App.action != "path") {
         canvas.isDrawingMode = false;
         //document.getElementById("path").src =  'images/nobrush.png' 
     } else {
-        App.drawShape = false;
-        canvas.isDrawingMode = !canvas.isDrawingMode;
-        this.src = (!canvas.isDrawingMode) ? 'images/nobrush.png' : 'images/brush.png'
-        document.getElementById("c").style.cursor = (canvas.isDrawingMode) ? 'crosshair' : 'default';
-        return;
+         canvas.isDrawingMode = !canvas.isDrawingMode;
+		 return;
     }
-    var obj = getDefaultDataFromArray(App.palette[palletteName].shapes[e.target.id].properties);
-    console.log("OBJECT =" + obj)
+	
+    
     obj.uid = uniqid();
     App.shapeArgs = [obj];
 
@@ -311,14 +319,14 @@ function getDefaultDataFromArray(arr) {
 
 function applyProperty(objName, prop, val) {
 	if(prop == "fill" || prop == "stroke") val = "#"+val;
-	console.log('apply property '+prop+'   '+val);
+	console.log('apply App.palletteName '+App.palletteName+'   '+val);
     var arr = [{
         obj: canvas.getActiveObject(),
         property: val
     }]
-    for (var i = 0; i < App.palette["basic_shapes"].shapes[objName].properties.length; i++) {
-        if (App.palette["basic_shapes"].shapes[objName].properties[i].name == prop) {
-            App.palette["basic_shapes"].shapes[objName].properties[i].action.apply(this, arr);
+    for (var i = 0; i < App.palette[App.palletteName].shapes[objName].properties.length; i++) {
+        if (App.palette[App.palletteName].shapes[objName].properties[i].name == prop) {
+            App.palette[App.palletteName].shapes[objName].properties[i].action.apply(this, arr);
             canvas.renderAll();
             canvas.getActiveObject().setCoords();
         }
@@ -372,21 +380,20 @@ function colorSelectListener(e) {
 function handleMouseEvents() {
     var msg = "";
     $("#canvasId").mousedown(function (event) {
-        resetCurrTool();
-        if (!canvas.isDrawingMode && App.drawShape) {
+         if (!canvas.isDrawingMode && App.drawShape) {
             App.points.x = event.pageX - App.xOffset; //offset
             App.points.y = event.pageY - App.yOffset; //offset
             App.shapeArgs[0].left = App.points.x;
             App.shapeArgs[0].top = App.points.y;
             App.shapeArgs[0].name = App.action;
-            App.shapeArgs[0].pallette = palletteName;
-            App.palette[palletteName].shapes[App.action].toolAction.apply(this, App.shapeArgs);
+            App.shapeArgs[0].pallette = App.palletteName;
+            App.palette[App.palletteName].shapes[App.action].toolAction.apply(this, App.shapeArgs);
             matisse.sendDrawMsg({
-                pallette: palletteName,
+                pallette: App.palletteName,
                 action: App.action,
                 args: App.shapeArgs
             });
-            App.drawShape = false;
+       
 
         }
         if (canvas.isDrawingMode) {
@@ -509,7 +516,6 @@ function unhide(divID, className) {
 }
 
 function drawPath(args) {
-
     // canvas.contextTop.closePath();
     canvas._isCurrentlyDrawing = false;
     var utilMin = fabric.util.array.min;
@@ -580,9 +586,9 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     $('#prop').remove();
   //  console.log(palletteName + "     " + obj.name)
     objName = obj.name;
-    palletteName = obj.pallette;
+    App.palletteName = obj.pallette;
     if (objName == undefined) return;
-    properties = getDefaultDataFromArray(App.palette[palletteName].shapes[objName].properties);
+    properties = getDefaultDataFromArray(App.palette[App.palletteName].shapes[objName].properties);
     var props = {};
     //alert(obj.width);
     $('#propdiv').append('<div id="prop"><table id="proptable"></table></div>');
@@ -617,6 +623,15 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 function addTools() {
     //$('#leftdiv').draggable()
     $('#leftdiv').css('zIndex', '100')
+	$('#toolsdiv').append("<div><img id='selecttool' src='images/select_arrow.gif'></img>");
+	$('#selecttool').click( function() {
+		resetCurrTool();
+		App.currTool = this;
+		App.currTool.setAttribute('border', "2px");		
+	    App.drawShape = false;
+		canvas.isSelectMode = true;
+		canvas.isDrawingMode = false;
+	});
     for (var i in App.palette["basic_shapes"].shapes) {
         $('#toolsdiv').append("<div id='basic_shapes' ></div>")
         var dispName = App.palette["basic_shapes"].shapes[i].displayName;
@@ -631,27 +646,14 @@ function addTools() {
         $('#svg').append("<img id='" + dispName + "' src='" + src + "'/><br>");
         $('#' + dispName).click(handleClick);
     }
+	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");
+	$('#deletetool').click( function() {
+		 deleteObjects();
+	});
     $("#accordion").accordion();
     //document.getElementById("drawing-mode").onclick = drawingButtonListener;
     $('#chatbutton').click(chatButtonListener);
     handleMouseEvents()
-/*$('#toolsdiv').draggable({
-        cursor: 'move'
-    });
-    $('#texteditor').draggable({
-        cursor: 'move'
-    });
-    $('#colorpicker').draggable({
-        cursor: 'move'
-    });
-	
-	  for (i in tools) {
-		for( n in tools[i].properties)
-		{
-			document.getElementById("chattext").value+= tools[i].properties[n].type+"  :  ";
-			//tools[data.action].properties[data.type].apply(this, data.args);
-		}
-	  }*/
 }
 
 function keyDown(e) {
@@ -679,8 +681,8 @@ function getOffset(el) {
 }
 
 function loadSVG(args) {
-    console.log("LOAD SVG  " + args.left)
-    fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
+    
+	fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
         //   console.log("OBJECTS LENGTH :::"+objects.length)	
         var loadedObject;
         if (objects.length > 1) {
@@ -696,10 +698,23 @@ function loadSVG(args) {
         });
         loadedObject.name = args.name;
         loadedObject.pallette = args.pallette;
-        // loadedObject.scaleToWidth(300).setCoords();
-        canvas.add(loadedObject);
-        canvas.calcOffset();
+        loadedObject.scaleToWidth(300).setCoords();
+        canvas.add(loadedObject);	
+		var tempx = App.shapeArgs[0].left;
+		var tempy = App.shapeArgs[0].top;
+		//var obj = {};
+		var obj = getDefaultDataFromArray(App.palette["basic_shapes"].shapes["text"].properties);
+		obj.uid = uniqid();
+		App.shapeArgs[0]=obj;
+		App.shapeArgs[0].left = tempx;
+		App.shapeArgs[0].top = tempy;
+		App.shapeArgs[0].name = 'text';
+		App.shapeArgs[0].pallette = 'basic_shapes';
+		App.shapeArgs[0].selectable = false;
+		App.shapeArgs[0].parentname = loadedObject.name;
+		App.palette["basic_shapes"].shapes["text"].toolAction.apply(this, App.shapeArgs);
     });
+	
 
 }
 

@@ -33,8 +33,10 @@ registerpalette("basic_shapes", {
                 rect.uid = args.uid;
                 rect.name = args.name;
                 rect.pallette = args.pallette;
+				rect.customName = "rectangle";
+				//rect.selectable = false;
                 canvas.add(rect);
-                canvas.setActiveObject(rect);
+               
             },
             properties: [{
                 name: 'left',
@@ -174,6 +176,7 @@ registerpalette("basic_shapes", {
             displayIcon: "text.png",
             displayIcon2: "notext.png",
             toolAction: function addText(args) {
+				console.log("load text.....");
                 var text = 'text text text...';
                 var textSample = new fabric.Text(text, {
                     left: args.left,
@@ -187,8 +190,10 @@ registerpalette("basic_shapes", {
                 textSample.uid = args.uid;
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
+				if(!args.selectable)
+				textSample.selectable = false; 
                 canvas.add(textSample);
-				
+				App.associateText[args.parentname] = textSample;
             },
             properties: [{
                 name: 'left',
@@ -324,7 +329,7 @@ registerpalette("svg", {
             displayIcon: "svg2.png",
             displayIcon2: "svg2.jpg",
             toolAction: function (args) {
-                args.svg = 'drawing.svg';
+                args.svg = 'list.svg';
                 args.name = 'pathgroup2';
                 loadSVG(args);
             },
