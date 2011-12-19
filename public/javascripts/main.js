@@ -19,6 +19,7 @@ App.xOffset
 App.yOffset;
 App.palletteName;
 App.associateText = {};
+App.focusInput = "stroke";
 // create canvas object
 var canvas = new fabric.Canvas('c', {
     backgroundColor: '#FFFFFF'
@@ -37,13 +38,13 @@ function init() {
     horizontal:     18       // width of horizontal strokes
 			// width of the gutter between strokes
   });*/
+   
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
    App.yOffset = getOffset(document.getElementById('canvasId')).top;
 
     addTools();
-    colorHandler();
-    
+      
     document.onkeydown = keyDown;
     $('#chaticon').click(openChatBox);
     $('#propicon').click(openProp)
@@ -52,6 +53,21 @@ function init() {
     initChatWindow();
 	initPropWindow();
     addObservers();
+}
+
+function pickerUpdate(color){
+	if(App.focusInput == "") return;
+	var obj = canvas.getActiveObject();
+	obj.set(App.focusInput, color);
+	$('#'+App.focusInput).val(color);
+	 matisse.sendDrawMsg({
+                action: "modified",
+                args: [{
+                   uid: obj.uid,
+                   object: obj
+                }]
+            });
+	canvas.renderAll();
 }
 
 function setCanvasSize() {
@@ -99,7 +115,6 @@ function openChatBox() {
         resizable: false
     });
     $("#chatdialog").dialog("option", "show", 'slide');
-
 }
 
 function openProp() {
@@ -124,8 +139,8 @@ matisse.onDraw = function (data) {
 	}
     if (data.action == "modified") {
         modifyObject(data.args[0])
-    } else if (data.action == "modifyColor") {
-        modifyColorOnOther(data.args[0]);
+    } else if (data.action == "modifiedbyvalue") {
+        setObjectProperty(data.args[0]);
     } else if (data.action == "drawpath") {
         drawPath(data.args[0])
     } else if (data.action == "chat") {
@@ -136,7 +151,9 @@ matisse.onDraw = function (data) {
         canvas.remove(obj);
         $('#prop').remove();
     } else {
-        if (App.palette[data.pallette].shapes[data.action] != undefined) App.palette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+        if (App.palette[data.pallette] != undefined) {
+			App.palette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+		}
     }
 }
 
@@ -182,7 +199,6 @@ function observe(eventName) {
 			}
             updatePropertyPanel(obj);
         break;
-
         case "selection:cleared":
             $('#prop').remove();
             $('#propdiv').dialog('close');
@@ -194,10 +210,13 @@ function observe(eventName) {
             })
 		break;
         case 'path:created':
+			var obj = e.memo.path;
+			obj.uid = uniqid()
             //alert("mousedown"+canvas.isDrawingMode);
             matisse.sendDrawMsg({
                 action: 'drawpath',
                 args: [{
+					objuid: obj.uid,
                     _freeDrawingXPoints: App.xPoints,
                     _freeDrawingYPoints: App.yPoints
                 }]
@@ -221,18 +240,25 @@ function observe(eventName) {
 
 function modifyObject(args) {
     var obj = getObjectById(args.uid);
-    //canvas.setActiveObject(obj);
-    var recvdObj = args.object;
-    obj.set("left", recvdObj.left);
-    obj.set("top", recvdObj.top);
-    obj.set("scaleX", recvdObj.scaleX);
-    obj.set("scaleY", recvdObj.scaleY);
-    if (obj.type == "text") obj.text = recvdObj.text;
-    obj.setAngle(recvdObj.angle)
-    //  obj.set("angle", recvdObj.angle);
-    canvas.setActiveObject(obj)
-    updatePropertyPanel(obj)
-    obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+	if(obj) {
+		//canvas.setActiveObject(obj);
+		var recvdObj = args.object;
+		obj.set("left", recvdObj.left);
+		obj.set("top", recvdObj.top);
+		obj.set("scaleX", recvdObj.scaleX);
+		obj.set("scaleY", recvdObj.scaleY);
+		if(obj.type != 'path')
+		{
+			obj.set("fill", recvdObj.fill);
+			obj.set("stroke", recvdObj.fill);
+		}
+		if (obj.type == "text") obj.text = recvdObj.text;
+		obj.setAngle(recvdObj.angle)
+		//  obj.set("angle", recvdObj.angle);
+		canvas.setActiveObject(obj)
+		updatePropertyPanel(obj)
+		obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+	}
     /*======================================================================================================*/
 	/*** for some reason below code not working for circle modification, hence commented and using above code
 	/*======================================================================================================
@@ -279,7 +305,7 @@ function getRandomColor() {
 
 // called when 'rectangle button' clicked
 
-function handleClick(e) {
+function handleToolClick(e) {
 	canvas.isSelectMode = false;
     resetCurrTool();
     App.currTool = e.target;
@@ -288,8 +314,7 @@ function handleClick(e) {
     App.drawShape = true;
     App.action = e.target.id;
     App.palletteName = $(e.target).parent().attr('id');
-    console.log("pallette ==============" + App.palletteName);
-	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
+  	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
     var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
     //alert(e.target.id)
     if (App.action != "path") {
@@ -299,9 +324,7 @@ function handleClick(e) {
          canvas.isDrawingMode = !canvas.isDrawingMode;
 		 return;
     }
-	
-    
-    obj.uid = uniqid();
+	obj.uid = uniqid();
     App.shapeArgs = [obj];
 
 }
@@ -318,9 +341,7 @@ function getDefaultDataFromArray(arr) {
 
 
 function applyProperty(objName, prop, val) {
-	if(prop == "fill" || prop == "stroke") val = "#"+val;
-	console.log('apply App.palletteName '+App.palletteName+'   '+val);
-    var arr = [{
+	var arr = [{
         obj: canvas.getActiveObject(),
         property: val
     }]
@@ -353,30 +374,6 @@ function chatButtonListener(e) {
 }
 
 
-// Listener for Color section - because canvas.observe does not trigger modify event when color is changed.
-
-function colorSelectListener(e) {
-    // Determine which option was selected
-    var newColor = this.options[this.selectedIndex].value;
-    // Locally, set the line color to the selected value
-    fillColor = newColor;
-    // check if any object is currently selected
-    if (canvas.getActiveObject()) {
-        // get currently selected object
-        var obj = canvas.getActiveObject();
-        // apply selected color for stroke
-        obj.set("stroke", fillColor);
-        modifyColor(obj, fillColor);
-        canvas.renderAll();
-        matisse.sendDrawMsg({
-            action: "modifyColor",
-            args: [obj.uid, fillColor]
-        })
-        //alert(obj.uid);
-        //delete obj;
-    }
-}
-
 function handleMouseEvents() {
     var msg = "";
     $("#canvasId").mousedown(function (event) {
@@ -393,9 +390,13 @@ function handleMouseEvents() {
                 action: App.action,
                 args: App.shapeArgs
             });
-       
-
+			resetCurrTool();
+			$('#selecttool').attr('border', "2px");
+			App.currTool = document.getElementById("selecttool");  //$('#selecttool');
+			canvas.isSelectMode = true;
+			App.drawShape = false;
         }
+		
         if (canvas.isDrawingMode) {
             App.xPoints = [];
             App.yPoints = [];
@@ -410,8 +411,16 @@ function handleMouseEvents() {
             App.xPoints.push(event.pageX - App.xOffset);
             App.yPoints.push(event.pageY - App.yOffset);
            // msg += event.pageX + ", " + event.pageY + "\n :";
-
         }
+		else {
+			var obj = canvas.getActiveObject();
+			if(obj && App.associateText[obj.name]) {
+				App.associateText[obj.name].left = obj.left;
+				App.associateText[obj.name].top = obj.top;
+				App.associateText[obj.name].setAngle(obj.getAngle());
+			}
+		}
+		
     });
 
 }
@@ -441,6 +450,13 @@ function modifyColorOnOther(args) {
     canvas.renderAll();
 }
 
+function setObjectProperty(args) {
+	 var obj = getObjectById(args.uid);
+	 if(obj) {
+		obj.set(args.property, args.value);
+		canvas.renderAll();
+	 }
+}
 
 function deleteObjects() {
     var activeObject = canvas.getActiveObject(),
@@ -502,9 +518,20 @@ function textHandler() {
  */
 
 function uniqid() {
-    var newDate = new Date;
+    //var newDate = new Date;
     //  alert(newDate.getTime());
-    return newDate.getTime();
+    return randomString();
+}
+
+function randomString() {
+	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+	var string_length = 8;
+	var randomstring = '';
+	for (var i=0; i<string_length; i++) {
+		var rnum = Math.floor(Math.random() * chars.length);
+		randomstring += chars.substring(rnum,rnum+1);
+	}
+	return randomstring;
 }
 
 function unhide(divID, className) {
@@ -546,41 +573,17 @@ function drawPath(args) {
     }
 
     var p = new fabric.Path(path);
-
     p.fill = null;
-    p.stroke = App.fillColor;
+    p.stroke = '#000000';
     p.strokeWidth = 1;
+	p.uid = args.objuid
     canvas.add(p);
     p.set("left", minX + (maxX - minX) / 2).set("top", minY + (maxY - minY) / 2).setCoords();
     canvas.renderAll();
     //this.fire('path:created', { path: p });
 }
 
-function colorHandler() {
-    $("#colors").on("click", "td", function () {
-        //alert($(this).attr('bgcolor'));//.toggleClass("chosen");
-        fillColor = $(this).attr('bgcolor');
-        $("#fColor").attr("bgcolor", fillColor);
-        if (canvas.getActiveObject()) {
-            // get currently selected object
-            var obj = canvas.getActiveObject();
-            // apply selected color for stroke
-            obj.set("stroke", fillColor);
-            modifyColor(obj, fillColor);
-            canvas.renderAll();
-            // send data to server
-            matisse.sendDrawMsg({
-                action: "modifyColor",
-                args: [{
-                    uid: obj.uid,
-                    fillColor: fillColor
-                }]
-            })
-            //alert(obj.uid);
-            //delete obj;
-        }
-    });
-}
+
 
 function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     $('#prop').remove();
@@ -591,28 +594,42 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     properties = getDefaultDataFromArray(App.palette[App.palletteName].shapes[objName].properties);
     var props = {};
     //alert(obj.width);
-    $('#propdiv').append('<div id="prop"><table id="proptable"></table></div>');
+    $('#propdiv').append('<div id="prop"><table id="proptable"></table><div id="colorpicker"></div></div>');
     jQuery.each(properties, function (i, val) {
-        if (i === "fill" || i === "stroke") var inputTag = "<input  style='width:70px' onKeyPress='return letternumber(event)' class= 'color' id='" + i + "' value='" + obj[i] + "'><br>";
-        else var inputTag = "<input type='text' style='width:70px' onKeyPress='return numbersonly(this, event)' id='" + i + "' value='" + obj[i] + "'></input><br>";
+        if (i === "fill" || i === "stroke") {
+			var inputTag = "<input  style='width:70px' onKeyPress='return letternumber(event)' class= 'color' id='" + i + "' value='" + obj[i] + "'><br>";
+			
+		}
+        else {
+			var inputTag = "<input type='text' style='width:70px' onKeyPress='return numbersonly(this, event)' id='" + i + "' value='" + obj[i] + "'></input><br>";
+		}
         var propDiv = $("#proptable");
         propDiv.append("<tr><td width='200px'><label for='" + i + "'>" + i + " </label>" + inputTag + "</td></tr>"); //(" - " + val));
         var inBox = $("#" + i);
         // inBox.addClass('inbox');
+		$(":input").focus(function () {
+			App.focusInput = '';
+			id = this.id;
+			if(id == 'fill' || id=='stroke') {
+				//alert(id);
+				App.focusInput = id;
+			}
+		});
         inBox.keyup(function () {
             if (!canvas.getActiveObject()) return;
             applyProperty(objName, i, $("#" + i).val());
             matisse.sendDrawMsg({
-                action: "modifiedbyvalue",
+                action: "modified",
                 args: [{
                     uid: obj.uid,
-                    object: obj
+                   object: obj
                 }]
             });
         });
         // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
     });
-	$('.color').jPicker();
+	var colorPicker = $.farbtastic("#colorpicker");
+	colorPicker.linkTo(pickerUpdate);
 }
 
 /**
@@ -637,14 +654,14 @@ function addTools() {
         var dispName = App.palette["basic_shapes"].shapes[i].displayName;
         var src = 'images/' + App.palette["basic_shapes"].shapes[i].displayIcon;
         $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/><br>");
-        $('#' + dispName).click(handleClick);
+        $('#' + dispName).click(handleToolClick);
     }
     for (var i in App.palette["svg"].shapes) {
         $('#svgdiv').append("<div id='svg'></div>")
         var dispName = App.palette["svg"].shapes[i].displayName;
         var src = 'images/' + App.palette["svg"].shapes[i].displayIcon;
         $('#svg').append("<img id='" + dispName + "' src='" + src + "'/><br>");
-        $('#' + dispName).click(handleClick);
+        $('#' + dispName).click(handleToolClick);
     }
 	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");
 	$('#deletetool').click( function() {
