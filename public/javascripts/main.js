@@ -30,13 +30,13 @@ $(document).ready(init);
 
 
 function init() {
-	 $("#c").gridBuilder({
+/*	 $("#c").gridBuilder({
     color:          '#eee',    // color of the primary gridlines
     secondaryColor: '#f9f9f9', // color of the secondary gridlines
     vertical:       18,        // height of the vertical rhythm
     horizontal:     18       // width of horizontal strokes
 			// width of the gutter between strokes
-  });
+  });*/
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
    App.yOffset = getOffset(document.getElementById('canvasId')).top;
