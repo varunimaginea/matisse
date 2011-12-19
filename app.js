@@ -9,6 +9,7 @@ var express = require('express')
 
 var Nohm = require('nohm').Nohm;
 var BoardModel = require(__dirname+'/BoardModel.js');
+var ShapesModel = require(__dirname+'/ShapesModel.js');
 var redis = require("redis")
 , redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
 
@@ -85,7 +86,8 @@ app.get('/html', function (req, res, next) {
 
 app.resource({
     index: function(req, res, next){
-	BoardModel.find(function (err, ids) {
+	
+	ShapesModel.find(function (err, ids) {
 	    if (err) {
 		return next(err);
 	    }
@@ -97,12 +99,12 @@ app.resource({
 	    }
 	    console.log(ids);
 	    ids.forEach(function (id) {
-	    var board = new BoardModel();
+	    var board = new ShapesModel();
 		board.load(id, function (err, props) {
 		    if (err) {
 			return next(err);
 		    }
-		    boards.push({id: this.id, url: props.url});
+		    boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args});
 		    if (++count === len) {
 			res.json(boards);
 		    }
@@ -130,9 +132,12 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 io.sockets.on('connection', function (socket) {
     socket.emit('eventConnect',{message:'welcome'});
-    socket.on("setUrl",function(location,data){
+    socket.emit('eventDraw','{"id":11,"pallette":"basic_shapes","action":"rectangle","args":"[{\"left\":194,\"top\":168,\"width\":200,\"height\":100,\"scaleX\":200,\"scaleY\":100,\"fill\":\"#FF0000\",\"stroke\":\"#00FF00\",\"angle\":0,\"uid\":1324292323410,\"name\":\"rectangle\",\"pallette\":\"basic_shapes\"}]"}');
+	
+	socket.on("setUrl",function(location,data){
 	var wb_url = location.replace("/", "");
 	socket.join(wb_url);
+	
 	BoardModel.find({url: wb_url}, function (err, ids) {
 	    if (err) {
 		return next(err);
@@ -144,7 +149,7 @@ io.sockets.on('connection', function (socket) {
 		console.log("No white board exists length is 0");
 //		return res.json(boards);
 	    }
-	    console.log(ids);
+	    console.log("IDS::: "+ids);
 	    ids.forEach(function (id) {
 	    var board = new BoardModel();
 		board.load(id, function (err, props) {
@@ -160,10 +165,17 @@ io.sockets.on('connection', function (socket) {
 	    });
 	});
     });
-    socket.on('eventDraw',function(location,data){
+    
+	
+	socket.on('eventDraw',function(location,data){
+	console.log(data);
 	var url = location.replace("/", "");
 	ko = new Date();
 	ji = ko.getTime();
 	socket.broadcast.to(url).emit('eventDraw',data);
+	var newShape = new ShapesModel();
+	newShape.store(data, function(err){
+		//console.log("***** Error in URL:"+url+" Err:"+err);
+    });
     });
 });
