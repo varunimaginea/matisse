@@ -6,6 +6,9 @@ var nohm = require(__dirname+'/node_modules/nohm/lib/nohm.js').Nohm;
 var shapesModel = module.exports = nohm.model('Shapes', {
     idGenerator: 'increment',
     properties: {
+	board_url: {
+	    type: 'string'
+	},
 	pallette: {
 	    type: 'string',
 	    index: true,
@@ -21,7 +24,7 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	    ]
 	},
 	args: {
-	    type: 'string',
+	    type: 'json',
 	    validations: [
 		'notEmpty'
 	    ]
@@ -54,7 +57,13 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	 */
 	store: function (data, callback) {
 	    var self = this;
-	    
+			console.log("===================");
+
+	    console.log(data.args);
+	console.log(data.url);
+	
+	console.log(data);
+	console.log("===================");
 	    this.fill(data);
 	    this.save(function (err) {
 		  if ( ! err) {

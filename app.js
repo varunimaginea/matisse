@@ -12,7 +12,7 @@ var BoardModel = require(__dirname+'/BoardModel.js');
 var ShapesModel = require(__dirname+'/ShapesModel.js');
 var redis = require("redis")
 , redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
-
+redisClient.select(4);
 Nohm.setPrefix('matisse'); //setting up app prefix for redis
 Nohm.setClient(redisClient);
 
@@ -139,6 +139,36 @@ io.sockets.on('connection', function (socket) {
 	socket.on("setUrl",function(location,data){
 	var wb_url = location.replace("/", "");
 	socket.join(wb_url);	
+		ShapesModel.find({board_url:wb_url}, function (err, ids) {
+			if (err) {
+				console.log(err);
+			}
+			var boards = [];
+			var len = ids.length;
+			var count = 0;
+			if (len === 0) {
+			console.log("::::::: "+boards);
+			}
+			console.log(ids);
+			ids.forEach(function (id) {
+			var board = new ShapesModel();
+			board.load(id, function (err, props) {
+				if (err) {
+				return next(err);
+				}
+				boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args});
+			
+				if (++count === len) 
+				{
+					//res.json(boards);
+					console.log("::::::: ");
+					//socket.emit('eventDraw',boards);
+				}
+				socket.emit('eventDraw',eval({pallette: props.pallette, action: props.action, args: [props.args]}));
+
+			});
+			});
+		}); 	
     });
     
 	
@@ -151,7 +181,10 @@ io.sockets.on('connection', function (socket) {
 	socket.broadcast.to(url).emit('eventDraw',data);
 	socket.broadcast.to(url).emit('eventDraw',data);
 	var newShape = new ShapesModel();
-	newShape.store(data, function(err){
+	console.log("===================");
+	data.args = data.args[0];
+	data.board_url = url;
+	newShape.store(data,function(err){
 		//console.log("***** Error in URL:"+url+" Err:"+err);
     });
     });
