@@ -4950,7 +4950,7 @@ fabric.util.string = {
      *
      */
     __onMouseDown: function (e) {
-      
+     
       // accept only left clicks
       if (e.which !== 1 && !fabric.isTouchSupported) return;
       
@@ -4962,7 +4962,10 @@ fabric.util.string = {
         
         return;
       }
-      
+      if(!this.isSelectMode) {
+	     this.renderAll();
+		return;
+	  }
       // ignore if some object is being transformed at this moment
       if (this._currentTransform) return;
       
@@ -5217,7 +5220,7 @@ fabric.util.string = {
     *
     */
     __onMouseMove: function (e) {
-      
+      if(!this.isSelectMode && !this.isDrawingMode) return;
       if (this.isDrawingMode) {
         if (this._isCurrentlyDrawing) {
           this._captureDrawingPath(e);
@@ -6834,7 +6837,7 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
     borderOpacityWhenMoving:  0.4,
     borderScaleFactor:        1,
     transformMatrix:          null,
-    
+    customName:			  null,
     /**
      * When set to `false`, an object can not be selected for modification (using either point-click-based or group-based selection)
      * @property
