@@ -26,18 +26,15 @@ var canvas = new fabric.Canvas('c', {
     //HOVER_CURSOR: 'pointer'
 	
 }); 
+
+/* by default selection mode is false */
 canvas.isSelectMode = false;
+
+/* init app when document is ready  */
 $(document).ready(init);
 
 
 function init() {
-/*	 $("#c").gridBuilder({
-    color:          '#eee',    // color of the primary gridlines
-    secondaryColor: '#f9f9f9', // color of the secondary gridlines
-    vertical:       18,        // height of the vertical rhythm
-    horizontal:     18       // width of horizontal strokes
-			// width of the gutter between strokes
-  });*/
    
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
@@ -47,8 +44,8 @@ function init() {
       
     document.onkeydown = keyDown;
     $('#chaticon').click(openChatBox);
-    $('#propicon').click(openProp)
-    //loadSVG()
+    $('#propicon').click(openProp);
+   
     initTextEditWindow();
     initChatWindow();
 	initPropWindow();
@@ -71,11 +68,9 @@ function pickerUpdate(color){
 }
 
 function setCanvasSize() {
-	var wid = $(document).width()-204; // width of left panels
-	var ht =  $(document).height()// footer height
-	$('#c').attr('width', "'"+wid+"'"); 
-	$('#c').attr('height', "'"+ht+"'");
-	canvas.setDimensions({width:wid, height:ht});
+	var width = $("#outer").width(); // width of left panels
+	var height =  $("#outer").height()-30;// footer height
+	canvas.setDimensions({width:width, height:height});
 }
 	
 function initPropWindow() {
@@ -226,11 +221,12 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
-            //	if(obj.type == "path-group") 	return;
-            //alert('selected')
-			console.log("customName ="+e.memo.target.customName);
-            if (e.memo.target.type == "text") showTextEditor();
-            createPropertiesPanel(e.memo.target);
+			console.log(obj.type);
+            if (obj.name === "text") {
+				showTextEditor();
+			} 
+			createPropertiesPanel(e.memo.target);
+			
         break;
         }
 
@@ -250,7 +246,7 @@ function modifyObject(args) {
 		if(obj.type != 'path')
 		{
 			obj.set("fill", recvdObj.fill);
-			obj.set("stroke", recvdObj.fill);
+			obj.set("stroke", recvdObj.stroke);
 		}
 		if (obj.type == "text") obj.text = recvdObj.text;
 		obj.setAngle(recvdObj.angle)
@@ -314,8 +310,13 @@ function handleToolClick(e) {
     App.drawShape = true;
     App.action = e.target.id;
     App.palletteName = $(e.target).parent().attr('id');
+//	console.log('App.palletteName =='+App.palette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.palette[App.palletteName]);
   	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
-    var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
+	if(e.target.id !="path") {
+		var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
+		obj.uid = uniqid();
+		App.shapeArgs = [obj];
+	}
     //alert(e.target.id)
     if (App.action != "path") {
         canvas.isDrawingMode = false;
@@ -324,9 +325,6 @@ function handleToolClick(e) {
          canvas.isDrawingMode = !canvas.isDrawingMode;
 		 return;
     }
-	obj.uid = uniqid();
-    App.shapeArgs = [obj];
-
 }
 
 function getDefaultDataFromArray(arr) {
@@ -375,9 +373,9 @@ function chatButtonListener(e) {
 
 
 function handleMouseEvents() {
-    var msg = "";
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
+			console.log("App.palletteName ="+App.palletteName);
             App.points.x = event.pageX - App.xOffset; //offset
             App.points.y = event.pageY - App.yOffset; //offset
             App.shapeArgs[0].left = App.points.x;
@@ -481,15 +479,15 @@ function deleteObjects() {
 }
 
 function textHandler() {
-    App.palette = document.getElementById('textarea');
-    if (App.palette) {
-        App.palette.onfocus = function () {
+    var txtele = document.getElementById('textarea');
+    if (txtele) {
+        txtele.onfocus = function () {
             var activeObject = canvas.getActiveObject();
-            if (activeObject && activeObject.type === 'text') {
+            if (activeObject && activeObject.name === 'text') {
                 this.value = activeObject.text;
             }
         };
-        App.palette.onkeyup = function (e) {
+        txtele.onkeyup = function (e) {
             var activeObject = canvas.getActiveObject();
             if (activeObject) {
                 if (!this.value) {
@@ -538,7 +536,7 @@ function unhide(divID, className) {
     var item = document.getElementById(divID);
     if (item) {
         item.value = canvas.getActiveObject().text;
-        item.className = className
+        item.className = className;
     }
 }
 
@@ -640,7 +638,7 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 function addTools() {
     //$('#leftdiv').draggable()
     $('#leftdiv').css('zIndex', '100')
-	$('#toolsdiv').append("<div><img id='selecttool' src='images/select_arrow.gif'></img>");
+	$('#toolsdiv').append("<div><img id='selecttool' src='images/select.png'></img>");
 	$('#selecttool').click( function() {
 		resetCurrTool();
 		App.currTool = this;
@@ -653,14 +651,14 @@ function addTools() {
         $('#toolsdiv').append("<div id='basic_shapes' ></div>")
         var dispName = App.palette["basic_shapes"].shapes[i].displayName;
         var src = 'images/' + App.palette["basic_shapes"].shapes[i].displayIcon;
-        $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/><br>");
+        $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/>");
         $('#' + dispName).click(handleToolClick);
     }
     for (var i in App.palette["svg"].shapes) {
         $('#svgdiv').append("<div id='svg'></div>")
         var dispName = App.palette["svg"].shapes[i].displayName;
         var src = 'images/' + App.palette["svg"].shapes[i].displayIcon;
-        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/><br>");
+        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/>");
         $('#' + dispName).click(handleToolClick);
     }
 	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");

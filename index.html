@@ -14,22 +14,7 @@
 	  <script src="/javascripts/farbtastic.js" type="text/javascript"></script>
    </head>
    <body>
-      <div id="outer">
-         <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
-			<img class = 'topicons' id='chaticon' src='images/chat_icon.gif'/>
-			<img class = 'topicons' id='propicon' src='images/properties_icon.jpg'/>&nbsp;&nbsp;
-			<img class = 'topicons' id='saveicon' src='images/save_edit.gif'/>
-			<p >MATISSE - the white board</p>
-         </div>
-         <div id="leftdiv" >
-			<div id="accordion" >
-				<h3><a href="#">Basic Shapes</a></h3>
-				<div id="toolsdiv"></div>
-				<h3><a href="#">SVGs</a></h3>
-				<div id="svgdiv"></div>
-			</div>
-         </div>
-         <div id="right" class="ui-widget-content">
+		<div id="right" class="ui-widget-content">
 			<div id='texteditdiv' title='Text Editor'>
 				<textarea id=textarea rows=2 ></textarea>
 			</div>
@@ -40,12 +25,33 @@
             </input><button id="chatbutton">OK</button>
 			</div>
 			<div id="propdiv" title="Properties"></div>
+         </div>     
+		 
+	 <div id="outer">	 
+         <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
+			<img src='images/matisse.png' id="logo"/>
+			<div id="menuicons">
+				<img class = 'topicons' id='chaticon' src='images/chat.png' alt="Chat"/>
+				<img class = 'topicons' id='propicon' src='images/prop.png' alt="Properties"/>
+				<img class = 'topicons' id='saveicon' src='images/save.png' alt="Save"/>
+				<img class = 'topicons' id='saveicon' src='images/logout.png' alt="Logout"/>
+			</div>
          </div>
          <div id="canvasId" >
             <canvas id="c" class="ui-corner-all" ></canvas>
 			
          </div>
      </div>
+	 
+         <div id="leftdiv">
+			<div id="accordion" >
+				<h3><a href="#">Shapes</a></h3>
+				<div id="toolsdiv"></div>
+				<h3><a href="#">SVGs</a></h3>
+				<div id="svgdiv"></div>
+			</div>
+         </div>
+		 
       <!-- end outer div -->
      <!-- <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>-->
 	  <script src="/javascripts/main.js"></script>

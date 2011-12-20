@@ -121,7 +121,6 @@ registerpalette("basic_shapes", {
                 cir.name = args.name;
                 cir.pallette = args.pallette;
                 canvas.add(cir);
-                canvas.setActiveObject(cir);
             },
             properties: [{
                 name: 'left',
@@ -190,10 +189,11 @@ registerpalette("basic_shapes", {
                 textSample.uid = args.uid;
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
-				if(!args.selectable)
+				canvas.add(textSample);
+				if(args.parentname) {
 				textSample.selectable = false; 
-                canvas.add(textSample);
 				App.associateText[args.parentname] = textSample;
+				}
             },
             properties: [{
                 name: 'left',
@@ -225,14 +225,18 @@ registerpalette("basic_shapes", {
                     (args.obj).set("fill", args.property);
                 },
                 defaultvalue: '#FF0000'
-            }, {
+            }, 
+			
+			{
                 name: 'stroke',
                 type: 'string',
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
                 defaultvalue: '#00FF00'
-            }, {
+            }, 
+			
+			{
                 name: 'angle',
                 type: 'number',
                 action: function (args) {
@@ -244,7 +248,7 @@ registerpalette("basic_shapes", {
         // end of text
         path: {
             displayName: "path",
-            displayIcon: "nobrush.png",
+            displayIcon: "brush.png",
             displayIcon2: "brush.png",
             toolAction: null
 
@@ -263,8 +267,8 @@ registerpalette("svg", {
     shapes: {
         pathgroup1: {
             displayName: "pathgroup1",
-            displayIcon: "svg.gif",
-            displayIcon2: "svg2.jpg",
+            displayIcon: "anchor.png",
+            displayIcon2: "anchor.png",
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
@@ -326,10 +330,10 @@ registerpalette("svg", {
         },
         pathgroup2: {
             displayName: "pathgroup2",
-            displayIcon: "svg2.png",
-            displayIcon2: "svg2.jpg",
+            displayIcon: "thumb.png",
+            displayIcon2: "thumb.png",
             toolAction: function (args) {
-                args.svg = 'list.svg';
+                args.svg = '17.svg';
                 args.name = 'pathgroup2';
                 loadSVG(args);
             },
