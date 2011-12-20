@@ -121,7 +121,6 @@ registerpalette("basic_shapes", {
                 cir.name = args.name;
                 cir.pallette = args.pallette;
                 canvas.add(cir);
-                canvas.setActiveObject(cir);
             },
             properties: [{
                 name: 'left',
@@ -190,10 +189,11 @@ registerpalette("basic_shapes", {
                 textSample.uid = args.uid;
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
-				if(!args.selectable)
+				canvas.add(textSample);
+				if(args.parentname) {
 				textSample.selectable = false; 
-                canvas.add(textSample);
 				App.associateText[args.parentname] = textSample;
+				}
             },
             properties: [{
                 name: 'left',
@@ -225,14 +225,18 @@ registerpalette("basic_shapes", {
                     (args.obj).set("fill", args.property);
                 },
                 defaultvalue: '#FF0000'
-            }, {
+            }, 
+			
+			{
                 name: 'stroke',
                 type: 'string',
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
                 defaultvalue: '#00FF00'
-            }, {
+            }, 
+			
+			{
                 name: 'angle',
                 type: 'number',
                 action: function (args) {

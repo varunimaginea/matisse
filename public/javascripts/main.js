@@ -31,7 +31,7 @@ $(document).ready(init);
 
 
 function init() {
-  
+   
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
    App.yOffset = getOffset(document.getElementById('canvasId')).top;
@@ -219,11 +219,13 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
-            //	if(obj.type == "path-group") 	return;
-            //alert('selected')
-			console.log("customName ="+e.memo.target.customName);
-            if (e.memo.target.type == "text") showTextEditor();
-            createPropertiesPanel(e.memo.target);
+			console.log(obj.type);
+            if (obj.name === "text") {
+				showTextEditor();
+			} 
+			if(obj.type != "text" && obj.type != "path") {
+				createPropertiesPanel(e.memo.target);
+			}
         break;
         }
 
@@ -307,8 +309,13 @@ function handleToolClick(e) {
     App.drawShape = true;
     App.action = e.target.id;
     App.palletteName = $(e.target).parent().attr('id');
+//	console.log('App.palletteName =='+App.palette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.palette[App.palletteName]);
   	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
-    var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
+	if(e.target.id !="path") {
+		var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
+		obj.uid = uniqid();
+		App.shapeArgs = [obj];
+	}
     //alert(e.target.id)
     if (App.action != "path") {
         canvas.isDrawingMode = false;
@@ -317,9 +324,6 @@ function handleToolClick(e) {
          canvas.isDrawingMode = !canvas.isDrawingMode;
 		 return;
     }
-	obj.uid = uniqid();
-    App.shapeArgs = [obj];
-
 }
 
 function getDefaultDataFromArray(arr) {
@@ -368,9 +372,9 @@ function chatButtonListener(e) {
 
 
 function handleMouseEvents() {
-    var msg = "";
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
+			console.log("App.palletteName ="+App.palletteName);
             App.points.x = event.pageX - App.xOffset; //offset
             App.points.y = event.pageY - App.yOffset; //offset
             App.shapeArgs[0].left = App.points.x;
@@ -474,15 +478,15 @@ function deleteObjects() {
 }
 
 function textHandler() {
-    App.palette = document.getElementById('textarea');
-    if (App.palette) {
-        App.palette.onfocus = function () {
+    var txtele = document.getElementById('textarea');
+    if (txtele) {
+        txtele.onfocus = function () {
             var activeObject = canvas.getActiveObject();
-            if (activeObject && activeObject.type === 'text') {
+            if (activeObject && activeObject.name === 'text') {
                 this.value = activeObject.text;
             }
         };
-        App.palette.onkeyup = function (e) {
+        txtele.onkeyup = function (e) {
             var activeObject = canvas.getActiveObject();
             if (activeObject) {
                 if (!this.value) {
