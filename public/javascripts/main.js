@@ -64,11 +64,9 @@ function pickerUpdate(color){
 }
 
 function setCanvasSize() {
-	var wid = $(document).width()-204; // width of left panels
-	var ht =  $(document).height()// footer height
-	$('#c').attr('width', "'"+wid+"'"); 
-	$('#c').attr('height', "'"+ht+"'");
-	canvas.setDimensions({width:wid, height:ht});
+	var width = $("#outer").width(); // width of left panels
+	var height =  $("#outer").height()-30;// footer height
+	canvas.setDimensions({width:width, height:height});
 }
 	
 function initPropWindow() {
@@ -223,9 +221,8 @@ function observe(eventName) {
             if (obj.name === "text") {
 				showTextEditor();
 			} 
-			if(obj.type != "text" && obj.type != "path") {
-				createPropertiesPanel(e.memo.target);
-			}
+			createPropertiesPanel(e.memo.target);
+			
         break;
         }
 
@@ -637,7 +634,7 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 function addTools() {
     //$('#leftdiv').draggable()
     $('#leftdiv').css('zIndex', '100')
-	$('#toolsdiv').append("<div><img id='selecttool' src='images/select_arrow.gif'></img>");
+	$('#toolsdiv').append("<div><img id='selecttool' src='images/select.png'></img>");
 	$('#selecttool').click( function() {
 		resetCurrTool();
 		App.currTool = this;
@@ -650,14 +647,14 @@ function addTools() {
         $('#toolsdiv').append("<div id='basic_shapes' ></div>")
         var dispName = App.palette["basic_shapes"].shapes[i].displayName;
         var src = 'images/' + App.palette["basic_shapes"].shapes[i].displayIcon;
-        $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/><br>");
+        $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/>");
         $('#' + dispName).click(handleToolClick);
     }
     for (var i in App.palette["svg"].shapes) {
         $('#svgdiv').append("<div id='svg'></div>")
         var dispName = App.palette["svg"].shapes[i].displayName;
         var src = 'images/' + App.palette["svg"].shapes[i].displayIcon;
-        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/><br>");
+        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/>");
         $('#' + dispName).click(handleToolClick);
     }
 	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");

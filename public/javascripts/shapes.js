@@ -248,7 +248,7 @@ registerpalette("basic_shapes", {
         // end of text
         path: {
             displayName: "path",
-            displayIcon: "nobrush.png",
+            displayIcon: "brush.png",
             displayIcon2: "brush.png",
             toolAction: null
 
@@ -267,8 +267,8 @@ registerpalette("svg", {
     shapes: {
         pathgroup1: {
             displayName: "pathgroup1",
-            displayIcon: "svg.gif",
-            displayIcon2: "svg2.jpg",
+            displayIcon: "anchor.png",
+            displayIcon2: "anchor.png",
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
@@ -330,10 +330,10 @@ registerpalette("svg", {
         },
         pathgroup2: {
             displayName: "pathgroup2",
-            displayIcon: "svg2.png",
-            displayIcon2: "svg2.jpg",
+            displayIcon: "thumb.png",
+            displayIcon2: "thumb.png",
             toolAction: function (args) {
-                args.svg = 'list.svg';
+                args.svg = '17.svg';
                 args.name = 'pathgroup2';
                 loadSVG(args);
             },
