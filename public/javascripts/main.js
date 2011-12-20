@@ -26,7 +26,11 @@ var canvas = new fabric.Canvas('c', {
     //HOVER_CURSOR: 'pointer'
 	
 }); 
+
+/* by default selection mode is false */
 canvas.isSelectMode = false;
+
+/* init app when document is ready  */
 $(document).ready(init);
 
 
@@ -40,8 +44,8 @@ function init() {
       
     document.onkeydown = keyDown;
     $('#chaticon').click(openChatBox);
-    $('#propicon').click(openProp)
-    //loadSVG()
+    $('#propicon').click(openProp);
+   
     initTextEditWindow();
     initChatWindow();
 	initPropWindow();
