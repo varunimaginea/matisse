@@ -31,14 +31,7 @@ $(document).ready(init);
 
 
 function init() {
-/*	 $("#c").gridBuilder({
-    color:          '#eee',    // color of the primary gridlines
-    secondaryColor: '#f9f9f9', // color of the secondary gridlines
-    vertical:       18,        // height of the vertical rhythm
-    horizontal:     18       // width of horizontal strokes
-			// width of the gutter between strokes
-  });*/
-   
+  
    setCanvasSize();
    App.xOffset = getOffset(document.getElementById('canvasId')).left;
    App.yOffset = getOffset(document.getElementById('canvasId')).top;
@@ -250,7 +243,7 @@ function modifyObject(args) {
 		if(obj.type != 'path')
 		{
 			obj.set("fill", recvdObj.fill);
-			obj.set("stroke", recvdObj.fill);
+			obj.set("stroke", recvdObj.stroke);
 		}
 		if (obj.type == "text") obj.text = recvdObj.text;
 		obj.setAngle(recvdObj.angle)
@@ -538,7 +531,7 @@ function unhide(divID, className) {
     var item = document.getElementById(divID);
     if (item) {
         item.value = canvas.getActiveObject().text;
-        item.className = className
+        item.className = className;
     }
 }
 
