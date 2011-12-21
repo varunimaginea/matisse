@@ -128,6 +128,9 @@ function openProp() {
  * 
  */
 matisse.onDraw = function (data) {
+	console.log('data ='+data)
+	//data = jQuery.parseJSON( data );
+	console.log('data ='+data.args)
     console.log(data.action + "\n");
     if (data.action == undefined) {
 		return;
