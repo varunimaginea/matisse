@@ -7,7 +7,12 @@ var shapesModel = module.exports = nohm.model('Shapes', {
     idGenerator: 'increment',
     properties: {
 	board_url: {
-	    type: 'string'
+	    type: 'string',
+	    index: true,
+	    validations: [
+		'notEmpty'
+	    ]
+
 	},
 	pallette: {
 	    type: 'string',
@@ -47,7 +52,6 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	    fields.forEach(function (i) {
 		props[i] = data[i];
 	    });
-	    
 	    this.p(props);
 	    return props;
 	},

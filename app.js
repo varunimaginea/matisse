@@ -106,7 +106,7 @@ app.resource({
 		    if (err) {
 			return next(err);
 		    }
-		    boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args});
+		    boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args, board_url: props.board_url});
 		    if (++count === len) {
 			res.json(boards);
 		    }
