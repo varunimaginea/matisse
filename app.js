@@ -3,12 +3,12 @@
  * Module dependencies.
  */
 
-var redis = require("redis")
+/*var redis = require("redis")
 , redis_client = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
 
 redis_client.on("error", function (err) {
     console.log("Error %s", err);
-});
+});*/
 
 
 var express = require('express')
@@ -91,7 +91,7 @@ socket.on("setUrl",function(location,data){
     //     console.log("----------------------");
     
     socket.join(url);
-    redis_client.hkeys(url, function (err, replies) {
+    /*redis_client.hkeys(url, function (err, replies) {
 
 	console.log("++++++++++++++++++++");
         console.log(replies.length + " replies:");
@@ -107,7 +107,7 @@ redis_client.hgetall(reply, function (err, obj) {
 });
         });
 //	redis_client.quit();
-    });
+    });*/
 });
 
 socket.on('eventDraw',function(location,data){
@@ -129,8 +129,8 @@ socket.on('eventDraw',function(location,data){
     ko = new Date();
     ji = ko.getTime();
 //    socket.broadcast.emit("eventDraw",data);
-    redis_client.hset([url, socket.id+"#"+ji, "test value"], redis.print);
-    redis_client.hmset(socket.id+"#"+ji, data,redis.print);
+ //   redis_client.hset([url, socket.id+"#"+ji, "test value"], redis.print);
+ //   redis_client.hmset(socket.id+"#"+ji, data,redis.print);
 
     //     console.log("++++++++------------");
     //     console.log(data);

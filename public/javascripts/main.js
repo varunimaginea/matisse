@@ -220,8 +220,7 @@ function observe(eventName) {
             App.yPoints = [];
         break;
         case 'object:selected':
-            var obj = e.memo.target;
-			console.log(obj.type);
+            var obj = e.memo.target;			
             if (obj.name === "text") {
 				showTextEditor();
 			} 
@@ -301,24 +300,24 @@ function getRandomColor() {
 
 // called when 'rectangle button' clicked
 
-function handleToolClick(e) {
+function handleToolClick(e) {	
 	canvas.isSelectMode = false;
     resetCurrTool();
     App.currTool = e.target;
     App.currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'default'
     App.drawShape = true;
-    App.action = e.target.id;
+    App.action = e.target.id;	
     App.palletteName = $(e.target).parent().attr('id');
 //	console.log('App.palletteName =='+App.palette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.palette[App.palletteName]);
-  	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
+  	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 	
 	if(e.target.id !="path") {
 		var obj = getDefaultDataFromArray(App.palette[App.palletteName].shapes[e.target.id].properties);
 		obj.uid = uniqid();
 		App.shapeArgs = [obj];
 	}
     //alert(e.target.id)
-    if (App.action != "path") {
+    if (App.action != "path") {	
         canvas.isDrawingMode = false;
         //document.getElementById("path").src =  'images/nobrush.png' 
     } else {
@@ -373,7 +372,7 @@ function chatButtonListener(e) {
 
 
 function handleMouseEvents() {
-    $("#canvasId").mousedown(function (event) {
+    $("#canvasId").mousedown(function (event) {	
          if (!canvas.isDrawingMode && App.drawShape) {
 			console.log("App.palletteName ="+App.palletteName);
             App.points.x = event.pageX - App.xOffset; //offset
@@ -580,15 +579,58 @@ function drawPath(args) {
     canvas.renderAll();
     //this.fire('path:created', { path: p });
 }
-
-
+function getStringWidth(str)
+{	
+	var font = '20px delicious_500',
+		obj = $('<div id=div1>' + str + '</div>')
+            .css({'position': 'absolute', 'float': 'left', 'white-space': 'pre-wrap', 'visibility': 'hidden', 'font': font})
+            .appendTo($('body')),
+		w = document.getElementById('div1').clientWidth;		
+	obj.remove();
+	return w;
+}
+function textInputHandler(obj, parent_obj)
+{
+	
+	$("#proptable").append("<tr><td width='200px'><textarea id='txtarea' style='height:100px'>hello</textarea> </td></tr>");
+	var txt_area = document.getElementById("txtarea");
+	txt_area.onfocus = function()
+	{
+		txt_area.innerHTML = obj.text;
+	}
+	var wireframeObject = parent_obj.name;
+	switch(wireframeObject)
+	{
+		case "radio":	txt_area.onkeyup = function (e) { 
+						var wdth = 0;
+						obj.text = this.value;
+						wdth = getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 10 + 30;
+						parent_obj.width = wdth;			
+						parent_obj.paths[0].left = -((wdth/2) - 15);
+						parent_obj.paths[1].left = parent_obj.paths[0].left;	
+						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 10;
+						parent_obj.paths[2].left = -(-getStringWidth(obj.text)/2 - text_left);	
+console.log(parent_obj);						
+						matisse.sendDrawMsg({
+							action: "modified",
+							args: [{
+							uid: parent_obj.uid,
+							object: parent_obj
+							}]
+						});		
+						canvas.renderAll();
+						};
+						break;
+	}	
+}
 
 function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     $('#prop').remove();
   //  console.log(palletteName + "     " + obj.name)
-    objName = obj.name;
+    objName = obj.name;	
     App.palletteName = obj.pallette;
     if (objName == undefined) return;
+	
     properties = getDefaultDataFromArray(App.palette[App.palletteName].shapes[objName].properties);
     var props = {};
     //alert(obj.width);
@@ -627,7 +669,19 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
         // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
     });
 	var colorPicker = $.farbtastic("#colorpicker");
-	colorPicker.linkTo(pickerUpdate);
+	colorPicker.linkTo(pickerUpdate);	
+	if (obj && obj.type == "path-group" || obj.type == "path")
+	{		
+		var objcts = obj.getObjects();
+		for (var o in objcts)
+		{
+			if (objcts[o].type == "text")
+			{
+				textInputHandler(objcts[o], obj);
+				break;
+			}
+		}
+	}
 }
 
 /**
@@ -654,12 +708,19 @@ function addTools() {
         $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/>");
         $('#' + dispName).click(handleToolClick);
     }
-    for (var i in App.palette["svg"].shapes) {
+    for (var i in App.palette["svg"].shapes) {	
         $('#svgdiv').append("<div id='svg'></div>")
-        var dispName = App.palette["svg"].shapes[i].displayName;
+        var dispName = App.palette["svg"].shapes[i].displayName;		
         var src = 'images/' + App.palette["svg"].shapes[i].displayIcon;
-        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/>");
+        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/>");		
         $('#' + dispName).click(handleToolClick);
+    }
+	for (var i in App.palette["wireframe"].shapes) {
+        $('#wirefrmsdiv').append("<div id='wireframe'></div>")
+        var dispName = App.palette["wireframe"].shapes[i].displayName;		
+        var src = 'images/' + App.palette["wireframe"].shapes[i].displayIcon;
+        $('#wireframe').append("<img id='" + dispName + "' src='" + src + "'/>");		
+        $('#wireframe').click(handleToolClick);
     }
 	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");
 	$('#deletetool').click( function() {
@@ -694,7 +755,23 @@ function getOffset(el) {
         left: _x
     };
 }
-
+/**
+* To load wireframe objects. group the objects using pathgroup
+*/
+function loadWireframe(args,objects)
+{
+	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
+	pathGroup.set({
+            left: args.left,
+            top: args.top,
+            angle: args.angle
+        });
+	pathGroup.setCoords();
+	pathGroup.name = args.name;
+    pathGroup.pallette = args.pallette;  
+	pathGroup.uid = uniqid();
+	canvas.add(pathGroup);
+}
 function loadSVG(args) {
     
 	fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
