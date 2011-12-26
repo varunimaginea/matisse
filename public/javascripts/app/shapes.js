@@ -482,7 +482,7 @@ App.Shapes.registerpalette("wireframe", {
 				text = "check",
 				margin = 15,
 				space = 15;
-			args.width = getStringWidth(text) + args.side + (2 * margin) + space;
+			args.width = App.Main.getStringWidth(text) + args.side + (2 * margin) + space;
 			args.height = 40;
 			var checkbox_left = -(args.width / 2) + margin;
 			var checkbox = new fabric.Polygon(      
@@ -498,7 +498,7 @@ App.Shapes.registerpalette("wireframe", {
 							fontSize : args.fontSize, 
 							fontFamily : args.fontFamily, 
 							fontWeight : 20,
-							left : -(-(getStringWidth(text))/2 - text_left),
+							left : -(-(App.Main.getStringWidth(text))/2 - text_left),
 							top : 0
 						});
 			var tick = new fabric.Polyline([{x: checkbox_left+2,y:0},{x:checkbox_left+6,y:-6},{x:checkbox_left+12,y:6}],{stroke:'#000000'});
