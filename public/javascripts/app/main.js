@@ -1,59 +1,44 @@
 /**
- * This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
+ * User: Bahvani Shankar
+ * Date: 12/26/11
+ * Time: 11:16 AM
+ * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
- 
-var App = {}; // global Object cointainer
-App.fillColor = "#AAAAAA";
-App.points = {};
-App.palette = {};
-App.textEl; 
-App.drawShape = false;
-App.action; 
-App.shapeArgs;
-App.currTool;
-App.xPoints = [],
-App.yPoints = [];
-App.xOffset
-App.yOffset;
-App.palletteName;
-App.associateText = {};
-App.focusInput = "stroke";
-// create canvas object
-var canvas = new fabric.Canvas('c', {
-    backgroundColor: '#FFFFFF'
-    //HOVER_CURSOR: 'pointer'
-	
-}); 
 
-/* by default selection mode is false */
-canvas.isSelectMode = false;
+ (function($){
+	 var currentTool="";
+     App.Main = {};
 
-var currentTool = "";
+    // create canvas object
+     window.canvas = new fabric.Canvas('c', {
+         backgroundColor: '#FFFFFF'
+         //HOVER_CURSOR: 'pointer'
 
-/* init app when document is ready  */
-$(document).ready(init);
+     });
+
+     /* by default selection mode is false */
+     canvas.isSelectMode = false;
 
 
-function init() {
-   
-   setCanvasSize();
-   App.xOffset = getOffset(document.getElementById('canvasId')).left;
-   App.yOffset = getOffset(document.getElementById('canvasId')).top;
+     App.Main.init = function(){
 
-    addTools();
-      
-    document.onkeydown = keyDown;
-    $('#chaticon').click(openChatBox);
-    $('#propicon').click(openProp);
-   
-    initTextEditWindow();
-    initChatWindow();
-	initPropWindow();
-    addObservers();
-}
+         setCanvasSize();
+         App.xOffset = getOffset(document.getElementById('canvasId')).left;
+         App.yOffset = getOffset(document.getElementById('canvasId')).top;
 
+         addTools();
+
+         document.onkeydown = keyDown;
+         $('#chaticon').click(openChatBox);
+         $('#propicon').click(openProp);
+
+         initTextEditWindow();
+         initChatWindow();
+         initPropWindow();
+         addObservers();
+     }
 function pickerUpdate(color){
 	if(App.focusInput == "") return;
 	var obj = canvas.getActiveObject();
@@ -130,7 +115,7 @@ function openProp() {
  * 
  */
 matisse.onDraw = function (data) {
-	console.log('data ='+data)
+	console.log('data ='+data.action)
 	//data = jQuery.parseJSON( data );
 	console.log('data ='+data.args)
     console.log(data.action + "\n");
@@ -620,6 +605,14 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 			if(id == 'fill' || id=='stroke') {
 				//alert(id);
 				App.focusInput = id;
+				$('#colorpicker').show();
+			}
+		});
+		$(":input").blur(function () {
+			App.focusInput = '';
+			id = this.id;
+			if(id == 'fill' || id=='stroke') {
+				$('#colorpicker').hide();
 			}
 		});
         inBox.keyup(function () {
@@ -637,6 +630,19 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
     });
 	var colorPicker = $.farbtastic("#colorpicker");
 	colorPicker.linkTo(pickerUpdate);
+	$('#colorpicker').hide();
+	if (obj && obj.type == "path-group" )
+	{
+		var objcts = obj.getObjects();
+		for (var o in objcts)
+		{
+			if (objcts[o].type == "text")
+			{
+				textInputHandler(objcts[o], obj);
+				break;				
+			}			
+		}		
+	}
 }
 
 /**
@@ -727,6 +733,68 @@ function getStringWidth(str)
 	return w;
 }
 
+function textInputHandler(obj, parent_obj)
+{
+	
+	$("#proptable").append("<tr><td width='200px'><label for='txtarea'>Text</label><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+	var txt_area = document.getElementById("txtarea");
+	txt_area.onfocus = function()
+	{
+		txt_area.innerHTML = obj.text;
+	}
+	var wireframeObject = parent_obj.name;	
+	switch(wireframeObject)
+	{
+		case "radio":	txt_area.onkeyup = function (e) { 
+						var wdth = 0;
+						obj.text = this.value;
+						wdth = getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 10 + 30;	
+						(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
+						parent_obj.width = wdth;						
+						parent_obj.paths[0].left = -((wdth/2) - 15);
+						parent_obj.paths[1].left = parent_obj.paths[0].left;	
+						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 10;
+						parent_obj.paths[2].left = -(-getStringWidth(obj.text)/2 - text_left);	
+						matisse.sendDrawMsg({
+							action: "modified",
+							args: [{
+							uid: parent_obj.uid,
+							object: parent_obj
+							}]
+						});
+						parent_obj.setCoords();						
+						canvas.renderAll();
+						};						
+						break;
+						
+		case "checkbox":	txt_area.onkeyup = function (e) { 
+							var wdth = 0;
+							obj.text = this.value;
+							wdth = getStringWidth(obj.text) + 16 + 15 + 30;								
+							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
+							parent_obj.width = wdth;		
+							var checkbox_left = -wdth/2 + 15;	
+							var text_left = checkbox_left + 16 + 15;							
+							parent_obj.paths[0].points[0].x = checkbox_left;	
+							parent_obj.paths[0].points[1].x = checkbox_left + 16;	
+							parent_obj.paths[0].points[2].x = checkbox_left + 16;	
+							parent_obj.paths[0].points[3].x = checkbox_left;								
+							parent_obj.paths[1].left = -(-getStringWidth(obj.text)/2 - text_left);	
+							matisse.sendDrawMsg({
+								action: "modified",
+								args: [{
+								uid: parent_obj.uid,
+								object: parent_obj
+								}]
+							});	
+							parent_obj.setCoords();				
+							canvas.renderAll();
+							};						
+							break;
+	}	
+}
+
+
 /**
 * To load wireframe objects. group the objects using pathgroup
 */
@@ -815,3 +883,4 @@ function letternumber(e) {
     else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1)) return true;
     else return false;
 }
+ })(jQuery);
