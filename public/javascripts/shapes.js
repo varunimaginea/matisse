@@ -190,10 +190,7 @@ registerpalette("basic_shapes", {
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
 				canvas.add(textSample);
-				if(args.parentname) {
-				textSample.selectable = false; 
-				App.associateText[args.parentname] = textSample;
-				}
+				
             },
             properties: [{
                 name: 'left',
@@ -457,4 +454,239 @@ registerpalette("svg", {
 
     } //end of shapes
 } // end of svg
+);
+
+
+/***********************************
+// WIREFRAME TOOLS
+************************************/
+registerpalette("wireframe", {
+    collectionName: 'wireframe',
+    shapes: {
+	checkbox:{
+		displayName: "checkbox",
+		displayIcon: "checkbox.png",
+		displayIcon2: "checkbox.png",
+		toolAction: function (args) {
+			var objects = [],
+				text = "check",
+				margin = 15,
+				space = 15;
+			args.width = getStringWidth(text) + args.side + (2 * margin) + space;
+			args.height = 40;
+			var checkbox_left = -(args.width / 2) + margin;
+			var checkbox = new fabric.Polygon(      
+                    [{x: checkbox_left,y:args.side/2},{x:checkbox_left + args.side, y:args.side/2},{x:checkbox_left + args.side, y:-args.side/2},{x:checkbox_left, y:-args.side/2}],
+					{
+						fill: '#FFFFFF', 
+						stroke:'#000000'						
+					}
+					);
+			var text_left = checkbox_left + args.side + space;
+			var text = new fabric.Text("check", 
+						{	
+							fontSize : args.fontSize, 
+							fontFamily : args.fontFamily, 
+							fontWeight : 20,
+							left : -(-(getStringWidth(text))/2 - text_left),
+							top : 0
+						});
+			var tick = new fabric.Polyline([{x: checkbox_left+2,y:0},{x:checkbox_left+6,y:-6},{x:checkbox_left+12,y:6}],{stroke:'#000000'});
+			objects.push(checkbox);
+			objects.push(text);
+			loadWireframe(args, objects);			
+		},
+		properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            },
+			{
+                name: 'side',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("side", args.property);
+                },
+                defaultvalue: 16
+            },
+			{
+                name: 'fontFamily',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("fontFamily", args.property);
+                },
+                defaultvalue: 'delicious_500'
+            },
+            {
+                name: 'fill',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("fill", args.property);
+                },
+                defaultvalue: '#FFFFFF'
+            }, {
+                name: 'stroke',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("stroke", args.property);
+                },
+                defaultvalue: '#000000'
+            }, 
+			{
+                name: 'opacity',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("opacity", args.property);
+                },
+                defaultvalue: 0.6
+            },{
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            },{
+                name: 'fontSize',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 20
+            }]
+	},
+	
+	radio: {
+			displayName: "radio",
+            displayIcon: "radio.png",
+            displayIcon2: "radio.png",
+            toolAction: function (args) {
+                var objects = [],
+					text = "radio",
+					width = 0;
+				var outer_circle = new fabric.Circle({
+                    radius: args.radius,
+                    left: -30,
+                    top: 0,  
+					fill: '#FFFFFF',
+                    stroke: args.stroke,
+                    opacity: args.opacity,
+                    angle: args.angle
+                });
+				var inner_circle = new fabric.Circle({
+                    radius: args.radius/4,
+                    left: -30,
+                    top: 0,
+                    fill: args.fill,                    
+                    opacity: args.opacity,
+                    angle: args.angle
+                });
+				
+				var txt = new fabric.Text(
+					text,{
+					left: 10,
+                    top: 0,
+                    fontFamily: args.fontFamily,
+					fontSize:args.fontSize,
+					fontWeight:20,
+					textAlign:'right',
+                    angle: args.angle,
+                    fill: '#000000',
+                    stroke: args.stroke
+				});
+				objects.push(inner_circle);
+				objects.push(outer_circle);
+				objects.push(txt);
+				var txt_width = getStringWidth(text);
+				width = txt_width + (2 * args.radius) + 10 + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
+				outer_circle.left = - ((width/2) - 15);
+				inner_circle.left = outer_circle.left;
+				var text_left = outer_circle.left + (2 * args.radius) + 10;
+				txt.left = -(-(txt_width)/2 - text_left);
+				args.width = width;		
+				args.height = 50;
+				loadWireframe(args, objects);
+            },
+
+            properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'radius',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("radius", args.property / args.obj.scaleX);
+                },
+                defaultvalue: 8
+            },
+			{
+                name: 'fontFamily',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("fontFamily", args.property);
+                },
+                defaultvalue: 'delicious_500'
+            },
+            {
+                name: 'fill',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("fill", args.property);
+                },
+                defaultvalue: '#000000'
+            }, {
+                name: 'stroke',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("stroke", args.property);
+                },
+                defaultvalue: '#000000'
+            }, 
+			{
+                name: 'opacity',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("opacity", args.property);
+                },
+                defaultvalue: 0.6
+            },{
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            },{
+                name: 'fontSize',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 20
+            }]
+        }
+		
+	} // end of shapes
+} // end of wireframe
 );

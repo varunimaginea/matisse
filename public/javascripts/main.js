@@ -674,6 +674,13 @@ function addTools() {
         $('#svg').append("<div id='" + dispName + "' class='tools " + dispName + "'></div>");
         $('#' + dispName).click(handleToolClick);
     }
+	for (var i in App.palette["wireframe"].shapes) {
+        $('#wirefrmsdiv').append("<div id='wireframe'></div>")
+        var dispName = App.palette["wireframe"].shapes[i].displayName;		
+        var src = 'images/' + App.palette["wireframe"].shapes[i].displayIcon;
+        $('#wireframe').append("<img id='" + dispName + "' src='" + src + "'/>");		
+        $('#' + dispName).click(handleToolClick);
+    }
 	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 	$('#deleteTool').click( function() {
 		currentTool = "deleteTool";
@@ -709,6 +716,34 @@ function getOffset(el) {
     };
 }
 
+function getStringWidth(str)
+{	
+	var font = '20px delicious_500',
+		obj = $('<div id=div1>' + str + '</div>')
+            .css({'position': 'absolute', 'float': 'left', 'white-space': 'pre-wrap', 'visibility': 'hidden', 'font': font})
+            .appendTo($('body')),
+		w = document.getElementById('div1').clientWidth;		
+	obj.remove();
+	return w;
+}
+
+/**
+* To load wireframe objects. group the objects using pathgroup
+*/
+function loadWireframe(args,objects)
+{
+	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
+	pathGroup.set({
+            left: args.left,
+            top: args.top,
+            angle: args.angle
+        });
+	pathGroup.setCoords();
+	pathGroup.name = args.name;
+    pathGroup.pallette = args.pallette;  	
+	canvas.add(pathGroup);
+}
+
 function loadSVG(args) {
     
 	fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
@@ -729,22 +764,9 @@ function loadSVG(args) {
         loadedObject.pallette = args.pallette;
         loadedObject.scaleToWidth(300).setCoords();
         canvas.add(loadedObject);	
-		var tempx = App.shapeArgs[0].left;
-		var tempy = App.shapeArgs[0].top;
-		//var obj = {};
-		var obj = getDefaultDataFromArray(App.palette["basic_shapes"].shapes["text"].properties);
-		obj.uid = uniqid();
-		App.shapeArgs[0]=obj;
-		App.shapeArgs[0].left = tempx;
-		App.shapeArgs[0].top = tempy;
-		App.shapeArgs[0].name = 'text';
-		App.shapeArgs[0].pallette = 'basic_shapes';
-		App.shapeArgs[0].selectable = false;
-		App.shapeArgs[0].parentname = loadedObject.name;
-		App.palette["basic_shapes"].shapes["text"].toolAction.apply(this, App.shapeArgs);
+		
     });
 	
-
 }
 
 function showTextEditor() {
