@@ -722,7 +722,7 @@ function getOffset(el) {
     };
 }
 
-function getStringWidth(str)
+App.Main.getStringWidth = function(str)
 {	
 	var font = '20px delicious_500',
 		obj = $('<div id=div1>' + str + '</div>')
@@ -748,13 +748,13 @@ function textInputHandler(obj, parent_obj)
 		case "radio":	txt_area.onkeyup = function (e) { 
 						var wdth = 0;
 						obj.text = this.value;
-						wdth = getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 10 + 30;	
+						wdth = App.Main.getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 10 + 30;	
 						(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 						parent_obj.width = wdth;						
 						parent_obj.paths[0].left = -((wdth/2) - 15);
 						parent_obj.paths[1].left = parent_obj.paths[0].left;	
 						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 10;
-						parent_obj.paths[2].left = -(-getStringWidth(obj.text)/2 - text_left);	
+						parent_obj.paths[2].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
 						matisse.sendDrawMsg({
 							action: "modified",
 							args: [{
@@ -770,7 +770,7 @@ function textInputHandler(obj, parent_obj)
 		case "checkbox":	txt_area.onkeyup = function (e) { 
 							var wdth = 0;
 							obj.text = this.value;
-							wdth = getStringWidth(obj.text) + 16 + 15 + 30;								
+							wdth = App.Main.getStringWidth(obj.text) + 16 + 15 + 30;								
 							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							parent_obj.width = wdth;		
 							var checkbox_left = -wdth/2 + 15;	
@@ -779,7 +779,7 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.paths[0].points[1].x = checkbox_left + 16;	
 							parent_obj.paths[0].points[2].x = checkbox_left + 16;	
 							parent_obj.paths[0].points[3].x = checkbox_left;								
-							parent_obj.paths[1].left = -(-getStringWidth(obj.text)/2 - text_left);	
+							parent_obj.paths[1].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -798,7 +798,7 @@ function textInputHandler(obj, parent_obj)
 /**
 * To load wireframe objects. group the objects using pathgroup
 */
-function loadWireframe(args,objects)
+App.Main.loadWireframe = function(args,objects)
 {
 	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
 	pathGroup.set({
@@ -812,7 +812,7 @@ function loadWireframe(args,objects)
 	canvas.add(pathGroup);
 }
 
-function loadSVG(args) {
+App.Main.loadSVG = function(args)  {
     
 	fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
         //   console.log("OBJECTS LENGTH :::"+objects.length)	
@@ -830,9 +830,8 @@ function loadSVG(args) {
         });
         loadedObject.name = args.name;
         loadedObject.pallette = args.pallette;
-        loadedObject.scaleToWidth(300).setCoords();
+        loadedObject.scaleToWidth(100).setCoords();
         canvas.add(loadedObject);	
-		
     });
 	
 }

@@ -619,7 +619,7 @@ App.Shapes.registerpalette("wireframe", {
 				objects.push(inner_circle);
 				objects.push(outer_circle);
 				objects.push(txt);
-				var txt_width = getStringWidth(text);
+				var txt_width = App.Main.getStringWidth(text);
 				width = txt_width + (2 * _radius) + 10 + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
 				outer_circle.left = - ((width/2) - 15);
 				inner_circle.left = outer_circle.left;
