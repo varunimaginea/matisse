@@ -12,7 +12,13 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	    validations: [
 		'notEmpty'
 	    ]
-
+	},
+	shapeId: {
+	    type: 'string',
+	    index: true,
+	    validations: [
+		'notEmpty'
+	    ]
 	},
 	pallette: {
 	    type: 'string',
@@ -61,21 +67,22 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	 */
 	store: function (data, callback) {
 	    var self = this;
-			console.log("===================");
-
-	    console.log(data.args);
-	console.log(data.url);
-	
+		
+	console.log("===================");
+	//console.log(data.args);
+	//console.log(data.url);
+	//console.log(data.shapeId);
 	console.log(data);
 	console.log("===================");
+	
 	    this.fill(data);
 	    this.save(function (err) {
 		  if ( ! err) {
 			this.errors; // the errors in validation
-			 console.log(":::Errors::::");
+			 console.log(":::it's in the db :)::::");
 		  } else {
 			// it's in the db :)
-			 console.log(":::it's in the db :)::::");
+			 console.log(":::COuld not save to DB:::: "+err);
 		  }
 		});	
 	},

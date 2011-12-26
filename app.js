@@ -173,17 +173,25 @@ io.sockets.on('connection', function (socket) {
     
 	
 	socket.on('eventDraw',function(location,data){
-	console.log(data);
+	//console.log(data);
 	var url = location.replace("/", "");
 	ko = new Date();
 	ji = ko.getTime();
-	//socket.broadcast.to(url).emit('eventDraw',data);
-	socket.broadcast.to(url).emit('eventDraw',data);
-	socket.broadcast.to(url).emit('eventDraw',data);
+	
+	socket.broadcast.to(url).emit('eventDraw',data);	
+	
 	var newShape = new ShapesModel();
-	console.log("===================");
-	data.args = data.args[0];
+	
+	data.args = data.args[0];	
+	data.shapeId = data.args.uid;
 	data.board_url = url;
+	
+	
+	
+	//console.log("===================");
+	//console.log(data.args.uid);
+	//console.log("===================");
+	
 	newShape.store(data,function(err){
 		//console.log("***** Error in URL:"+url+" Err:"+err);
     });

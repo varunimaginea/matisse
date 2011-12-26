@@ -30,6 +30,8 @@ var canvas = new fabric.Canvas('c', {
 /* by default selection mode is false */
 canvas.isSelectMode = false;
 
+var currentTool = "";
+
 /* init app when document is ready  */
 $(document).ready(init);
 
@@ -307,8 +309,11 @@ function getRandomColor() {
 function handleToolClick(e) {
 	canvas.isSelectMode = false;
     resetCurrTool();
+	var toolId = $(e.target).attr('id');
+	currentTool = toolId;
     App.currTool = e.target;
-    App.currTool.setAttribute('border', "2px");
+	$(e.target).removeClass(toolId).addClass(toolId+"_click");
+    //App.currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'default'
     App.drawShape = true;
     App.action = e.target.id;
@@ -392,7 +397,8 @@ function handleMouseEvents() {
                 args: App.shapeArgs
             });
 			resetCurrTool();
-			$('#selecttool').attr('border', "2px");
+			currentTool = "selectTool";
+			$('#selectTool').removeClass('#selecttool').addClass('selectTool_click');
 			App.currTool = document.getElementById("selecttool");  //$('#selecttool');
 			canvas.isSelectMode = true;
 			App.drawShape = false;
@@ -427,9 +433,9 @@ function handleMouseEvents() {
 }
 
 function resetCurrTool() {
-    if (App.currTool) {
-        App.currTool.setAttribute('border', "0");
-    }
+	var toolId = "#"+currentTool;
+	var currentClass = currentTool+"_click";
+	$(toolId).removeClass(currentClass).addClass(currentTool);
 }
 
 
@@ -641,8 +647,10 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 function addTools() {
     //$('#leftdiv').draggable()
     $('#leftdiv').css('zIndex', '100')
-	$('#toolsdiv').append("<div><img id='selecttool' src='images/select.png'></img>");
-	$('#selecttool').click( function() {
+	var bkg_syle = "width:100px; height:100px;background:url('images/select.png') no-repeat top center"; 
+	$('#toolsdiv').append("<div class='tools selectTool' id='selectTool'></div>");
+	$('#selectTool').click( function() {
+		currentTool = "selectTool";
 		resetCurrTool();
 		App.currTool = this;
 		App.currTool.setAttribute('border', "2px");		
@@ -654,18 +662,21 @@ function addTools() {
         $('#toolsdiv').append("<div id='basic_shapes' ></div>")
         var dispName = App.palette["basic_shapes"].shapes[i].displayName;
         var src = 'images/' + App.palette["basic_shapes"].shapes[i].displayIcon;
-        $('#basic_shapes').append("<img id='" + dispName + "' src='" + src + "'/>");
+		console.log(dispName+"\n");
+        $('#basic_shapes').append("<div id='" + dispName + "' class='tools " + dispName + "'></div>");
         $('#' + dispName).click(handleToolClick);
     }
     for (var i in App.palette["svg"].shapes) {
         $('#svgdiv').append("<div id='svg'></div>")
         var dispName = App.palette["svg"].shapes[i].displayName;
         var src = 'images/' + App.palette["svg"].shapes[i].displayIcon;
-        $('#svg').append("<img id='" + dispName + "' src='" + src + "'/>");
+		console.log(dispName+"\n");
+        $('#svg').append("<div id='" + dispName + "' class='tools " + dispName + "'></div>");
         $('#' + dispName).click(handleToolClick);
     }
-	$('#toolsdiv').append("<div><img id='deletetool' src='images/delete.png'></img>");
-	$('#deletetool').click( function() {
+	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
+	$('#deleteTool').click( function() {
+		currentTool = "deleteTool";
 		 deleteObjects();
 	});
     $("#accordion").accordion();
