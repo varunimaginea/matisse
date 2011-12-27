@@ -101,7 +101,7 @@ text-decoration:none;
 
 #leftdiv {
 width:100px;
-height:80%;
+height:78%;
 position:absolute;
 top:80px;
 left:0px;
@@ -135,8 +135,10 @@ cursor:pointer;
 }
 
 #logo{
-position:absolute;
-left:10px;
+left: 30px;
+position: absolute;
+top: 10px;
+height:50px;
 }
 
 #leftdiv img{
