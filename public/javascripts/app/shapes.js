@@ -36,14 +36,14 @@
                     top: args.top,
                     fill: args.fill,
                     stroke: args.stroke,
-                    angle: args.angle,
-                    scaleX: 1,
-                    scaleY: 1
+                    scaleX: args.scaleX,
+                    scaleY: args.scaleY
                 });
                 rect.uid = args.uid;
                 rect.name = args.name;
                 rect.pallette = args.pallette;
 				rect.customName = "rectangle";
+				rect.setAngle(args.angle)
 				//rect.selectable = false;
                 canvas.add(rect);
                
@@ -82,14 +82,14 @@
                 action: function (args) {
                     (args.obj).set("scaleX", args.property);
                 },
-                defaultvalue: 200
+                defaultvalue: 1
             }, {
                 name: 'scaleY',
                 type: 'number',
                 action: function (args) {
                     (args.obj).set("scaleY", args.property);
                 },
-                defaultvalue: 100
+                defaultvalue: 1
             }, {
                 name: 'fill',
                 type: 'string',
@@ -125,11 +125,14 @@
                     fill: args.fill,
                     stroke: args.stroke,
                     opacity: args.opacity,
-                    angle: args.angle
+                    scaleX: args.scaleX,
+                    scaleY: args.scaleY
                 });
+				cir.setAngle(args.angle)
                 cir.uid = args.uid;
                 cir.name = args.name;
                 cir.pallette = args.pallette;
+				cir.customName = "circle";
                 canvas.add(cir);
             },
             properties: [{
@@ -199,6 +202,7 @@
                 textSample.uid = args.uid;
                 textSample.name = args.name;
                 textSample.pallette = args.pallette;
+				textSample.customName = "text";
 				canvas.add(textSample);
 				
             },
@@ -258,7 +262,7 @@
             displayIcon: "brush.png",
             displayIcon2: "brush.png",
             toolAction: null
-
+			
         } // end of path
 
     } // end of shapes
@@ -472,7 +476,166 @@ App.Shapes.registerpalette("svg", {
 ************************************/
 App.Shapes.registerpalette("wireframe", {
     collectionName: 'wireframe',
-    shapes: {
+    shapes: {	
+	label:{
+		displayName: "label",
+		displayIcon: "label.png",
+		displayIcon2: "label.png",
+		toolAction: function (args) {
+			var objects = [],
+				txt = "label";
+			args.width = App.Main.getStringWidth(txt) + 20;
+			args.height = App.Main.getStringHeight(txt) + 20;		
+			var text = new fabric.Text(txt, 
+						{	
+							fontSize : 20, 
+							fontFamily : "delicious_500", 
+							fontWeight : 20,
+							left :0,
+							top : 0,
+							stroke: '#000000'							
+						});			
+			objects.push(text);
+			App.Main.loadWireframe(args, objects);			
+		},
+		properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            },{
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+	},
+	txt_button:{
+		displayName: "txt_button",
+		displayIcon: "txt_button.png",
+		displayIcon2: "txt_button.png",
+		toolAction: function (args) {
+			var objects = [],
+				txt = "click me";
+			args.width = App.Main.getStringWidth(txt) + 5;
+			args.height = App.Main.getStringHeight(txt) + 5;			
+				
+			var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 5},
+											 {x:-args.width/2 + 5, y: args.height/2},
+											 {x:args.width/2 - 5, y: args.height/2},
+											 {x:args.width/2, y:args.height/2 - 5},
+											 {x:args.width/2,y: -args.height/2 + 5},
+											 {x:args.width/2 - 5, y: -args.height/2},
+											 {x: -args.width/2 + 5, y:-args.height/2},
+											 {x: -args.width/2, y: -args.height/2 + 5}],											 
+											 {
+												fill:'#ffffff',
+												stroke:'#000000'
+											 });
+			var text = new fabric.Text(txt, 
+						{	
+							fontSize : 15, 
+							fontFamily : "delicious_500", 
+							fontWeight : 20,
+							left :0,
+							top : 0,
+							stroke: '#000000'							
+						});					
+			objects.push(border);
+			objects.push(text);
+			App.Main.loadWireframe(args, objects);			
+		},
+		properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            },{
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+	},
+	
+	textbox:{
+		displayName: "textbox",
+		displayIcon: "textbox.png",
+		displayIcon2: "textbox.png",
+		toolAction: function (args) {
+			var objects = [],
+				txt = "Hello !!!...";
+			args.width = App.Main.getStringWidth(txt) + 20;
+			args.height = App.Main.getStringHeight(txt) + 20;		
+			var border = new fabric.Rect({
+                    width: args.width,
+                    height: args.height,
+                    left: args.left,
+                    top: args.top,
+                    fill: '#FFFFFF',
+                    stroke: '#000000',
+                    angle: args.angle,
+                    scaleX: 1,
+                    scaleY: 1
+                });
+			var text = new fabric.Text(txt, 
+						{	
+							fontSize : 20, 
+							fontFamily : "delicious_500", 
+							fontWeight : 20,
+							left :0,
+							top : 0,
+							stroke: '#000000'							
+						});					
+			objects.push(border);
+			objects.push(text);
+			App.Main.loadWireframe(args, objects);			
+		},
+		properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            },{
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+	},
 	checkbox:{
 		displayName: "checkbox",
 		displayIcon: "checkbox.png",
@@ -501,9 +664,11 @@ App.Shapes.registerpalette("wireframe", {
 							left : -(-(App.Main.getStringWidth(text))/2 - text_left),
 							top : 0
 						});
-			var tick = new fabric.Polyline([{x: checkbox_left+2,y:0},{x:checkbox_left+6,y:-6},{x:checkbox_left+12,y:6}],{stroke:'#000000'});
+			var tick = new fabric.Polyline([{x: checkbox_left+2,y:0},{x:checkbox_left+6,y:6},{x:checkbox_left+12,y:-6}],
+					{fill:'#ffffff',stroke:'#000000'});
 			objects.push(checkbox);
 			objects.push(text);
+			objects.push(tick);
 			App.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
@@ -581,7 +746,7 @@ App.Shapes.registerpalette("wireframe", {
             displayIcon: "radio.png",
             displayIcon2: "radio.png",
             toolAction: function (args) {
-				var fillColor = '#000000', _stroke = '#000000', _radius = 8, _opacity = 1,
+				var fillColor = '#000000', _stroke = '#000000', _radius = 8, _opacity = 0.8,
 					_fontfamily = 'delicious_500', _fontSize = 20
                 var objects = [],
 					text = "radio",
@@ -616,8 +781,8 @@ App.Shapes.registerpalette("wireframe", {
                     fill: fillColor,
                     stroke: _stroke
 				});
-				objects.push(inner_circle);
 				objects.push(outer_circle);
+				objects.push(inner_circle);
 				objects.push(txt);
 				var txt_width = App.Main.getStringWidth(text);
 				width = txt_width + (2 * _radius) + 10 + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
