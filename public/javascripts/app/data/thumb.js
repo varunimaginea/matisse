@@ -1,9 +1,15 @@
-App.Templates.Button =  {
-    displayName: "button",
-    displayIcon: "button.png",
-    displayIcon2: "svg2.jpg",
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create thumb.
+ */
+App.Data.Thumb = {
+    displayName: "pathgroup2",
+    displayIcon: "thumb.png",
+    displayIcon2: "thumb.png",
     toolAction: function (args) {
-        args.svg = 'button.svg';
+        args.svg = '17.svg';
         args.name = 'pathgroup2';
         App.Main.loadSVG(args);
     },

@@ -1,4 +1,10 @@
-App.Templates.Label = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create label.
+ */
+App.Data.Label = {
     displayName: "label",
     displayIcon: "label.png",
     displayIcon2: "label.png",

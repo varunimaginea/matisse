@@ -1,4 +1,10 @@
-App.Templates.Radio = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create radio.
+ */
+App.Data.Radio = {
     displayName: "radio",
     displayIcon: "radio.png",
     displayIcon2: "radio.png",

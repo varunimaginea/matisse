@@ -23,5 +23,5 @@
     App.palletteName;
     App.associateText = {};
     App.focusInput = "stroke";
-    //Defining Templates Name space
-    App.Templates = {};
+    //Name space that contains Data need to generate shapes like rectangle,circle
+    App.Data = {};

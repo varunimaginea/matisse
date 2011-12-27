@@ -1,4 +1,10 @@
-App.Templates.TxtButton = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create text button.
+ */
+App.Data.TxtButton = {
     displayName: "txt_button",
     displayIcon: "txt_button.png",
     displayIcon2: "txt_button.png",

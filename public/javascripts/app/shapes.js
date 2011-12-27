@@ -24,10 +24,10 @@
  App.Shapes.registerpalette("basic_shapes", {
     collectionName: 'basic shapes',
     shapes: {
-        rectangle:App.Templates.Rectangle,
-        circle:App.Templates.Circle,
+        rectangle:App.Data.Rectangle,
+        circle:App.Data.Circle,
         // end of circle
-        text: App.Templates.Text,
+        text: App.Data.Text,
         // end of text
         path: {
             displayName: "path",
@@ -48,9 +48,9 @@
 App.Shapes.registerpalette("svg", {
     collectionName: 'svg',
     shapes: {
-        pathgroup1:App.Templates.Anchor,
-        pathgroup2:App.Templates.Thumb,
-		button:App.Templates.Button
+        pathgroup1:App.Data.Anchor,
+        pathgroup2:App.Data.Thumb,
+		button:App.Data.Button
 
     } //end of shapes
 } // end of svg
@@ -63,11 +63,11 @@ App.Shapes.registerpalette("svg", {
 App.Shapes.registerpalette("wireframe", {
     collectionName: 'wireframe',
     shapes: {	
-	    label:App.Templates.Label,
-	    txt_button:App.Templates.TxtButton,
-	    textbox:App.Templates.TextBox,
-	    checkbox:App.Templates.CheckBox,
-	    radio:App.Templates.Radio
+	    label:App.Data.Label,
+	    txt_button:App.Data.TxtButton,
+	    textbox:App.Data.TextBox,
+	    checkbox:App.Data.CheckBox,
+	    radio:App.Data.Radio
 	} // end of shapes
 } // end of wireframe
 );

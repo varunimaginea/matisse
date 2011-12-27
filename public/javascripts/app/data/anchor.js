@@ -1,4 +1,11 @@
-App.Templates.Anchor =  {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create anchor.
+ */
+
+App.Data.Anchor =  {
     displayName: "pathgroup1",
     displayIcon: "anchor.png",
     displayIcon2: "anchor.png",

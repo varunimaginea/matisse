@@ -1,4 +1,10 @@
-App.Templates.Circle = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create circle.
+ */
+App.Data.Circle = {
     displayName: "circle",
         displayIcon: "circle.png",
         displayIcon2: "nocircle.png",

@@ -1,4 +1,10 @@
-App.Templates.Text = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create text.
+ */
+App.Data.Text = {
     displayName: "text",
     displayIcon: "text.png",
     displayIcon2: "notext.png",

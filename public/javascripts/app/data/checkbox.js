@@ -1,4 +1,10 @@
-App.Templates.CheckBox = {
+/**
+ * User: Pradeep
+ * Date: 12/27/11
+ * Time: 11:16 AM
+ * About this :This file contains data needed to create checkbox.
+ */
+App.Data.CheckBox = {
     displayName: "checkbox",
     displayIcon: "checkbox.png",
     displayIcon2: "checkbox.png",
