@@ -79,7 +79,6 @@ label {
 .topicons {
 	position:relative;
 	top:20px;
-	right:-500px;
 }
 
 #outer{ 
@@ -126,7 +125,7 @@ float:left;
 #right {display:none; width:0px; height:0px;}
 
 #menuicons{
-margin:15px 0 0 350px;
+margin:15px 0 0 0px;
 }
 
 #menuicons img{
