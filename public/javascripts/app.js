@@ -23,3 +23,5 @@
     App.palletteName;
     App.associateText = {};
     App.focusInput = "stroke";
+    //Defining Templates Name space
+    App.Templates = {};
