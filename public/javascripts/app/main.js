@@ -42,8 +42,7 @@
          document.onkeydown = keyDown;
          $('#chaticon').click(openChatBox);
          $('#propicon').click(openProp);
-
-         initTextEditWindow();
+        
          initChatWindow();
          initPropWindow();
          addObservers();
@@ -179,7 +178,7 @@
 	}
 
 	function updatePropertyPanel(obj) {
-		if (obj.customName == "drawingpath") return;
+		if (obj.name == "drawingpath") return;
 		properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
 		jQuery.each(properties, function (i, value) {
 			$('#' + i).val(obj[i]);
@@ -195,7 +194,7 @@ function observe(eventName) {
         switch (eventName) {
         case "object:modified":
             var obj = e.memo.target;
-            //if(obj.type == "path-group") 	return;
+			console.log("object  name ="+obj.name);
             matisse.sendDrawMsg({
                 action: "modified",
                 args: [{
@@ -208,24 +207,21 @@ function observe(eventName) {
         case "selection:cleared":
             $('#prop').remove();
             $('#propdiv').dialog('close');
-            $('#texteditdiv').dialog('close');
-            //var obj = e.memo.target;
-            matisse.sendDrawMsg({
-                action: "clearText",
-                args: []
-            })
+          
 		break;
         case 'path:created':
 			var obj = e.memo.path;
-			obj.uid = uniqid()
+			obj.uid = uniqid();
+			obj.name = "drawingpath"
             //alert("mousedown"+canvas.isDrawingMode);
             matisse.sendDrawMsg({
                 action: 'drawpath',
 				pallette: App.palletteName,
                 args: [{
 					uid: obj.uid,
-                    _freeDrawingXPoints: App.xPoints,
-                    _freeDrawingYPoints: App.yPoints
+					left: obj.left,
+					top: obj.top,
+                    path: obj.path
                 }]
             });
             App.xPoints = [];
@@ -233,11 +229,8 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
-			console.log(obj.type);
-            if (obj.customName === "text") {
-				showTextEditor();
-			} 
-			createPropertiesPanel(e.memo.target);
+			console.log("object name =="+obj.name);
+            createPropertiesPanel(e.memo.target);
 			
         break;
         }
@@ -251,7 +244,9 @@ function modifyObject(args) {
 	
 	if(obj) {
 		//canvas.setActiveObject(obj);
+	
 		var recvdObj = args.object;
+		console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type)
 		obj.set("left", recvdObj.left);
 		obj.set("top", recvdObj.top);
 		obj.set("scaleX", recvdObj.scaleX);
@@ -260,7 +255,7 @@ function modifyObject(args) {
 			obj.set("fill", recvdObj.fill);
 		if(recvdObj.stroke)	
 			obj.set("stroke", recvdObj.stroke);
-		if (obj.customName == "text") obj.text = recvdObj.text;
+		if (obj.name == "text") obj.text = recvdObj.text;
 		obj.setAngle(recvdObj.angle)
 		//  obj.set("angle", recvdObj.angle);
 		if (obj.pallette == "wireframe")
@@ -290,7 +285,7 @@ function modifyObject(args) {
 					obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;					
 					obj.width = recvdObj.width;
 					break;
-					
+				case "password":
 				case "textbox" :
 					obj.left = recvdObj.left;
 					obj.top = recvdObj.top;
@@ -323,6 +318,25 @@ function modifyObject(args) {
 					obj.paths[0].points[6].x = recvdObj.paths[0].points[6].x;
 					obj.paths[0].points[7].x = recvdObj.paths[0].points[7].x;
 					obj.paths[1].text = recvdObj.paths[1].text;
+					break;
+					
+				case "combo" :
+					obj.left = recvdObj.left;							
+					obj.width = recvdObj.width;							
+					obj.paths[0].width = recvdObj.paths[0].width;	
+					obj.paths[1].points[0].x = recvdObj.paths[1].points[0].x;
+					obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;	
+					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
+					obj.paths[1].points[3].x = recvdObj.paths[1].points[3].x;
+					obj.paths[2].points[0].x = recvdObj.paths[2].points[0].x;
+					obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
+					obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
+					obj.paths[3].text = recvdObj.paths[3].text;
+					break;
+				
+				case "progressbar":
+					obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
+					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
 					break;
 			}
 		}
@@ -542,35 +556,6 @@ function deleteObjects() {
     }
 }
 
-function textHandler() {
-    var txtele = document.getElementById('textarea');
-    if (txtele) {
-        txtele.onfocus = function () {
-            var activeObject = canvas.getActiveObject();
-            if (activeObject && activeObject.name === 'text') {
-                this.value = activeObject.text;
-            }
-        };
-        txtele.onkeyup = function (e) {
-            var activeObject = canvas.getActiveObject();
-            if (activeObject) {
-                if (!this.value) {
-                    canvas.discardActiveObject();
-                } else {
-                    activeObject.text = this.value;
-                }
-                canvas.renderAll();
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: activeObject.uid,
-                        object: activeObject
-                    }]
-                });
-            }
-        };
-    }
-}
 
 
 /**
@@ -605,45 +590,20 @@ function unhide(divID, className) {
 }
 
 function drawPath(args) {
-    // canvas.contextTop.closePath();
-    canvas._isCurrentlyDrawing = false;
-    var utilMin = fabric.util.array.min;
-    var utilMax = fabric.util.array.max;
-    var minX = utilMin(args._freeDrawingXPoints),
-        minY = utilMin(args._freeDrawingYPoints),
-        maxX = utilMax(args._freeDrawingXPoints),
-        maxY = utilMax(args._freeDrawingYPoints),
-        ctx = canvas.contextTop,
-        path = [],
-		xPoint, yPoint,	xPoints = args._freeDrawingXPoints,
-		yPoints = args._freeDrawingYPoints;
-   console.log('xPoints '+xPoints);
-	path.push('M ',xPoints[0] - minX, ' ', yPoints[0] - minY, ' ');
-
-    for (var i = 1; xPoint = xPoints[i], yPoint = yPoints[i]; i++) {
-        path.push('L ', xPoint - minX, ' ', yPoint - minY, ' ');
-    }
-
-    // TODO (kangax): maybe remove Path creation from here, to decouple fabric.Canvas from fabric.Path, 
-    // and instead fire something like "drawing:completed" event with path string
-    path = path.join('');
-
-    if (path === "M 0 0 L 0 0 ") {
-        // do not create 0 width/height paths, as they are rendered inconsistently across browsers
-        // Firefox 4, for example, renders a dot, whereas Chrome 10 renders nothing
-        return;
-    }
-
-    var p = new fabric.Path(path);
+    var p = new fabric.Path(args.path);
     p.fill = null;
     p.stroke = '#000000';
     p.strokeWidth = 1;
 	p.uid = args.uid;
-	p.customName = "drawingpath";
+	p.name = "drawingpath";
+	p.scaleX = 1;
+	p.scaleY = 1;
+	p.angle = 0;
     canvas.add(p);
-    p.set("left", minX + (maxX - minX) / 2).set("top", minY + (maxY - minY) / 2).setCoords();
+    p.set("left", args.left).set("top", args.top).setCoords();
     canvas.renderAll();
     //this.fire('path:created', { path: p });
+	console.log("drawingpath name ="+p.name);
 }
 
 function checkboxSelectionHandler(objct)
@@ -698,13 +658,41 @@ function radioSelectionHandler(objct)
 	}
 }
 
+function progressHandler(objct)
+{
+	$("#proptable").append("<tr><td><input id='txtbox' type='text'>Progress %</input> </td></tr>");
+	var txtbox = document.getElementById('txtbox');	
+	var wdth = objct.paths[0].width;
+	txtbox.onfocus = function(e)	
+	{	
+		this.value = (wdth/2 + objct.paths[1].points[1].x) * (100/wdth);
+	}
+	txtbox.onkeyup = function(e)
+	{
+				
+		if (this.value <= 100 && this.value >= 0)
+		{
+			objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
+			objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
+			matisse.sendDrawMsg({
+							action: "modified",
+							args: [{
+							uid: objct.uid,
+							object: objct
+							}]
+						});
+			canvas.renderAll();
+		}
+	}
+}
+
 function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 	var val;
     $('#prop').remove();
   //  console.log(palletteName + "     " + obj.name)
     objName = obj.name;
     App.palletteName = obj.pallette;
-    if (objName == undefined) return;
+    if (objName == undefined || objName == 'drawingpath') return;
     properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
     var props = {};
     //alert(obj.width);
@@ -765,6 +753,8 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 	var colorPicker = $.farbtastic("#colorpicker");
 	colorPicker.linkTo(pickerUpdate);
 	$('#colorpicker').hide();
+	if(obj.name == 'text')
+		textInputHandler(obj, null);
 	if (obj && obj.pallette == "wireframe" && obj.getObjects)
 	{
 		var objcts = obj.getObjects();
@@ -783,6 +773,9 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 				break;
 			case "radio":
 				radioSelectionHandler(obj);
+				break;
+			case "progressbar":
+				progressHandler(obj);
 				break;
 		}
 	}
@@ -855,7 +848,7 @@ function keyDown(e) {
     var evt = (e) ? e : (window.event) ? window.event : null;
     if (evt) {
         var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
-        if (key == "46" && key == "17") {
+       if (key == "46" && evt.altKey) {
             deleteObjects();
         }
     }
@@ -900,13 +893,17 @@ App.Main.getStringHeight = function(str)
 function textInputHandler(obj, parent_obj)
 {
 	
-	$("#proptable").append("<tr><td width='200px'><label for='txtarea'>Text</label><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
-	var txt_area = document.getElementById("txtarea");
+	$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' width='200px'><label id='labl' for='txtarea'>Text</label><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+	var txt_area = document.getElementById("txtarea");	
 	txt_area.onfocus = function()
 	{
 		txt_area.innerHTML = obj.text;
 	}
-	var wireframeObject = parent_obj.name;	
+	if(parent_obj) {
+		var wireframeObject = parent_obj.name;	
+	}
+
+		
 	switch(wireframeObject)
 	{
 		case "radio":	txt_area.onkeyup = function (e) { 
@@ -981,7 +978,35 @@ function textInputHandler(obj, parent_obj)
 							canvas.renderAll();
 							};						
 							break;
-		
+							
+		case "password":	
+							txt_area.onkeyup = function(e){
+								obj.text = "";
+								for (var i = 0; i < this.value.length; i++)
+								{
+									obj.text += '.';
+								}
+								this.value = obj.text;
+								var width = 0, height = 0, diff = 0;
+								width = App.Main.getStringWidth(obj.text) + 30;	
+								height = App.Main.getStringHeight(obj.text);
+								diff = (width/2 - App.Main.getStringWidth(obj.text)/2);
+								(width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;								
+								parent_obj.width = width;	
+								parent_obj.height = height;														
+								parent_obj.paths[0].width = width;	
+								parent_obj.paths[0].height = height;								
+								matisse.sendDrawMsg({
+									action: "modified",
+									args: [{
+									uid: parent_obj.uid,
+									object: parent_obj
+									}]
+								});	
+								parent_obj.setCoords();				
+								canvas.renderAll();
+							};
+							break;
 		case "txt_button": 	txt_area.onkeyup = function (e) { 
 							var width = 0, height = 0;
 							obj.text = this.value;
@@ -1008,7 +1033,48 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.setCoords();				
 							canvas.renderAll();
 							};						
-							break;
+		break;
+		case "combo":	txt_area.onkeyup = function (e){
+							var wdth = 0;
+							obj.text = this.value;							
+							wdth = App.Main.getStringWidth(obj.text) + parent_obj.paths[1].width + 30;								
+							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
+							parent_obj.width = wdth;														
+							parent_obj.paths[0].width = wdth;
+							parent_obj.paths[1].points[0].x = wdth/2 -25;
+							parent_obj.paths[1].points[1].x = wdth/2;
+							parent_obj.paths[1].points[2].x = wdth/2;
+							parent_obj.paths[1].points[3].x = wdth/2 - 25;
+							parent_obj.paths[2].points[0].x = wdth/2 - 17.5;
+							parent_obj.paths[2].points[1].x = wdth/2 - 7.5;
+							parent_obj.paths[2].points[2].x = wdth/2 - 12.5;
+							matisse.sendDrawMsg({
+								action: "modified",
+								args: [{
+								uid: parent_obj.uid,
+								object: parent_obj
+								}]
+							});	
+							parent_obj.setCoords();				
+							canvas.renderAll();							
+						}
+						break;
+		default:
+		txt_area.onkeyup = function (e) { 
+			obj.text = this.value;
+		
+		matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+						uid: obj.uid,
+						object: obj
+						}]
+					});
+					obj.setCoords();						
+					canvas.renderAll();
+		}
+		break;
+				
 		
 	}	
 }

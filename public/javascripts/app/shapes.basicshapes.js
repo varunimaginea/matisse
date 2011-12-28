@@ -141,7 +141,21 @@ App.Shapes.registerpallette("basic_shapes", {
                 },
                 defaultvalue: 20
             },
-
+			{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
+            },
             {
                 name: 'fill',
                 type: 'string',
