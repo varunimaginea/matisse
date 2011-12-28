@@ -10,7 +10,7 @@
     //Properties of the global name space
     App.fillColor = "#AAAAAA";
     App.points = {};
-    App.palette = {};
+    App.pallette = {};
     App.textEl;
     App.drawShape = false;
     App.action;
@@ -23,3 +23,5 @@
     App.palletteName;
     App.associateText = {};
     App.focusInput = "stroke";
+	//Defining shapes name space
+	App.Shapes = {};
