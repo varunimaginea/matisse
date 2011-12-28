@@ -23,5 +23,6 @@
     App.palletteName;
     App.associateText = {};
     App.focusInput = "stroke";
+
 	//Defining shapes name space
 	App.Shapes = {};
