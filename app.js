@@ -93,22 +93,22 @@ app.resource({
 	    if (err) {
 		return next(err);
 	    }
-	    var boards = [];
+	    var shapes = [];
 	    var len = ids.length;
 	    var count = 0;
 	    if (len === 0) {
-		return res.json(boards);
+		return res.json(shapes);
 	    }
-	    console.log(ids);
+	    //console.log(ids);
 	    ids.forEach(function (id) {
 	    var board = new ShapesModel();
 		board.load(id, function (err, props) {
 		    if (err) {
 			return next(err);
 		    }
-		    boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args, board_url: props.board_url});
+		    shapes.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args, board_url: props.board_url});
 		    if (++count === len) {
-			res.json(boards);
+			res.json(shapes);
 		    }
 		});
 	    });
@@ -147,9 +147,10 @@ io.sockets.on('connection', function (socket) {
 			var len = ids.length;
 			var count = 0;
 			if (len === 0) {
-			console.log("::::::: "+boards);
+			//console.log("::::::: "+boards);
 			}
-			console.log(ids);
+			//console.log(ids);
+			else {
 			ids.forEach(function (id) {
 			var board = new ShapesModel();
 			board.load(id, function (err, props) {
@@ -161,39 +162,73 @@ io.sockets.on('connection', function (socket) {
 				if (++count === len) 
 				{
 					//res.json(boards);
-					console.log("::::::: ");
+					//console.log("::::::: ");
 					//socket.emit('eventDraw',boards);
 				}
 				socket.emit('eventDraw',eval({pallette: props.pallette, action: props.action, args: [props.args]}));
 
 			});
 			});
+			}
 		}); 	
     });
     
 	
 	socket.on('eventDraw',function(location,data){
-	//console.log(data);
+	console.log(data);
 	var url = location.replace("/", "");
 	ko = new Date();
 	ji = ko.getTime();
-	
-	socket.broadcast.to(url).emit('eventDraw',data);	
-	
-	var newShape = new ShapesModel();
-	
-	data.args = data.args[0];	
-	data.shapeId = data.args.uid;
-	data.board_url = url;
-	
-	
-	
-	//console.log("===================");
-	//console.log(data.args.uid);
-	//console.log("===================");
-	
-	newShape.store(data,function(err){
-		//console.log("***** Error in URL:"+url+" Err:"+err);
+		if(data.action != "clearText") 
+		{
+			var newShape = new ShapesModel();
+			socket.broadcast.to(url).emit('eventDraw',data);	
+			data.args = data.args[0];	
+			data.shapeId = data.args.uid;
+			data.board_url = url;
+			
+			if(data.action == "modified")
+			{
+				data.args = data.args.object;	
+			
+				ShapesModel.find({shapeID:data.shapeId}, function (err, id) {
+					if (err) {
+						console.log(err);
+					}
+					var shape = new ShapesModel();
+					shape.load(id, function (err, props) {
+						if (err) {
+						//return next(err);
+						}	
+						
+						data.pallette = props.pallette;
+						data.action = props.action;
+						console.log("===================");
+						console.log("***** before shape Updated:"+shape);
+						
+						shape.store(data,function(err){
+							//console.log("***** Error in URL:"+url+" Err:"+err);
+						});
+								socket.broadcast.to(url).emit('eventDraw',shape);	
+
+						console.log("***** after shape Updated:"+shape);
+						console.log("===================");
+					});
+				}); 			
+			}
+			else
+			{
+				//console.log("===================");
+				//console.log(data.args.uid);
+				//console.log("===================");
+				
+				newShape.store(data,function(err){
+					//console.log("***** Error in URL:"+url+" Err:"+err);
+				});
+						socket.broadcast.to(url).emit('eventDraw',newShape);	
+
+			}	
+		}	
     });
-    });
+	
 });
