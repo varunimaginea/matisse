@@ -20,7 +20,19 @@
          //HOVER_CURSOR: 'pointer'
 
      });
-
+	 
+	  /** width and height of panels for resize */
+     var bodyWidth,bodyHeight;
+     var topPanelHeight;
+     var leftPanelWidth,leftPanelHeight;
+     var accordionContentHeight;
+     var canvasWidth,canvasHeight;
+	 
+	 /**
+	 * current active reference
+	 */
+	 var $currActiveIcon;
+	 
      /* by default selection mode is false */
      canvas.isSelectMode = false;
 	
@@ -32,8 +44,11 @@
    */
 
     App.Main.init = function(){
-
-         setCanvasSize();
+         resetWidthAndHeightOfPanels();
+         resizeWindow();
+         bindResizeWindow();
+		 canvas.isSelectMode = true;
+         //setCanvasSize();
          App.xOffset = getOffset(document.getElementById('canvasId')).left;
          App.yOffset = getOffset(document.getElementById('canvasId')).top;
 
@@ -42,11 +57,84 @@
          document.onkeydown = keyDown;
          $('#chaticon').click(openChatBox);
          $('#propicon').click(openProp);
-        
+
+         initTextEditWindow();
          initChatWindow();
          initPropWindow();
          addObservers();
     }
+
+   /**
+   * function to reset width and heights
+   */
+  function resetWidthAndHeightOfPanels(){
+     if($(window).width() >960 ) {
+		bodyWidth = $(window).width();
+	} else {
+		bodyWidth = 960;
+	}
+		
+    if($(window).height() >800 ) {
+		bodyHeight = $(window).height();
+	}
+	else {
+		bodyHeight = 800;
+	}
+	
+      topPanelHeight = 100;
+      leftPanelWidth = 100;
+      leftPanelHeight = bodyHeight-100;
+      canvasHeight = bodyHeight-100;
+      canvasWidth = bodyWidth-100;
+  }
+    /**
+    * method to resize panels on resize of window
+    */
+   function resizeWindow(){
+        resizeHeader();
+        resizeMainPanel();
+        resizeLeftPanel();
+        setAccordinContentHeight();
+        resizeCanvas();
+   }
+
+    function resizeHeader(){
+        $('#header').width(bodyWidth);
+        $('#header').height(topPanelHeight);
+    }
+
+    function resizeMainPanel(){
+        $('#outer').height(bodyHeight-100);
+        $('#outer').width(bodyWidth);
+    }
+
+    function resizeLeftPanel(){
+        $('#leftdiv').width(leftPanelWidth);
+        $('#leftdiv').height(leftPanelHeight);
+    }
+
+    function resizeCanvas(){
+        $('#canvasId').height(canvasHeight);
+        $('#canvasId').width(canvasWidth);
+        canvas.setDimensions({width:canvasWidth, height:canvasHeight});
+    }
+    function setAccordinContentHeight(){
+        var $accordionHeaders = $('.ui-accordion-header');
+        var accordionHeaderHeight = 0;
+        $accordionHeaders.each(function(i,s){
+            accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
+        });
+        accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));
+    //  console.log(accordionHeaderHeight);
+       $('.ui-accordion-content').height(accordionContentHeight);
+    }
+
+   function bindResizeWindow(){
+       $(window).resize(function() {
+           resetWidthAndHeightOfPanels();
+           resizeWindow();
+       });
+   }
 	 
    /**
    * Applies color picked from picker to object 
@@ -78,6 +166,7 @@
    * 
    */ 
 	function setCanvasSize() {
+	
 		var width = $("#outer").width()-50; // width of left panels
 		var height =  $("#outer").height()-40;// footer height
 		canvas.setDimensions({width:width, height:height});
@@ -141,26 +230,31 @@
 	matisse.onDraw = function (data) {
 		//console.log('data angle='+data.args[0].angle+'  scaleX = '+data.args[0].scaleX)
 		//data = jQuery.parseJSON( data );
-		
-		if (data.action == undefined) {
-			return;
-		}
-		if (data.action == "modified") {
-			modifyObject(data.args[0])
-		} else if (data.action == "modifiedbyvalue") {
-			setObjectProperty(data.args[0]);
-		} else if (data.action == "drawpath") {
-			drawPath(data.args[0])
-		} else if (data.action == "chat") {
-			var txt = document.createTextNode(data.args[0].text)
-			$("#chattext").append(txt);
-		} else if (data.action == "delete") {
-			var obj = getObjectById(data.args[0].uid);
-			canvas.remove(obj);
-			$('#prop').remove();
-		} else {
-			if (App.pallette[data.pallette] != undefined) {
-				App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+		if(data && data.args)
+		{
+			console.log('================================================');
+			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette);
+			console.log('================================================');
+			if (data.action == undefined) {
+				return;
+			}
+			if (data.action == "modified") {
+				modifyObject(data.args[0])
+			} else if (data.action == "modifiedbyvalue") {
+				setObjectProperty(data.args[0]);
+			} else if (data.action == "drawpath") {
+				drawPath(data.args[0])
+			} else if (data.action == "chat") {
+				var txt = document.createTextNode(data.args[0].text)
+				$("#chattext").append(txt);
+			} else if (data.action == "delete") {
+				var obj = getObjectById(data.args[0].uid);
+				canvas.remove(obj);
+				$('#prop').remove();
+			} else {
+				if (App.pallette[data.pallette] != undefined) {
+					App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+				}
 			}
 		}
 	}
@@ -178,13 +272,15 @@
 	}
 
 	function updatePropertyPanel(obj) {
-		if (obj.name == "drawingpath") return;
-		properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
-		jQuery.each(properties, function (i, value) {
-			$('#' + i).val(obj[i]);
-		})
-		if(obj.getAngle()) {
-			$('#angle').val(obj.getAngle());
+		if (obj && obj.name && obj.pallette) 
+		{
+			properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
+			jQuery.each(properties, function (i, value) {
+				$('#' + i).val(obj[i]);
+			})
+			if(obj.getAngle()) {
+				$('#angle').val(obj.getAngle());
+			}
 		}
 	}
 
@@ -194,9 +290,11 @@ function observe(eventName) {
         switch (eventName) {
         case "object:modified":
             var obj = e.memo.target;
-			console.log("object  name ="+obj.name);
+			console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
             matisse.sendDrawMsg({
                 action: "modified",
+				name: obj.name,
+				pallette: obj.pallette,
                 args: [{
                     uid: obj.uid,
                     object: obj
@@ -210,6 +308,11 @@ function observe(eventName) {
           
 		break;
         case 'path:created':
+			canvas.isSelectMode = true;
+			canvas.isDrawingMode = false;
+			resetIconSelection();
+			App.drawShape = false;
+			document.getElementById("c").style.cursor = 'default';
 			var obj = e.memo.path;
 			obj.uid = uniqid();
 			obj.name = "drawingpath"
@@ -221,7 +324,10 @@ function observe(eventName) {
 					uid: obj.uid,
 					left: obj.left,
 					top: obj.top,
-                    path: obj.path
+					width: obj.width,
+					height: obj.height,
+                    path: obj.path,
+					name:obj.name
                 }]
             });
             App.xPoints = [];
@@ -229,8 +335,8 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
-			console.log("object name =="+obj.name);
-            createPropertiesPanel(e.memo.target);
+			console.log("object name =="+obj.type+'    '+obj.name+'   ::  '+obj);
+            createPropertiesPanel(obj);
 			
         break;
         }
@@ -244,9 +350,8 @@ function modifyObject(args) {
 	
 	if(obj) {
 		//canvas.setActiveObject(obj);
-	
 		var recvdObj = args.object;
-		console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type)
+		console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type+'   '+recvdObj.name)
 		obj.set("left", recvdObj.left);
 		obj.set("top", recvdObj.top);
 		obj.set("scaleX", recvdObj.scaleX);
@@ -388,11 +493,19 @@ function getRandomColor() {
 }
 
 
-
+function resetIconSelection(){
+	if($currActiveIcon) {
+				$currActiveIcon.attr("src",$currActiveIcon.attr('data-inactive'));
+				$currActiveIcon.parent().parent().removeClass('shape-active');
+			}
+}
 
 function handleToolClick(e) {
+	resetIconSelection();
+	$(e.target).attr("src",$(e.target).attr('data-active'));
+	$(e.target).parent().parent().addClass('shape-active');
+	$currActiveIcon = $(e.target);
 	canvas.isSelectMode = false;
-    resetCurrTool();
 	var toolId = $(e.target).attr('id');
 	currentTool = toolId;
     App.currTool = e.target;
@@ -401,10 +514,9 @@ function handleToolClick(e) {
     document.getElementById("c").style.cursor = 'default'
     App.drawShape = true;
     App.action = e.target.id;
-    App.palletteName = $(e.target).parent().attr('id');
+    App.palletteName = $(e.target).attr('data-parent');
 //	console.log('App.palletteName =='+App.pallette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.pallette[App.palletteName]);
-  	document.getElementById("c").style.cursor = (canvas.isSelectMode) ? 'default' :'crosshair' ; 
-	if(e.target.id !="path") {
+  	if(e.target.id !="path") {
 		var obj = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[e.target.id].properties);
 		obj.uid = uniqid();
 		App.shapeArgs = [obj];
@@ -414,7 +526,8 @@ function handleToolClick(e) {
         canvas.isDrawingMode = false;
         //document.getElementById("path").src =  'images/nobrush.png' 
     } else {
-         canvas.isDrawingMode = !canvas.isDrawingMode;
+		 document.getElementById("c").style.cursor = 'crosshair';
+         canvas.isDrawingMode = true;
 		 return;
     }
 }
@@ -481,12 +594,12 @@ function handleMouseEvents() {
                 action: App.action,
                 args: App.shapeArgs
             });
-			resetCurrTool();
 			currentTool = "selectTool";
 			$('#selectTool').removeClass('#selecttool').addClass('selectTool_click');
 			App.currTool = document.getElementById("selecttool");  //$('#selecttool');
 			canvas.isSelectMode = true;
 			App.drawShape = false;
+			resetIconSelection();
         }
 		
         if (canvas.isDrawingMode) {
@@ -517,11 +630,6 @@ function handleMouseEvents() {
 
 }
 
-function resetCurrTool() {
-	var toolId = "#"+currentTool;
-	var currentClass = currentTool+"_click";
-	$(toolId).removeClass(currentClass).addClass(currentTool);
-}
 
 
 
@@ -565,9 +673,8 @@ function deleteObjects() {
  */
 
 function uniqid() {
-    //var newDate = new Date;
-    //  alert(newDate.getTime());
-    return randomString();
+    var newDate = new Date;
+    return randomString()+newDate.getTime();
 }
 
 function randomString() {
@@ -592,16 +699,20 @@ function unhide(divID, className) {
 function drawPath(args) {
     var p = new fabric.Path(args.path);
     p.fill = null;
-    p.stroke = '#000000';
+    p.stroke = '#FF000';
     p.strokeWidth = 1;
 	p.uid = args.uid;
 	p.name = "drawingpath";
 	p.scaleX = 1;
 	p.scaleY = 1;
-	p.angle = 0;
+	
+	p.set("left", args.left);
+	p.set("top", args.top);
+	p.set("width", args.width);
+	p.set("height", args.height);
     canvas.add(p);
-    p.set("left", args.left).set("top", args.top).setCoords();
-    canvas.renderAll();
+   	canvas.renderAll();
+	p.setCoords();
     //this.fire('path:created', { path: p });
 	console.log("drawingpath name ="+p.name);
 }
@@ -636,16 +747,16 @@ function radioSelectionHandler(objct)
 {
 	$("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>select</input> </td></tr>");
 	var chkbox = document.getElementById('chkbox');
-	objct.paths[0].fill == '#000000' ? chkbox.checked = true : chkbox.checked = false;	
+	objct.paths[1].fill == '#000000' ? chkbox.checked = true : chkbox.checked = false;	
 	chkbox.onmousedown = function()
 	{
 		if (!chkbox.checked)
 		{
-			objct.paths[0].fill = '#000000';
+			objct.paths[1].fill = '#000000';
 		}
 		else
 		{
-			objct.paths[0].fill = '#ffffff';
+			objct.paths[1].fill = '#ffffff';
 		}
 		matisse.sendDrawMsg({
 							action: "modified",
@@ -687,7 +798,9 @@ function progressHandler(objct)
 }
 
 function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
-	var val;
+
+if(obj.pallette && obj && obj.name) {
+	var val; 
     $('#prop').remove();
   //  console.log(palletteName + "     " + obj.name)
     objName = obj.name;
@@ -779,6 +892,7 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 				break;
 		}
 	}
+	}
 }
 
 /**
@@ -788,7 +902,6 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 
 function addTools() {
     //$('#leftdiv').draggable()
-	createSelectTool();
 	createpallettes(App.pallette);
 	
 	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
@@ -800,23 +913,11 @@ function addTools() {
     //document.getElementById("drawing-mode").onclick = drawingButtonListener;
     $('#chatbutton').click(chatButtonListener);
     handleMouseEvents()
-	$('#accordion').accordion({ autoHeight: false });
+	$('#accordion').accordion();
+	setAccordinContentHeight();
 }
 
-function createSelectTool(){
-	$('#leftdiv').css('zIndex', '100');
-	var bkg_syle = "width:100px; height:100px;background:url('images/select.png') no-repeat top center"; 
-	$('#toolsdiv').append("<div class='tools selectTool' id='selectTool'></div>");
-	$('#selectTool').click( function() {
-		currentTool = "selectTool";
-		resetCurrTool();
-		App.currTool = this;
-		App.currTool.setAttribute('border', "2px");		
-	    App.drawShape = false;
-		canvas.isSelectMode = true;
-		canvas.isDrawingMode = false;
-	});
-}
+
 
 function createpallettes(palletteObj){
 	for(var palletteName in palletteObj) {
@@ -830,10 +931,13 @@ function createShape(palletteName){
 	var shapesObj = App.pallette[palletteName];
     for (var i in shapesObj.shapes) {
 		var shape = shapesObj.shapes[i]
-	    console.log(shape.displayIcon);
+	    console.log(shape.activeIcon);
 		var dispName = shape.displayName;		
-        var src = 'images/' + shape.displayIcon;
-        $(document.getElementById(displayName)).append("<img id='" + dispName + "' src='" + src + "'/>");		
+        var src = 'images/' + shape.inactiveIcon;
+		var activesrc = 'images/' + shape.activeIcon;
+		var html = '<div id="shape-holder">';
+		html+='<div id="shape"><img id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';
+        $(document.getElementById(displayName)).append(html);		
         $('#' + dispName).click(handleToolClick);
 	}	
 }
@@ -984,7 +1088,7 @@ function textInputHandler(obj, parent_obj)
 								obj.text = "";
 								for (var i = 0; i < this.value.length; i++)
 								{
-									obj.text += '.';
+									obj.text += '*';
 								}
 								this.value = obj.text;
 								var width = 0, height = 0, diff = 0;
