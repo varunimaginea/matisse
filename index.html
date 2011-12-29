@@ -18,44 +18,46 @@
       <script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
 	  <script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
    </head>
-   <body>
+   <body style="margin:2px;background-color:#fff;border-radius:2px 2px #fff;">
 
-		<div id="right" class="ui-widget-content">
-			<div id='texteditdiv' title='Text Editor'>
-				<textarea id=textarea rows=2 ></textarea>
-			</div>
-			<div id='chatdialog' title="Chat">
-                  <textarea id="chattext" value="hello" rows="2"></textarea><br>
-			<br>
-            <input type="text" id="chat" value="type some thing" /><br>
-            </input><button id="chatbutton">OK</button>
-			</div>
-			<div id="propdiv" title="Properties"></div>
-         </div>     
-		
-			
-	 <div id="outer">	 
-         <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
-			<div id="logo-wrapper">
-				<img src='images/matisse_blackbg.png' id="logo"/>
-			</div>
-			<div id="icons-wrapper">
-			<div id="menuicons">
-				<img class = 'topicons' id='chaticon' src='images/chat.png' alt="Chat"/>
-				<img class = 'topicons' id='propicon' src='images/prop.png' alt="Properties"/>
-				<img class = 'topicons' id='saveicon' src='images/save.png' alt="Save"/>
-				<img class = 'topicons' id='saveicon' src='images/logout.png' alt="Logout"/>
-			</div>
-			</div>
-         </div>
+     <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
+            <div id="logo-wrapper">
+				<div style="float:right;">
+					<div><img src="images/matisse_blackbg.png"></div>
+					<a id="logo-tag-wrapper" target="new" href="http://www.pramati.com">by imaginea</a>
+				</div>
+            </div>
+            <div id="icons-wrapper">
+                <div id="menuicons">
+                    <img class = 'topicons' id='chaticon' src='images/chat.png' alt="Chat"/>
+                    <img class = 'topicons' id='propicon' src='images/prop.png' alt="Properties"/>
+                    <img class = 'topicons' id='saveicon' src='images/save.png' alt="Save"/>
+                    <img class = 'topicons' id='saveicon' src='images/logout.png' alt="Logout"/>
+                </div>
+            </div>
+     </div>
+
+	 <div id="outer">
          <div id="leftdiv">
 			<div id="accordion" >
 			</div>
          </div>
          <div id="canvasId" >
             <canvas id="c" class="ui-corner-all" ></canvas>
-			
          </div>
+     </div>
+
+     <div id="right" class="ui-widget-content">
+         <div id='texteditdiv' title='Text Editor'>
+             <textarea id=textarea rows=2 ></textarea>
+         </div>
+         <div id='chatdialog' title="Chat">
+             <textarea id="chattext" value="hello" rows="2"></textarea><br>
+             <br>
+             <input type="text" id="chat" value="type some thing" /><br>
+             </input><button id="chatbutton">OK</button>
+         </div>
+         <div id="propdiv" title="Properties"></div>
      </div>
 	 
 		 
@@ -65,7 +67,7 @@
 
     <script src="/javascripts/app/shapes.js"></script>
 	<script src="/javascripts/app/shapes.basicshapes.js"></script>
-	<script src="/javascripts/app/shapes.svg.js"></script>
+	<!--<script src="/javascripts/app/shapes.svg.js"></script>-->
 	<script src="/javascripts/app/shapes.wireframe.js"></script>
     <script src="/javascripts/app/main.js"></script>
     <script src="/javascripts/app/setup.js"></script>

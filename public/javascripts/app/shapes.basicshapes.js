@@ -10,8 +10,8 @@ App.Shapes.registerpallette("basic_shapes", {
     shapes: {
         rectangle: {
             displayName: "rectangle",
-            displayIcon: "rect.png",
-            displayIcon2: "norectangle.jpg",
+            activeIcon: "rectangle_w.png",
+            inactiveIcon: "rectangle_g.png",
             toolAction: function (args) {
                 var rect = new fabric.Rect({
                     width: args.width,
@@ -24,9 +24,8 @@ App.Shapes.registerpallette("basic_shapes", {
                     scaleY: args.scaleY
                 });
                 rect.uid = args.uid;
-                rect.name = args.name;
+				rect.name = 'rectangle';
                 rect.pallette = args.pallette;
-				rect.customName = "rectangle";
 				rect.setAngle(args.angle)
 				//rect.selectable = false;
                 canvas.add(rect);
@@ -99,8 +98,8 @@ App.Shapes.registerpallette("basic_shapes", {
         },
         circle: {
             displayName: "circle",
-            displayIcon: "circle.png",
-            displayIcon2: "nocircle.png",
+            activeIcon: "circle_w.png",
+            inactiveIcon: "circle_g.png",
             toolAction: function addCircle(args) {
                 var cir = new fabric.Circle({
                     radius: args.radius,
@@ -108,16 +107,15 @@ App.Shapes.registerpallette("basic_shapes", {
                     top: args.top,
                     fill: args.fill,
                     stroke: args.stroke,
-                    opacity: args.opacity,
+                    opacity: 1,
                     scaleX: args.scaleX,
                     scaleY: args.scaleY
                 });
 				cir.setAngle(args.angle)
                 cir.uid = args.uid;
-                cir.name = args.name;
+                cir.name = "circle";
                 cir.pallette = args.pallette;
-				cir.customName = "circle";
-                canvas.add(cir);
+			    canvas.add(cir);
             },
             properties: [{
                 name: 'left',
@@ -141,7 +139,21 @@ App.Shapes.registerpallette("basic_shapes", {
                 },
                 defaultvalue: 20
             },
-
+			{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
+            },
             {
                 name: 'fill',
                 type: 'string',
@@ -166,11 +178,87 @@ App.Shapes.registerpallette("basic_shapes", {
             }]
 
         },
-        // end of circle
+		/*triangle: {
+            displayName: "triangle",
+            activeIcon: "triangle.png",
+            inactiveIcon: "nocircle.png",
+            toolAction: function addCircle(args) {
+                var tri = new fabric.Triangle({
+                    width: args.width,
+                    height: args.height,
+                    left: args.left,
+                    top: args.top,
+                    fill: args.fill,
+                    stroke: args.stroke,
+                    scaleX: args.scaleX,
+                    scaleY: args.scaleY
+                });
+				tri.setAngle(args.angle)
+                tri.uid = args.uid;
+                tri.name = "triangle";
+                tri.pallette = args.pallette;
+				
+				canvas.add(tri);
+            },
+            properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            }, 
+			{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
+            },
+            {
+                name: 'fill',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("fill", args.property);
+                },
+                defaultvalue: '#0099FF'
+            }, {
+                name: 'stroke',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("stroke", args.property);
+                },
+                defaultvalue: '#00FF00'
+            }, {
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+
+        },*/
+        // end of triangle
         text: {
             displayName: "text",
-            displayIcon: "text.png",
-            displayIcon2: "notext.png",
+            activeIcon: "text_w.png",
+            inactiveIcon: "text_g.png",
             toolAction: function addText(args) {
 				console.log("load text.....");
                 var text = 'text text text...';
@@ -184,7 +272,7 @@ App.Shapes.registerpallette("basic_shapes", {
                 });
                 //alert(textSample)
                 textSample.uid = args.uid;
-                textSample.name = args.name;
+                textSample.name = "text";
                 textSample.pallette = args.pallette;
 				textSample.customName = "text";
 				canvas.add(textSample);
@@ -242,8 +330,8 @@ App.Shapes.registerpallette("basic_shapes", {
         },
         path: {
             displayName: "path",
-            displayIcon: "brush.png",
-            displayIcon2: "brush.png",
+            activeIcon: "brush_w.png",
+            inactiveIcon: "brush_g.png",
             toolAction: null
 			
         } // end of path

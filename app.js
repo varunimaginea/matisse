@@ -130,7 +130,7 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(8000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 io.sockets.on('connection', function (socket) {
     socket.emit('eventConnect',{message:'welcome'});
@@ -179,55 +179,61 @@ io.sockets.on('connection', function (socket) {
 	var url = location.replace("/", "");
 	ko = new Date();
 	ji = ko.getTime();
-		if(data.action != "clearText") 
-		{
-			var newShape = new ShapesModel();
-			socket.broadcast.to(url).emit('eventDraw',data);	
-			data.args = data.args[0];	
-			data.shapeId = data.args.uid;
-			data.board_url = url;
-			
-			if(data.action == "modified")
-			{
-				data.args = data.args.object;	
-			
-				ShapesModel.find({shapeID:data.shapeId}, function (err, id) {
-					if (err) {
-						console.log(err);
-					}
-					var shape = new ShapesModel();
-					shape.load(id, function (err, props) {
-						if (err) {
-						//return next(err);
-						}	
-						
-						data.pallette = props.pallette;
-						data.action = props.action;
-						console.log("===================");
-						console.log("***** before shape Updated:"+shape);
-						
-						shape.store(data,function(err){
-							//console.log("***** Error in URL:"+url+" Err:"+err);
-						});
-								socket.broadcast.to(url).emit('eventDraw',shape);	
-
-						console.log("***** after shape Updated:"+shape);
-						console.log("===================");
-					});
-				}); 			
+	
+		if(data.action != "clearText") {
+	var newShape = new ShapesModel();
+	socket.broadcast.to(url).emit('eventDraw',data);	
+	data.args = data.args[0];	
+	data.shapeId = data.args.uid;
+	data.board_url = url;
+	
+	if(data.action == "modified")
+	{
+		data.args = data.args.object;
+		console.log("***** name:"+data.name);
+		
+		ShapesModel.find({shapeId:data.shapeId}, function (err, id) {
+			if (err) {
+				console.log(err);
 			}
-			else
-			{
-				//console.log("===================");
-				//console.log(data.args.uid);
-				//console.log("===================");
+			var shape = new ShapesModel();
+			shape.load(id, function (err, props) {
+				if (err) {
+				//return next(err);
+				}	
 				
-				newShape.store(data,function(err){
+				data.args.name = props.args.name;
+				data.args.uid = props.shapeId;
+				data.args.pallette = props.pallette;				
+				data.pallette = props.pallette;
+				data.action = props.action;
+				
+				console.log("===================");
+				console.log("***** before shape Updated:"+shape);
+				
+				shape.store(data,function(err){
 					//console.log("***** Error in URL:"+url+" Err:"+err);
 				});
-						socket.broadcast.to(url).emit('eventDraw',newShape);	
+						socket.broadcast.to(url).emit('eventDraw',shape);	
 
-			}	
+				console.log("***** after shape Updated:"+shape);
+				console.log("===================");
+			});
+		}); 			
+	}
+	else
+	{
+		//console.log("===================");
+		//console.log(data.args.uid);
+		//console.log("===================");
+		
+		newShape.store(data,function(err){
+			//console.log("***** Error in URL:"+url+" Err:"+err);
+		});
+				socket.broadcast.to(url).emit('eventDraw',newShape);	
+
+	}	
+
 		}	
     });
 	
