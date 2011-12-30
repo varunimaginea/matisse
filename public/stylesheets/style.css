@@ -204,11 +204,11 @@ div.scroller{
 	cursor:pointer;
 }
 
-.scroller-up{
+#wireframe .scroller-up{
 	background: #AAB0BB url('../images/up_arrow.png') no-repeat center center;
 }
 
-.scroller-down{
+#wireframe .scroller-down{
 	background: #AAB0BB url('../images/down_arrow.png') no-repeat center center;
 }
 
