@@ -61,21 +61,21 @@ App.Shapes.registerpallette("wireframe", {
 		toolAction: function (args) {
 			var objects = [],
 				txt = "click me";
-			args.width = App.Main.getStringWidth(txt) + 5;
-			args.height = App.Main.getStringHeight(txt) + 5;			
+			args.width = App.Main.getStringWidth(txt) ;
+			args.height = App.Main.getStringHeight(txt) - 2;			
 				
-			var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 5},
-											 {x:-args.width/2 + 5, y: args.height/2},
-											 {x:args.width/2 - 5, y: args.height/2},
-											 {x:args.width/2, y:args.height/2 - 5},
-											 {x:args.width/2,y: -args.height/2 + 5},
-											 {x:args.width/2 - 5, y: -args.height/2},
-											 {x: -args.width/2 + 5, y:-args.height/2},
-											 {x: -args.width/2, y: -args.height/2 + 5}],											 
+			var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 2},
+											 {x:-args.width/2 + 2, y: args.height/2},
+											 {x:args.width/2 - 2, y: args.height/2},
+											 {x:args.width/2, y:args.height/2 - 2},
+											 {x:args.width/2,y: -args.height/2 + 2},
+											 {x:args.width/2 - 2, y: -args.height/2},
+											 {x: -args.width/2 + 2, y:-args.height/2},
+											 {x: -args.width/2, y: -args.height/2 + 2}],											 
 											 {
 												fill:'#ffffff',
 												stroke:'#000000'
-											 });
+											 });			
 			var text = new fabric.Text(txt, 
 						{	
 							fontSize : 15, 
@@ -84,7 +84,17 @@ App.Shapes.registerpallette("wireframe", {
 							left :0,
 							top : 0,
 							stroke: '#000000'							
-						});					
+						});		
+			border.setGradientFill(canvas.getContext(), {
+							x1: 0,
+							y1: args.height,
+							x2: 0,
+							y2: 0,
+							colorStops: {
+								0: '#fff',
+								1: '#555'
+							}
+			});						
 			objects.push(border);
 			objects.push(text);
 			App.Main.loadWireframe(args, objects);			
@@ -681,7 +691,7 @@ App.Shapes.registerpallette("wireframe", {
 							fontFamily : "delicious_500", 
 							fontWeight : 20,							
 							stroke: '#000000',
-							top: -4,
+							top: 3,
 							left: 4
 						});	
 			objects.push(rect);						
