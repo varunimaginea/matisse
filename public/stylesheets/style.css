@@ -150,81 +150,6 @@ background:url('../images/tools_sprite.png') no-repeat;
 }
 
 
-.selectTool{
-background-position: -0px -0px;
-}
-
-.rectangle{
-background-position: -100px -0px;
-}
-
-.circle{
-background-position: -200px -0px;
-}
-
-.text{
-background-position: -300px -0px;
-}
-
-.path{
-background-position: -400px -0px;
-}
-
-.deleteTool{
-background-position: -500px -0px;
-}
-
-
-.selectTool_click{
-background-position: -0px -100px;
-}
-
-.rectangle_click{
-background-position: -100px -100px;
-}
-
-.circle_click{
-background-position: -200px -100px;
-}
-
-.text_click{
-background-position: -300px -100px;
-}
-
-.path_click{
-background-position: -400px -100px;
-}
-
-.deleteTool_click{
-background-position: -500px -100px;
-}
-
-
-.pathgroup1{
-background-position: -600px -0px;
-}
-
-.pathgroup2{
-background-position: -700px -0px;
-}
-
-.button{
-background-position: -800px -0px;
-}
-
-
-.pathgroup1_click{
-background-position: -600px -100px;
-}
-
-.pathgroup2_click{
-background-position: -700px -100px;
-}
-
-.button_click{
-background-position: -800px -100px;
-}
-
 #logo-wrapper{
 	float:left;
 	margin:15px 0 0 30px;
@@ -274,7 +199,26 @@ color:#026CD0;
 
 }
 
+div.scroller{
+	height: 14px;
+	cursor:pointer;
+}
 
+.scroller-up{
+	background: #AAB0BB url('../images/up_arrow.png') no-repeat center center;
+}
+
+.scroller-down{
+	background: #AAB0BB url('../images/down_arrow.png') no-repeat center center;
+}
+
+.shapesHolder{
+height:96%; overflow:hidden;
+}
+
+.scrollerContentHolder{
+	position:relative;
+}
 
 
 
