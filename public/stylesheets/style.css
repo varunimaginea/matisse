@@ -115,8 +115,16 @@ float:left;
 #leftdiv p {padding-left:2px;padding-right:2px}
 #right {display:none; width:0px; height:0px;}
 
+#version {
+    color: #AAAAAA;
+    float: right;
+    font-family: arial;
+    font-size: 13px;
+    margin: 5px 30px 0 0;
+}
+
 #menuicons{
-margin:15px 0 0 0px;
+margin: 43px 20px 0px 0px;
 }
 
 #menuicons img{
@@ -219,10 +227,11 @@ background-position: -800px -100px;
 
 #logo-wrapper{
 	float:left;
-	margin:0 0 0 20px;
+	margin:15px 0 0 30px;
 }
 #logo-tag-wrapper{
-    font-size:16px;
+	font-family:arial;
+    font-size:14px;
 	float:right;
 	text-decoration:none;
 }
@@ -240,6 +249,9 @@ color:#026CD0;
 .shape-active{
 	background-color:#9BA2AD;
 	color:#FFF;
+	box-shadow:-10px 10px 10px #222 inset;
+	-webkit-box-shadow:-10px 10px 10px #222 inset;
+	-moz-box-shadow: -10px 10px 10px #222 inset;
 }
 
 #shape{
