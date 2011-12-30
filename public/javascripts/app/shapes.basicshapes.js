@@ -79,14 +79,14 @@ App.Shapes.registerpallette("basic", {
                 action: function (args) {
                     (args.obj).set("fill", args.property);
                 },
-                defaultvalue: '#166bca'
+                defaultvalue: '#D3DAE5'
             }, {
                 name: 'stroke',
                 type: 'string',
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
-                defaultvalue: '#00FF00'
+                defaultvalue: '#000000'
             }, {
                 name: 'angle',
                 type: 'number',
@@ -160,14 +160,14 @@ App.Shapes.registerpallette("basic", {
                 action: function (args) {
                     (args.obj).set("fill", args.property);
                 },
-                defaultvalue: '#FF0000'
+                defaultvalue: '#D3DAE5'
             }, {
                 name: 'stroke',
                 type: 'string',
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
-                defaultvalue: '#00FF00'
+                defaultvalue: '#000000'
             }, {
                 name: 'angle',
                 type: 'number',
@@ -307,7 +307,7 @@ App.Shapes.registerpallette("basic", {
                 action: function (args) {
                     (args.obj).set("fill", args.property);
                 },
-                defaultvalue: '#FF0000'
+                defaultvalue: '#222222'
             }, 
 			
 			{
