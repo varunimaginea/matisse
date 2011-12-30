@@ -190,7 +190,6 @@ io.sockets.on('connection', function (socket) {
 	if(data.action == "modified")
 	{
 		data.args = data.args.object;
-		console.log("***** name:"+data.name);
 		
 		ShapesModel.find({shapeId:data.shapeId}, function (err, id) {
 			if (err) {
@@ -220,6 +219,28 @@ io.sockets.on('connection', function (socket) {
 				console.log("===================");
 			});
 		}); 			
+	}
+	else
+	if(data.action == "delete")
+	{
+		
+		ShapesModel.find({shapeId:data.shapeId}, function (err, id) {
+			if (err) {
+				console.log(err);
+			}
+			var shape = new ShapesModel();
+			shape.load(id, function (err, props) {
+				if (err) {
+				//return next(err);
+				}	
+											
+				shape.delete(data,function(err){
+					console.log("***** Error while deleting ID:"+id+" errr:"+err);
+				});
+				
+			});
+		}); 			
+		
 	}
 	else
 	{
