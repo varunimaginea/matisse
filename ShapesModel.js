@@ -86,5 +86,19 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 		  }
 		});	
 	},
+	
+	/**
+	 * This is a wrapper around fill and save.
+	 */
+	delete: function (data, callback) {
+	    var self = this;
+		
+		console.log("===================");
+		console.log(data);
+		console.log("===================");
+	
+	    this.fill(data);
+	    this.remove();	
+	},
     }
 });
