@@ -17,6 +17,7 @@
     // create canvas object
      window.canvas = new fabric.Canvas('c', {
          backgroundColor: '#FFFFFF'
+		 //backgroundImage: '/images/combobox_w.png'
          //HOVER_CURSOR: 'pointer'
 
      });
@@ -176,6 +177,7 @@
 	function initPropWindow() {
 		$('#propdiv').dialog();
 		$('#propdiv').dialog({
+			width: 'auto',
 			resizable: false
 		});
 		$('#propdiv').dialog('close');
@@ -200,16 +202,18 @@
 	}
 
 	function openChatBox() {
+		$('#chatdialog').dialog({ width : 200});
 		var dialog_width = $("#chatdialog").dialog("option", "width");
 		var win_width = $(window).width();
 		$('#chatdialog').dialog({
 			position: [win_width - dialog_width, 100]
 		})
+		
 		$('#chatdialog').dialog('open')
 		$('#chatdialog').dialog({
 			resizable: false
 		});
-		$("#chatdialog").dialog("option", "show", 'slide');
+	
 	}
 
 	function openProp() {
@@ -598,9 +602,7 @@ function handleMouseEvents() {
                 action: App.action,
                 args: App.shapeArgs
             });
-			currentTool = "selectTool";
-			$('#selectTool').removeClass('#selecttool').addClass('selectTool_click');
-			App.currTool = document.getElementById("selecttool");  //$('#selecttool');
+			
 			canvas.isSelectMode = true;
 			App.drawShape = false;
 			resetIconSelection();
@@ -766,7 +768,8 @@ function radioSelectionHandler(objct)
 							action: "modified",
 							args: [{
 							uid: objct.uid,
-							object: objct
+							object: objct,
+							text:objct.text
 							}]
 						});
 		canvas.renderAll();
@@ -828,7 +831,7 @@ if(obj.pallette && obj && obj.name) {
 			var inputTag = "<input type='text' style='width:70px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input><br>";
 		}
         var propDiv = $("#proptable");
-        propDiv.append("<tr><td width='200px'><label for='" + i + "'>" + i + " </label>" + inputTag + "</td></tr>"); //(" - " + val));
+        propDiv.append("<tr><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>"); //(" - " + val));
         var inBox = $("#" + i);
         // inBox.addClass('inbox');
 		$(":input").focus(function () {
@@ -1007,7 +1010,7 @@ App.Main.getStringHeight = function(str)
 function textInputHandler(obj, parent_obj)
 {
 	
-	$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' width='200px'><label id='labl' for='txtarea'>Text</label><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+	$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 	var txt_area = document.getElementById("txtarea");	
 	txt_area.onfocus = function()
 	{
@@ -1082,6 +1085,7 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.height = height;														
 							parent_obj.paths[0].width = width;	
 							parent_obj.paths[0].height = height;
+							
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -1182,7 +1186,8 @@ function textInputHandler(obj, parent_obj)
 						action: "modified",
 						args: [{
 						uid: obj.uid,
-						object: obj
+						object: obj,
+						text:obj.text
 						}]
 					});
 					obj.setCoords();						
