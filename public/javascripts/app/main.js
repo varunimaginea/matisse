@@ -1013,12 +1013,12 @@ function textInputHandler(obj, parent_obj)
 		case "radio":	txt_area.onkeyup = function (e) { 
 						var wdth = 0;
 						obj.text = this.value;
-						wdth = App.Main.getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 10 + 30;	
+						wdth = App.Main.getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 15 + 30;	
 						(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 						parent_obj.width = wdth;						
 						parent_obj.paths[0].left = -((wdth/2) - 15);
 						parent_obj.paths[1].left = parent_obj.paths[0].left;	
-						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 10;
+						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 15;
 						parent_obj.paths[2].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
 						matisse.sendDrawMsg({
 							action: "modified",
@@ -1035,19 +1035,19 @@ function textInputHandler(obj, parent_obj)
 		case "checkbox":	txt_area.onkeyup = function (e) { 
 							var wdth = 0;
 							obj.text = this.value;
-							wdth = App.Main.getStringWidth(obj.text) + 16 + 15 + 30;								
+							wdth = App.Main.getStringWidth(obj.text) + 14 + 15 + 30;								
 							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							parent_obj.width = wdth;		
 							var checkbox_left = -wdth/2 + 15;	
-							var text_left = checkbox_left + 16 + 15;							
+							var text_left = checkbox_left + 14 + 15;							
 							parent_obj.paths[0].points[0].x = checkbox_left;	
-							parent_obj.paths[0].points[1].x = checkbox_left + 16;	
-							parent_obj.paths[0].points[2].x = checkbox_left + 16;	
+							parent_obj.paths[0].points[1].x = checkbox_left + 14;	
+							parent_obj.paths[0].points[2].x = checkbox_left + 14;	
 							parent_obj.paths[0].points[3].x = checkbox_left;								
 							parent_obj.paths[1].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
-							parent_obj.paths[2].points[0].x = checkbox_left + 2;	
+							parent_obj.paths[2].points[0].x = checkbox_left + 3;	
 							parent_obj.paths[2].points[1].x = checkbox_left + 6;	
-							parent_obj.paths[2].points[2].x = checkbox_left + 12;
+							parent_obj.paths[2].points[2].x = checkbox_left + 11;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -1063,14 +1063,16 @@ function textInputHandler(obj, parent_obj)
 		case "textbox":		txt_area.onkeyup = function (e) { 
 							var width = 0, height = 0;
 							obj.text = this.value;
-							width = App.Main.getStringWidth(obj.text) + 20;	
-							height = App.Main.getStringHeight(obj.text) + 20;
+							width = App.Main.getStringWidth(obj.text);
+							(width <= 150)? width = 150 : width = width;
+							height = App.Main.getStringHeight(obj.text) + 5;
 							(width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							(height - parent_obj.height) > 0 ? parent_obj.top += (height - parent_obj.height)/2 : parent_obj.top = parent_obj.top;
 							parent_obj.width = width;	
 							parent_obj.height = height;														
 							parent_obj.paths[0].width = width;	
 							parent_obj.paths[0].height = height;
+							parent_obj.paths[1].left = 1;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -1145,13 +1147,13 @@ function textInputHandler(obj, parent_obj)
 							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							parent_obj.width = wdth;														
 							parent_obj.paths[0].width = wdth;
-							parent_obj.paths[1].points[0].x = wdth/2 -25;
+							parent_obj.paths[1].points[0].x = wdth/2 -22;
 							parent_obj.paths[1].points[1].x = wdth/2;
 							parent_obj.paths[1].points[2].x = wdth/2;
-							parent_obj.paths[1].points[3].x = wdth/2 - 25;
-							parent_obj.paths[2].points[0].x = wdth/2 - 17.5;
-							parent_obj.paths[2].points[1].x = wdth/2 - 7.5;
-							parent_obj.paths[2].points[2].x = wdth/2 - 12.5;
+							parent_obj.paths[1].points[3].x = wdth/2 - 22;
+							parent_obj.paths[2].points[0].x = wdth/2 - 15.5;
+							parent_obj.paths[2].points[1].x = wdth/2 - 6.5;
+							parent_obj.paths[2].points[2].x = wdth/2 - 10.5;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
