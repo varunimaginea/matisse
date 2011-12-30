@@ -249,9 +249,9 @@ color:#026CD0;
 .shape-active{
 	background-color:#9BA2AD;
 	color:#FFF;
-	box-shadow:-10px 10px 10px #222 inset;
-	-webkit-box-shadow:-10px 10px 10px #222 inset;
-	-moz-box-shadow: -10px 10px 10px #222 inset;
+	box-shadow:-5px -5px 2px #666 inset;
+	-webkit-box-shadow:-5px -5px 2px #666 inset;
+	-moz-box-shadow: -5px -5px 2px #666 inset;
 }
 
 #shape{
