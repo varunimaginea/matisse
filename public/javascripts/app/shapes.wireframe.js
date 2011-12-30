@@ -61,8 +61,8 @@ App.Shapes.registerpallette("wireframe", {
 		toolAction: function (args) {
 			var objects = [],
 				txt = "click me";
-			args.width = App.Main.getStringWidth(txt) ;
-			args.height = App.Main.getStringHeight(txt) - 2;			
+			args.width = App.Main.getStringWidth(txt)+1 ;
+			args.height = App.Main.getStringHeight(txt)+4;			
 				
 			var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 2},
 											 {x:-args.width/2 + 2, y: args.height/2},
@@ -81,7 +81,7 @@ App.Shapes.registerpallette("wireframe", {
 							fontSize : 15, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
-							left :0,
+							left :1,
 							top : 0,
 							stroke: '#000000'							
 						});		
@@ -129,7 +129,7 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "input_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "abc |       ";
+				txt = "abc |                ";
 			args.width = 150;
 			args.height = 25;		
 			var border = new fabric.Rect({
@@ -813,7 +813,7 @@ App.Shapes.registerpallette("wireframe", {
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
-                defaultvalue: '#000000'
+                defaultvalue: '#ddd'
             }, {
                 name: 'angle',
                 type: 'number',

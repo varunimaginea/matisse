@@ -1072,7 +1072,6 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.height = height;														
 							parent_obj.paths[0].width = width;	
 							parent_obj.paths[0].height = height;
-							parent_obj.paths[1].left = 1;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
