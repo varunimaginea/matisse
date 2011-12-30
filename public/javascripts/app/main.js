@@ -84,8 +84,8 @@
       topPanelHeight = 100;
       leftPanelWidth = 100;
       leftPanelHeight = bodyHeight-100;
-      canvasHeight = bodyHeight-100;
-      canvasWidth = bodyWidth-100;
+      canvasHeight = bodyHeight-130;
+      canvasWidth = bodyWidth-130;
   }
     /**
     * method to resize panels on resize of window
@@ -498,6 +498,10 @@ function resetIconSelection(){
 				$currActiveIcon.attr("src",$currActiveIcon.attr('data-inactive'));
 				$currActiveIcon.parent().parent().removeClass('shape-active');
 			}
+}
+
+function scrollUp(e) {
+	$(this).siblings(".scrollerContentHolder").css("top", "yellow");
 }
 
 function handleToolClick(e) {
@@ -929,17 +933,23 @@ function createShape(palletteName){
 	var displayName = App.pallette[palletteName].collectionName;
     updateAccordian(displayName);
 	var shapesObj = App.pallette[palletteName];
+	var html = '<div class="scroller scroller-up"></div>';
+	html += '<div class="shapesHolder">';
+	html += '<div class="scrollerContentHolder">';
     for (var i in shapesObj.shapes) {
 		var shape = shapesObj.shapes[i]
 	    console.log(shape.activeIcon);
 		var dispName = shape.displayName;		
         var src = 'images/' + shape.inactiveIcon;
 		var activesrc = 'images/' + shape.activeIcon;
-		var html = '<div id="shape-holder">';
-		html+='<div id="shape"><img id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';
-        $(document.getElementById(displayName)).append(html);		
-        $('#' + dispName).click(handleToolClick);
+		var shapeHolder = '<div id="shape-holder">';
+		shapeHolder+='<div id="shape"><img class="tool" id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';		        
+		html += shapeHolder;
 	}	
+	html += '</div></div>';
+	html += '<div class="scroller scroller-down"></div>';
+	$(document.getElementById(displayName)).append(html);
+	$('.tool').click(handleToolClick);
 }
 
 function updateAccordian(displayName){
@@ -1273,4 +1283,41 @@ App.Main.letternumber = function(e) {
     else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1)) return true;
     else return false;
 }
+
+	$(".scroller-up").live("click", function(){ 		
+		var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
+		var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
+		var parentHeight = $(this).parent().css('height');
+		
+		scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0,scrollerContentHolderHeight.indexOf('px'));
+		parentHeight = parentHeight.substr(0,parentHeight.indexOf('px'));
+		scrollerContentHolderTop = scrollerContentHolderTop.substr(0,scrollerContentHolderTop.indexOf('px'));
+		
+		//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight);
+		
+		if(scrollerContentHolderHeight>parentHeight)
+		{
+			//if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
+			$(this).siblings().find(".scrollerContentHolder").animate({"top":"-=85px"},"slow");	
+		}	
+	});
+
+	$(".scroller-down").live("click", function(){  		
+		var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
+		var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
+		var parentHeight = $(this).parent().css('height');
+		
+		scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0,scrollerContentHolderHeight.indexOf('px'));
+		parentHeight = parentHeight.substr(0,parentHeight.indexOf('px'));
+		scrollerContentHolderTop = scrollerContentHolderTop.substr(0,scrollerContentHolderTop.indexOf('px'));
+		
+		//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight);
+		
+		if(scrollerContentHolderHeight>parentHeight)
+		{
+			//if(scrollerContentHolderTop < 0)
+			$(this).siblings().find(".scrollerContentHolder").animate({"top":"+=85px"},"slow");	
+		}	
+	});
+
  })(jQuery);
