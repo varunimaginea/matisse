@@ -129,23 +129,23 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "input_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "Hello !!!...";
-			args.width = App.Main.getStringWidth(txt) + 20;
-			args.height = App.Main.getStringHeight(txt) + 20;		
+				txt = "abc |       ";
+			args.width = 150;
+			args.height = 25;		
 			var border = new fabric.Rect({
                     width: args.width,
                     height: args.height,
                     left: args.left,
                     top: args.top,
-                    fill: '#FFFFFF',
-                    stroke: '#000000',
+                    fill: '#fcfcfc',
+                    stroke: '#dfdfdf',
                     angle: args.angle,
                     scaleX: 1,
                     scaleY: 1
                 });
 			var text = new fabric.Text(txt, 
 						{	
-							fontSize : 20, 
+							fontSize : 18, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
 							left :0,
@@ -189,12 +189,12 @@ App.Shapes.registerpallette("wireframe", {
 				margin = 15,
 				space = 15;
 			args.width = App.Main.getStringWidth(text) + args.side + (2 * margin) + space;
-			args.height = 40;
+			args.height = 30;
 			var checkbox_left = -(args.width / 2) + margin;
 			var checkbox = new fabric.Polygon(      
                     [{x: checkbox_left,y:args.side/2},{x:checkbox_left + args.side, y:args.side/2},{x:checkbox_left + args.side, y:-args.side/2},{x:checkbox_left, y:-args.side/2}],
 					{
-						fill: '#FFFFFF', 
+						fill: '#eee', 
 						stroke:'#000000'						
 					}
 					);
@@ -207,7 +207,7 @@ App.Shapes.registerpallette("wireframe", {
 							left : -(-(App.Main.getStringWidth(text))/2 - text_left),
 							top : 0
 						});
-			var tick = new fabric.Polyline([{x: checkbox_left+2,y:0},{x:checkbox_left+6,y:6},{x:checkbox_left+12,y:-6}],
+			var tick = new fabric.Polyline([{x: checkbox_left+3,y:1},{x:checkbox_left+6,y:5},{x:checkbox_left+11,y:-5}],
 					{fill:'#ffffff',stroke:'#000000'});
 			objects.push(checkbox);
 			objects.push(text);
@@ -235,7 +235,7 @@ App.Shapes.registerpallette("wireframe", {
                 action: function (args) {
                     (args.obj).set("side", args.property);
                 },
-                defaultvalue: 16
+                defaultvalue: 14
             },
 			{
                 name: 'fontFamily',
@@ -298,13 +298,13 @@ App.Shapes.registerpallette("wireframe", {
                     radius: _radius,
                     left: -30,
                     top: 0,  
-					fill: '#FFFFFF',
+					fill: '#eee',
                     stroke: _stroke,
                     opacity: _opacity,
                     angle: args.angle
                 });
 				var inner_circle = new fabric.Circle({
-                    radius: _radius/4,
+                    radius: _radius/2,
                     left: -30,
                     top: 0,
                     fill: fillColor,                    
@@ -323,18 +323,18 @@ App.Shapes.registerpallette("wireframe", {
                     angle: args.angle,
                     fill: fillColor,
                     stroke: _stroke
-				});
+				});				
 				objects.push(outer_circle);
 				objects.push(inner_circle);
 				objects.push(txt);
 				var txt_width = App.Main.getStringWidth(text);
-				width = txt_width + (2 * _radius) + 10 + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
+				width = txt_width + (2 * _radius) + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
 				outer_circle.left = - ((width/2) - 15);
 				inner_circle.left = outer_circle.left;
-				var text_left = outer_circle.left + (2 * _radius) + 10;
+				var text_left = outer_circle.left + (2 * _radius) + 5;
 				txt.left = -(-(txt_width)/2 - text_left);
 				args.width = width;		
-				args.height = 50;
+				args.height = 30;
 				App.Main.loadWireframe(args, objects);
             },
 
@@ -380,28 +380,28 @@ App.Shapes.registerpallette("wireframe", {
 				margin = 15,
 				space = 5;
 			args.width = App.Main.getStringWidth(text) + args.side + (2 * margin);
-			args.height = 30;
+			args.height = 20;
 			var outerRect = new fabric.Rect(
 						{
 							width: args.width,
 							height: args.height,
-							fill: '#ffffff',
-							stroke: '#000000'
+							fill: '#fdfdfd',
+							stroke: '#ddd'
 						}
 					);
 			
 			var innerRect = new fabric.Polygon(      
-                    [{x: args.width/2 - 25,y:args.height/2 },{x:args.width/2 , y:args.height/2},{x:args.width/2 , y:-args.height/2},{x:args.width/2 - 25, y:-args.height/2}],
+                    [{x: args.width/2 - 22,y:args.height/2 },{x:args.width/2 , y:args.height/2},{x:args.width/2 , y:-args.height/2},{x:args.width/2 - 22, y:-args.height/2}],
 					{
-						fill: '#FFFFFF', 
-						stroke:'#000000'						
+						fill: '#dfdfdf', 
+						stroke:'#dfdfdf'						
 					}
 					);	
-			var triangle = new fabric.Polygon([{x: args.width/2 - 17.5,y: -5},{x:args.width/2 - 7.5,y:-5},{x:args.width/2 - 12.5 ,y:5}],
+			var triangle = new fabric.Polygon([{x: args.width/2 - 15.5,y: -2.5},{x:args.width/2 - 6.5,y:-2.5},{x:args.width/2 - 10.5 ,y:2.5}],
 					{fill:'#000000',stroke:'#000000'});				
 			var text = new fabric.Text(text, 
 						{	
-							fontSize : 18, 
+							fontSize : 16, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
 							left : -4,
@@ -496,15 +496,15 @@ App.Shapes.registerpallette("wireframe", {
 							width: args.width,
 							height: args.height,
 							fill: '#ffffff',
-							stroke: '#000000'
+							stroke: '#8f8f8f'
 						}
 					);
 			
 			var innerRect = new fabric.Polygon(      
                     [{x: -args.width/2,y:args.height/2 },{x:-args.width/4 , y:args.height/2},{x:-args.width/4 , y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
-					{
-						fill: '#1c8e2a', 
-						stroke:'#1c8e2a'						
+					{						
+						fill: '#9f9f9f', 
+						stroke:'#8f8f8f'						
 					}
 					);				
 			objects.push(outerRect);
@@ -547,8 +547,8 @@ App.Shapes.registerpallette("wireframe", {
 						{
 							width: args.width,
 							height: args.height,
-							fill: '#aaaaaa',
-							stroke: '#000000'
+							fill: '#dfdfdf',
+							stroke: '#8f8f8f'
 						}
 					);
 			
@@ -556,36 +556,36 @@ App.Shapes.registerpallette("wireframe", {
 						{
 							width: 10,
 							height: 15,
-							fill: '#cccccc',
-							stroke: '#000000'
+							fill: '#8f8f8f',
+							stroke: '#9f9f9f'
 						}
 					);	
 			var leftLine1 = new fabric.Polygon(      
                     [{x: -60,y:2.5 },{x:-59.95 , y:2.5},{x:-59.95 , y:10},{x:-60, y:10}],
 					{
-						fill: '#000000', 
-						stroke:'#000000'						
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
 					}
 					);	
 			var leftLine2 = new fabric.Polygon(      
                     [{x: -40,y:2.5 },{x:-39.95 , y:2.5},{x:-39.95 , y:7},{x:-40, y:7}],
 					{
-						fill: '#000000', 
-						stroke:'#000000'						
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
 					}
 					);						
 			var rightLine1 = new fabric.Polygon(      
                     [{x: 60,y:2.5 },{x:59.95 , y:2.5},{x:59.95 , y:10},{x:60, y:10}],
 					{
-						fill: '#000000', 
-						stroke:'#000000'						
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
 					}
 					);
 			var rightLine2 = new fabric.Polygon(      
                     [{x: 40,y:2.5 },{x:39.95 , y:2.5},{x:39.95 , y:7},{x:40, y:7}],
 					{
-						fill: '#000000', 
-						stroke:'#000000'						
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA	'						
 					}
 					);	
 			objects.push(outerRect);
@@ -633,17 +633,38 @@ App.Shapes.registerpallette("wireframe", {
 			var border = new fabric.Polygon(      
                     [{x: -args.width/2,y:args.height/2},{x:args.width/2, y:args.height/2},{x:args.width/2, y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
 					{
-						fill: '#FFFFFF', 
-						stroke:'#000000'						
+						fill: '#fcfcfc', 
+						stroke:'#6f6f6f'						
 					}
 					);				
 			var diagonal1 = new fabric.Polyline([{x: -args.width/2,y:args.height/2},{x:args.width/2,y:-args.height/2}],
-					{fill:'#ffffff',stroke:'#000000'});
+					{fill:'#ffffff',stroke:'#6f6f6f'});
 			var diagonal2 = new fabric.Polyline([{x: args.width/2,y:args.height/2},{x:-args.width/2,y:-args.height/2}],
-					{fill:'#ffffff',stroke:'#000000'});
+					{fill:'#ffffff',stroke:'#6f6f6f'});
+			var rect = new fabric.Rect({
+                    width: 20,
+                    height: 20,
+                    left: 0,
+                    top: 0,
+                    fill: '#fcfcfc',
+                    stroke: '#fcfcfc',
+                    scaleX: 1,
+                    scaleY: 1
+                });
+			var textobj = new fabric.Text('w x h', {
+                    left: 0,
+                    top: 0,
+                    fontFamily: 'delicious_500',
+                    angle: 0,
+                    fill: '#000000',
+                    stroke: '#000000',
+					fontSize: 9
+                });
 			objects.push(border);
 			objects.push(diagonal1);
-			objects.push(diagonal2);			
+			objects.push(diagonal2);	
+			objects.push(rect);				
+			objects.push(textobj);
 			App.Main.loadWireframe(args, objects);	
 		},
 		properties:[{
@@ -683,15 +704,15 @@ App.Shapes.registerpallette("wireframe", {
 							top: args.top,
 							width: args.width,
 							height: args.height,
-							fill: '#ffffff',
-							stroke: '#000000'});
+							fill: '#fcfcfc',
+							stroke: '#dfdfdf'});
 			var text = new fabric.Text(txt, 
 						{	
 							fontSize : 20, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,							
 							stroke: '#000000',
-							top: 3,
+							top: 4,
 							left: 4
 						});	
 			objects.push(rect);						
@@ -720,7 +741,88 @@ App.Shapes.registerpallette("wireframe", {
                 },
                 defaultvalue: 0
             }]
-	}	
+	}, 
+	 div: {
+            displayName: "div",
+            activeIcon: "rectangle_w.png",
+            inactiveIcon: "rectangle_g.png",
+            toolAction: function (args) {
+                var rect = new fabric.Rect({
+                    width: args.width,
+                    height: args.height,
+                    left: args.left,
+                    top: args.top,
+                    fill: null,
+                    stroke: args.stroke,
+                    scaleX: args.scaleX,
+                    scaleY: args.scaleY
+                });
+                rect.uid = args.uid;
+				rect.name = 'div';
+                rect.pallette = args.pallette;
+				rect.setAngle(args.angle)
+				//rect.selectable = false;
+                canvas.add(rect);
+               
+            },
+            properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'width',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("width", args.property / args.obj.scaleX);
+                },
+                defaultvalue: 200
+            }, {
+                name: 'height',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("height", args.property / args.obj.scaleY);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
+            },  {
+                name: 'stroke',
+                type: 'string',
+                action: function (args) {
+                    (args.obj).set("stroke", args.property);
+                },
+                defaultvalue: '#000000'
+            }, {
+                name: 'angle',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 0
+            }]
+        }	
 	} // end of shapes
 } // end of wireframe
 );
