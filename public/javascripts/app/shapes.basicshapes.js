@@ -5,8 +5,8 @@
  * About this : Define all Basic Shape.s here
  */
 
-App.Shapes.registerpallette("basic_shapes", {
-    collectionName: 'basic_shapes',
+App.Shapes.registerpallette("basic", {
+    collectionName: 'basic',
     shapes: {
         rectangle: {
             displayName: "rectangle",
