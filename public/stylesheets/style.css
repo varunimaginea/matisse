@@ -83,6 +83,7 @@ label {
 
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
 
+
 #header{
 /*background:#125699;
 //border-top:1px solid #fff;
@@ -200,7 +201,7 @@ color:#026CD0;
 }
 
 div.scroller{
-	height: 14px;
+	height: 18px;
 	cursor:pointer;
 }
 
@@ -213,7 +214,7 @@ div.scroller{
 }
 
 .shapesHolder{
-height:96%; overflow:hidden;
+height:95%; overflow:hidden;
 }
 
 .scrollerContentHolder{
