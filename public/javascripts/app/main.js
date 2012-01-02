@@ -69,6 +69,7 @@
    * function to reset width and heights
    */
   function resetWidthAndHeightOfPanels(){
+
      if($(window).width() >960 ) {
 		bodyWidth = $(window).width();
 	} else {
@@ -84,7 +85,7 @@
 	  bodyHeight = $(window).height();
       topPanelHeight = 100;
       leftPanelWidth = 100;
-      leftPanelHeight = bodyHeight-100;
+      leftPanelHeight = bodyHeight-topPanelHeight;
       canvasHeight = bodyHeight-130;
       canvasWidth = bodyWidth-130;
   }
@@ -105,8 +106,8 @@
     }
 
     function resizeMainPanel(){
-        $('#outer').height(bodyHeight-100);
-        $('#outer').width(bodyWidth);
+        //$('#outer').height(bodyHeight-100);
+        //$('#outer').width(bodyWidth);
     }
 
     function resizeLeftPanel(){
