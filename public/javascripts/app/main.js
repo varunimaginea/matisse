@@ -69,22 +69,11 @@
    * function to reset width and heights
    */
   function resetWidthAndHeightOfPanels(){
-     if($(window).width() >960 ) {
-		bodyWidth = $(window).width();
-	} else {
-		bodyWidth = 960;
-	}
-		
-    if($(window).height() >800 ) {
-		bodyHeight = $(window).height();
-	}
-	else {
-		bodyHeight = 800;
-	}
-	
+     
+	  bodyHeight = $(window).height()-10;
       topPanelHeight = 100;
       leftPanelWidth = 100;
-      leftPanelHeight = bodyHeight-100;
+      leftPanelHeight = bodyHeight-topPanelHeight+25;
       canvasHeight = bodyHeight-130;
       canvasWidth = bodyWidth-130;
   }
@@ -105,8 +94,8 @@
     }
 
     function resizeMainPanel(){
-        $('#outer').height(bodyHeight-100);
-        $('#outer').width(bodyWidth);
+        //$('#outer').height(bodyHeight-100);
+        //$('#outer').width(bodyWidth);
     }
 
     function resizeLeftPanel(){
@@ -1302,7 +1291,7 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
+			if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
 			$(this).siblings().find(".scrollerContentHolder").animate({"top":"-=85px"},"slow");	
 		}	
 	});
@@ -1320,7 +1309,7 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if(scrollerContentHolderTop < 0)
+			if(scrollerContentHolderTop < 0)
 			$(this).siblings().find(".scrollerContentHolder").animate({"top":"+=85px"},"slow");	
 		}	
 	});
