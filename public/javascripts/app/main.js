@@ -81,7 +81,7 @@
 	else {
 		bodyHeight = 800;
 	}
-	
+	  bodyHeight = $(window).height();
       topPanelHeight = 100;
       leftPanelWidth = 100;
       leftPanelHeight = bodyHeight-100;
@@ -1302,7 +1302,7 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
+			if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
 			$(this).siblings().find(".scrollerContentHolder").animate({"top":"-=85px"},"slow");	
 		}	
 	});
@@ -1320,7 +1320,7 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if(scrollerContentHolderTop < 0)
+			if(scrollerContentHolderTop < 0)
 			$(this).siblings().find(".scrollerContentHolder").animate({"top":"+=85px"},"slow");	
 		}	
 	});
