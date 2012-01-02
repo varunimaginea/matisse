@@ -1303,8 +1303,8 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
-			$(this).siblings().find(".scrollerContentHolder").animate({"top":"-=85px"},"slow");	
+			if((scrollerContentHolderTop-145) > -(scrollerContentHolderHeight))
+			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"-=85px"},"slow");	
 		}	
 	});
 
@@ -1322,7 +1322,7 @@ App.Main.letternumber = function(e) {
 		if(scrollerContentHolderHeight>parentHeight)
 		{
 			if(scrollerContentHolderTop < 0)
-			$(this).siblings().find(".scrollerContentHolder").animate({"top":"+=85px"},"slow");	
+			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"+=85px"},"slow");	
 		}	
 	});
 
