@@ -8,7 +8,7 @@
  */
 
  (function($){
-	 var currentTool="";
+	
      /**
 	 * @namespace
 	 */
@@ -30,11 +30,11 @@
      var canvasWidth,canvasHeight;
 	 
 	 /**
-	 * current active reference
+	 * current active tool reference
 	 */
 	 var $currActiveIcon;
 	 
-     /* by default selection mode is false */
+     /** by default selection mode is false */
      canvas.isSelectMode = false;
 	
    /**
@@ -508,8 +508,7 @@ function handleToolClick(e) {
 	$currActiveIcon = $(e.target);
 	canvas.isSelectMode = false;
 	var toolId = $(e.target).attr('id');
-	currentTool = toolId;
-    App.currTool = e.target;
+	App.currTool = e.target;
 	$(e.target).removeClass(toolId).addClass(toolId+"_click");
     //App.currTool.setAttribute('border', "2px");
     document.getElementById("c").style.cursor = 'crosshair';
@@ -896,15 +895,9 @@ if(obj.pallette && obj && obj.name) {
 
 function addTools() {
     //$('#leftdiv').draggable()
-	createpallettes(App.pallette);
-	
+	createPallettes(App.pallette);
 	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
-	$('#deleteTool').click( function() {
-		currentTool = "deleteTool";
-		 deleteObjects();
-	});
-    
-    //document.getElementById("drawing-mode").onclick = drawingButtonListener;
+	//document.getElementById("drawing-mode").onclick = drawingButtonListener;
     $('#chatbutton').click(chatButtonListener);
     handleMouseEvents()
 	$('#accordion').accordion();
@@ -913,36 +906,36 @@ function addTools() {
 
 
 
-function createpallettes(palletteObj){
+function createPallettes(palletteObj){
 	for(var palletteName in palletteObj) {
-		createShape(palletteName);
+		createPallette(palletteName);
 	}
 }
 
-function createShape(palletteName){
-	var displayName = App.pallette[palletteName].collectionName;
-    updateAccordian(displayName);
+function createPallette(palletteName){
+	var pallette_DisplayName = App.pallette[palletteName].collectionName;
+    updateAccordian(pallette_DisplayName);
 	var shapesObj = App.pallette[palletteName];
 	var html = '<div class="scroller scroller-up"></div>';
 	html += '<div class="shapesHolder">';
 	html += '<div class="scrollerContentHolder">';
     for (var i in shapesObj.shapes) {
-		var shape = shapesObj.shapes[i]
-	    var dispName = shape.displayName;		
+		var shape = shapesObj.shapes[i];
+	    var shape_dispName = shape.displayName;		
         var src = 'images/' + shape.inactiveIcon;
 		var activesrc = 'images/' + shape.activeIcon;
 		var shapeHolder = '<div id="shape-holder">';
-		shapeHolder+='<div id="shape"><img class="tool" id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';		        
+		shapeHolder+='<div id="shape"><img class="tool" id="' + shape_dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+pallette_DisplayName+'" width="64" height="64" /></div><div id="shape-label">'+shape_dispName+'</div></div>';		        
 		html += shapeHolder;
 	}	
 	html += '</div></div>';
 	html += '<div class="scroller scroller-down"></div>';
-	$(document.getElementById(displayName)).append(html);
+	$(document.getElementById(pallette_DisplayName)).append(html);
 	$('.tool').click(handleToolClick);
 }
 
-function updateAccordian(displayName){
-	$("#accordion").append('<h3><a href="#">'+displayName+'</a></h3><div height="100%" id="'+displayName+'"></div>');
+function updateAccordian(pallette_DisplayName){
+	$("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
 }
 
 
