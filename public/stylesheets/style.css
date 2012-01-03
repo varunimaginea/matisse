@@ -83,6 +83,7 @@ label {
 
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
 
+
 #header{
 /*background:#125699;
 //border-top:1px solid #fff;
@@ -200,20 +201,21 @@ color:#026CD0;
 }
 
 div.scroller{
-	height: 14px;
 	cursor:pointer;
 }
 
 #wireframe .scroller-up{
+	height: 13px;
 	background: #AAB0BB url('../images/up_arrow.png') no-repeat center center;
 }
 
 #wireframe .scroller-down{
+	height: 18px;
 	background: #AAB0BB url('../images/down_arrow.png') no-repeat center center;
 }
 
 .shapesHolder{
-height:96%; overflow:hidden;
+height:95%; overflow:hidden;
 }
 
 .scrollerContentHolder{
