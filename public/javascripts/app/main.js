@@ -106,8 +106,8 @@
     }
 
     function resizeMainPanel(){
-        //$('#outer').height(bodyHeight-100);
-        //$('#outer').width(bodyWidth);
+        $('#outer').height(bodyHeight-100);
+        $('#outer').width(bodyWidth);
     }
 
     function resizeLeftPanel(){
