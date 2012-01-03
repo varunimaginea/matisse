@@ -127,8 +127,7 @@
             accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
         });
         accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));
-    //  console.log(accordionHeaderHeight);
-       $('.ui-accordion-content').height(accordionContentHeight);
+        $('.ui-accordion-content').height(accordionContentHeight);
     }
 
    function bindResizeWindow(){
@@ -233,13 +232,9 @@
 	 * 
 	 */
 	matisse.onDraw = function (data) {
-		//console.log('data angle='+data.args[0].angle+'  scaleX = '+data.args[0].scaleX)
-		//data = jQuery.parseJSON( data );
+		
 		if(data && data.args)
 		{
-			console.log('================================================');
-			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette);
-			console.log('================================================');
 			if (data.action == undefined) {
 				return;
 			}
@@ -295,8 +290,7 @@ function observe(eventName) {
         switch (eventName) {
         case "object:modified":
             var obj = e.memo.target;
-			console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
-            matisse.sendDrawMsg({
+			matisse.sendDrawMsg({
                 action: "modified",
 				name: obj.name,
 				pallette: obj.pallette,
@@ -321,7 +315,6 @@ function observe(eventName) {
 			var obj = e.memo.path;
 			obj.uid = uniqid();
 			obj.name = "drawingpath"
-            //alert("mousedown"+canvas.isDrawingMode);
             matisse.sendDrawMsg({
                 action: 'drawpath',
 				pallette: App.palletteName,
@@ -340,8 +333,7 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
-			console.log("object name =="+obj.type+'    '+obj.name+'   ::  '+obj);
-            createPropertiesPanel(obj);
+			createPropertiesPanel(obj);
 			
         break;
         }
@@ -356,7 +348,6 @@ function modifyObject(args) {
 	if(obj) {
 		//canvas.setActiveObject(obj);
 		var recvdObj = args.object;
-		console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type+'   '+recvdObj.name)
 		obj.set("left", recvdObj.left);
 		obj.set("top", recvdObj.top);
 		obj.set("scaleX", recvdObj.scaleX);
@@ -500,6 +491,7 @@ function getRandomColor() {
 
 function resetIconSelection(){
 	if($currActiveIcon) {
+				document.getElementById("c").style.cursor = 'default'
 				$currActiveIcon.attr("src",$currActiveIcon.attr('data-inactive'));
 				$currActiveIcon.parent().parent().removeClass('shape-active');
 			}
@@ -520,30 +512,26 @@ function handleToolClick(e) {
     App.currTool = e.target;
 	$(e.target).removeClass(toolId).addClass(toolId+"_click");
     //App.currTool.setAttribute('border', "2px");
-    document.getElementById("c").style.cursor = 'default'
+    document.getElementById("c").style.cursor = 'crosshair';
     App.drawShape = true;
     App.action = e.target.id;
     App.palletteName = $(e.target).attr('data-parent');
-//	console.log('App.palletteName =='+App.pallette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.pallette[App.palletteName]);
   	if(e.target.id !="path") {
 		var obj = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[e.target.id].properties);
 		obj.uid = uniqid();
 		App.shapeArgs = [obj];
 	}
-    //alert(e.target.id)
     if (App.action != "path") {
         canvas.isDrawingMode = false;
-        //document.getElementById("path").src =  'images/nobrush.png' 
+    
     } else {
-		 document.getElementById("c").style.cursor = 'crosshair';
-         canvas.isDrawingMode = true;
+		 canvas.isDrawingMode = true;
 		 return;
     }
 }
 
 function getDefaultDataFromArray(arr) {
-	console.log('arrraaa='+arr);
-    if (arr == undefined) return "undefined";
+	if (arr == undefined) return "undefined";
     var obj = {};
     for (var i = 0; i < arr.length; i++) {
         obj[arr[i].name] = arr[i].defaultvalue;
@@ -590,8 +578,7 @@ function chatButtonListener(e) {
 function handleMouseEvents() {
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
-			console.log("App.palletteName ="+App.palletteName);
-            App.points.x = event.pageX - App.xOffset; //offset
+	        App.points.x = event.pageX - App.xOffset; //offset
             App.points.y = event.pageY - App.yOffset; //offset
             App.shapeArgs[0].left = App.points.x;
             App.shapeArgs[0].top = App.points.y;
@@ -721,7 +708,7 @@ function drawPath(args) {
    	canvas.renderAll();
 	p.setCoords();
     //this.fire('path:created', { path: p });
-	console.log("drawingpath name ="+p.name);
+	
 }
 
 function checkboxSelectionHandler(objct)
@@ -810,7 +797,6 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 if(obj.pallette && obj && obj.name) {
 	var val; 
     $('#prop').remove();
-  //  console.log(palletteName + "     " + obj.name)
     objName = obj.name;
     App.palletteName = obj.pallette;
     if (objName == undefined || objName == 'drawingpath') return;
@@ -942,8 +928,7 @@ function createShape(palletteName){
 	html += '<div class="scrollerContentHolder">';
     for (var i in shapesObj.shapes) {
 		var shape = shapesObj.shapes[i]
-	    console.log(shape.activeIcon);
-		var dispName = shape.displayName;		
+	    var dispName = shape.displayName;		
         var src = 'images/' + shape.inactiveIcon;
 		var activesrc = 'images/' + shape.activeIcon;
 		var shapeHolder = '<div id="shape-holder">';
@@ -1251,7 +1236,6 @@ App.Main.loadWireframe = function(args,objects)
 App.Main.loadSVG = function(args)  {
     
 	fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
-        //   console.log("OBJECTS LENGTH :::"+objects.length)	
         var loadedObject;
         if (objects.length > 1) {
             loadedObject = new fabric.PathGroup(objects, options);
