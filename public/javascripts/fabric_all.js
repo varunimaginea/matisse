@@ -11304,8 +11304,7 @@ fabric.Image.filters.RemoveWhite.fromObject = function(object) {
         strokeWidth:    this.strokeWidth,
         backgroundColor: this.backgroundColor
       });
-    },
-    
+    },	
     /**
      * Sets "color" of an instance (alias of `set('fill', &hellip;)`)
      * @method setColor
