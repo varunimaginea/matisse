@@ -30,10 +30,8 @@ redisClient.on("error", function (err) {
 var app = module.exports = express.createServer()
 , io = require('socket.io').listen(app);
 
-var ddd = '{"id":1,"pallette":"basic_shapes","action":"rectangle","args":"[{\"left\":194,\"top\":168,\"width\":200,\"height\":100,\"scaleX\":200,\"scaleY\":100,\"fill\":\"#FF0000\",\"stroke\":\"#00FF00\",\"angle\":0,\"uid\":1324292323410,\"name\":\"rectangle\",\"pallette\":\"basic_shapes\"}]"}';
 
 // Configuration
-
 app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
