@@ -69,23 +69,26 @@
    * function to reset width and heights
    */
   function resetWidthAndHeightOfPanels(){
-
-     if($(window).width() >960 ) {
-		bodyWidth = $(window).width();
+	
+	var windowHeight = $(window).height();
+	var windowWidth = $(window).width();
+  
+     if(windowWidth >960 ) {
+		bodyWidth = windowWidth;
 	} else {
 		bodyWidth = 960;
 	}
 		
-    if($(window).height() >800 ) {
-		bodyHeight = $(window).height();
+    if(windowHeight >800 ) {
+		bodyHeight = windowHeight;
 	}
 	else {
 		bodyHeight = 800;
 	}
-	  bodyHeight = $(window).height();
+	  //bodyHeight = $(window).height();
+	  //bodyWidth = $(window).width();
       topPanelHeight = 100;
-      leftPanelWidth = 100;
-      leftPanelHeight = bodyHeight-topPanelHeight;
+      leftPanelHeight = windowHeight-100;
       canvasHeight = bodyHeight-130;
       canvasWidth = bodyWidth-130;
   }
@@ -106,8 +109,8 @@
     }
 
     function resizeMainPanel(){
-        //$('#outer').height(bodyHeight-100);
-        //$('#outer').width(bodyWidth);
+        $('#outer').height(bodyHeight-100);
+        $('#outer').width(bodyWidth);
     }
 
     function resizeLeftPanel(){
@@ -946,7 +949,7 @@ function createShape(palletteName){
 		var dispName = shape.displayName;		
         var src = 'images/' + shape.inactiveIcon;
 		var activesrc = 'images/' + shape.activeIcon;
-		var shapeHolder = '<div id="shape-holder">';
+		var shapeHolder = '<div class="shape-holder" id="shape-holder-'+dispName+'">';
 		shapeHolder+='<div id="shape"><img class="tool" id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';		        
 		html += shapeHolder;
 	}	
@@ -1319,39 +1322,63 @@ App.Main.letternumber = function(e) {
     else return false;
 }
 
-	$(".scroller-up").live("click", function(){ 		
+	$(".scroller-up").live("click", function(){ 	
 		var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
 		var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
 		var parentHeight = $(this).parent().css('height');
+		var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
 		
 		scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0,scrollerContentHolderHeight.indexOf('px'));
 		parentHeight = parentHeight.substr(0,parentHeight.indexOf('px'));
 		scrollerContentHolderTop = scrollerContentHolderTop.substr(0,scrollerContentHolderTop.indexOf('px'));
 		
-		//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight);
+		//alert($(".scrollerContentHolder:visible>.shape-holder").height());
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			if((scrollerContentHolderTop-145) > -(scrollerContentHolderHeight))
-			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"-=85px"},"slow");	
+			if(scrollerContentHolderTop < -30)
+			{
+				$("#wireframe .scroller-down").css("background-color","#8F98A6");
+				var newTop = (scrollerContentHolderTop-(-shapeHeight));
+				//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight+" - "+newTop);
+				$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":newTop},"slow");	
+			}
+			else
+			{
+				$("#wireframe .scroller-up").css("background-color","#aaa");
+			}
 		}	
 	});
 
-	$(".scroller-down").live("click", function(){  		
+	$(".scroller-down").live("click", function(){  			
 		var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
 		var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
 		var parentHeight = $(this).parent().css('height');
+		var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
 		
 		scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0,scrollerContentHolderHeight.indexOf('px'));
 		parentHeight = parentHeight.substr(0,parentHeight.indexOf('px'));
 		scrollerContentHolderTop = scrollerContentHolderTop.substr(0,scrollerContentHolderTop.indexOf('px'));
 		
-		//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight);
+		var carouselArrowheight = 18;
+		var accordianHeight = $(".ui-accordion-content").height()-(carouselArrowheight*2);
+		var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();
+		
+		//alert(sumOfShapesHeight+" - "+accordianHeight+": "+(sumOfShapesHeight-accordianHeight)+" ::: "+scrollerContentHolderTop);
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			if(scrollerContentHolderTop < 0)
-			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"+=85px"},"slow");	
+			if(-(scrollerContentHolderTop) < (sumOfShapesHeight-accordianHeight-30))
+			{
+				$("#wireframe .scroller-up").css("background-color","#8F98A6");
+				var newTop = (scrollerContentHolderTop-shapeHeight);
+				//alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight+" - "+newTop);
+				$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":newTop},"slow");	
+			}
+			else
+			{
+				$("#wireframe .scroller-down").css("background-color","#aaa");
+			}
 		}	
 	});
 
