@@ -167,6 +167,7 @@
         var obj = canvas.getActiveObject();
         obj.set(App.focusInput, color);
         $('#' + App.focusInput).val(color);
+		$('#' + App.focusInput).css('background', color);
         matisse.sendDrawMsg({
             action: "modified",
             args: [{
@@ -199,6 +200,7 @@
         $('#propdiv').dialog();
         $('#propdiv').dialog({
             width: 'auto',
+			height: 'auto',
             resizable: false
         });
         $('#propdiv').dialog('close');
@@ -786,7 +788,7 @@
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
             var props = {};
             //alert(obj.width);
-            $('#propdiv').append('<div id="prop"><table id="proptable"></table></div>');
+            $('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
             jQuery.each(properties, function (i, val) {
                 if (i == 'angle') {
                     val = obj.getAngle()
@@ -794,30 +796,36 @@
                     val = obj[i]
                 }
                 if (i === "fill" || i === "stroke") {
-                    var inputTag = "<input style='width:70px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
+                    var inputTag = "<input style='width:100px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
 
                 } else {
-                    var inputTag = "<input type='text' style='width:70px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
+                    var inputTag = "<input type='text' style='width:100px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
                 }
-                var propDiv = $("#proptable");
-                propDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
+                var $propTableDiv = $("#proptable");
+                $propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
                 var inBox = $("#" + i);
 
                 $(":input").focus(function () {
                     App.focusInput = '';
                     id = this.id;
+					console.log('focus id ='+id);
                     if (id == 'fill' || id == 'stroke') {
-                        $('.' + id + 'tr').append('<tr><td class= "cp" id="colorpicker"></td></tr>');
-                        colorPicker = $.farbtastic("#colorpicker");
-                        colorPicker.linkTo(pickerUpdate);
-                        App.focusInput = id;
+						 App.focusInput = id;
+						 var prop = $(this).position();
+						 $('#colorpicker').show();
+						 var ht = $propTableDiv.height();
+						 var cssObj = {'position':'absolute', 'left':5, 'top': prop.top+20};
+						 $('#colorpicker').css(cssObj);
+						$( "#propdiv").dialog({ height:530});
+				
                     }
                 });
                 $(":input").blur(function () {
                     App.focusInput = '';
                     id = this.id;
                     if (id == 'fill' || id == 'stroke') {
-                        $('td').remove('.cp');
+                       $('#colorpicker').hide();
+					    $( "#propdiv").dialog({ height:'auto'});
                     }
                 });
                 inBox.keyup(function () {
@@ -839,8 +847,10 @@
                 });
                 // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
             });
-
-            $('#colorpicker').hide();
+			colorPicker = $.farbtastic("#colorpicker");
+            colorPicker.linkTo(pickerUpdate);
+			$('#colorpicker').hide();
+			 initPropWindow();
             if (obj.name == 'text') textInputHandler(obj, null);
             if (obj && obj.pallette == "wireframe" && obj.getObjects) {
                 var objcts = obj.getObjects();
