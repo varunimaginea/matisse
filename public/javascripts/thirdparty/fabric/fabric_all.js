@@ -11184,7 +11184,8 @@ fabric.Image.filters.RemoveWhite.fromObject = function(object) {
         'lineHeight',
         'strokeStyle',
         'strokeWidth',
-        'backgroundColor'
+        'backgroundColor',
+		'width'
       );
       fabric.util.removeFromArray(this.stateProperties, 'width');
     },
@@ -11302,7 +11303,8 @@ fabric.Image.filters.RemoveWhite.fromObject = function(object) {
         path:           this.path,
         strokeStyle:    this.strokeStyle,
         strokeWidth:    this.strokeWidth,
-        backgroundColor: this.backgroundColor
+        backgroundColor: this.backgroundColor,
+		width: 			this.width
       });
     },
     
@@ -11318,6 +11320,12 @@ fabric.Image.filters.RemoveWhite.fromObject = function(object) {
       return this;
     },
     
+    /**
+     * Returns the width occupied by the text
+     */
+    getWidth: function() {
+    	return this.width;
+    },
     /**
      * Sets fontSize of an instance and updates its coordinates
      * @method setFontsize

@@ -69,6 +69,7 @@
    * function to reset width and heights
    */
   function resetWidthAndHeightOfPanels(){
+
      if($(window).width() >960 ) {
 		bodyWidth = $(window).width();
 	} else {
@@ -81,10 +82,10 @@
 	else {
 		bodyHeight = 800;
 	}
-	
+	  bodyHeight = $(window).height();
       topPanelHeight = 100;
       leftPanelWidth = 100;
-      leftPanelHeight = bodyHeight-100;
+      leftPanelHeight = bodyHeight-topPanelHeight;
       canvasHeight = bodyHeight-130;
       canvasWidth = bodyWidth-130;
   }
@@ -105,8 +106,8 @@
     }
 
     function resizeMainPanel(){
-        $('#outer').height(bodyHeight-100);
-        $('#outer').width(bodyWidth);
+        //$('#outer').height(bodyHeight-100);
+        //$('#outer').width(bodyWidth);
     }
 
     function resizeLeftPanel(){
@@ -753,16 +754,16 @@ function radioSelectionHandler(objct)
 {
 	$("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>select</input> </td></tr>");
 	var chkbox = document.getElementById('chkbox');
-	objct.paths[1].fill == '#000000' ? chkbox.checked = true : chkbox.checked = false;	
+	objct.paths[1].fill == '#555555' ? chkbox.checked = true : chkbox.checked = false;	
 	chkbox.onmousedown = function()
 	{
 		if (!chkbox.checked)
 		{
-			objct.paths[1].fill = '#000000';
+			objct.paths[1].fill = '#555555';
 		}
 		else
 		{
-			objct.paths[1].fill = '#ffffff';
+			objct.paths[1].fill = '#eeeeee';
 		}
 		matisse.sendDrawMsg({
 							action: "modified",
@@ -1026,13 +1027,14 @@ function textInputHandler(obj, parent_obj)
 		case "radio":	txt_area.onkeyup = function (e) { 
 						var wdth = 0;
 						obj.text = this.value;
-						wdth = App.Main.getStringWidth(obj.text) + (2 * parent_obj.paths[1].radius) + 15 + 30;	
+						canvas.renderAll();
+						wdth = obj.getWidth() + (2 * parent_obj.paths[1].radius) + 15 + 30;	
 						(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 						parent_obj.width = wdth;						
 						parent_obj.paths[0].left = -((wdth/2) - 15);
 						parent_obj.paths[1].left = parent_obj.paths[0].left;	
-						var text_left =parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 15;
-						parent_obj.paths[2].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
+						var text_left = parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 15;
+						parent_obj.paths[2].left = -(-obj.getWidth()/2 - text_left);	
 						matisse.sendDrawMsg({
 							action: "modified",
 							args: [{
@@ -1048,7 +1050,8 @@ function textInputHandler(obj, parent_obj)
 		case "checkbox":	txt_area.onkeyup = function (e) { 
 							var wdth = 0;
 							obj.text = this.value;
-							wdth = App.Main.getStringWidth(obj.text) + 14 + 15 + 30;								
+							canvas.renderAll();
+							wdth = obj.getWidth() + 14 + 15 + 30;								
 							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							parent_obj.width = wdth;		
 							var checkbox_left = -wdth/2 + 15;	
@@ -1057,7 +1060,7 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.paths[0].points[1].x = checkbox_left + 14;	
 							parent_obj.paths[0].points[2].x = checkbox_left + 14;	
 							parent_obj.paths[0].points[3].x = checkbox_left;								
-							parent_obj.paths[1].left = -(-App.Main.getStringWidth(obj.text)/2 - text_left);	
+							parent_obj.paths[1].left = -(-(obj.getWidth())/2 - text_left);	
 							parent_obj.paths[2].points[0].x = checkbox_left + 3;	
 							parent_obj.paths[2].points[1].x = checkbox_left + 6;	
 							parent_obj.paths[2].points[2].x = checkbox_left + 11;
@@ -1072,20 +1075,43 @@ function textInputHandler(obj, parent_obj)
 							canvas.renderAll();
 							};						
 							break;
-		case "label":		
+		case "label":		txt_area.onkeyup = function (e) { 
+							var width = 0, height = 0;
+							obj.text = this.value;							
+							canvas.renderAll();							
+							width = obj.getWidth() + 10;							
+							height = obj.height + 5;
+							(width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
+							(height - parent_obj.height) > 0 ? parent_obj.top += (height - parent_obj.height)/2 : parent_obj.top = parent_obj.top;
+							parent_obj.width = width;	
+							parent_obj.height = height;														
+							parent_obj.paths[0].width = width;	
+							parent_obj.paths[0].height = height;							
+							matisse.sendDrawMsg({
+								action: "modified",
+								args: [{
+								uid: parent_obj.uid,
+								object: parent_obj
+								}]
+							});	
+							parent_obj.setCoords();				
+							canvas.renderAll();									
+							};						
+							break;
 		case "textbox":		txt_area.onkeyup = function (e) { 
 							var width = 0, height = 0;
 							obj.text = this.value;
-							width = App.Main.getStringWidth(obj.text);
+							canvas.renderAll();							
+							width = obj.getWidth() + 15;
 							(width <= 150)? width = 150 : width = width;
-							height = App.Main.getStringHeight(obj.text) + 5;
+							height = obj.height + 5;
 							(width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							(height - parent_obj.height) > 0 ? parent_obj.top += (height - parent_obj.height)/2 : parent_obj.top = parent_obj.top;
 							parent_obj.width = width;	
 							parent_obj.height = height;														
 							parent_obj.paths[0].width = width;	
 							parent_obj.paths[0].height = height;
-							
+							obj.left = -width/2 + obj.getWidth()/2 + 10;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -1105,11 +1131,11 @@ function textInputHandler(obj, parent_obj)
 								{
 									obj.text += '*';
 								}
+								canvas.renderAll();
 								this.value = obj.text;
-								var width = 0, height = 0, diff = 0;
-								width = App.Main.getStringWidth(obj.text) + 30;	
-								height = App.Main.getStringHeight(obj.text);
-								diff = (width/2 - App.Main.getStringWidth(obj.text)/2);
+								var width = 0, height = 0;
+								width = obj.getWidth() + 30;	
+								height = App.Main.getStringHeight(obj.text);								
 								(width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;								
 								parent_obj.width = width;	
 								parent_obj.height = height;														
@@ -1155,8 +1181,9 @@ function textInputHandler(obj, parent_obj)
 		break;
 		case "combo":	txt_area.onkeyup = function (e){
 							var wdth = 0;
-							obj.text = this.value;							
-							wdth = App.Main.getStringWidth(obj.text) + parent_obj.paths[1].width + 30;								
+							obj.text = this.value;
+							canvas.renderAll();
+							wdth = obj.getWidth() + parent_obj.paths[1].width + 30;								
 							(wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
 							parent_obj.width = wdth;														
 							parent_obj.paths[0].width = wdth;
@@ -1167,6 +1194,7 @@ function textInputHandler(obj, parent_obj)
 							parent_obj.paths[2].points[0].x = wdth/2 - 15.5;
 							parent_obj.paths[2].points[1].x = wdth/2 - 6.5;
 							parent_obj.paths[2].points[2].x = wdth/2 - 10.5;
+							parent_obj.paths[3].left = -wdth/2 + 15 + obj.getWidth()/2;
 							matisse.sendDrawMsg({
 								action: "modified",
 								args: [{
@@ -1209,7 +1237,9 @@ App.Main.loadWireframe = function(args,objects)
 	pathGroup.set({
             left: args.left,
             top: args.top,
-            angle: args.angle
+            angle: args.angle,
+	    scaleX: args.scaleX,
+	    scaleY: args.scaleY
         });
 	pathGroup.setCoords();
 	pathGroup.name = args.name;
@@ -1302,8 +1332,8 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if((scrollerContentHolderTop-85) > -(scrollerContentHolderHeight))
-			$(this).siblings().find(".scrollerContentHolder").animate({"top":"-=85px"},"slow");	
+			if((scrollerContentHolderTop-145) > -(scrollerContentHolderHeight))
+			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"-=85px"},"slow");	
 		}	
 	});
 
@@ -1320,8 +1350,8 @@ App.Main.letternumber = function(e) {
 		
 		if(scrollerContentHolderHeight>parentHeight)
 		{
-			//if(scrollerContentHolderTop < 0)
-			$(this).siblings().find(".scrollerContentHolder").animate({"top":"+=85px"},"slow");	
+			if(scrollerContentHolderTop < 0)
+			$(this).siblings().find(".scrollerContentHolder").stop().animate({"top":"+=85px"},"slow");	
 		}	
 	});
 

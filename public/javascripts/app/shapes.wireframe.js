@@ -16,9 +16,9 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "label_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "label";
-			args.width = App.Main.getStringWidth(txt) + 20;
-			args.height = App.Main.getStringHeight(txt) + 20;		
+				txt = args.paths ? args.paths[0].text : "label me";
+			args.width = args.paths ? args.paths[0].width : App.Main.getStringWidth(txt) + 20;
+			args.height = args.paths ? args.paths[0].height : App.Main.getStringHeight(txt) + 20;		
 			var text = new fabric.Text(txt, 
 						{	
 							fontSize : 20, 
@@ -52,6 +52,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+            },{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	txt_button:{
@@ -60,7 +74,7 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "button_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "click me";
+				txt = args.paths ? args.paths[1].text : "click me";
 			args.width = App.Main.getStringWidth(txt)+1 ;
 			args.height = App.Main.getStringHeight(txt)+4;			
 				
@@ -120,6 +134,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+            },{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	
@@ -129,9 +157,9 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "input_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "abc |                ";
-			args.width = 150;
-			args.height = 25;		
+				txt = args.paths ? args.paths[1].text : "abc...";			
+			args.width = args.paths ? args.paths[0].width : 150;
+			args.height = args.paths ? args.paths[0].height : 25;		
 			var border = new fabric.Rect({
                     width: args.width,
                     height: args.height,
@@ -148,8 +176,8 @@ App.Shapes.registerpallette("wireframe", {
 							fontSize : 18, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
-							left :0,
-							top : 0,
+							left : args.paths ? args.paths[1].left : -45,
+							top : args.paths ? args.paths[1].top : 0,
 							stroke: '#000000'							
 						});					
 			objects.push(border);
@@ -177,6 +205,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+            },{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	checkbox:{
@@ -185,30 +227,35 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "checkbox_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				text = "check",
+				text = args.paths ? args.paths[1].text : "check",
 				margin = 15,
-				space = 15;
-			args.width = App.Main.getStringWidth(text) + args.side + (2 * margin) + space;
-			args.height = 30;
+				space = 15,
+				side = 14,
+				_stroke =  args.paths ? args.paths[2].stroke : "#000000",
+				_fill = "#000000";				
+			args.width = args.width ? args.width : App.Main.getStringWidth(text) + side + (2 * margin) + space;
+			args.height = 30;					
 			var checkbox_left = -(args.width / 2) + margin;
 			var checkbox = new fabric.Polygon(      
-                    [{x: checkbox_left,y:args.side/2},{x:checkbox_left + args.side, y:args.side/2},{x:checkbox_left + args.side, y:-args.side/2},{x:checkbox_left, y:-args.side/2}],
+                    [{x: checkbox_left,y:side/2},{x:checkbox_left + side, y:side/2},{x:checkbox_left + side, y:-side/2},{x:checkbox_left, y:-side/2}],
 					{
 						fill: '#eee', 
 						stroke:'#000000'						
 					}
 					);
-			var text_left = checkbox_left + args.side + space;
-			var text = new fabric.Text("check", 
+			var text_left = checkbox_left + side + space;
+			var text = new fabric.Text(text, 
 						{	
-							fontSize : args.fontSize, 
-							fontFamily : args.fontFamily, 
+							fontSize : 20, 
+							fontFamily : "delicious_500", 
 							fontWeight : 20,
-							left : -(-(App.Main.getStringWidth(text))/2 - text_left),
-							top : 0
+							left : args.paths ? args.paths[1].left : -(-(App.Main.getStringWidth(text))/2 - text_left),
+							top : 0,
+							fill: _fill,
+							stroke: _stroke
 						});
 			var tick = new fabric.Polyline([{x: checkbox_left+3,y:1},{x:checkbox_left+6,y:5},{x:checkbox_left+11,y:-5}],
-					{fill:'#ffffff',stroke:'#000000'});
+					{fill: '#ffffff',stroke: _stroke});
 			objects.push(checkbox);
 			objects.push(text);
 			objects.push(tick);
@@ -228,45 +275,6 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("top", args.property);
                 },
                 defaultvalue: 100
-            },
-			{
-                name: 'side',
-                type: 'number',
-                action: function (args) {
-                    (args.obj).set("side", args.property);
-                },
-                defaultvalue: 14
-            },
-			{
-                name: 'fontFamily',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("fontFamily", args.property);
-                },
-                defaultvalue: 'delicious_500'
-            },
-            {
-                name: 'fill',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("fill", args.property);
-                },
-                defaultvalue: '#FFFFFF'
-            }, {
-                name: 'stroke',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("stroke", args.property);
-                },
-                defaultvalue: '#000000'
-            }, 
-			{
-                name: 'opacity',
-                type: 'number',
-                action: function (args) {
-                    (args.obj).set("opacity", args.property);
-                },
-                defaultvalue: 0.6
             },{
                 name: 'angle',
                 type: 'number',
@@ -274,13 +282,22 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
-            },{
-                name: 'fontSize',
+            },
+			{
+                name: 'scaleX',
                 type: 'number',
                 action: function (args) {
                     (args.obj).set("angle", args.property);
                 },
-                defaultvalue: 20
+                defaultvalue: 1
+            },
+			{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	
@@ -292,7 +309,7 @@ App.Shapes.registerpallette("wireframe", {
 				var fillColor = '#000000', _stroke = '#000000', _radius = 8, _opacity = 0.8,
 					_fontfamily = 'delicious_500', _fontSize = 20
                 var objects = [],
-					text = "radio",
+					text = args.paths ? args.paths[2].text : "radio",
 					width = 0;
 				var outer_circle = new fabric.Circle({
                     radius: _radius,
@@ -307,14 +324,14 @@ App.Shapes.registerpallette("wireframe", {
                     radius: _radius/2,
                     left: -30,
                     top: 0,
-                    fill: fillColor,                    
+                    fill: args.paths ? args.paths[1].fill : '#555555',                    
                     opacity: _opacity,
                     angle: args.angle
                 });
 				
 				var txt = new fabric.Text(
 					text,{
-					left: 10,
+					left: args.paths ? args.paths[2].left : 10,
                     top: 0,
                     fontFamily: _fontfamily,
 					fontSize:_fontSize,
@@ -368,6 +385,22 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },
+			{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+            },
+			{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
         },
 		combo:	{
@@ -376,10 +409,11 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "combobox_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				text = "Edit me",
-				margin = 15,
-				space = 5;
-			args.width = App.Main.getStringWidth(text) + args.side + (2 * margin);
+				text = args.paths ? args.paths[3].text : "Edit me",
+				margin = 15,				
+				space = 5,
+				side = 25;
+			args.width = args.width ? args.width : App.Main.getStringWidth(text) + side + (2 * margin);
 			args.height = 20;
 			var outerRect = new fabric.Rect(
 						{
@@ -404,7 +438,7 @@ App.Shapes.registerpallette("wireframe", {
 							fontSize : 16, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
-							left : -4,
+							left : args.paths ? args.paths[3].left : -4,
 							top : 0
 						});
 			
@@ -430,57 +464,27 @@ App.Shapes.registerpallette("wireframe", {
                 defaultvalue: 100
             },
 			{
-                name: 'side',
-                type: 'number',
-                action: function (args) {
-                    (args.obj).set("side", args.property);
-                },
-                defaultvalue: 25
-            },
-			{
-                name: 'fontFamily',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("fontFamily", args.property);
-                },
-                defaultvalue: 'delicious_500'
-            },
-            {
-                name: 'fill',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("fill", args.property);
-                },
-                defaultvalue: '#FFFFFF'
-            }, {
-                name: 'stroke',
-                type: 'string',
-                action: function (args) {
-                    (args.obj).set("stroke", args.property);
-                },
-                defaultvalue: '#000000'
-            }, 
-			{
-                name: 'opacity',
-                type: 'number',
-                action: function (args) {
-                    (args.obj).set("opacity", args.property);
-                },
-                defaultvalue: 0.6
-            },{
                 name: 'angle',
                 type: 'number',
                 action: function (args) {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
-            },{
-                name: 'fontSize',
+            },
+			{
+                name: 'scaleX',
                 type: 'number',
                 action: function (args) {
-                    (args.obj).set("angle", args.property);
+                    (args.obj).set("scaleX", args.property);
                 },
-                defaultvalue: 20
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	progressbar: {
@@ -489,22 +493,23 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "progressbar_g.png",
 		toolAction: function (args) {
 			var objects = [];				
-			args.width = 150;
-			args.height = 20;
+			args.width = args.width ? args.width : 150;
+			args.height = args.height ? args.height : 20;
+			console.log("scaleX: "+args.scaleX + " scaleY: "+args.scaleY);
 			var outerRect = new fabric.Rect(
 						{
 							width: args.width,
 							height: args.height,
 							fill: '#ffffff',
-							stroke: '#8f8f8f'
+							stroke: '#8f8f8f'							
 						}
 					);
 			
 			var innerRect = new fabric.Polygon(      
-                    [{x: -args.width/2,y:args.height/2 },{x:-args.width/4 , y:args.height/2},{x:-args.width/4 , y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
+                    args.paths ? args.paths[1].points : [{x: -args.width/2,y:args.height/2 },{x:-args.width/4 , y:args.height/2},{x:-args.width/4 , y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
 					{						
 						fill: '#9f9f9f', 
-						stroke:'#8f8f8f'						
+						stroke:'#8f8f8f'					
 					}
 					);				
 			objects.push(outerRect);
@@ -533,6 +538,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	slider:{
@@ -618,6 +637,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+            },{
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
             }]
 	},
 	
@@ -647,9 +680,7 @@ App.Shapes.registerpallette("wireframe", {
                     left: 0,
                     top: 0,
                     fill: '#fcfcfc',
-                    stroke: '#fcfcfc',
-                    scaleX: 1,
-                    scaleY: 1
+                    stroke: '#fcfcfc'                  
                 });
 			var textobj = new fabric.Text('w x h', {
                     left: 0,
@@ -688,6 +719,20 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
+            },{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
             }]
 	}, // end of image
 	password:{
@@ -696,7 +741,7 @@ App.Shapes.registerpallette("wireframe", {
 		inactiveIcon: "password_g.png",
 		toolAction: function (args) {
 			var objects = [],
-				txt = "************";
+				txt = args.paths ? args.paths[1].text : "************";
 			args.width = App.Main.getStringWidth(txt) + 30;
 			args.height = App.Main.getStringHeight(txt);	
 			var rect = new fabric.Rect(
@@ -740,7 +785,21 @@ App.Shapes.registerpallette("wireframe", {
                     (args.obj).set("angle", args.property);
                 },
                 defaultvalue: 0
-            }]
+            },{
+		name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+	    },{
+		name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("angle", args.property);
+                },
+                defaultvalue: 1
+	    }]
 	}, 
 	 div: {
             displayName: "div",
@@ -813,7 +872,7 @@ App.Shapes.registerpallette("wireframe", {
                 action: function (args) {
                     (args.obj).set("stroke", args.property);
                 },
-                defaultvalue: '#ddd'
+                defaultvalue: '#ccc'
             }, {
                 name: 'angle',
                 type: 'number',
