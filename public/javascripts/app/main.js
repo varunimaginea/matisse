@@ -56,7 +56,7 @@
         $('#chaticon').click(openChatBox);
         $('#propicon').click(openProp);
 
-        initTextEditWindow();
+      
         initChatWindow();
         initPropWindow();
         addObservers();
@@ -209,11 +209,12 @@
         $('#chatdialog').dialog('close');
     }
 
-    function initTextEditWindow() {
-        $('#texteditdiv').dialog();
-        $('#texteditdiv').dialog('close');
-    }
-
+    /**
+     * Regiser observers to observe any object changes like resize, rotate, move etc
+     * @method addObservers
+     * @param none
+     * 
+     */    
     function addObservers() {
         observe('object:modified');
         observe('path:created');
@@ -238,7 +239,10 @@
         });
 
     }
-
+	
+	/**
+     * method to open a Properties panel for currently selected object
+     */
     function openProp() {
         if (canvas.getActiveObject() == undefined) return;
         var dialog_width = $("#chatdialog").dialog("option", "width");
@@ -282,6 +286,12 @@
         }
     }
 
+	  /**
+     * searches for the object with the given id and returns that object
+     * @property id
+     * @type object
+     */
+
     function getObjectById(id) {
         var obj;
         var objs = canvas.getObjects();
@@ -294,6 +304,9 @@
         return obj;
     }
 
+	/**
+     * method to update a Properties panel as per the object changed on canvas
+     */
     function updatePropertyPanel(obj) {
         if (obj && obj.name && obj.pallette) {
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
@@ -480,32 +493,6 @@
     }
 
 
-    /**
-     * 
-     * @property str, length
-     * @type string
-     */
-
-    function pad(str, length) {
-        while (str.length < length) {
-            str = '0' + str;
-        }
-        return str;
-    };
-
-    /**
-     * Returns color in RGB format
-     * @property null
-     * @type string
-     */
-
-    function getRandomColor() {
-        var getRandomInt = fabric.util.getRandomInt;
-        return (
-        pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2));
-    }
-
-
     function resetIconSelection() {
         if ($currActiveIcon) {
             document.getElementById("c").style.cursor = 'default'
@@ -637,10 +624,6 @@
         });
 
     }
-
-
-
-
 
     function setObjectProperty(args) {
         var obj = getObjectById(args.uid);
@@ -1255,12 +1238,6 @@
             canvas.add(loadedObject);
         });
 
-    }
-
-    function showTextEditor() {
-        $('#texteditdiv').dialog();
-        $('#texteditdiv').dialog('open');
-        textHandler();
     }
 
     App.Main.numbersonly = function (myfield, e, dec) {
