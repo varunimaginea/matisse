@@ -795,6 +795,7 @@ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 
 if(obj.pallette && obj && obj.name) {
 	var val; 
+	var colorPicker;
     $('#prop').remove();
     objName = obj.name;
     App.palletteName = obj.pallette;
@@ -802,7 +803,7 @@ if(obj.pallette && obj && obj.name) {
     properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
     var props = {};
     //alert(obj.width);
-    $('#propdiv').append('<div id="prop"><table id="proptable"></table><div id="colorpicker"></div></div>');
+    $('#propdiv').append('<div id="prop"><table id="proptable"></table></div>');
     jQuery.each(properties, function (i, val) {
 	if(i == 'angle') {
 		val = obj.getAngle()
@@ -810,30 +811,34 @@ if(obj.pallette && obj && obj.name) {
 	   val = obj[i] 
 	}
         if (i === "fill" || i === "stroke") {
-			var inputTag = "<input  style='width:70px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'><br>";
+			var inputTag = "<input style='width:70px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
 			
 		}
         else {
-			var inputTag = "<input type='text' style='width:70px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input><br>";
+			var inputTag = "<input type='text' style='width:70px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
 		}
         var propDiv = $("#proptable");
-        propDiv.append("<tr><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>"); //(" - " + val));
+        propDiv.append("<tr class='"+i+"tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>"); //(" - " + val));
         var inBox = $("#" + i);
         // inBox.addClass('inbox');
 		$(":input").focus(function () {
 			App.focusInput = '';
 			id = this.id;
 			if(id == 'fill' || id=='stroke') {
-				//alert(id);
+				//propDiv.insertAfter($('#'+id+'tr')) 
+				$('.'+id+'tr').append('<tr><td class= "cp" id="colorpicker"></td></tr>');
+				colorPicker = $.farbtastic("#colorpicker");
+				colorPicker.linkTo(pickerUpdate);
 				App.focusInput = id;
-				$('#colorpicker').show();
+				//$('#colorpicker').show();
 			}
 		});
 		$(":input").blur(function () {
 			App.focusInput = '';
 			id = this.id;
 			if(id == 'fill' || id=='stroke') {
-				$('#colorpicker').hide();
+				$('td').remove('.cp');
+				//	$('#colorpicker').remove();
 			}
 		});
         inBox.keyup(function () {
@@ -856,8 +861,7 @@ if(obj.pallette && obj && obj.name) {
         });
         // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
     });
-	var colorPicker = $.farbtastic("#colorpicker");
-	colorPicker.linkTo(pickerUpdate);
+	
 	$('#colorpicker').hide();
 	if(obj.name == 'text')
 		textInputHandler(obj, null);
