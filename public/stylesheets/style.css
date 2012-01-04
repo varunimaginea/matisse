@@ -175,9 +175,9 @@ color:#026CD0;
 .shape-active{
 	background-color:#9BA2AD;
 	color:#FFF;
-	box-shadow:-5px -5px 2px #666 inset;
-	-webkit-box-shadow:-5px -5px 2px #666 inset;
-	-moz-box-shadow: -5px -5px 2px #666 inset;
+	box-shadow: -1px -1px 2px 1px #666666 inset;
+	-webkit-box-shadow:-1px -1px 2px 1px #666666 inset;
+	-moz-box-shadow: -1px -1px 2px 1px #666666 insets;
 }
 
 #shape{
@@ -205,13 +205,13 @@ div.scroller{
 }
 
 #wireframe .scroller-up{
-	height: 13px;
-	background: #AAB0BB url('../images/up_arrow.png') no-repeat center center;
+	height: 14px;
+	background: #AAAAAA url('../images/up_arrow.png') no-repeat center center;
 }
 
 #wireframe .scroller-down{
 	height: 18px;
-	background: #AAB0BB url('../images/down_arrow.png') no-repeat center center;
+	background: #8F98A6 url('../images/down_arrow.png') no-repeat center center;
 }
 
 .shapesHolder{
