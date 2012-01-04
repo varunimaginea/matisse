@@ -59,7 +59,7 @@
          $('#chaticon').click(openChatBox);
          $('#propicon').click(openProp);
 
-         initTextEditWindow();
+         
          initChatWindow();
          initPropWindow();
          addObservers();
@@ -103,27 +103,43 @@
         resizeCanvas();
    }
 
-    function resizeHeader(){
+    /**
+     * method to set header width and height
+     */
+    function resizeHeader() {
         $('#header').width(bodyWidth);
         $('#header').height(topPanelHeight);
     }
 
-    function resizeMainPanel(){
-        $('#outer').height(bodyHeight-100);
+    /**
+     * method to set outer panel width and height
+     */
+    function resizeMainPanel() {
+        $('#outer').height(bodyHeight - 100);
         $('#outer').width(bodyWidth);
     }
 
-    function resizeLeftPanel(){
+    /**
+     * method to set left panel width and height
+     */
+    function resizeLeftPanel() {
         $('#leftdiv').width(leftPanelWidth);
         $('#leftdiv').height(leftPanelHeight);
     }
 
-    function resizeCanvas(){
+    /**
+     * method to set Canvas width and height
+     */
+    function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
         $('#canvasId').width(canvasWidth);
         canvas.setDimensions({width:canvasWidth, height:canvasHeight});
     }
-    function setAccordinContentHeight(){
+
+    /**
+     * method to set Accordian width and height
+     */
+    function setAccordinContentHeight() {
         var $accordionHeaders = $('.ui-accordion-header');
         var accordionHeaderHeight = 0;
         $accordionHeaders.each(function(i,s){
@@ -134,34 +150,38 @@
        $('.ui-accordion-content').height(accordionContentHeight);
     }
 
-   function bindResizeWindow(){
-       $(window).resize(function() {
-           resetWidthAndHeightOfPanels();
-           resizeWindow();
-       });
-   }
-	 
-   /**
-   * Applies color picked from picker to object 
-   * @method pickerUpdate
-   * @param (String) color value
-   * 
-   */ 
-	 
-	function pickerUpdate(color){
-		if(App.focusInput == "") return;
-		var obj = canvas.getActiveObject();
-		obj.set(App.focusInput, color);
-		$('#'+App.focusInput).val(color);
-		 matisse.sendDrawMsg({
-					action: "modified",
-					args: [{
-					   uid: obj.uid,
-					   object: obj
-					}]
-				});
-		canvas.renderAll();
-	}
+    /**
+     * method to bind resizing of window to panels
+     */
+    function bindResizeWindow() {
+        $(window).resize(function () {
+            resetWidthAndHeightOfPanels();
+            resizeWindow();
+        });
+    }
+
+    /**
+     * Applies color picked from picker to object 
+     * @method pickerUpdate
+     * @param (String) color value
+     * 
+     */
+
+    function pickerUpdate(color) {
+        if (App.focusInput == "") return;
+        var obj = canvas.getActiveObject();
+        obj.set(App.focusInput, color);
+        $('#' + App.focusInput).val(color);
+		$('#' + App.focusInput).css('background', color);
+        matisse.sendDrawMsg({
+            action: "modified",
+            args: [{
+                uid: obj.uid,
+                object: obj
+            }]
+        });
+        canvas.renderAll();
+    }
 
 	
    /**
@@ -182,6 +202,7 @@
 		$('#propdiv').dialog();
 		$('#propdiv').dialog({
 			width: 'auto',
+			height: 'auto',
 			resizable: false
 		});
 		$('#propdiv').dialog('close');
@@ -192,18 +213,19 @@
 		$('#chatdialog').dialog('close');
 	}
 
-	function initTextEditWindow() {
-		$('#texteditdiv').dialog();
-		$('#texteditdiv').dialog('close');
-	}
-
-	function addObservers() {
-		observe('object:modified');
-		observe('path:created');
-		observe('selection:cleared');
-		observe('object:moved');
-		observe('object:selected');
-	}
+    /**
+     * Regiser observers to observe any object changes like resize, rotate, move etc
+     * @method addObservers
+     * @param none
+     * 
+     */    
+    function addObservers() {
+        observe('object:modified');
+        observe('path:created');
+        observe('selection:cleared');
+        observe('object:moved');
+        observe('object:selected');
+    }
 
 	function openChatBox() {
 		$('#chatdialog').dialog({ width : 200});
@@ -220,6 +242,9 @@
 	
 	}
 
+     /**
+     * method to open a Properties panel for currently selected object
+     */
 	function openProp() {
 		if (canvas.getActiveObject() == undefined) return;
 		var dialog_width = $("#chatdialog").dialog("option", "width");
@@ -230,11 +255,13 @@
 		$('#propdiv').dialog('open')
 	}
 
-	/**
-	 *  Called when other users add, modify or delete any object
-	 *  data - shape(data.shape) and args array (data.args)
-	 * 
-	 */
+    /**
+     *  Called when other users add, modify or delete any object
+     *  @method  matisse.onDraw
+     *  @parama data - shape(data.shape) and args array (data.args)
+     * 
+     */
+
 	matisse.onDraw = function (data) {
 		//console.log('data angle='+data.args[0].angle+'  scaleX = '+data.args[0].scaleX)
 		//data = jQuery.parseJSON( data );
@@ -267,17 +294,23 @@
 		}
 	}
 
-	function getObjectById(id) {
-		var obj;
-		var objs = canvas.getObjects();
-		objs.forEach(function (object) {
-			if (object.uid == id) {
-				//alert((object.uid==id))
-				obj = object;
-			}
-		});
-		return obj;
-	}
+	  /**
+     * searches for the object with the given id and returns that object
+     * @property id
+     * @type object
+     */
+
+    function getObjectById(id) {
+        var obj;
+        var objs = canvas.getObjects();
+        objs.forEach(function (object) {
+            if (object.uid == id) {
+                //alert((object.uid==id))
+                obj = object;
+            }
+        });
+        return obj;
+    }
 
 	function updatePropertyPanel(obj) {
 		if (obj && obj.name && obj.pallette) 
@@ -808,103 +841,104 @@ function progressHandler(objct)
 	}
 }
 
-function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
+ function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 
-if(obj.pallette && obj && obj.name) {
-	var val; 
-    $('#prop').remove();
-  //  console.log(palletteName + "     " + obj.name)
-    objName = obj.name;
-    App.palletteName = obj.pallette;
-    if (objName == undefined || objName == 'drawingpath') return;
-    properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
-    var props = {};
-    //alert(obj.width);
-    $('#propdiv').append('<div id="prop"><table id="proptable"></table><div id="colorpicker"></div></div>');
-    jQuery.each(properties, function (i, val) {
-	if(i == 'angle') {
-		val = obj.getAngle()
-	} else	{
-	   val = obj[i] 
-	}
-        if (i === "fill" || i === "stroke") {
-			var inputTag = "<input  style='width:70px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'><br>";
-			
-		}
-        else {
-			var inputTag = "<input type='text' style='width:70px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input><br>";
-		}
-        var propDiv = $("#proptable");
-        propDiv.append("<tr><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>"); //(" - " + val));
-        var inBox = $("#" + i);
-        // inBox.addClass('inbox');
-		$(":input").focus(function () {
-			App.focusInput = '';
-			id = this.id;
-			if(id == 'fill' || id=='stroke') {
-				//alert(id);
-				App.focusInput = id;
-				$('#colorpicker').show();
-			}
-		});
-		$(":input").blur(function () {
-			App.focusInput = '';
-			id = this.id;
-			if(id == 'fill' || id=='stroke') {
-				$('#colorpicker').hide();
-			}
-		});
-        inBox.keyup(function () {
-            if (!canvas.getActiveObject()) return;
-			var actObj = canvas.getActiveObject();
-			var val = $("#" + i).val();
-			actObj.set(i, val);
-			if(i == 'angle')
-			actObj.setAngle(val);
-			canvas.renderAll();
-            canvas.getActiveObject().setCoords();
-           // applyProperty(objName, i, $("#" + i).val());
-            matisse.sendDrawMsg({
-                action: "modified",
-                args: [{
-                    uid: obj.uid,
-                   object: obj
-                }]
+        if (obj.pallette && obj && obj.name) {
+            var val;
+            var colorPicker;
+            $('#prop').remove();
+            objName = obj.name;
+            App.palletteName = obj.pallette;
+            if (objName == undefined || objName == 'drawingpath') return;
+            properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
+            var props = {};
+            //alert(obj.width);
+            $('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
+            jQuery.each(properties, function (i, val) {
+                if (i == 'angle') {
+                    val = obj.getAngle()
+                } else {
+                    val = obj[i]
+                }
+                if (i === "fill" || i === "stroke") {
+                    var inputTag = "<input style='width:100px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
+
+                } else {
+                    var inputTag = "<input type='text' style='width:100px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
+                }
+                var $propTableDiv = $("#proptable");
+                $propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
+                var inBox = $("#" + i);
+
+                $(":input").focus(function () {
+                    App.focusInput = '';
+                    id = this.id;
+					console.log('focus id ='+id);
+                    if (id == 'fill' || id == 'stroke') {
+						 App.focusInput = id;
+						 var prop = $(this).position();
+						 $('#colorpicker').show();
+						 var ht = $propTableDiv.height();
+						 var cssObj = {'position':'absolute', 'left':5, 'top': prop.top+20};
+						 $('#colorpicker').css(cssObj);
+						$( "#propdiv").dialog({ height:530});
+				
+                    }
+                });
+                $(":input").blur(function () {
+                    App.focusInput = '';
+                    id = this.id;
+                    if (id == 'fill' || id == 'stroke') {
+                       $('#colorpicker').hide();
+					    $( "#propdiv").dialog({ height:'auto'});
+                    }
+                });
+                inBox.keyup(function () {
+                    if (!canvas.getActiveObject()) return;
+                    var actObj = canvas.getActiveObject();
+                    var val = $("#" + i).val();
+                    actObj.set(i, val);
+                    if (i == 'angle') actObj.setAngle(val);
+                    canvas.renderAll();
+                    canvas.getActiveObject().setCoords();
+                    // applyProperty(objName, i, $("#" + i).val());
+                    matisse.sendDrawMsg({
+                        action: "modified",
+                        args: [{
+                            uid: obj.uid,
+                            object: obj
+                        }]
+                    });
+                });
+                // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
             });
-        });
-        // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
-    });
-	var colorPicker = $.farbtastic("#colorpicker");
-	colorPicker.linkTo(pickerUpdate);
-	$('#colorpicker').hide();
-	if(obj.name == 'text')
-		textInputHandler(obj, null);
-	if (obj && obj.pallette == "wireframe" && obj.getObjects)
-	{
-		var objcts = obj.getObjects();
-		for (var o in objcts)
-		{
-			if (objcts[o].type == "text")
-			{
-				textInputHandler(objcts[o], obj);
-				break;				
-			}			
-		}
-		switch (obj.name)
-		{
-			case "checkbox":
-				checkboxSelectionHandler(obj);
-				break;
-			case "radio":
-				radioSelectionHandler(obj);
-				break;
-			case "progressbar":
-				progressHandler(obj);
-				break;
-		}
-	}
-	}
-}
+			colorPicker = $.farbtastic("#colorpicker");
+            colorPicker.linkTo(pickerUpdate);
+			$('#colorpicker').hide();
+			 initPropWindow();
+            if (obj.name == 'text') textInputHandler(obj, null);
+            if (obj && obj.pallette == "wireframe" && obj.getObjects) {
+                var objcts = obj.getObjects();
+                for (var o in objcts) {
+                    if (objcts[o].type == "text") {
+                        textInputHandler(objcts[o], obj);
+                        break;
+                    }
+                }
+                switch (obj.name) {
+                case "checkbox":
+                    checkboxSelectionHandler(obj);
+                    break;
+                case "radio":
+                    radioSelectionHandler(obj);
+                    break;
+                case "progressbar":
+                    progressHandler(obj);
+                    break;
+                }
+            }
+        }
+    }
 
 /**
  * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
@@ -913,7 +947,7 @@ if(obj.pallette && obj && obj.name) {
 
 function addTools() {
     //$('#leftdiv').draggable()
-	createpallettes(App.pallette);
+	createPallettes(App.pallette);
 	
 	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 	$('#deleteTool').click( function() {
@@ -930,7 +964,7 @@ function addTools() {
 
 
 
-function createpallettes(palletteObj){
+function createPallettes(palletteObj){
 	for(var palletteName in palletteObj) {
 		createShape(palletteName);
 	}
