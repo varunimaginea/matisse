@@ -8260,8 +8260,8 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
       
       this.set('radius', options.radius || 0);
       this.callSuper('initialize', options);
-      
-      var radiusBy2ByScale = this.get('radius') * 2 * this.get('scaleX');
+      /* formula for width and height below is modified to fix selection border issue by imaginea 04-jan-2012*/
+      var radiusBy2ByScale = this.get('radius') * 2 ;//* this.get('scaleX'); 
       this.set('width', radiusBy2ByScale).set('height', radiusBy2ByScale);
     },
     
