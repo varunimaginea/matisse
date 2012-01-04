@@ -1006,6 +1006,14 @@ function keyDown(e) {
        if (key == "46" && evt.altKey) {
             deleteObjects();
         }
+		else if (key == "38" && evt.ctrlKey) {
+				var obj = canvas.getActiveObject();
+				if(obj)	canvas.bringForward(obj);
+		}
+		else if (key == "40" && evt.ctrlKey) {
+				var obj = canvas.getActiveObject();
+				if(obj)	canvas.sendBackwards(obj);
+		}
     }
 }
 
