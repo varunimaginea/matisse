@@ -947,7 +947,7 @@ function progressHandler(objct)
 
 function addTools() {
     //$('#leftdiv').draggable()
-	createPallettes(App.pallette);
+	createAllPallettes(App.pallette);
 	
 	$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 	$('#deleteTool').click( function() {
@@ -964,15 +964,15 @@ function addTools() {
 
 
 
-function createPallettes(palletteObj){
+function createAllPallettes(palletteObj){
 	for(var palletteName in palletteObj) {
-		createShape(palletteName);
+		createPallette(palletteName);
 	}
 }
 
-function createShape(palletteName){
-	var displayName = App.pallette[palletteName].collectionName;
-    updateAccordian(displayName);
+function createPallette(palletteName){
+	var pallette_DisplayName = App.pallette[palletteName].collectionName;
+    updateAccordian(pallette_DisplayName);
 	var shapesObj = App.pallette[palletteName];
 	var html = '<div class="scroller scroller-up"></div>';
 	html += '<div class="shapesHolder">';
@@ -980,21 +980,21 @@ function createShape(palletteName){
     for (var i in shapesObj.shapes) {
 		var shape = shapesObj.shapes[i]
 	    console.log(shape.activeIcon);
-		var dispName = shape.displayName;		
+		var shape_DisplayName = shape.displayName;		
         var src = 'images/' + shape.inactiveIcon;
 		var activesrc = 'images/' + shape.activeIcon;
-		var shapeHolder = '<div class="shape-holder" id="shape-holder-'+dispName+'">';
-		shapeHolder+='<div id="shape"><img class="tool" id="' + dispName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+displayName+'" width="64" height="64" /></div><div id="shape-label">'+dispName+'</div></div>';		        
+		var shapeHolder = '<div class="shape-holder" id="shape-holder-'+shape_DisplayName+'">';
+		shapeHolder+='<div id="shape"><img class="tool" id="' + shape_DisplayName + '" src="' + src + '" data-active="'+activesrc+'" data-inactive="'+src+'" data-parent="'+pallette_DisplayName+'" width="64" height="64" /></div><div id="shape-label">'+shape_DisplayName+'</div></div>';		        
 		html += shapeHolder;
 	}	
 	html += '</div></div>';
 	html += '<div class="scroller scroller-down"></div>';
-	$(document.getElementById(displayName)).append(html);
+	$(document.getElementById(pallette_DisplayName)).append(html);
 	$('.tool').click(handleToolClick);
 }
 
-function updateAccordian(displayName){
-	$("#accordion").append('<h3><a href="#">'+displayName+'</a></h3><div height="100%" id="'+displayName+'"></div>');
+function updateAccordian(pallette_DisplayName){
+	$("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
 }
 
 
