@@ -1423,5 +1423,19 @@ App.Main.letternumber = function(e) {
 			}
 		}	
 	});
+	
+	$('#saveicon').bind("click", function() {
+		//canvas.loadImageFromURL('images/mockup.png' , onload);
+		var data = canvas.toDataURL('png')
+		//console.log(data);
+		matisse.saveImage(data);
+	});
+	
+	function onload(e) {
+		canvas.add(e);
+		e.left = 200;
+		e.top = 200;
+		alert('loaded'+e);
+	}
 
  })(jQuery);
