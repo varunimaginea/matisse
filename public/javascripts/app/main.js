@@ -1430,12 +1430,42 @@ App.Main.letternumber = function(e) {
 		//console.log(data);
 		matisse.saveImage(data);
 	});
+	$('#loadicon').bind("click", function() {
+		canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
+	});
+	$('#inputfile').change(fileSelected);
 	
-	function onload(e) {
-		canvas.add(e);
-		e.left = 200;
-		e.top = 200;
-		alert('loaded'+e);
+	function fileSelected() {
+		var oFile = document.getElementById('inputfile').files[0];
+		var filepath = document.getElementById('inputfile').value;
+		/* var oReader = new FileReader();
+        oReader.onload = function(e){
+		console.log('file src =========='+e.target.result)
+		}
+		oReader.readAsDataURL(oFile);*/
+		canvas.loadImageFromURL(oFile.name , onImageLoad);
+		console.log('file =========='+filepath)
+	}
+	function onImageLoad(obj) {
+		obj.name = "myimage";
+		obj.uid = uniqid();
+		obj.left = 500;
+		obj.top = 500;
+		obj.pallette = 'imagepallette';
+		canvas.add(obj);
+		obj.setCoords();
+		 matisse.sendDrawMsg({
+			action: 'myimage',
+			pallette: 'imagepallette',
+			args: [{
+				uid: obj.uid,
+				left: obj.left,
+				top: obj.top,
+				width: obj.width,
+				height: obj.height,
+				name:obj.name
+			}]
+		});
 	}
 
  })(jQuery);

@@ -200,7 +200,7 @@ io.sockets.on('connection', function (socket) {
 	if(data.action == "modified")
 	{
 		data.args = data.args.object;
-		
+		console.log("***** data args:"+data.args);
 		ShapesModel.find({shapeId:data.shapeId}, function (err, id) {
 			if (err) {
 				console.log(err);
