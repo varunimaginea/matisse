@@ -268,9 +268,9 @@
 		if(data && data.args)
 		{
 			console.log('================================================');
-			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette);
+			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette+' path==   '+data.args[0].path);
 			console.log('================================================');
-			if (data.action == undefined) {
+			if (data.action == undefined || data.action == null) {
 				return;
 			}
 			if (data.action == "modified") {
@@ -286,6 +286,8 @@
 				var obj = getObjectById(data.args[0].uid);
 				canvas.remove(obj);
 				$('#prop').remove();
+			} else if(data.action == "myimage") {
+				loadImage(data.args[0]);
 			} else {
 				if (App.pallette[data.pallette] != undefined) {
 					App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
@@ -313,6 +315,9 @@
     }
 
 	function updatePropertyPanel(obj) {
+		if(! assertNotNull(obj, 'object undefined')) return;
+		if(App.pallette[App.palletteName] == null) return;
+		if(canvas.getActiveGroup()) return;
 		if (obj && obj.name && obj.pallette) 
 		{
 			properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
@@ -325,11 +330,33 @@
 		}
 	}
 
+function notifyServerGroupMoved() {
+		activeGroup = canvas.getActiveGroup();
+		var objectsInGroup = activeGroup.getObjects();
+        canvas.discardActiveGroup();
+        objectsInGroup.forEach(function (obj) {
+            matisse.sendDrawMsg({
+                action: "modified",
+				name: obj.name,
+				pallette: obj.pallette,
+                args: [{
+                    uid: obj.uid,
+                    object: obj
+                }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
+            })
+        });
+
+}	
+	
 function observe(eventName) {
     canvas.observe(eventName, function (e) {
         // alert(eventName);
         switch (eventName) {
         case "object:modified":
+			if(canvas.getActiveGroup()) {
+				notifyServerGroupMoved();
+				return;
+			}
             var obj = e.memo.target;
 			console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
             matisse.sendDrawMsg({
@@ -376,6 +403,9 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
+			if(canvas.getActiveGroup()) {
+				return;
+			}
 			console.log("object name =="+obj.type+'    '+obj.name+'   ::  '+obj);
             createPropertiesPanel(obj);
 			
@@ -842,13 +872,16 @@ function progressHandler(objct)
 }
 
  function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
-
-        if (obj.pallette && obj && obj.name) {
+		if(! assertNotNull(obj, 'object undefined')) return;
+	
+	    if (obj.pallette && obj && obj.name) {
+			console.log('CREATE PROP PANEL');
             var val;
             var colorPicker;
             $('#prop').remove();
             objName = obj.name;
             App.palletteName = obj.pallette;
+			if(App.pallette[App.palletteName] == null ) return;
             if (objName == undefined || objName == 'drawingpath') return;
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
             var props = {};
@@ -1431,9 +1464,24 @@ App.Main.letternumber = function(e) {
 		matisse.saveImage(data);
 	});
 	$('#loadicon').bind("click", function() {
-		canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
+		var args = {};
+		args.path = 'images/conventional-html-layout.png';
+		args.name ="myimage";
+		args.left = 300;
+		args.top = 200;
+		args.uid = uniqid();
+		args.pallette = 'imagepallette';
+		loadImage(args);
 	});
 	$('#inputfile').change(fileSelected);
+	
+	$('#newdocicon').bind("click", function() {
+	   var pageURL = document.location.href;
+	   // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
+	   var indx = pageURL.indexOf('/');
+	   pageURL = pageURL.substr(0, indx)
+	   window.open (pageURL+'/html',"mywindow");
+	});
 	
 	function fileSelected() {
 		var oFile = document.getElementById('inputfile').files[0];
@@ -1443,29 +1491,48 @@ App.Main.letternumber = function(e) {
 		console.log('file src =========='+e.target.result)
 		}
 		oReader.readAsDataURL(oFile);*/
-		canvas.loadImageFromURL(oFile.name , onImageLoad);
+		canvas.loadImageFromURL(oFile.name , onImageLoad, args);
 		console.log('file =========='+filepath)
 	}
-	function onImageLoad(obj) {
-		obj.name = "myimage";
-		obj.uid = uniqid();
-		obj.left = 500;
-		obj.top = 500;
-		obj.pallette = 'imagepallette';
+	
+	function loadImage(args) {
+		//canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
+		console.log('IMAGE PATH = '+args.path);
+		canvas.loadImageFromURL(args.path, onImageLoad, args);
+	
+	}
+	function onImageLoad(obj, args) {
+		obj.name = args.name;
+		obj.uid = args.uid;
+		obj.left = args.left;
+		obj.top = args.top;
+		obj.pallette = args.pallette;
 		canvas.add(obj);
 		obj.setCoords();
 		 matisse.sendDrawMsg({
 			action: 'myimage',
-			pallette: 'imagepallette',
+			pallette: args.pallette,
+		
 			args: [{
 				uid: obj.uid,
 				left: obj.left,
 				top: obj.top,
 				width: obj.width,
 				height: obj.height,
-				name:obj.name
+				name:obj.name,
+				path:args.path
 			}]
 		});
 	}
 
+	/* Throws Error if the value is null.
+	 */
+	function assertNotNull(value, str) {
+		if (value == null || (value.pallette) == null || (value.name) == null) {
+			throw new Error(str);
+			canvas.activeObject = null;
+			return false;
+		}
+		return true;
+	}
  })(jQuery);

@@ -5960,7 +5960,7 @@ fabric.util.string = {
     loadImageFromURL: (function () {
       var imgCache = { };
 
-      return function (url, callback) {
+      return function (url, callback, options) { // #for matisse 'options' to sent as callback method parameter
         // check cache first
         
         var _this = this;
@@ -5968,7 +5968,7 @@ fabric.util.string = {
         function checkIfLoaded() {
           var imgEl = fabric.document.getElementById(imgCache[url]);
           if (imgEl.width && imgEl.height) {
-            callback(new fabric.Image(imgEl));
+            callback(new fabric.Image(imgEl), options);
           }
           else {
             setTimeout(checkIfLoaded, 50);
@@ -5993,7 +5993,7 @@ fabric.util.string = {
             
             setTimeout(function() {
               if (imgEl.width && imgEl.height) {
-                callback(new fabric.Image(imgEl));
+                callback(new fabric.Image(imgEl), options);
               }
             }, 0);
           };

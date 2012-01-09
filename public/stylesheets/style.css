@@ -79,6 +79,8 @@ label {
 .topicons {
 	position:relative;
 	top:20px;
+	width:16px;
+	height:16px;
 }
 
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
@@ -125,7 +127,7 @@ float:left;
 }
 
 #menuicons{
-margin: 43px 20px 0px 0px;
+margin: 55px 20px 0px 0px;
 }
 
 #menuicons img{
