@@ -262,13 +262,8 @@
      */
 
 	matisse.onDraw = function (data) {
-		//console.log('data angle='+data.args[0].angle+'  scaleX = '+data.args[0].scaleX)
-		//data = jQuery.parseJSON( data );
 		if(data && data.args)
 		{
-			console.log('================================================');
-			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette+' path==   '+data.args[0].path);
-			console.log('================================================');
 			if (data.action == undefined || data.action == null) {
 				return;
 			}
@@ -285,7 +280,7 @@
 				var obj = getObjectById(data.args[0].uid);
 				canvas.remove(obj);
 				$('#prop').remove();
-			} else if(data.action == "myimage") {
+			} else if(data.action == "importimage") {
 				loadImage(data.args[0]);
 			} else {
 				if (App.pallette[data.pallette] != undefined) {
@@ -1462,7 +1457,7 @@ App.Main.letternumber = function(e) {
 	$('#loadicon').bind("click", function() {
 		var args = {};
 		args.path = 'images/conventional-html-layout.png';
-		args.name ="myimage";
+		args.name ="importimage";
 		args.left = 300;
 		args.top = 200;
 		args.uid = uniqid();
@@ -1506,7 +1501,7 @@ App.Main.letternumber = function(e) {
 		canvas.add(obj);
 		obj.setCoords();
 		 matisse.sendDrawMsg({
-			action: 'myimage',
+			action: 'importimage',
 			pallette: args.pallette,
 		
 			args: [{
