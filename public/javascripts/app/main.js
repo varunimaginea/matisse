@@ -59,7 +59,6 @@
          $('#chaticon').click(openChatBox);
          $('#propicon').click(openProp);
 
-         
          initChatWindow();
          initPropWindow();
          addObservers();
@@ -315,7 +314,6 @@
     }
 
 	function updatePropertyPanel(obj) {
-		if(! assertNotNull(obj, 'object undefined')) return;
 		if(App.pallette[App.palletteName] == null) return;
 		if(canvas.getActiveGroup()) return;
 		if (obj && obj.name && obj.pallette) 
@@ -872,8 +870,7 @@ function progressHandler(objct)
 }
 
  function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
-		if(! assertNotNull(obj, 'object undefined')) return;
-	
+
 	    if (obj.pallette && obj && obj.name) {
 			console.log('CREATE PROP PANEL');
             var val;
@@ -906,8 +903,7 @@ function progressHandler(objct)
                 $(":input").focus(function () {
                     App.focusInput = '';
                     id = this.id;
-					console.log('focus id ='+id);
-                    if (id == 'fill' || id == 'stroke') {
+					if (id == 'fill' || id == 'stroke') {
 						 App.focusInput = id;
 						 var prop = $(this).position();
 						 $('#colorpicker').show();
