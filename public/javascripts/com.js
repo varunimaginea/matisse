@@ -30,7 +30,7 @@ var matisse = {
 		socket.emit("saveImage",loc,data);
 	}
 };
-var socket = io.connect('http://192.168.3.65'); //change it to server ip or local ip for testing from other machines
+var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
 socket.on("eventDraw", function(data){
 	console.log("new draw event received--");
 	matisse.drawHandler(data);
