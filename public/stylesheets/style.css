@@ -111,7 +111,8 @@ overflow:hidden;
 
 
 #canvasId{
-float:left;
+float:right;
+overflow:auto;
 }
 
 

@@ -24,6 +24,8 @@
 	 
 	  /** width and height of panels for resize */
      var bodyWidth,bodyHeight;
+     var initialBodyWidth = $(window).width() > 960 ? $(window).width() : 960,
+         initialBodyHeight = $(window).height() > 800 ? $(window).height() : 800;
      var topPanelHeight;
      var leftPanelWidth,leftPanelHeight;
      var accordionContentHeight;
@@ -45,10 +47,12 @@
    */
 
     App.Main.init = function(){
-         resetWidthAndHeightOfPanels();
+    	initWidthAndHeightOfPanels();
+        //resetWidthAndHeightOfPanels();
          resizeWindow();
+	 setCanvasSize();
          bindResizeWindow();
-		 canvas.isSelectMode = true;
+	 canvas.isSelectMode = true;
          //setCanvasSize();
          App.xOffset = getOffset(document.getElementById('canvasId')).left;
          App.yOffset = getOffset(document.getElementById('canvasId')).top;
@@ -64,6 +68,18 @@
          addObservers();
     }
 
+    /**
+    * function to initialize width and heights
+    */
+    function initWidthAndHeightOfPanels(){		
+    	bodyWidth = $(window).width() - 2;
+    	bodyHeight = $(window).height();
+    	topPanelHeight = 100;
+    	leftPanelWidth = 100;
+    	leftPanelHeight = bodyHeight - topPanelHeight;
+    	canvasWidth = bodyWidth - leftPanelWidth;
+    	canvasHeight = bodyHeight - topPanelHeight - 23;		
+    }
    /**
    * function to reset width and heights
    */
@@ -95,11 +111,17 @@
     * method to resize panels on resize of window
     */
    function resizeWindow(){
+   	resizeBody();
         resizeHeader();
         resizeMainPanel();
         resizeLeftPanel();
         setAccordinContentHeight();
         resizeCanvas();
+   }
+
+   function resizeBody(){
+   	$('#_body').width(bodyWidth + 2);
+	$('#_body').height(bodyHeight);
    }
 
     /**
@@ -114,7 +136,7 @@
      * method to set outer panel width and height
      */
     function resizeMainPanel() {
-        $('#outer').height(bodyHeight - 100);
+    	$('#outer').height(leftPanelHeight);
         $('#outer').width(bodyWidth);
     }
 
@@ -132,7 +154,7 @@
     function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
         $('#canvasId').width(canvasWidth);
-        canvas.setDimensions({width:canvasWidth, height:canvasHeight});
+        //canvas.setDimensions({width:canvasWidth, height:canvasHeight});
     }
 
     /**
@@ -154,8 +176,9 @@
      */
     function bindResizeWindow() {
         $(window).resize(function () {
-            resetWidthAndHeightOfPanels();
+            initWidthAndHeightOfPanels();
             resizeWindow();
+	    setCanvasSize();
         });
     }
 
@@ -191,8 +214,8 @@
    */ 
 	function setCanvasSize() {
 	
-		var width = $("#outer").width()-50; // width of left panels
-		var height =  $("#outer").height()-40;// footer height
+		width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
+		height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
 		canvas.setDimensions({width:width, height:height});
 	}
 	
@@ -650,8 +673,8 @@ function handleMouseEvents() {
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
 			console.log("App.palletteName ="+App.palletteName);
-            App.points.x = event.pageX - App.xOffset; //offset
-            App.points.y = event.pageY - App.yOffset; //offset
+            App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
+            App.points.y = event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset; //offset		
             App.shapeArgs[0].left = App.points.x;
             App.shapeArgs[0].top = App.points.y;
             App.shapeArgs[0].name = App.action;
@@ -671,16 +694,16 @@ function handleMouseEvents() {
         if (canvas.isDrawingMode) {
             App.xPoints = [];
             App.yPoints = [];
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
 
         }
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
         if (canvas.isDrawingMode) {
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
            // msg += event.pageX + ", " + event.pageY + "\n :";
         }
 		else {
