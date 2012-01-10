@@ -32,6 +32,7 @@
      var canvasWidth,canvasHeight;
 	 var horIndent = 2;
 	 var verIndent = 2;
+	 var hLine, vLine;
 	 /**
 	 * current active reference
 	 */
@@ -48,7 +49,7 @@
    */
 
     App.Main.init = function(){
-		drawGrid()
+		//drawGrid()
     	initWidthAndHeightOfPanels();
         //resetWidthAndHeightOfPanels();
          resizeWindow();
@@ -219,7 +220,7 @@
 		width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
 		height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
 		canvas.setDimensions({width:width, height:height});
-		
+		drawHVLines();
 	}
 	
 	
@@ -228,6 +229,15 @@
 		var line = new fabric.Line([10,10, 100,10], {eanbled:false, stroke:'#ff0000'})
 		canvas.add(line);
 		line.set('stroke', '#ff0000');
+		//disableObject(line);
+	//	fabric.util.makeElementUnselectable(line)
+	}
+	function drawHVLines() {
+		hLine = new fabric.Line([0,0,width,0], {eanbled:false, stroke:'#ff0000', left:width/2})
+		vLine = new fabric.Line([0,0,0,height], {eanbled:false, stroke:'#ff0000', top:height/2})
+		canvas.add(hLine);
+		canvas.add(vLine);
+		
 		//disableObject(line);
 	//	fabric.util.makeElementUnselectable(line)
 	}
@@ -411,6 +421,8 @@ function observe(eventName) {
                     object: obj
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
+			hLine.set('top', 0);
+			vLine.set('left', 0);
 			updatePropertyPanel(obj);
 			
         break;
@@ -1624,16 +1636,24 @@ App.Main.letternumber = function(e) {
 	
 	*/
 	function checkAlign(obj) {
+		hLine.set('top', 0);
+		vLine.set('left', 0);
 		var canvasObjects = canvas.getObjects();
 		for(var i =0; i<canvasObjects.length; i++)
 		{
 			//console.log(';;;;;;;;;;;;;;'+canvasObjects[i].left+' :: '+obj.left);
 			if(canvasObjects[i] != obj && canvasObjects[i].left == obj.left) {
-				console.log('FOUND LEFT ALIGN');
+				console.log('FOUND LEFT ALIGN '+canvasObjects[i].name);
+				vLine.set('left', obj.left - obj.width/2);
+				canvas.renderAll();
+				vLine.setCoords()
 				return 'left';
 			}
 			else if(canvasObjects[i] != obj && canvasObjects[i].top == obj.top) {
-				console.log('FOUND TOP ALIGN');
+				console.log('FOUND TOP ALIGN '+canvasObjects[i].name);
+				hLine.set('top', obj.top - obj.height/2);
+				canvas.renderAll();
+				hLine.setCoords()
 				return 'top';
 			}
 		}
