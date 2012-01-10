@@ -24,11 +24,14 @@
 	 
 	  /** width and height of panels for resize */
      var bodyWidth,bodyHeight;
+     var initialBodyWidth = $(window).width() > 960 ? $(window).width() : 960,
+         initialBodyHeight = $(window).height() > 800 ? $(window).height() : 800;
      var topPanelHeight;
      var leftPanelWidth,leftPanelHeight;
      var accordionContentHeight;
      var canvasWidth,canvasHeight;
-	 
+	 var horIndent = 2;
+	 var verIndent = 2;
 	 /**
 	 * current active reference
 	 */
@@ -45,8 +48,11 @@
    */
 
     App.Main.init = function(){
-         resetWidthAndHeightOfPanels();
+		drawGrid()
+    	initWidthAndHeightOfPanels();
+        //resetWidthAndHeightOfPanels();
          resizeWindow();
+		 setCanvasSize();
          bindResizeWindow();
 		 canvas.isSelectMode = true;
          //setCanvasSize();
@@ -56,14 +62,27 @@
          addTools();
 
          document.onkeydown = keyDown;
-         $('#chaticon').click(openChatBox);
-         $('#propicon').click(openProp);
+         $('#chaticon').click(openChatWindow);
+         $('#propicon').click(openPropWindow);
 
          initChatWindow();
          initPropWindow();
          addObservers();
+		 initAnnotation();
     }
 
+    /**
+    * function to initialize width and heights
+    */
+    function initWidthAndHeightOfPanels(){		
+    	bodyWidth = $(window).width() - 2;
+    	bodyHeight = $(window).height();
+    	topPanelHeight = 100;
+    	leftPanelWidth = 100;
+    	leftPanelHeight = bodyHeight - topPanelHeight;
+    	canvasWidth = bodyWidth - leftPanelWidth;
+    	canvasHeight = bodyHeight - topPanelHeight - 23;		
+    }
    /**
    * function to reset width and heights
    */
@@ -95,11 +114,17 @@
     * method to resize panels on resize of window
     */
    function resizeWindow(){
+   	resizeBody();
         resizeHeader();
         resizeMainPanel();
         resizeLeftPanel();
         setAccordinContentHeight();
         resizeCanvas();
+   }
+
+   function resizeBody(){
+   	$('#_body').width(bodyWidth + 2);
+	$('#_body').height(bodyHeight);
    }
 
     /**
@@ -114,7 +139,7 @@
      * method to set outer panel width and height
      */
     function resizeMainPanel() {
-        $('#outer').height(bodyHeight - 100);
+    	$('#outer').height(leftPanelHeight);
         $('#outer').width(bodyWidth);
     }
 
@@ -132,7 +157,7 @@
     function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
         $('#canvasId').width(canvasWidth);
-        canvas.setDimensions({width:canvasWidth, height:canvasHeight});
+        //canvas.setDimensions({width:canvasWidth, height:canvasHeight});
     }
 
     /**
@@ -154,8 +179,9 @@
      */
     function bindResizeWindow() {
         $(window).resize(function () {
-            resetWidthAndHeightOfPanels();
+            initWidthAndHeightOfPanels();
             resizeWindow();
+			setCanvasSize();
         });
     }
 
@@ -190,12 +216,31 @@
    * 
    */ 
 	function setCanvasSize() {
-	
-		var width = $("#outer").width()-50; // width of left panels
-		var height =  $("#outer").height()-40;// footer height
+		width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
+		height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
 		canvas.setDimensions({width:width, height:height});
+		
 	}
 	
+	
+	
+	function drawGrid() {
+		var line = new fabric.Line([10,10, 100,10], {eanbled:false, stroke:'#ff0000'})
+		canvas.add(line);
+		line.set('stroke', '#ff0000');
+		//disableObject(line);
+	//	fabric.util.makeElementUnselectable(line)
+	}
+	
+	function disableObject(obj) {
+		obj.lockMovementX = true;
+		obj.lockMovementY = true;
+		obj.lockScalingX = true;
+		obj.lockScalingY = true;
+		obj.lockUniScaling = true;
+		obj.lockRotation = true;
+		obj.selection = false;
+	}
 	
 	function initPropWindow() {
 		$('#propdiv').dialog();
@@ -211,6 +256,11 @@
 		$('#chatdialog').dialog();
 		$('#chatdialog').dialog('close');
 	}
+	
+	function initAnnotation() {
+		$('#annotation').dialog();
+		//$('#annotate').dialog('close');
+	}
 
     /**
      * Regiser observers to observe any object changes like resize, rotate, move etc
@@ -222,11 +272,11 @@
         observe('object:modified');
         observe('path:created');
         observe('selection:cleared');
-        observe('object:moved');
+        observe('object:moving');
         observe('object:selected');
     }
 
-	function openChatBox() {
+	function openChatWindow() {
 		$('#chatdialog').dialog({ width : 200});
 		var dialog_width = $("#chatdialog").dialog("option", "width");
 		var win_width = $(window).width();
@@ -244,7 +294,7 @@
      /**
      * method to open a Properties panel for currently selected object
      */
-	function openProp() {
+	function openPropWindow() {
 		if (canvas.getActiveObject() == undefined) return;
 		var dialog_width = $("#chatdialog").dialog("option", "width");
 		var win_width = $(window).width();
@@ -362,6 +412,7 @@ function observe(eventName) {
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
 			updatePropertyPanel(obj);
+			
         break;
         case "selection:cleared":
             $('#prop').remove();
@@ -403,6 +454,11 @@ function observe(eventName) {
             createPropertiesPanel(obj);
 			
         break;
+		case 'object:moving':
+		//console.log('moving....');
+			var obj = e.memo.target;
+			checkAlign(obj)
+		break;
         }
 
     })
@@ -650,8 +706,8 @@ function handleMouseEvents() {
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
 			console.log("App.palletteName ="+App.palletteName);
-            App.points.x = event.pageX - App.xOffset; //offset
-            App.points.y = event.pageY - App.yOffset; //offset
+            App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
+            App.points.y = event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset; //offset		
             App.shapeArgs[0].left = App.points.x;
             App.shapeArgs[0].top = App.points.y;
             App.shapeArgs[0].name = App.action;
@@ -671,16 +727,16 @@ function handleMouseEvents() {
         if (canvas.isDrawingMode) {
             App.xPoints = [];
             App.yPoints = [];
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
 
         }
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
         if (canvas.isDrawingMode) {
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
            // msg += event.pageX + ", " + event.pageY + "\n :";
         }
 		else {
@@ -1030,14 +1086,44 @@ function keyDown(e) {
        if (key == "46" && evt.altKey) {
             deleteObjects();
         }
-		else if (key == "38" && evt.ctrlKey) {
+		/* when ALT+upArrow pressed*/
+		else if (key == "38" && evt.altKey) {
 				var obj = canvas.getActiveObject();
 				if(obj)	canvas.bringForward(obj);
 		}
-		else if (key == "40" && evt.ctrlKey) {
+		/* when ALT+downArrow pressed*/
+		else if (key == "40" && evt.altKey) {
 				var obj = canvas.getActiveObject();
 				if(obj)	canvas.sendBackwards(obj);
 		}
+		else if(key =="37") {
+				var obj = canvas.getActiveObject();
+				var objleft = obj.left;
+				obj.set('left', objleft-horIndent);
+				canvas.renderAll();
+				obj.setCoords();
+		}	
+		else if(key =="39") {
+				var obj = canvas.getActiveObject();
+				var objleft = obj.left;
+				obj.set('left', objleft+horIndent);
+				canvas.renderAll();
+				obj.setCoords();
+		}	
+		else if(key =="38") {
+				var obj = canvas.getActiveObject();
+				var objtop = obj.top;
+				obj.set('top', objtop-verIndent);
+				canvas.renderAll();
+				obj.setCoords();
+		}	
+		else if(key =="40") {
+				var obj = canvas.getActiveObject();
+				var objtop = obj.top;
+				obj.set('top', objtop+verIndent);
+				canvas.renderAll();
+				obj.setCoords();
+		}	
     }
 }
 
@@ -1532,5 +1618,25 @@ App.Main.letternumber = function(e) {
 			return false;
 		}
 		return true;
+	}
+	
+	/* Get all objects from canvas and check if borders of any of them matches with active object borders
+	
+	*/
+	function checkAlign(obj) {
+		var canvasObjects = canvas.getObjects();
+		for(var i =0; i<canvasObjects.length; i++)
+		{
+			//console.log(';;;;;;;;;;;;;;'+canvasObjects[i].left+' :: '+obj.left);
+			if(canvasObjects[i] != obj && canvasObjects[i].left == obj.left) {
+				console.log('FOUND LEFT ALIGN');
+				return 'left';
+			}
+			else if(canvasObjects[i] != obj && canvasObjects[i].top == obj.top) {
+				console.log('FOUND TOP ALIGN');
+				return 'top';
+			}
+		}
+		return null;
 	}
  })(jQuery);

@@ -111,7 +111,8 @@ overflow:hidden;
 
 
 #canvasId{
-float:left;
+float:right;
+overflow:auto;
 }
 
 
@@ -242,4 +243,13 @@ z-index: 9001;
 top:0px;
 left:0px;
 width:100%;
+}
+
+#annotation {
+	background-color:#FFFFCC;
+}
+#annotationtext {
+	background-color:#FFFFCC;
+	width:90%;
+	height:90%;
 }

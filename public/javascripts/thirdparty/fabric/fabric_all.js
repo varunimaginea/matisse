@@ -4977,8 +4977,8 @@ fabric.util.string = {
       if (this._shouldClearSelection(e)) {
         
         this._groupSelector = {
-          ex: pointer.x,
-          ey: pointer.y,
+          ex: pointer.x + this.wrapperEl.parentNode.scrollLeft,
+          ey: pointer.y + this.wrapperEl.parentNode.scrollTop,
           top: 0,
           left: 0
         };
@@ -4989,12 +4989,12 @@ fabric.util.string = {
         // determine if it's a drag or rotate case
         // rotate and scale will happen at the same time
         this.stateful && target.saveState();
-        
-        if (corner = target._findTargetCorner(e, this._offset)) {
+        var canvasHolder = this.wrapperEl.parentNode;
+        if (corner = target._findTargetCorner(e, this._offset, canvasHolder)) {
           this.onBeforeScaleRotate(target);
         }
         
-        this._setupCurrentTransform(e, target);
+        this._setupCurrentTransform(e, target, canvasHolder);
         
         var shouldHandleGroupLogic = e.shiftKey && (activeGroup || this.getActiveObject());
         if (shouldHandleGroupLogic) {
@@ -5043,12 +5043,12 @@ fabric.util.string = {
      * @private
      * @method _setupCurrentTransform
      */
-    _setupCurrentTransform: function (e, target) {
+    _setupCurrentTransform: function (e, target, _canvasHolder) {
       var action = 'drag', 
           corner,
           pointer = getPointer(e);
       
-      if (corner = target._findTargetCorner(e, this._offset)) {
+      if (corner = target._findTargetCorner(e, this._offset, _canvasHolder)) {
         action = (corner === 'ml' || corner === 'mr') 
           ? 'scaleX' 
           : (corner === 'mt' || corner === 'mb') 
@@ -5061,10 +5061,10 @@ fabric.util.string = {
         action: action,
         scaleX: target.scaleX,
         scaleY: target.scaleY,
-        offsetX: pointer.x - target.left,
-        offsetY: pointer.y - target.top,
-        ex: pointer.x,
-        ey: pointer.y,
+        offsetX: pointer.x + _canvasHolder.scrollLeft - target.left,
+        offsetY: pointer.y + _canvasHolder.scrollTop - target.top,
+        ex: pointer.x + _canvasHolder.scrollLeft,
+        ey: pointer.y + _canvasHolder.scrollTop,
         left: target.left, 
         top: target.top,
         theta: target.theta,
@@ -5133,14 +5133,15 @@ fabric.util.string = {
       this.discardActiveObject().renderAll();
       
       var pointer = this.getPointer(e);
-      
+      var canvasHolder = this.wrapperEl.parentNode;
+	  
       this._freeDrawingXPoints.length = this._freeDrawingYPoints.length = 0;
       
-      this._freeDrawingXPoints.push(pointer.x);
-      this._freeDrawingYPoints.push(pointer.y);
+      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft);
+      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop);
       
       this.contextTop.beginPath();
-      this.contextTop.moveTo(pointer.x, pointer.y);
+      this.contextTop.moveTo(pointer.x + canvasHolder.scrollLeft, pointer.y + canvasHolder.scrollTop);
       this.contextTop.strokeStyle = this.freeDrawingColor;
       this.contextTop.lineWidth = this.freeDrawingLineWidth;
       this.contextTop.lineCap = this.contextTop.lineJoin = 'round';
@@ -5150,13 +5151,13 @@ fabric.util.string = {
      * @private
      * @method _captureDrawingPath
      */
-    _captureDrawingPath: function(e) {
-      var pointer = this.getPointer(e);
+    _captureDrawingPath: function(e) {	
+      var pointer = this.getPointer(e);  
+      var canvasHolder = this.wrapperEl.parentNode;
+      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft);
+      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop);
       
-      this._freeDrawingXPoints.push(pointer.x);
-      this._freeDrawingYPoints.push(pointer.y);
-      
-      this.contextTop.lineTo(pointer.x, pointer.y);
+      this.contextTop.lineTo(pointer.x + canvasHolder.scrollLeft, pointer.y + canvasHolder.scrollTop);
       this.contextTop.stroke();
     },
     
@@ -5229,12 +5230,12 @@ fabric.util.string = {
       }
       
       var groupSelector = this._groupSelector;
-      
+      var canvasHolder = this.wrapperEl.parentNode;
       // We initially clicked in an empty area, so we draw a box for multiple selection.
       if (groupSelector !== null) {
         var pointer = getPointer(e);
-        groupSelector.left = pointer.x - this._offset.left - groupSelector.ex;
-        groupSelector.top = pointer.y - this._offset.top - groupSelector.ey;
+        groupSelector.left = pointer.x + canvasHolder.scrollLeft - this._offset.left - groupSelector.ex;
+        groupSelector.top = pointer.y + canvasHolder.scrollTop- this._offset.top - groupSelector.ey;
         this.renderTop();
       }
       else if (!this._currentTransform) {
@@ -5269,8 +5270,8 @@ fabric.util.string = {
       else {
         // object is being transformed (scaled/rotated/moved/etc.)
         var pointer = getPointer(e), 
-            x = pointer.x, 
-            y = pointer.y;
+            x = pointer.x + canvasHolder.scrollLeft, 
+            y = pointer.y + canvasHolder.scrollTop;
         
         this._currentTransform.target.isMoving = true;
         
@@ -5397,6 +5398,7 @@ fabric.util.string = {
      */
     _setCursorFromEvent: function (e, target) {
       var s = this.upperCanvasEl.style;
+      var canvasHolder = this.wrapperEl.parentNode;
       if (!target) {
         s.cursor = 'default';
         return false;
@@ -5406,7 +5408,7 @@ fabric.util.string = {
         // only show proper corner when group selection is not active
         var corner = !!target._findTargetCorner 
                       && (!activeGroup || !activeGroup.contains(target)) 
-                      && target._findTargetCorner(e, this._offset);
+                      && target._findTargetCorner(e, this._offset, canvasHolder);
         
         if (!corner) {
           s.cursor = this.HOVER_CURSOR;
@@ -5712,7 +5714,7 @@ fabric.util.string = {
       
       // if xcount is odd then we clicked inside the object
       // For the specific case of square images xcount === 1 in all true cases
-      if ((xpoints && xpoints % 2 === 1) || target._findTargetCorner(e, this._offset)) {
+      if ((xpoints && xpoints % 2 === 1) || target._findTargetCorner(e, this._offset, this.wrapperEl.parentNode)) {
         return true;
       }
       return false;
@@ -5725,8 +5727,8 @@ fabric.util.string = {
     _normalizePointer: function (object, pointer) {
       
       var activeGroup = this.getActiveGroup(), 
-          x = pointer.x, 
-          y = pointer.y;
+          x = pointer.x + this.wrapperEl.parentNode.scrollLeft, //Matisse :: Fix for selection of objects when a canvas is inside a div with scroll
+          y = pointer.y + this.wrapperEl.parentNode.scrollTop;
       
       var isObjectInGroup = (
         activeGroup && 
@@ -7594,12 +7596,13 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
      * @param offset {Object} canvas offset
      * @return {String|Boolean} corner code (tl, tr, bl, br, etc.), or false if nothing is found
      */
-    _findTargetCorner: function(e, offset) {
+    _findTargetCorner: function(e, offset, _canvasHolder) {		
       if (!this.hasControls) return false;
-      
+      var _scrollLeft = _canvasHolder ? _canvasHolder.scrollLeft : 0,
+          _scrollTop = _canvasHolder ? _canvasHolder.scrollTop : 0;
       var pointer = getPointer(e),
-          ex = pointer.x - offset.left,
-          ey = pointer.y - offset.top,
+          ex = pointer.x + _scrollLeft - offset.left,
+          ey = pointer.y + _scrollTop - offset.top,
           xpoints,
           lines;
       

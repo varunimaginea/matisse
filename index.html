@@ -22,7 +22,7 @@
 	  <script type="text/javascript" src="/javascripts/thirdparty/csspopup.js"></script>
 	 
    </head>
-   <body style="margin:2px;background-color:#fff;border-radius:2px 2px #fff;">
+   <body id="_body" style="margin:0px;background-color:#fff;border-radius:2px 2px #fff;overflow:hidden">
     <!-- for popup to show when user click's save button-->	
 	<div id="blanket" style="display:none;"></div>
 	<div id="popUpDiv" style="display:none;overflow:scroll">
@@ -72,6 +72,9 @@
              </input><button id="chatbutton">OK</button>
          </div>
          <div id="propdiv" title="Properties"></div>
+		 <div id="annotation" title="Notes">
+			<textarea id="annotationtext" value="ur notes" rows="2"></textarea>
+		 </div>
      </div>
 	 <!-- end outer div -->
      <!-- <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>-->
