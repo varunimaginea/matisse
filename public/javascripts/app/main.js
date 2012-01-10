@@ -1450,9 +1450,16 @@ App.Main.letternumber = function(e) {
 	
 	$('#saveicon').bind("click", function() {
 		//canvas.loadImageFromURL('images/mockup.png' , onload);
-		var data = canvas.toDataURL('png')
+		canvas.deactivateAll();
+		var data = canvas.toDataURL('png', 0.1)
 		//console.log(data);
-		matisse.saveImage(data);
+		popup('popUpDiv')
+		$("#result").html('<img src='+data+' />');
+		/*$("#data").val(data);
+		$("#get").click(function(){
+			$("#frm").trigger('submit');
+		});*/
+		//matisse.saveImage(data);
 	});
 	$('#loadicon').bind("click", function() {
 		var args = {};
