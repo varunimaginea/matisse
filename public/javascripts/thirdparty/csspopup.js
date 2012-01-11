@@ -60,3 +60,4 @@ function popup(windowname, close, pw, ph) {
 function closePopup(windowname) {
 	toggle(windowname);	
 }
+
