@@ -261,13 +261,18 @@ App.Shapes.registerpallette("basic", {
             inactiveIcon: "text_g.png",
             toolAction: function addText(args) {
 				console.log("load text.....");
-                var text = 'text text text...';
+				if(args.text)
+					var text = args.text;
+				else
+					var text = 'sample';
                 var textSample = new fabric.Text(text, {
                     left: args.left,
                     top: args.top,
                     fontFamily: args.fontFamily,
                     angle: args.angle,
                     fill: args.fill,
+					scaleX: args.scaleX,
+					scaleY: args.scaleY,
                     stroke: args.stroke
                 });
                 //alert(textSample)
@@ -299,6 +304,21 @@ App.Shapes.registerpallette("basic", {
                     (args.obj).set("fontFamily", args.property);
                 },
                 defaultvalue: 'delicious_500'
+            },
+			{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
             },
 
             {

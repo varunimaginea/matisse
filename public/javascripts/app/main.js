@@ -24,6 +24,8 @@
 	 
 	  /** width and height of panels for resize */
      var bodyWidth,bodyHeight;
+     var initialBodyWidth = $(window).width() > 960 ? $(window).width() : 960,
+         initialBodyHeight = $(window).height() > 800 ? $(window).height() : 800;
      var topPanelHeight;
      var leftPanelWidth,leftPanelHeight;
      var accordionContentHeight;
@@ -45,10 +47,12 @@
    */
 
     App.Main.init = function(){
-         resetWidthAndHeightOfPanels();
+    	initWidthAndHeightOfPanels();
+        //resetWidthAndHeightOfPanels();
          resizeWindow();
+	 setCanvasSize();
          bindResizeWindow();
-		 canvas.isSelectMode = true;
+	 canvas.isSelectMode = true;
          //setCanvasSize();
          App.xOffset = getOffset(document.getElementById('canvasId')).left;
          App.yOffset = getOffset(document.getElementById('canvasId')).top;
@@ -59,12 +63,23 @@
          $('#chaticon').click(openChatBox);
          $('#propicon').click(openProp);
 
-         
          initChatWindow();
          initPropWindow();
          addObservers();
     }
 
+    /**
+    * function to initialize width and heights
+    */
+    function initWidthAndHeightOfPanels(){		
+    	bodyWidth = $(window).width() - 2;
+    	bodyHeight = $(window).height();
+    	topPanelHeight = 100;
+    	leftPanelWidth = 100;
+    	leftPanelHeight = bodyHeight - topPanelHeight;
+    	canvasWidth = bodyWidth - leftPanelWidth;
+    	canvasHeight = bodyHeight - topPanelHeight - 23;		
+    }
    /**
    * function to reset width and heights
    */
@@ -96,11 +111,17 @@
     * method to resize panels on resize of window
     */
    function resizeWindow(){
+   	resizeBody();
         resizeHeader();
         resizeMainPanel();
         resizeLeftPanel();
         setAccordinContentHeight();
         resizeCanvas();
+   }
+
+   function resizeBody(){
+   	$('#_body').width(bodyWidth + 2);
+	$('#_body').height(bodyHeight);
    }
 
     /**
@@ -115,7 +136,7 @@
      * method to set outer panel width and height
      */
     function resizeMainPanel() {
-        $('#outer').height(bodyHeight - 100);
+    	$('#outer').height(leftPanelHeight);
         $('#outer').width(bodyWidth);
     }
 
@@ -133,7 +154,7 @@
     function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
         $('#canvasId').width(canvasWidth);
-        canvas.setDimensions({width:canvasWidth, height:canvasHeight});
+        //canvas.setDimensions({width:canvasWidth, height:canvasHeight});
     }
 
     /**
@@ -155,8 +176,9 @@
      */
     function bindResizeWindow() {
         $(window).resize(function () {
-            resetWidthAndHeightOfPanels();
+            initWidthAndHeightOfPanels();
             resizeWindow();
+	    setCanvasSize();
         });
     }
 
@@ -192,8 +214,8 @@
    */ 
 	function setCanvasSize() {
 	
-		var width = $("#outer").width()-50; // width of left panels
-		var height =  $("#outer").height()-40;// footer height
+		width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
+		height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
 		canvas.setDimensions({width:width, height:height});
 	}
 	
@@ -263,14 +285,9 @@
      */
 
 	matisse.onDraw = function (data) {
-		//console.log('data angle='+data.args[0].angle+'  scaleX = '+data.args[0].scaleX)
-		//data = jQuery.parseJSON( data );
 		if(data && data.args)
 		{
-			console.log('================================================');
-			console.log('data.args.name ================='+data.args[0].name+'   '+data.args[0].pallette);
-			console.log('================================================');
-			if (data.action == undefined) {
+			if (data.action == undefined || data.action == null) {
 				return;
 			}
 			if (data.action == "modified") {
@@ -286,6 +303,8 @@
 				var obj = getObjectById(data.args[0].uid);
 				canvas.remove(obj);
 				$('#prop').remove();
+			} else if(data.action == "importimage") {
+				loadImage(data.args[0]);
 			} else {
 				if (App.pallette[data.pallette] != undefined) {
 					App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
@@ -313,6 +332,8 @@
     }
 
 	function updatePropertyPanel(obj) {
+		if(App.pallette[App.palletteName] == null) return;
+		if(canvas.getActiveGroup()) return;
 		if (obj && obj.name && obj.pallette) 
 		{
 			properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
@@ -325,11 +346,33 @@
 		}
 	}
 
+function notifyServerGroupMoved() {
+		activeGroup = canvas.getActiveGroup();
+		var objectsInGroup = activeGroup.getObjects();
+        canvas.discardActiveGroup();
+        objectsInGroup.forEach(function (obj) {
+            matisse.sendDrawMsg({
+                action: "modified",
+				name: obj.name,
+				pallette: obj.pallette,
+                args: [{
+                    uid: obj.uid,
+                    object: obj
+                }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
+            })
+        });
+
+}	
+	
 function observe(eventName) {
     canvas.observe(eventName, function (e) {
         // alert(eventName);
         switch (eventName) {
         case "object:modified":
+			if(canvas.getActiveGroup()) {
+				notifyServerGroupMoved();
+				return;
+			}
             var obj = e.memo.target;
 			console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
             matisse.sendDrawMsg({
@@ -376,6 +419,9 @@ function observe(eventName) {
         break;
         case 'object:selected':
             var obj = e.memo.target;
+			if(canvas.getActiveGroup()) {
+				return;
+			}
 			console.log("object name =="+obj.type+'    '+obj.name+'   ::  '+obj);
             createPropertiesPanel(obj);
 			
@@ -627,8 +673,8 @@ function handleMouseEvents() {
     $("#canvasId").mousedown(function (event) {
          if (!canvas.isDrawingMode && App.drawShape) {
 			console.log("App.palletteName ="+App.palletteName);
-            App.points.x = event.pageX - App.xOffset; //offset
-            App.points.y = event.pageY - App.yOffset; //offset
+            App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
+            App.points.y = event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset; //offset		
             App.shapeArgs[0].left = App.points.x;
             App.shapeArgs[0].top = App.points.y;
             App.shapeArgs[0].name = App.action;
@@ -648,16 +694,16 @@ function handleMouseEvents() {
         if (canvas.isDrawingMode) {
             App.xPoints = [];
             App.yPoints = [];
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
 
         }
     });
     // drawingModeEl.innerHTML = 'Cancel drawing mode';
     $("#canvasId").mousemove(function (event) {
         if (canvas.isDrawingMode) {
-            App.xPoints.push(event.pageX - App.xOffset);
-            App.yPoints.push(event.pageY - App.yOffset);
+            App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
+            App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
            // msg += event.pageX + ", " + event.pageY + "\n :";
         }
 		else {
@@ -843,12 +889,14 @@ function progressHandler(objct)
 
  function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 
-        if (obj.pallette && obj && obj.name) {
+	    if (obj.pallette && obj && obj.name) {
+			console.log('CREATE PROP PANEL');
             var val;
             var colorPicker;
             $('#prop').remove();
             objName = obj.name;
             App.palletteName = obj.pallette;
+			if(App.pallette[App.palletteName] == null ) return;
             if (objName == undefined || objName == 'drawingpath') return;
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
             var props = {};
@@ -873,8 +921,7 @@ function progressHandler(objct)
                 $(":input").focus(function () {
                     App.focusInput = '';
                     id = this.id;
-					console.log('focus id ='+id);
-                    if (id == 'fill' || id == 'stroke') {
+					if (id == 'fill' || id == 'stroke') {
 						 App.focusInput = id;
 						 var prop = $(this).position();
 						 $('#colorpicker').show();
@@ -1006,6 +1053,14 @@ function keyDown(e) {
        if (key == "46" && evt.altKey) {
             deleteObjects();
         }
+		else if (key == "38" && evt.ctrlKey) {
+				var obj = canvas.getActiveObject();
+				if(obj)	canvas.bringForward(obj);
+		}
+		else if (key == "40" && evt.ctrlKey) {
+				var obj = canvas.getActiveObject();
+				if(obj)	canvas.sendBackwards(obj);
+		}
     }
 }
 
@@ -1415,5 +1470,83 @@ App.Main.letternumber = function(e) {
 			}
 		}	
 	});
+	
+	$('#saveicon').bind("click", function() {
+		//canvas.loadImageFromURL('images/mockup.png' , onload);
+		var data = canvas.toDataURL('png')
+		//console.log(data);
+		matisse.saveImage(data);
+	});
+	$('#loadicon').bind("click", function() {
+		var args = {};
+		args.path = 'images/conventional-html-layout.png';
+		args.name ="importimage";
+		args.left = 300;
+		args.top = 200;
+		args.uid = uniqid();
+		args.pallette = 'imagepallette';
+		loadImage(args);
+	});
+	$('#inputfile').change(fileSelected);
+	
+	$('#newdocicon').bind("click", function() {
+	   var pageURL = document.location.href;
+	   // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
+	   var indx = pageURL.indexOf('/');
+	   pageURL = pageURL.substr(0, indx)
+	   window.open (pageURL+'/html',"mywindow");
+	});
+	
+	function fileSelected() {
+		var oFile = document.getElementById('inputfile').files[0];
+		var filepath = document.getElementById('inputfile').value;
+		/* var oReader = new FileReader();
+        oReader.onload = function(e){
+		console.log('file src =========='+e.target.result)
+		}
+		oReader.readAsDataURL(oFile);*/
+		canvas.loadImageFromURL(oFile.name , onImageLoad, args);
+		console.log('file =========='+filepath)
+	}
+	
+	function loadImage(args) {
+		//canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
+		console.log('IMAGE PATH = '+args.path);
+		canvas.loadImageFromURL(args.path, onImageLoad, args);
+	
+	}
+	function onImageLoad(obj, args) {
+		obj.name = args.name;
+		obj.uid = args.uid;
+		obj.left = args.left;
+		obj.top = args.top;
+		obj.pallette = args.pallette;
+		canvas.add(obj);
+		obj.setCoords();
+		 matisse.sendDrawMsg({
+			action: 'importimage',
+			pallette: args.pallette,
+		
+			args: [{
+				uid: obj.uid,
+				left: obj.left,
+				top: obj.top,
+				width: obj.width,
+				height: obj.height,
+				name:obj.name,
+				path:args.path
+			}]
+		});
+	}
 
+	/* Throws Error if the value is null.
+	 */
+	function assertNotNull(value, str) {
+		if (value == null || (value.pallette) == null || (value.name) == null) {
+			throw new Error(str);
+			canvas.activeObject = null;
+			return false;
+		}
+		return true;
+	}
  })(jQuery);

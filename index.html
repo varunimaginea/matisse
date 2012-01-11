@@ -1,7 +1,9 @@
 <!DOCTYPE html> 
 <html>
    <head>
-      <title>Matisse, by Imaginea</title>
+	  <meta charset="utf-8" />
+	  <title>Matisse, by Imaginea</title>
+	  <meta name="description" content="A shared whiteboard using HTML5 Canvas with server on socket.io and node.js" />
        <!-- Third Party CSS files -->
 	  <link type="text/css" href="/stylesheets/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet" />
 	  <link rel="stylesheet" href="/stylesheets/farbtastic.css" type="text/css" />
@@ -18,7 +20,7 @@
       <script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
 	  <script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
    </head>
-   <body style="margin:2px;background-color:#fff;border-radius:2px 2px #fff;">
+   <body id="_body" style="margin:0px;background-color:#fff;border-radius:2px 2px #fff;overflow:hidden">
 
      <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
             <div id="logo-wrapper">
@@ -30,10 +32,12 @@
             <div id="icons-wrapper">
 				<div id="version">0.4 preview</div>
                 <div id="menuicons">
+					<img class = 'topicons' id='newdocicon' src='images/new_doc.png' alt="new canvas"/>
+					<img class = 'topicons' id='loadicon' src='images/load.png' alt="Load Image"/>
                     <img class = 'topicons' id='chaticon' src='images/chat.png' alt="Chat"/>
                     <img class = 'topicons' id='propicon' src='images/prop.png' alt="Properties"/>
                     <img class = 'topicons' id='saveicon' src='images/save.png' alt="Save"/>
-                    <img class = 'topicons' id='saveicon' src='images/logout.png' alt="Logout"/>
+                    <img class = 'topicons' id='logouticon' src='images/logout.png' alt="Logout"/>
                 </div>				
             </div>
      </div>
@@ -64,7 +68,7 @@
 		 
       <!-- end outer div -->
      <!-- <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>-->
-	  <script src="/javascripts/app.js"></script>
+	  <script src="/javascripts/client_app.js"></script>
 
     <script src="/javascripts/app/shapes.js"></script>
 	<script src="/javascripts/app/shapes.basicshapes.js"></script>
