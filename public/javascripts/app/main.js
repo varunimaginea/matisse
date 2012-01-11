@@ -30,8 +30,8 @@
      var leftPanelWidth,leftPanelHeight;
      var accordionContentHeight;
      var canvasWidth,canvasHeight;
-	 var horIndent = 2;
-	 var verIndent = 2;
+	 var horIndent = 1;
+	 var verIndent = 1;
 	 var hLine, vLine;
 	 /**
 	 * current active reference
@@ -233,11 +233,14 @@
 	//	fabric.util.makeElementUnselectable(line)
 	}
 	function drawHVLines() {
-		hLine = new fabric.Line([0,0,width,0], {eanbled:false, stroke:'#ff0000', left:width/2})
-		vLine = new fabric.Line([0,0,0,height], {eanbled:false, stroke:'#ff0000', top:height/2})
+		hLine = new fabric.Line([0,-10,width,-10], {eanbled:false, stroke:'#ff0000', left:width/2})
+		vLine = new fabric.Line([-10,0,-10,height], {eanbled:false, stroke:'#ff0000', top:height/2})
 		canvas.add(hLine);
 		canvas.add(vLine);
-		
+		hLine.set('fill', '#ff0000');
+		vLine.set('fill', '#ff0000');
+		hLine.set('strokeWidth', '.5');
+		vLine.set('strokeWidth', '.5');
 		//disableObject(line);
 	//	fabric.util.makeElementUnselectable(line)
 	}
@@ -421,8 +424,8 @@ function observe(eventName) {
                     object: obj
                 }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
             })
-			hLine.set('top', 0);
-			vLine.set('left', 0);
+			hLine.set('top', -10);
+			vLine.set('left', -10);
 			updatePropertyPanel(obj);
 			
         break;
@@ -1636,25 +1639,74 @@ App.Main.letternumber = function(e) {
 	
 	*/
 	function checkAlign(obj) {
-		hLine.set('top', 0);
-		vLine.set('left', 0);
+		hLine.set('top', -10);
+		vLine.set('left', -10);
+		var movingObjLeft = Math.round(obj.left-(obj.width*obj.scaleX)/2);
+		var movingObjTop = Math.round(obj.top-(obj.height*obj.scaleY)/2);
+		var movingObjRight = Math.round(obj.left+(obj.width*obj.scaleX)/2);
+		var movingObjBottom = Math.round(obj.top+(obj.height*obj.scaleY)/2);
 		var canvasObjects = canvas.getObjects();
 		for(var i =0; i<canvasObjects.length; i++)
 		{
-			//console.log(';;;;;;;;;;;;;;'+canvasObjects[i].left+' :: '+obj.left);
-			if(canvasObjects[i] != obj && canvasObjects[i].left == obj.left) {
-				console.log('FOUND LEFT ALIGN '+canvasObjects[i].name);
-				vLine.set('left', obj.left - obj.width/2);
+			var otherObjLeft = Math.round(canvasObjects[i].left-(canvasObjects[i].width*canvasObjects[i].scaleX)/2);
+			var otherObjTop =  Math.round(canvasObjects[i].top-(canvasObjects[i].height*canvasObjects[i].scaleY)/2);
+			var otherObjRight = Math.round(canvasObjects[i].left+(canvasObjects[i].width*canvasObjects[i].scaleX)/2);
+			var otherObjBottom =  Math.round(canvasObjects[i].top+(canvasObjects[i].height*canvasObjects[i].scaleY)/2);
+			/* this LEFT matches with Other LEFT */
+			if(canvasObjects[i] != obj && otherObjLeft === movingObjLeft) {
+				vLine.set('left', obj.left-(obj.width*obj.scaleX)/2);
 				canvas.renderAll();
 				vLine.setCoords()
-				return 'left';
+				//return 'left';
 			}
-			else if(canvasObjects[i] != obj && canvasObjects[i].top == obj.top) {
-				console.log('FOUND TOP ALIGN '+canvasObjects[i].name);
-				hLine.set('top', obj.top - obj.height/2);
+			/* this RIGHT matches with Other RIGHT */
+			if(canvasObjects[i] != obj && otherObjRight === movingObjRight) {
+				vLine.set('left', obj.left+(obj.width*obj.scaleX)/2);
+				canvas.renderAll();
+				vLine.setCoords()
+				//return 'left';
+			}
+			/* this TOP matches with Other TOP */
+			if(canvasObjects[i] != obj && otherObjTop === movingObjTop) {
+				hLine.set('top', obj.top-(obj.height*obj.scaleY)/2);
 				canvas.renderAll();
 				hLine.setCoords()
-				return 'top';
+				//return 'top';
+			}
+			/* this BOTTOM matches with Other BOTTOM */
+			if(canvasObjects[i] != obj && otherObjBottom === movingObjBottom) {
+				hLine.set('top', obj.top+(obj.height*obj.scaleY)/2);
+				canvas.renderAll();
+				hLine.setCoords()
+				//return 'top';
+			}
+			/* this LEFT matches with Other RIGHT */
+			if(canvasObjects[i] != obj && otherObjRight === movingObjLeft) {
+				vLine.set('left', obj.left-(obj.width*obj.scaleX)/2);
+				canvas.renderAll();
+				hLine.setCoords()
+				//return 'top';
+			}
+			/* this RIGHT matches with Other LEFT */
+			if(canvasObjects[i] != obj && otherObjLeft === movingObjRight) {
+				vLine.set('left', obj.left+(obj.width*obj.scaleX)/2);
+				canvas.renderAll();
+				hLine.setCoords()
+				//return 'top';
+			}
+			/* this TOP matches with Other BOTTOM */
+			if(canvasObjects[i] != obj && otherObjBottom === movingObjTop) {
+				hLine.set('top', obj.top-(obj.height*obj.scaleY)/2);
+				canvas.renderAll();
+				hLine.setCoords()
+				//return 'top';
+			}
+			/* this BOTTOM matches with Other TOP */
+			if(canvasObjects[i] != obj && otherObjTop === movingObjBottom) {
+				hLine.set('top', obj.top+(obj.height*obj.scaleY)/2);
+				canvas.renderAll();
+				hLine.setCoords()
+				//return 'top';
 			}
 		}
 		return null;
