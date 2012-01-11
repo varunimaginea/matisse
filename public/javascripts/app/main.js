@@ -32,6 +32,7 @@
      var canvasWidth,canvasHeight;
 	 var horIndent = 1;
 	 var verIndent = 1;
+	 var indentMultiplier =10;
 	 var hLine, vLine;
 	 /**
 	 * current active reference
@@ -69,7 +70,7 @@
          initChatWindow();
          initPropWindow();
          addObservers();
-		 initAnnotation();
+		// initAnnotation();
     }
 
     /**
@@ -235,6 +236,8 @@
 	function drawHVLines() {
 		hLine = new fabric.Line([0,-10,width,-10], {eanbled:false, stroke:'#ff0000', left:width/2})
 		vLine = new fabric.Line([-10,0,-10,height], {eanbled:false, stroke:'#ff0000', top:height/2})
+		vLine.name = 'vline';
+		hLine.name = 'hline';
 		canvas.add(hLine);
 		canvas.add(vLine);
 		hLine.set('fill', '#ff0000');
@@ -1111,35 +1114,63 @@ function keyDown(e) {
 				var obj = canvas.getActiveObject();
 				if(obj)	canvas.sendBackwards(obj);
 		}
+		else if(key =="37" && evt.shiftKey) {
+				var obj = canvas.getActiveObject();
+				var objleft = obj.left;
+				obj.set('left', objleft-(horIndent*indentMultiplier));
+				onObjectMoveByKey(obj)
+		}		
 		else if(key =="37") {
 				var obj = canvas.getActiveObject();
 				var objleft = obj.left;
 				obj.set('left', objleft-horIndent);
-				canvas.renderAll();
-				obj.setCoords();
+				onObjectMoveByKey(obj)
 		}	
+		else if(key =="39" && evt.shiftKey) {
+				var obj = canvas.getActiveObject();
+				var objleft = obj.left;
+				obj.set('left', objleft+(horIndent*indentMultiplier));
+				onObjectMoveByKey(obj);
+		}		
 		else if(key =="39") {
 				var obj = canvas.getActiveObject();
 				var objleft = obj.left;
 				obj.set('left', objleft+horIndent);
-				canvas.renderAll();
-				obj.setCoords();
-		}	
+				onObjectMoveByKey(obj)
+		}
+		else if(key =="38" && evt.shiftKey) {
+				var obj = canvas.getActiveObject();
+				var objtop = obj.top;
+				obj.set('top', objtop-verIndent*indentMultiplier);
+				onObjectMoveByKey(obj)
+		}		
 		else if(key =="38") {
 				var obj = canvas.getActiveObject();
 				var objtop = obj.top;
 				obj.set('top', objtop-verIndent);
-				canvas.renderAll();
-				obj.setCoords();
-		}	
+				onObjectMoveByKey(obj)
+		}
+		else if(key =="40" && evt.shiftKey) {
+				var obj = canvas.getActiveObject();
+				var objtop = obj.top;
+				obj.set('top', objtop+verIndent*indentMultiplier);
+				onObjectMoveByKey(obj)
+		}			
 		else if(key =="40") {
 				var obj = canvas.getActiveObject();
 				var objtop = obj.top;
 				obj.set('top', objtop+verIndent);
-				canvas.renderAll();
-				obj.setCoords();
+				onObjectMoveByKey(obj)
 		}	
     }
+}
+
+function onObjectMoveByKey(obj) {
+	canvas.renderAll();
+	obj.setCoords();
+	canvas.fire('object:moving', {
+		target: obj
+	});
 }
 
 function getOffset(el) {
@@ -1554,14 +1585,16 @@ App.Main.letternumber = function(e) {
 		canvas.deactivateAll();
 		var data = canvas.toDataURL('png', 0.1)
 		//console.log(data);
-		popup('popUpDiv')
+		popup('popUpDiv', 'closediv', 600, 600);
 		$("#result").html('<img src='+data+' />');
+		alert("Right click and choose Save Image as...");
 		/*$("#data").val(data);
 		$("#get").click(function(){
 			$("#frm").trigger('submit');
 		});*/
 		//matisse.saveImage(data);
 	});
+	$('#helpicon').bind("click", showHelp);
 	$('#loadicon').bind("click", function() {
 		var args = {};
 		args.path = 'images/conventional-html-layout.png';
@@ -1652,63 +1685,54 @@ App.Main.letternumber = function(e) {
 			var otherObjTop =  Math.round(canvasObjects[i].top-(canvasObjects[i].height*canvasObjects[i].scaleY)/2);
 			var otherObjRight = Math.round(canvasObjects[i].left+(canvasObjects[i].width*canvasObjects[i].scaleX)/2);
 			var otherObjBottom =  Math.round(canvasObjects[i].top+(canvasObjects[i].height*canvasObjects[i].scaleY)/2);
-			/* this LEFT matches with Other LEFT */
-			if(canvasObjects[i] != obj && otherObjLeft === movingObjLeft) {
-				vLine.set('left', obj.left-(obj.width*obj.scaleX)/2);
-				canvas.renderAll();
-				vLine.setCoords()
-				//return 'left';
-			}
-			/* this RIGHT matches with Other RIGHT */
-			if(canvasObjects[i] != obj && otherObjRight === movingObjRight) {
-				vLine.set('left', obj.left+(obj.width*obj.scaleX)/2);
-				canvas.renderAll();
-				vLine.setCoords()
-				//return 'left';
-			}
-			/* this TOP matches with Other TOP */
-			if(canvasObjects[i] != obj && otherObjTop === movingObjTop) {
-				hLine.set('top', obj.top-(obj.height*obj.scaleY)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
-			}
-			/* this BOTTOM matches with Other BOTTOM */
-			if(canvasObjects[i] != obj && otherObjBottom === movingObjBottom) {
-				hLine.set('top', obj.top+(obj.height*obj.scaleY)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
-			}
-			/* this LEFT matches with Other RIGHT */
-			if(canvasObjects[i] != obj && otherObjRight === movingObjLeft) {
-				vLine.set('left', obj.left-(obj.width*obj.scaleX)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
-			}
-			/* this RIGHT matches with Other LEFT */
-			if(canvasObjects[i] != obj && otherObjLeft === movingObjRight) {
-				vLine.set('left', obj.left+(obj.width*obj.scaleX)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
-			}
-			/* this TOP matches with Other BOTTOM */
-			if(canvasObjects[i] != obj && otherObjBottom === movingObjTop) {
-				hLine.set('top', obj.top-(obj.height*obj.scaleY)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
-			}
-			/* this BOTTOM matches with Other TOP */
-			if(canvasObjects[i] != obj && otherObjTop === movingObjBottom) {
-				hLine.set('top', obj.top+(obj.height*obj.scaleY)/2);
-				canvas.renderAll();
-				hLine.setCoords()
-				//return 'top';
+			if(canvasObjects[i] != obj && canvasObjects[i].name != 'vline' && canvasObjects[i].name != 'hline') {
+				/* this LEFT matches with Other LEFT */
+				if(otherObjLeft-1 === movingObjLeft || otherObjLeft+1 === movingObjLeft) {
+					showAlginLine(obj, "left", "minus");
+				}
+				/* this RIGHT matches with Other RIGHT */
+				if(otherObjRight-1 === movingObjRight || otherObjRight+1 === movingObjRight) {
+					showAlginLine(obj, "left", "plus");
+				}
+				/* this TOP matches with Other TOP */
+				if(otherObjTop-1 === movingObjTop || otherObjTop+1 === movingObjTop) {
+					showAlginLine(obj, "top", "minus");
+				}
+				/* this BOTTOM matches with Other BOTTOM */
+				if(otherObjBottom-1 === movingObjBottom || otherObjBottom+1 === movingObjBottom) {
+					showAlginLine(obj, "top", "plus");
+				}
+				/* this LEFT matches with Other RIGHT */
+				if(otherObjRight-1 === movingObjLeft || otherObjRight-1 === movingObjLeft) {
+					showAlginLine(obj, "left", "minus");
+				}
+				/* this RIGHT matches with Other LEFT */
+				if(otherObjLeft-1 === movingObjRight || otherObjLeft+1 === movingObjRight) {
+					showAlginLine(obj, "left", "plus");
+				}
+				/* this TOP matches with Other BOTTOM */
+				if(otherObjBottom-1 === movingObjTop || otherObjBottom+1 === movingObjTop) {
+					showAlginLine(obj, "top", "minus");
+				}
+				/* this BOTTOM matches with Other TOP */
+				if(otherObjTop-1 === movingObjBottom || otherObjTop+1 === movingObjBottom ) {
+					showAlginLine(obj, "top", "plus");
+				}
 			}
 		}
 		return null;
+	}
+	
+	function showAlginLine(obj, position, operator) {
+		switch(position) {
+			case "left":
+				(operator == "plus") ? vLine.set('left', obj.left+(obj.width*obj.scaleX)/2) : vLine.set('left', obj.left-(obj.width*obj.scaleX)/2)
+			break;
+			case "top":
+				(operator == "plus") ? hLine.set('top', obj.top+(obj.height*obj.scaleY)/2) :  hLine.set('top', obj.top-(obj.height*obj.scaleY)/2);
+			break;
+		}
+		canvas.renderAll();
+		hLine.setCoords()
 	}
  })(jQuery);

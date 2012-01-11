@@ -233,7 +233,13 @@ width:300px;
 height:300px;
 z-index: 9002;
 }
-
+#helpDiv {
+position:absolute;
+background-color:#eeeeee;
+width:800px;
+height:600px;
+z-index: 9003;
+}
 #blanket {
 background-color:#111;
 opacity: 0.65;

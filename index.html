@@ -24,12 +24,11 @@
    </head>
    <body id="_body" style="margin:0px;background-color:#fff;border-radius:2px 2px #fff;overflow:hidden">
     <!-- for popup to show when user click's save button-->	
-	<div id="blanket" style="display:none;"></div>
+	<div id="blanket" style="display:none;"> <div id='closediv'style="position:absolute;"> <a style="text-decoration:none;" href="#" onclick="popup('popUpDiv', 'closediv' )"> Close </a></div> </div>
 	<div id="popUpDiv" style="display:none;overflow:scroll">
-		Right Click and choose Save image as...
-		<a href="#" onclick="popup('popUpDiv')"> Close </a>
-			<span id="result" ><br /></span> 
+		<span id="result" ></span> 
 	</div>
+	<div id="helpDiv" style="display:none;overflow:scroll"></div>
 	<!----end for popup -->
      <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" >
             <div id="logo-wrapper">
@@ -41,6 +40,7 @@
             <div id="icons-wrapper">
 				<div id="version">0.4 preview</div>
                 <div id="menuicons">
+					<img class = 'topicons' id='helpicon' src='images/help.png' alt="help"/>
 					<img class = 'topicons' id='newdocicon' src='images/new_doc.png' alt="new canvas"/>
 					<img class = 'topicons' id='loadicon' src='images/load.png' alt="Load Image"/>
                     <img class = 'topicons' id='chaticon' src='images/chat.png' alt="Chat"/>
@@ -78,6 +78,7 @@
      </div>
 	 <!-- end outer div -->
      <!-- <div id="footer" class="ui-accordion-header ui-helper-reset ui-state-active ui-corner-bottom" > --Pramati Tech--</div>-->
+	 <script src="/javascripts/app/help.js"></script>
 	<script src="/javascripts/client_app.js"></script>
     <script src="/javascripts/app/shapes.js"></script>
 	<script src="/javascripts/app/shapes.basicshapes.js"></script>

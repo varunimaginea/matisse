@@ -5279,7 +5279,7 @@ fabric.util.string = {
           // rotate object only if shift key is not pressed 
           // and if it is not a group we are transforming
           
-          if (!e.shiftKey) {
+          if (e.shiftKey) {
             this._rotateObject(x, y);
             
             this.fire('object:rotating', {
