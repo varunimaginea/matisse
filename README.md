@@ -46,6 +46,7 @@ See index.html in this directory for a vanilla html example.
 > $ node app.js
 >
 
-in the checked folder.
+in the root folder.
 
-Then go to the browser and open http://localhost:8000/ for the jade template page or http://localhost:8000/html for the HTML page.
+Now you can open the http://localhost:8000/ to open the matisse home page.
+
