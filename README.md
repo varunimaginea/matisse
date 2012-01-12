@@ -23,6 +23,7 @@ See index.html in this directory for a vanilla html example.
 
 >
 >   a. for windows redis exe https://github.com/dmajkic/redis/downloads
+>
 >   b. for ubuntu use - sudo apt-get install redis-server
 >
 >
