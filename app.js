@@ -52,12 +52,12 @@ app.configure('production', function(){
 
 // Routes
 
-//app.get('/', routes.index);
+app.get('/', routes.index);
 app.get('/favicon', function (req, res, next) {
 
 });
 
-app.get('/html', function (req, res, next) {
+app.get('/boards', function (req, res, next) {
     var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
     var string_length = 8;
     var randomstring = '';
@@ -85,7 +85,7 @@ app.get('/html', function (req, res, next) {
     });
  });
 
-app.resource({
+app.resource('api', {
     index: function(req, res, next){
 	
         ShapesModel.find(function (err, ids) {
@@ -112,10 +112,12 @@ app.resource({
                 });
             });
         });
-    },
+    }
+});
+app.resource('boards',{
     show: function(req, res, next){
         if (req.params.id != "favicon") {
-                res.sendfile(__dirname + '/index.html');
+                res.sendfile(__dirname + '/board.html');
         }
     }
 });
