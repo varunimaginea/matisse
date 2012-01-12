@@ -31,6 +31,7 @@
     var verIndent = 1;
     var indentMultiplier = 10;
     var hLine, vLine;
+    var imageTag;
     /**
      * current active reference
      */
@@ -479,7 +480,7 @@
                 if (canvas.getActiveGroup()) {
                     return;
                 }
-              //  console.log("object name ==" + obj.type + '    ' + obj.name + '   ::  ' + obj);
+                //  console.log("object name ==" + obj.type + '    ' + obj.name + '   ::  ' + obj);
                 createPropertiesPanel(obj);
 
                 break;
@@ -1591,7 +1592,7 @@
     $('#saveicon').bind("click", function () {
         //canvas.loadImageFromURL('images/mockup.png' , onload);
         Canvas2Image.saveAsPNG(canvas, false);
-/*canvas.deactivateAll();
+	/*canvas.deactivateAll();
 		var data = canvas.toDataURL('png', 0.1)
 		//console.log(data);
 		popup('popUpDiv', 'closediv', 600, 600);
@@ -1604,12 +1605,13 @@
         //matisse.saveImage(data);
     });
     $('#helpicon').bind("click", showHelp);
-	/* faking inputfile */
-	$("#loadicon").click(function(){
-		$("#inputfile").click();//show().focus().click().hide();
-	});
-	
-   /* $('#loadicon').bind("click", function () {
+
+    /* faking inputfile */
+    $("#loadicon").click(function () {
+        $("#inputfile").click(); //show().focus().click().hide();
+    });
+
+	/* $('#loadicon').bind("click", function () {
         var args = {};
         args.path = 'images/conventional-html-layout.png';
         args.name = "importimage";
@@ -1619,12 +1621,12 @@
         args.pallette = 'imagepallette';
         loadImage(args);
     });*/
-	
+
     $('#inputfile').change(fileSelected);
-	$('#inputfile').bind("mouseup", function () {
+    $('#inputfile').bind("mouseup", function () {
         console.log('Click was triggered');
     });
-	
+
     $('#newdocicon').bind("click", function () {
         var pageURL = document.location.href;
         // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
@@ -1633,50 +1635,104 @@
         window.open(pageURL + '/html', "mywindow");
     });
 
-	addToCanvas = function()  {
-		  var fabImage = new fabric.Image("myimage", {left:500, top:200, width:$('#myimage').width(), height:$('#myimage').height()});
-		  	canvas.add(fabImage);
-			fabImage.setCoords();
-			canvas.renderAll();
-			$('#myimage').remove(); 
-	};
-		 
+    addToCanvas = function () {
+        var fabImage = new fabric.Image("myimage", {
+            left: 500,
+            top: 200,
+            width: $('#myimage').width(),
+            height: $('#myimage').height()
+        });
+        canvas.add(fabImage);
+        fabImage.uid = uniqid();
+        fabImage.name = "image";
+        fabImage.pallette = 'imagepallette';
+        fabImage.setCoords();
+        canvas.renderAll();
+        $('#myimage').remove();
+		//var id = 'addToCanvas2("'+fabImage.uid+'")'
+		var id = ["addToCanvas2(", "'",fabImage.uid,"'", ")" ].join('');
+		console.log("===================>>>>>>>>>>>>>>>  "+id)
+		//alert(id);
+	    //imageTag = imageTag.replace("addToCanvas()", "addToCanvas2()");
+		imageTag = imageTag.replace("addToCanvas()", id);
+		console.log("==========imageTag=========>>>>>>>>>>>>>>>  "+imageTag)
+        matisse.sendDrawMsg({
+            action: 'importimage',
+            pallette: fabImage.pallette,
+
+            args: [{
+                uid: fabImage.uid,
+                left: fabImage.left,
+                top: fabImage.top,
+                width: fabImage.width,
+                height: fabImage.height,
+                name: fabImage.name,
+                path: imageTag
+            }]
+        });
+    };
+
+    addToCanvas2 = function (uid) {
+		console.log("ON OTHER =="+uid)
+        var fabImage = new fabric.Image("myimage", {
+            left: 500,
+            top: 200,
+            width: $('#myimage').width(),
+            height: $('#myimage').height()
+        });
+        canvas.add(fabImage);
+        fabImage.uid = uid;
+        fabImage.name = "image";
+        fabImage.pallette = 'imagepallette';
+        fabImage.setCoords();
+        canvas.renderAll();
+        $('#myimage').remove();
+    };
+
     function fileSelected() {
         var oFile = document.getElementById('inputfile').files[0];
         var filepath = document.getElementById('inputfile').value;
-		 var oReader = new FileReader();
+        var oReader = new FileReader();
         // Closure to capture the file information.
-      oReader.onload = (function(theFile) {
-        return function(e) {
-          // Render thumbnail.
-          var span = document.createElement('span');
-		  span.innerHTML = ['<img id="myimage" class="thumb" onload = "addToCanvas()" src="', e.target.result,
-                            '" title="', theFile.name, '"/>'].join('');
-		 document.getElementById('icons-wrapper').insertBefore(span, null);
-		 console.log("image width = "+$('#myimage').width()+ theFile.width);
-		 
-		 var fabImage = new fabric.Image("myimage", {left:500, top:200, width:$('#myimage').width(), height:$('#myimage').height()});
-		
-		//  var fabImage = new fabric.Image("<img class = 'topicons' id='helpicon' src='images/help.png' alt='help'/>", );
-		  
-	 
-        };
-      })(oFile);
+        oReader.onload = (function (theFile) {
+            return function (e) {
+                // Render thumbnail.
+                var span = document.createElement('span');
+                imageTag = ['<img id="myimage" class="thumb" onload = "addToCanvas()" src="', e.target.result, '" title="', theFile.name, '"/>'].join('');
+                span.innerHTML = imageTag;
+                document.getElementById('icons-wrapper').insertBefore(span, null);
+                console.log("image width = " + $('#myimage').width() + theFile.width);
 
-      // Read in the image file as a data URL.
-      oReader.readAsDataURL(oFile);
-	//	oReader.readAsDataURL(oFile);
-		
-       // canvas.loadImageFromURL(oFile.name, onImageLoad, args);
+                var fabImage = new fabric.Image("myimage", {
+                    left: 500,
+                    top: 200,
+                    width: $('#myimage').width(),
+                    height: $('#myimage').height()
+                });
+
+                //  var fabImage = new fabric.Image("<img class = 'topicons' id='helpicon' src='images/help.png' alt='help'/>", );
+
+            };
+        })(oFile);
+
+        // Read in the image file as a data URL.
+        oReader.readAsDataURL(oFile);
+        //	oReader.readAsDataURL(oFile);
+        // canvas.loadImageFromURL(oFile.name, onImageLoad, args);
         console.log('file ==========' + filepath)
     }
 
-	
+
     function loadImage(args) {
         //canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
-      //  console.log('IMAGE PATH = ' + args.path);
-        canvas.loadImageFromURL(args.path, onImageLoad, args);
-
+        //  console.log('IMAGE PATH = ' + args.path);
+        // canvas.loadImageFromURL(args.path, onImageLoad, args);
+        var span = document.createElement('span');
+        imageTag = args.path;
+        span.innerHTML = imageTag;
+        document.getElementById('icons-wrapper').insertBefore(span, null);
+        //	 console.log("image width = "+$('#myimage').width()+ theFile.width);
+        // var fabImage = new fabric.Image("myimage", {left:500, top:200, width:$('#myimage').width(), height:$('#myimage').height()});
     }
 
     function onImageLoad(obj, args) {
