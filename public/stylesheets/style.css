@@ -239,7 +239,14 @@ background-color:#eeeeee;
 width:800px;
 height:600px;
 z-index: 9003;
+
 }
+
+#helpInnerDiv {
+padding:15px !important;
+}
+#helpInnerDiv h1 {background:#474747;color:white;padding:10px;}
+
 #blanket {
 background-color:#111;
 opacity: 0.65;
@@ -250,7 +257,12 @@ top:0px;
 left:0px;
 width:100%;
 }
-
+#closediv  a{
+text-decoration:none;
+font-family:arial;
+font-size:14px;
+color:white;
+}
 #annotation {
 	background-color:#FFFFCC;
 }
@@ -259,3 +271,14 @@ width:100%;
 	width:90%;
 	height:90%;
 }
+
+input.file {
+	position: relative;
+	top:20px;
+	width:16px;
+	height:16px;
+	text-align: right;
+	visibility:hidden;
+	z-index: 2;
+}
+
