@@ -14,5 +14,6 @@
     , "lingo":"0.0.4"
     , "async":"0.1.15"
     , "express-resource":"0.2.3"
+    , "everyauth":"0.2.28"
   }
 }
