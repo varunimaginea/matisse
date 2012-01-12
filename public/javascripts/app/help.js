@@ -1,4 +1,4 @@
 function showHelp() {
-$("#result").html('<div><h1>Help</h1><h3>Short Cuts:</h3><p>Move(1px) : Arrows</p><p>Move(5px) : Shift+Arrows</p><p>BringForward : Alt+Up Arrow</p><p>SendBackwards : Alt+Down Arrow</p><img src="images/help/help_01.png" /><img src="images/help/help_02.png" /><img src="images/help/help_03.png" /></div>');
+$("#result").html('<div id="helpInnerDiv"><h1>Help</h1><h2>Short Cuts:</h2><p><b>Move(1px) : </b>Arrows</p><p><b>Move(5px) : </b>Shift+Arrows</p><p><b>BringForward : </b>Alt+Up Arrow</p><p><b>SendBackwards : </b>Alt+Down Arrow</p><p><b>Delete : </b>Alt+Delete</p><p><Fig01 - Below diagrams describes about each icon in this app</p><img src="images/help/help_00.png" /></div>');
 popup('popUpDiv', 'closediv', 800, 600);
 }
