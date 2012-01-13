@@ -57,16 +57,20 @@
         addTools();
 
         document.onkeydown = keyDown;
-        $('#chaticon').click(openChatBox);
-        $('#propicon').click(openProp);
+        $('#chaticon').click(openChatWindow);
+        $('#propicon').click(openPropertiesPanel);
 
         initChatWindow();
         initPropWindow();
         addObservers();
+		saveButtonClickHandler();
+		newButtonClickHanlder();
     }
 
     /**
      * function to initialize width and heights
+	 * @method initWidthAndHeightOfPanels
+	 * @param none
      */
     function initWidthAndHeightOfPanels(){
         bodyWidth = $(window).width() - 2;
@@ -79,7 +83,9 @@
     }
    
     /**
-     * method to resize panels on resize of window
+     * method to resize panels on resize of browser window
+	 * @method resizeWindow
+	 * @param none
      */
     function resizeWindow(){
         resizeBody();
@@ -89,7 +95,12 @@
         setAccordinContentHeight();
         resizeCanvas();
     }
-
+	
+	/**
+     * method to resize the document body
+	 * @method resizeBody
+	 * @param none
+     */
     function resizeBody(){
         $('#_body').width(bodyWidth + 2);
         $('#_body').height(bodyHeight);
@@ -97,6 +108,8 @@
 
     /**
      * method to set header width and height
+	 * @method resizeHeader
+	 * @param none
      */
     function resizeHeader() {
         $('#header').width(bodyWidth);
@@ -104,7 +117,9 @@
     }
 
     /**
-     * method to set outer panel width and height
+     * Set Outer panel width and height
+     * @method resizeMainPanel
+	 * @param none
      */
     function resizeMainPanel() {
         $('#outer').height(leftPanelHeight);
@@ -112,7 +127,9 @@
     }
 
     /**
-     * method to set left panel width and height
+     * Set left panel width and height
+     * @method resizeLeftPanel
+	 * @param none
      */
     function resizeLeftPanel() {
         $('#leftdiv').width(leftPanelWidth);
@@ -120,7 +137,9 @@
     }
 
     /**
-     * method to set Canvas width and height
+     * Set Canvas width and height
+     * @method resizeCanvas
+	 * @param none
      */
     function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
@@ -129,7 +148,9 @@
     }
 
     /**
-     * method to set Accordian width and height
+     * Set Accordian width and height
+	 * @method setAccordinContentHeight
+	 * @param none
      */
     function setAccordinContentHeight() {
         var $accordionHeaders = $('.ui-accordion-header');
@@ -138,12 +159,13 @@
             accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
         });
         accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));
-        //  console.log(accordionHeaderHeight);
         $('.ui-accordion-content').height(accordionContentHeight);
     }
 
     /**
-     * method to bind resizing of window to panels
+     * Bind resizing of window to panels
+	 * @method bindResizeWindow
+	 * @param none
      */
     function bindResizeWindow() {
         $(window).resize(function () {
@@ -178,19 +200,23 @@
 
 
     /**
-     * Sets the canvas width and height based on browser window size
+     * Sets the Canvas width and height based on browser window size
      * @method setCanvasSize
      * @param none
      *
      */
     function setCanvasSize() {
-
         width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
         height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
         canvas.setDimensions({width:width, height:height});
     }
 
-
+	/**
+     * Initializes the Properties Window, hide it initially
+     * @method initPropWindow
+     * @param none
+     *
+     */
     function initPropWindow() {
         $('#propdiv').dialog();
         $('#propdiv').dialog({
@@ -200,7 +226,12 @@
         });
         $('#propdiv').dialog('close');
     }
-
+	/**
+     * Initializes the Chat Window, hide it initially
+     * @method initChatWindow
+     * @param none
+     *
+     */
     function initChatWindow() {
         $('#chatdialog').dialog();
         $('#chatdialog').dialog('close');
@@ -219,8 +250,13 @@
         observe('object:moved');
         observe('object:selected');
     }
-
-    function openChatBox() {
+	/**
+     * Open Chat Window when user clicks on chat icon
+     * @method openChatWindow
+     * @param none
+     *
+     */
+    function openChatWindow() {
         $('#chatdialog').dialog({ width : 200});
         var dialog_width = $("#chatdialog").dialog("option", "width");
         var win_width = $(window).width();
@@ -236,9 +272,11 @@
     }
 
     /**
-     * method to open a Properties panel for currently selected object
+     * Open a Properties panel for currently selected object
+	 * @method openPropertiesPanel
+	 * @param none
      */
-    function openProp() {
+    function openPropertiesPanel() {
         if (canvas.getActiveObject() == undefined) return;
         var dialog_width = $("#chatdialog").dialog("option", "width");
         var win_width = $(window).width();
@@ -251,7 +289,7 @@
     /**
      *  Called when other users add, modify or delete any object
      *  @method  matisse.onDraw
-     *  @parama data - shape(data.shape) and args array (data.args)
+     *  @param data - shape(data.shape) and args array (data.args)
      *
      */
 
@@ -285,7 +323,7 @@
     }
 
     /**
-     * searches for the object with the given id and returns that object
+     * Searches for the object with the given id and returns that object
      * @property id
      * @type object
      */
@@ -295,13 +333,18 @@
         var objs = canvas.getObjects();
         objs.forEach(function (object) {
             if (object.uid == id) {
-                //alert((object.uid==id))
-                obj = object;
+               obj = object;
             }
         });
         return obj;
     }
-
+	
+	/**
+     *  Updates proeperties panel with current selected object properites
+     *  @method  updatePropertyPanel
+     *  @param obj - Object
+     *
+     */
     function updatePropertyPanel(obj) {
         if(App.pallette[App.palletteName] == null) return;
         if(canvas.getActiveGroup()) return;
@@ -316,7 +359,11 @@
             }
         }
     }
-
+	/**
+     *  Notify Server about Group Moved
+     *  @method  notifyServerGroupMoved
+     *  @param none
+     */
     function notifyServerGroupMoved() {
         activeGroup = canvas.getActiveGroup();
         var objectsInGroup = activeGroup.getObjects();
@@ -334,10 +381,14 @@
         });
 
     }
-
+	
+	/**
+     *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
+     *  @method  observe
+     *  @param eventName
+     */
     function observe(eventName) {
         canvas.observe(eventName, function (e) {
-            // alert(eventName);
             switch (eventName) {
                 case "object:modified":
                     if(canvas.getActiveGroup()) {
@@ -345,7 +396,6 @@
                         return;
                     }
                     var obj = e.memo.target;
-                    console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
                     matisse.sendDrawMsg({
                         action: "modified",
                         name: obj.name,
@@ -371,7 +421,6 @@
                     var obj = e.memo.path;
                     obj.uid = uniqid();
                     obj.name = "drawingpath"
-                    //alert("mousedown"+canvas.isDrawingMode);
                     matisse.sendDrawMsg({
                         action: 'drawpath',
                         pallette: App.palletteName,
@@ -393,23 +442,23 @@
                     if(canvas.getActiveGroup()) {
                         return;
                     }
-                    console.log("object name =="+obj.type+'    '+obj.name+'   ::  '+obj);
                     createPropertiesPanel(obj);
-
                     break;
             }
 
         })
     }
 
-
+	/**
+     *  Modify object when receive a notification from server 
+     *  @method  modifyObject
+     *  @param args - args array/object
+     */
     function modifyObject(args) {
         var obj = getObjectById(args.uid);
 
         if(obj) {
-            //canvas.setActiveObject(obj);
             var recvdObj = args.object;
-            console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type+'   '+recvdObj.name)
             obj.set("left", recvdObj.left);
             obj.set("top", recvdObj.top);
             obj.set("scaleX", recvdObj.scaleX);
@@ -518,39 +567,11 @@
         canvas.renderAll();
     }
 
-
-    function clearText() {
-        var textEl = document.getElementById('textarea');
-        textEl.value = "";
-    }
-
-
-    /**
-     *
-     * @property str, length
-     * @type string
+	/**
+     *  Reset Current seltected tool Icon when object is drawn on canvas
+     *  @method  resetIconSelection
+     *  @param none
      */
-
-    function pad(str, length) {
-        while (str.length < length) {
-            str = '0' + str;
-        }
-        return str;
-    };
-
-    /**
-     * Returns color in RGB format
-     * @property null
-     * @type string
-     */
-
-    function getRandomColor() {
-        var getRandomInt = fabric.util.getRandomInt;
-        return (
-            pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2) + pad(getRandomInt(0, 255).toString(16), 2));
-    }
-
-
     function resetIconSelection(){
         if($currActiveIcon) {
             $currActiveIcon.attr("src",$currActiveIcon.attr('data-inactive'));
@@ -561,7 +582,12 @@
     function scrollUp(e) {
         $(this).siblings(".scrollerContentHolder").css("top", "yellow");
     }
-
+	
+	/**
+     *  Handles the tools icon click events
+     *  @method  handleToolClick
+     *  @param e object
+     */
     function handleToolClick(e) {
         resetIconSelection();
         $(e.target).attr("src",$(e.target).attr('data-active'));
@@ -572,21 +598,17 @@
         currentTool = toolId;
         App.currTool = e.target;
         $(e.target).removeClass(toolId).addClass(toolId+"_click");
-        //App.currTool.setAttribute('border', "2px");
         document.getElementById("c").style.cursor = 'default'
         App.drawShape = true;
         App.action = e.target.id;
         App.palletteName = $(e.target).attr('data-parent');
-//	console.log('App.palletteName =='+App.pallette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.pallette[App.palletteName]);
-        if(e.target.id !="path") {
+	    if(e.target.id !="path") {
             var obj = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[e.target.id].properties);
             obj.uid = uniqid();
             App.shapeArgs = [obj];
         }
-        //alert(e.target.id)
         if (App.action != "path") {
             canvas.isDrawingMode = false;
-            //document.getElementById("path").src =  'images/nobrush.png'
         } else {
             document.getElementById("c").style.cursor = 'crosshair';
             canvas.isDrawingMode = true;
@@ -594,18 +616,26 @@
         }
     }
 
+	/**
+     *  Creates an proeperties object from a  given array and returns that object
+     *  @method  getDefaultDataFromArray
+     *  @param arr - Array of properties
+	 *  @return obj - Object
+     */
     function getDefaultDataFromArray(arr) {
-        console.log('arrraaa='+arr);
         if (arr == undefined) return "undefined";
         var obj = {};
         for (var i = 0; i < arr.length; i++) {
             obj[arr[i].name] = arr[i].defaultvalue;
         }
-        //alert(obj);
         return obj;
     }
 
-
+	/**
+     *  Apply received property to the given shape on canvas
+     *  @method  applyProperty
+     *  @param objName, prop, val
+     */
     function applyProperty(objName, prop, val) {
         var arr = [{
             obj: canvas.getActiveObject(),
@@ -619,16 +649,15 @@
             }
         }
     }
-//called when 'delete button' clicked
 
-    function deleteButtonListener(e) {
-        deleteObjects();
-    }
-
+	/**
+     *  Sends the message typed by user to chat window and also notify it to Server
+     *  @method  chatButtonListener
+     *  @param e - event object
+     */
     function chatButtonListener(e) {
         var msg = $("#chat").val();
         msg = "from $:" + msg + "\n";
-        //alert(msg);
         var txt = document.createTextNode(msg)
         $("#chattext").append(txt);
         matisse.sendDrawMsg({
@@ -639,11 +668,14 @@
         });
     }
 
-
+	/**
+     *  Handle MouseMove and MouseDown events - when user trying to draw a shape on canvas
+     *  @method  handleMouseEvents
+     *  @param none
+     */
     function handleMouseEvents() {
         $("#canvasId").mousedown(function (event) {
             if (!canvas.isDrawingMode && App.drawShape) {
-                console.log("App.palletteName ="+App.palletteName);
                 App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
                 App.points.y = event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset; //offset
                 App.shapeArgs[0].left = App.points.x;
@@ -690,10 +722,11 @@
 
     }
 
-
-
-
-
+	/**
+     *  Sets the property of a shape when a notification received from server
+     *  @method  setObjectProperty
+     *  @param args
+     */
     function setObjectProperty(args) {
         var obj = getObjectById(args.uid);
         if(obj) {
@@ -701,7 +734,11 @@
             canvas.renderAll();
         }
     }
-
+	/**
+     *  Check for the active object or group object and remove them from canvas
+     *  @method  deleteObjects
+     *  @param none
+     */
     function deleteObjects() {
         var activeObject = canvas.getActiveObject(),
             activeGroup = canvas.getActiveGroup();
@@ -728,15 +765,20 @@
 
     /**
      * Returns unique id to attach to an object
-     * @property null
-     * @type string
+	 * @method uniqid
+     * @param null
      */
 
     function uniqid() {
         var newDate = new Date;
         return randomString()+newDate.getTime();
     }
-
+	
+	/**
+     * Returns Random String 
+	 * @method randomString
+     * @param null
+     */
     function randomString() {
         var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
         var string_length = 8;
@@ -747,15 +789,11 @@
         }
         return randomstring;
     }
-
-    function unhide(divID, className) {
-        var item = document.getElementById(divID);
-        if (item) {
-            item.value = canvas.getActiveObject().text;
-            item.className = className;
-        }
-    }
-
+	/**
+     * Draw free-hand drawing path when notification received from server
+	 * @method drawPath
+     * @param args
+     */
     function drawPath(args) {
         var p = new fabric.Path(args.path);
         p.fill = null;
@@ -773,8 +811,8 @@
         canvas.add(p);
         canvas.renderAll();
         p.setCoords();
-        //this.fire('path:created', { path: p });
-        console.log("drawingpath name ="+p.name);
+        
+        
     }
 
     function checkboxSelectionHandler(objct)
@@ -858,10 +896,14 @@
         }
     }
 
+	/**
+     * Creates a property panel with various properties based on object selected
+	 * @method createPropertiesPanel
+     * @param obj
+     */
     function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
 
         if (obj.pallette && obj && obj.name) {
-            console.log('CREATE PROP PANEL');
             var val;
             var colorPicker;
             $('#prop').remove();
@@ -871,7 +913,6 @@
             if (objName == undefined || objName == 'drawingpath') return;
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
             var props = {};
-            //alert(obj.width);
             $('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
             jQuery.each(properties, function (i, val) {
                 if (i == 'angle') {
@@ -960,7 +1001,8 @@
 
     /**
      * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
-     *
+     * @method addTools
+	 * @param none
      */
 
     function addTools() {
@@ -981,13 +1023,22 @@
     }
 
 
-
+	/**
+     * Loop through all pallettes and call createPallette for each pallette found
+     * @method createAllPallettes
+	 * @param palletteObj
+     */
     function createAllPallettes(palletteObj){
         for(var palletteName in palletteObj) {
             createPallette(palletteName);
         }
     }
-
+	
+	/**
+     * Create a  pallette for each type of pallette and add it in toolbar
+     * @method createPallette
+	 * @param palletteName
+     */
     function createPallette(palletteName){
         var pallette_DisplayName = App.pallette[palletteName].collectionName;
         updateAccordian(pallette_DisplayName);
@@ -997,7 +1048,6 @@
         html += '<div class="scrollerContentHolder">';
         for (var i in shapesObj.shapes) {
             var shape = shapesObj.shapes[i]
-            console.log(shape.activeIcon);
             var shape_DisplayName = shape.displayName;
             var src = '/images/' + shape.inactiveIcon;
             var activesrc = '/images/' + shape.activeIcon;
@@ -1010,13 +1060,22 @@
         $(document.getElementById(pallette_DisplayName)).append(html);
         $('.tool').click(handleToolClick);
     }
-
+	
+	/**
+     * Update accordion
+     * @method updateAccordian
+	 * @param pallette_DisplayName
+     */
     function updateAccordian(pallette_DisplayName){
         $("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
     }
 
 
-
+	/**
+     * Listen for keyboard events and do necessary action
+     * @method keyDown 
+	 * @param e keyevent
+     */
     function keyDown(e) {
         var evt = (e) ? e : (window.event) ? window.event : null;
         if (evt) {
@@ -1034,7 +1093,12 @@
             }
         }
     }
-
+	
+	/**
+     * Calculate the offset value for the canvas and return it
+     * @method getOffset 
+	 * @param el 
+     */
     function getOffset(el) {
         var _x = 0;
         var _y = 0;
@@ -1048,7 +1112,12 @@
             left: _x
         };
     }
-
+	
+	/**
+     * Calculate width of the given text string and return it
+     * @method getStringWidth 
+	 * @str
+     */
     App.Main.getStringWidth = function(str)
     {
         var font = '20px delicious_500',
@@ -1060,6 +1129,12 @@
         return w;
     }
 
+	
+	/**
+     * Calculate height of the given text string and return it
+     * @method getStringHeight 
+	 * @param str
+     */
     App.Main.getStringHeight = function(str)
     {
         var font = '20px delicious_500',
@@ -1314,7 +1389,6 @@
     App.Main.loadSVG = function(args)  {
 
         fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
-            //   console.log("OBJECTS LENGTH :::"+objects.length)
             var loadedObject;
             if (objects.length > 1) {
                 loadedObject = new fabric.PathGroup(objects, options);
@@ -1334,13 +1408,12 @@
         });
 
     }
-
-    function showTextEditor() {
-        $('#texteditdiv').dialog();
-        $('#texteditdiv').dialog('open');
-        textHandler();
-    }
-
+	
+	/**
+     * Validation method for input field, checks for the user keypress and allows only numbers
+     * @method numbersonly
+	 * @param myfield, e, dec
+     */
     App.Main.numbersonly = function(myfield, e, dec) {
         var key;
         var keychar;
@@ -1363,7 +1436,11 @@
         } else return false;
     }
 
-
+	/**
+     * Validation method for input field, checks for the user keypress and allows only letters
+     * @method letternumber
+	 * @param e
+     */
     App.Main.letternumber = function(e) {
         var key;
         var keychar;
@@ -1392,15 +1469,12 @@
         parentHeight = parentHeight.substr(0,parentHeight.indexOf('px'));
         scrollerContentHolderTop = scrollerContentHolderTop.substr(0,scrollerContentHolderTop.indexOf('px'));
 
-        //alert($(".scrollerContentHolder:visible>.shape-holder").height());
-
         if(scrollerContentHolderHeight>parentHeight)
         {
             if(scrollerContentHolderTop < -30)
             {
                 $("#wireframe .scroller-down").css("background-color","#8F98A6");
                 var newTop = (scrollerContentHolderTop-(-shapeHeight));
-                //alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight+" - "+newTop);
                 $(this).siblings().find(".scrollerContentHolder").stop().animate({"top":newTop},"slow");
             }
             else
@@ -1423,16 +1497,12 @@
         var carouselArrowheight = 18;
         var accordianHeight = $(".ui-accordion-content").height()-(carouselArrowheight*2);
         var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();
-
-        //alert(sumOfShapesHeight+" - "+accordianHeight+": "+(sumOfShapesHeight-accordianHeight)+" ::: "+scrollerContentHolderTop);
-
         if(scrollerContentHolderHeight>parentHeight)
         {
             if(-(scrollerContentHolderTop) < (sumOfShapesHeight-accordianHeight-30))
             {
                 $("#wireframe .scroller-up").css("background-color","#8F98A6");
                 var newTop = (scrollerContentHolderTop-shapeHeight);
-                //alert(scrollerContentHolderTop+" - "+scrollerContentHolderHeight+" - "+newTop);
                 $(this).siblings().find(".scrollerContentHolder").stop().animate({"top":newTop},"slow");
             }
             else
@@ -1441,74 +1511,56 @@
             }
         }
     });
+	
+	/**
+     * Handler for Save Button Click
+     * @method saveButtonClickHandler
+	 * @param none
+     */
+	saveButtonClickHandler = function() {
+		$('#saveicon').bind("click", function() {
+			var data = canvas.toDataURL('png')
+			matisse.saveImage(data);
+		});
+	}
+	
+	/**
+     * Handler for Import Image Button Click
+     * @method importImageButtonClickHandler
+	 * @param none
+     */
+	importImageButtonClickHandler = function() {
+		$('#loadicon').bind("click", function() {
+			var args = {};
+			args.path = 'images/conventional-html-layout.png';
+			args.name ="importimage";
+			args.left = 300;
+			args.top = 200;
+			args.uid = uniqid();
+			args.pallette = 'imagepallette';
+			loadImage(args);
+		});
+	}
+	
+   
+	/**
+     * Handler for New Document Button Click
+     * @method newButtonClickHanlder
+	 * @param none
+     */
+	newButtonClickHanlder = function() {
+		$('#newdocicon').bind("click", function() {
+			var pageURL = document.location.href;
+			// get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
+			var indx = pageURL.indexOf('/');
+			pageURL = pageURL.substr(0, indx)
+			window.open (pageURL+'/boards/',"mywindow");
+		});
+	}
 
-    $('#saveicon').bind("click", function() {
-        //canvas.loadImageFromURL('images/mockup.png' , onload);
-        var data = canvas.toDataURL('png')
-        //console.log(data);
-        matisse.saveImage(data);
-    });
-    $('#loadicon').bind("click", function() {
-        var args = {};
-        args.path = 'images/conventional-html-layout.png';
-        args.name ="importimage";
-        args.left = 300;
-        args.top = 200;
-        args.uid = uniqid();
-        args.pallette = 'imagepallette';
-        loadImage(args);
-    });
-    $('#inputfile').change(fileSelected);
+  
 
-    $('#newdocicon').bind("click", function() {
-        var pageURL = document.location.href;
-        // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
-        var indx = pageURL.indexOf('/');
-        pageURL = pageURL.substr(0, indx)
-        window.open (pageURL+'/boards/',"mywindow");
-    });
-
-    function fileSelected() {
-        var oFile = document.getElementById('inputfile').files[0];
-        var filepath = document.getElementById('inputfile').value;
-        /* var oReader = new FileReader();
-         oReader.onload = function(e){
-         console.log('file src =========='+e.target.result)
-         }
-         oReader.readAsDataURL(oFile);*/
-        canvas.loadImageFromURL(oFile.name , onImageLoad, args);
-        console.log('file =========='+filepath)
-    }
-
-    function loadImage(args) {
-        //canvas.loadImageFromURL('images/conventional-html-layout.png' , onImageLoad);
-        console.log('IMAGE PATH = '+args.path);
-        canvas.loadImageFromURL(args.path, onImageLoad, args);
-
-    }
-    function onImageLoad(obj, args) {
-        obj.name = args.name;
-        obj.uid = args.uid;
-        obj.left = args.left;
-        obj.top = args.top;
-        obj.pallette = args.pallette;
-        canvas.add(obj);
-        obj.setCoords();
-        matisse.sendDrawMsg({
-            action: 'importimage',
-            pallette: args.pallette,
-
-            args: [{
-                uid: obj.uid,
-                left: obj.left,
-                top: obj.top,
-                width: obj.width,
-                height: obj.height,
-                name:obj.name,
-                path:args.path
-            }]
-        });
-    }
+   
 
     /* Throws Error if the value is null.
      */
