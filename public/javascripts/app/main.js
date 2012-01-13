@@ -1,6 +1,6 @@
 /**
  * User: Bahvani Shankar
- * Date: 12/26/11
+ * Date: 01/13/12
  * Time: 11:16 AM
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
