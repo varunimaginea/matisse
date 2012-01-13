@@ -16,14 +16,29 @@ See the views/index.jade for example written in [http://jade-lang.com/](jade) te
 See index.html in this directory for a vanilla html example.
 
 ### How to Run this app?
-1) To run this application you need to install [http://nodejs.org](node.js) and also install npm. And then - npm install socket.io
-1a) sudo apt-get install redis-server
-1b) npm install hiredis redis 
-1c) npm install nohm
+1) To run this application you need to install [http://nodejs.org](node.js) and 
+   also install npm. 
 
-2) Change the "localhost" to your local machine ip in public/javascripts/com.js. 
-Code snippet:
-var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
+2) Install Redis Server
+
+>
+>   a. for windows redis exe https://github.com/dmajkic/redis/downloads
+>
+>   b. for ubuntu use - sudo apt-get install redis-server
+>
+>
+
+3) Install all node module dependencies for matisse using -
+
+>
+>   $npm install -d
+>
+
+3) Change the "localhost" to your local machine ip in public/javascripts/com.js.
+
+>
+> var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
+>
 
 3) Then you can run 
 
@@ -31,6 +46,7 @@ var socket = io.connect('http://localhost'); //change it to server ip or local i
 > $ node app.js
 >
 
-in the checked folder.
+in the root folder.
 
-Then go to the browser and open http://localhost:8000/ for the jade template page or http://localhost:8000/html for the HTML page.
+Now you can open the http://localhost:8000/ to open the matisse home page.
+

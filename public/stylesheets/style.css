@@ -79,16 +79,12 @@ label {
 .topicons {
 	position:relative;
 	top:20px;
-	right:-500px;
+	width:16px;
+	height:16px;
 }
 
-#outer{ 
-margin:0px auto;
-width: 100%;
-height: 100%;
-
-}
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
+
 
 #header{
 /*background:#125699;
@@ -101,10 +97,7 @@ text-decoration:none;
 
 #leftdiv {
 width:100px;
-height:80%;
-position:absolute;
-top:80px;
-left:0px;
+float:left;
 }
 
 #accordion{
@@ -118,15 +111,24 @@ overflow:hidden;
 
 
 #canvasId{
-float:left;
+float:right;
+overflow:auto;
 }
 
 
 #leftdiv p {padding-left:2px;padding-right:2px}
 #right {display:none; width:0px; height:0px;}
 
+#version {
+    color: #AAAAAA;
+    float: right;
+    font-family: arial;
+    font-size: 13px;
+    margin: 5px 30px 0 0;
+}
+
 #menuicons{
-margin:15px 0 0 350px;
+margin: 55px 20px 0px 0px;
 }
 
 #menuicons img{
@@ -140,6 +142,89 @@ left:10px;
 }
 
 #leftdiv img{
-margin:-12px 0 0 -30px;
 cursor: pointer;
 }
+
+.tools{
+margin:-12px 0 5px -30px;
+cursor: pointer;
+width:100px;
+height:100px;
+background:url('../images/tools_sprite.png') no-repeat;
+}
+
+
+#logo-wrapper{
+	float:left;
+	margin:15px 0 0 30px;
+}
+#logo-tag-wrapper{
+	font-family:arial;
+    font-size:14px;
+	float:right;
+	text-decoration:none;
+}
+#logo-tag-wrapper:hover{
+color:#026CD0;
+}
+#icons-wrapper{
+	float:right;
+}
+
+.ui-accordion-content{
+	background-color:#D3DAE5;
+}
+
+.shape-active{
+	background-color:#9BA2AD;
+	color:#FFF;
+	box-shadow: -1px -1px 2px 1px #666666 inset;
+	-webkit-box-shadow:-1px -1px 2px 1px #666666 inset;
+	-moz-box-shadow: -1px -1px 2px 1px #666666 insets;
+}
+
+#shape{
+	text-align:center;
+}
+
+#shape img{
+	display:inline-block;
+}
+#shape-label{
+	text-align:center !important;
+	clear:both !important;
+	position: relative;
+	top: -10px;
+}
+
+.ui-accordion-content{
+	margin:0px !important;
+	padding:0px !important;
+
+}
+
+div.scroller{
+	cursor:pointer;
+}
+
+#wireframe .scroller-up{
+	height: 14px;
+	background: #AAAAAA url('../images/up_arrow.png') no-repeat center center;
+}
+
+#wireframe .scroller-down{
+	height: 18px;
+	background: #8F98A6 url('../images/down_arrow.png') no-repeat center center;
+}
+
+.shapesHolder{
+height:95%; overflow:hidden;
+}
+
+.scrollerContentHolder{
+	position:relative;
+}
+
+
+
+
