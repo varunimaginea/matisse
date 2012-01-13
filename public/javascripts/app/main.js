@@ -17,9 +17,6 @@
     // create canvas object
     window.canvas = new fabric.Canvas('c', {
         backgroundColor: '#FFFFFF'
-        //backgroundImage: '/images/combobox_w.png'
-        //HOVER_CURSOR: 'pointer'
-
     });
 
     /** width and height of panels for resize */
@@ -36,7 +33,9 @@
      */
     var $currActiveIcon;
 
-    /* by default selection mode is false */
+    /**
+	 * by default selection mode is false 
+	 */
     canvas.isSelectMode = false;
 
     /**
@@ -48,12 +47,10 @@
 
     App.Main.init = function(){
         initWidthAndHeightOfPanels();
-        //resetWidthAndHeightOfPanels();
         resizeWindow();
         setCanvasSize();
         bindResizeWindow();
         canvas.isSelectMode = true;
-        //setCanvasSize();
         App.xOffset = getOffset(document.getElementById('canvasId')).left;
         App.yOffset = getOffset(document.getElementById('canvasId')).top;
 
@@ -80,33 +77,7 @@
         canvasWidth = bodyWidth - leftPanelWidth;
         canvasHeight = bodyHeight - topPanelHeight - 23;
     }
-    /**
-     * function to reset width and heights
-     */
-    function resetWidthAndHeightOfPanels(){
-
-        var windowHeight = $(window).height();
-        var windowWidth = $(window).width();
-
-        if(windowWidth >960 ) {
-            bodyWidth = windowWidth;
-        } else {
-            bodyWidth = 960;
-        }
-
-        if(windowHeight >800 ) {
-            bodyHeight = windowHeight;
-        }
-        else {
-            bodyHeight = 800;
-        }
-        //bodyHeight = $(window).height();
-        //bodyWidth = $(window).width();
-        topPanelHeight = 100;
-        leftPanelHeight = windowHeight-100;
-        canvasHeight = bodyHeight-130;
-        canvasWidth = bodyWidth-130;
-    }
+   
     /**
      * method to resize panels on resize of window
      */
