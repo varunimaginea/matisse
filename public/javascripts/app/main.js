@@ -119,6 +119,9 @@
         resizeCanvas();
     }
 
+	/**
+	 * Method to resize the width and height of document body.
+	 */
     function resizeBody(){
         $('#_body').width(bodyWidth + 2);
         $('#_body').height(bodyHeight);
@@ -291,7 +294,7 @@
                 return;
             }
             if (data.action == "modified") {
-                modifyObject(data.args[0])
+                modifyObject(data.args)
             } else if (data.action == "modifiedbyvalue") {
                 setObjectProperty(data.args[0]);
             } else if (data.action == "drawpath") {
@@ -300,7 +303,7 @@
                 var txt = document.createTextNode(data.args[0].text)
                 $("#chattext").append(txt);
             } else if (data.action == "delete") {
-                var obj = getObjectById(data.args[0].uid);
+                var obj = App.Main.getObjectById(data.args[0].uid);
                 canvas.remove(obj);
                 $('#prop').remove();
             } else if(data.action == "importimage") {
@@ -319,7 +322,7 @@
      * @type object
      */
 
-    function getObjectById(id) {
+    App.Main.getObjectById = function(id){
         var obj;
         var objs = canvas.getObjects();
         objs.forEach(function (object) {
@@ -365,16 +368,14 @@
     }
 
     function observe(eventName) {
-        canvas.observe(eventName, function (e) {
-            // alert(eventName);
+        canvas.observe(eventName, function (e) {          
             switch (eventName) {
                 case "object:modified":
                     if(canvas.getActiveGroup()) {
                         notifyServerGroupMoved();
                         return;
                     }
-                    var obj = e.memo.target;
-                    console.log(" modified object  name ="+obj.type+'   '+obj.name+'  ::  '+obj);
+                    var obj = e.memo.target;                 
                     matisse.sendDrawMsg({
                         action: "modified",
                         name: obj.name,
@@ -399,8 +400,8 @@
                     document.getElementById("c").style.cursor = 'default';
                     var obj = e.memo.path;
                     obj.uid = uniqid();
-                    obj.name = "drawingpath"
-                    //alert("mousedown"+canvas.isDrawingMode);
+                    obj.name = "drawingpath";
+					obj.pallette = "basic";                  
                     matisse.sendDrawMsg({
                         action: 'drawpath',
                         pallette: App.palletteName,
@@ -411,7 +412,8 @@
                             width: obj.width,
                             height: obj.height,
                             path: obj.path,
-                            name:obj.name
+                            name:obj.name,	
+							pallette:App.palletteName
                         }]
                     });
                     App.xPoints = [];
@@ -431,119 +433,18 @@
         })
     }
 
-
+	/**
+	 * To modify the object on the other side when it gets modified.
+	 * @param args - received object and object's id.
+	 */
     function modifyObject(args) {
-        var obj = getObjectById(args.uid);
-
-        if(obj) {
-            //canvas.setActiveObject(obj);
-            var recvdObj = args.object;
-            console.log('RECEEEEEEEEEEVD OBJECT ============='+recvdObj.type+'   '+obj.type+'   '+recvdObj.name)
-            obj.set("left", recvdObj.left);
-            obj.set("top", recvdObj.top);
-            obj.set("scaleX", recvdObj.scaleX);
-            obj.set("scaleY", recvdObj.scaleY);
-            if(recvdObj.fill)
-                obj.set("fill", recvdObj.fill);
-            if(recvdObj.stroke)
-                obj.set("stroke", recvdObj.stroke);
-            if (obj.name == "text") obj.text = recvdObj.text;
-            obj.setAngle(recvdObj.angle)
-            //  obj.set("angle", recvdObj.angle);
-            if (obj.pallette == "wireframe")
-            {
-                switch(obj.name)
-                {
-                    case "radio" :
-                        obj.paths[0].fill = recvdObj.paths[0].fill;
-                        obj.paths[0].left = recvdObj.paths[0].left;
-                        obj.paths[1].left = recvdObj.paths[1].left;
-                        obj.paths[2].left = recvdObj.paths[2].left;
-                        obj.paths[2].text = recvdObj.paths[2].text;
-                        obj.width = recvdObj.width;
-                        break;
-
-                    case "checkbox" :
-
-                        obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
-                        obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
-                        obj.paths[0].points[2].x = recvdObj.paths[0].points[2].x;
-                        obj.paths[0].points[3].x = recvdObj.paths[0].points[3].x;
-                        obj.paths[1].left = recvdObj.paths[1].left;
-                        obj.paths[1].text = recvdObj.paths[1].text;
-                        obj.paths[2].stroke = recvdObj.paths[2].stroke;
-                        obj.paths[2].points[0].x = recvdObj.paths[2].points[0].x;
-                        obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
-                        obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
-                        obj.width = recvdObj.width;
-                        break;
-                    case "password":
-                    case "textbox" :
-                        obj.left = recvdObj.left;
-                        obj.top = recvdObj.top;
-                        obj.width = recvdObj.width;
-                        obj.height = recvdObj.height;
-                        obj.paths[0].width = recvdObj.paths[0].width;
-                        obj.paths[0].height = recvdObj.paths[0].height;
-                        obj.paths[1].text = recvdObj.paths[1].text;
-                        break;
-
-                    case "label" :
-                        obj.left = recvdObj.left;
-                        obj.top = recvdObj.top;
-                        obj.width = recvdObj.width;
-                        obj.height = recvdObj.height;
-                        obj.paths[0].width = recvdObj.paths[0].width;
-                        obj.paths[0].height = recvdObj.paths[0].height;
-                        obj.paths[0].text = recvdObj.paths[0].text;
-                        break;
-
-                    case "txt_button" :
-                        obj.left = recvdObj.left;
-                        obj.width = recvdObj.width;
-                        obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
-                        obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
-                        obj.paths[0].points[2].x = recvdObj.paths[0].points[2].x;
-                        obj.paths[0].points[3].x = recvdObj.paths[0].points[3].x;
-                        obj.paths[0].points[4].x = recvdObj.paths[0].points[4].x;
-                        obj.paths[0].points[5].x = recvdObj.paths[0].points[5].x;
-                        obj.paths[0].points[6].x = recvdObj.paths[0].points[6].x;
-                        obj.paths[0].points[7].x = recvdObj.paths[0].points[7].x;
-                        obj.paths[1].text = recvdObj.paths[1].text;
-                        break;
-
-                    case "combo" :
-                        obj.left = recvdObj.left;
-                        obj.width = recvdObj.width;
-                        obj.paths[0].width = recvdObj.paths[0].width;
-                        obj.paths[1].points[0].x = recvdObj.paths[1].points[0].x;
-                        obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
-                        obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
-                        obj.paths[1].points[3].x = recvdObj.paths[1].points[3].x;
-                        obj.paths[2].points[0].x = recvdObj.paths[2].points[0].x;
-                        obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
-                        obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
-                        obj.paths[3].text = recvdObj.paths[3].text;
-                        break;
-
-                    case "progressbar":
-                        obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
-                        obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
-                        break;
-                }
-            }
+        var obj = App.Main.getObjectById(args[0].uid);		
+        if(obj) {          
+			App.pallette[obj.pallette].shapes[obj.name].modifyAction ? App.pallette[obj.pallette].shapes[obj.name].modifyAction.apply(this, args) : null;	            
             canvas.setActiveObject(obj)
             updatePropertyPanel(obj)
             obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
-        }
-        /*======================================================================================================*/
-        /*** for some reason below code not working for circle modification, hence commented and using above code
-         /*======================================================================================================
-         for (var prop in recvdObj) {
-         obj.set(prop, recvdObj[prop]);
-         $("#chattext").append(prop);
-         }
-         obj.setCoords();**/
+        }       
         canvas.renderAll();
     }
 
@@ -600,22 +501,18 @@
         var toolId = $(e.target).attr('id');
         currentTool = toolId;
         App.currTool = e.target;
-        $(e.target).removeClass(toolId).addClass(toolId+"_click");
-        //App.currTool.setAttribute('border', "2px");
+        $(e.target).removeClass(toolId).addClass(toolId+"_click");        
         document.getElementById("c").style.cursor = 'default'
         App.drawShape = true;
-        App.action = e.target.id;
+        App.action = e.target.id;		
         App.palletteName = $(e.target).attr('data-parent');
-//	console.log('App.palletteName =='+App.pallette+'  ::::  '+App.palletteName+"   "+e.target.id+" >>>>>>  "+App.pallette[App.palletteName]);
         if(e.target.id !="path") {
             var obj = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[e.target.id].properties);
             obj.uid = uniqid();
             App.shapeArgs = [obj];
-        }
-        //alert(e.target.id)
+        }     
         if (App.action != "path") {
-            canvas.isDrawingMode = false;
-            //document.getElementById("path").src =  'images/nobrush.png'
+            canvas.isDrawingMode = false;           
         } else {
             document.getElementById("c").style.cursor = 'crosshair';
             canvas.isDrawingMode = true;
@@ -629,8 +526,7 @@
         var obj = {};
         for (var i = 0; i < arr.length; i++) {
             obj[arr[i].name] = arr[i].defaultvalue;
-        }
-        //alert(obj);
+        }       
         return obj;
     }
 
@@ -724,7 +620,7 @@
 
 
     function setObjectProperty(args) {
-        var obj = getObjectById(args.uid);
+        var obj = App.Main.getObjectById(args.uid);
         if(obj) {
             obj.set(args.property, args.value);
             canvas.renderAll();
@@ -794,7 +690,7 @@
         p.name = "drawingpath";
         p.scaleX = 1;
         p.scaleY = 1;
-
+		p.pallette = "basic";
         p.set("left", args.left);
         p.set("top", args.top);
         p.set("width", args.width);
@@ -803,7 +699,7 @@
         canvas.renderAll();
         p.setCoords();
         //this.fire('path:created', { path: p });
-        console.log("drawingpath name ="+p.name);
+       
     }
 
     function checkboxSelectionHandler(objct)
@@ -1317,28 +1213,7 @@
 
 
         }
-    }
-
-
-    /**
-     * To load wireframe objects. group the objects using pathgroup
-     */
-    App.Main.loadWireframe = function(args,objects)
-    {
-        var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
-        pathGroup.set({
-            left: args.left,
-            top: args.top,
-            angle: args.angle,
-            scaleX: args.scaleX,
-            scaleY: args.scaleY
-        });
-        pathGroup.setCoords();
-        pathGroup.name = args.name;
-        pathGroup.uid = args.uid;
-        pathGroup.pallette = args.pallette;
-        canvas.add(pathGroup);
-    }
+    }    
 
     App.Main.loadSVG = function(args)  {
 

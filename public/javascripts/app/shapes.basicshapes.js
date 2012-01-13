@@ -5,6 +5,24 @@
  * About this : Define all Basic Shape.s here
  */
 
+/**
+ * To set the properties of the object with the received object
+ */
+setProperties = function(obj, recvdObj)
+{
+	obj.left = recvdObj.left;
+	obj.top = recvdObj.top;
+	obj.scaleX = recvdObj.scaleX;
+	obj.scaleY = recvdObj.scaleY;
+	obj.setAngle(recvdObj.angle);
+	if(recvdObj.fill)
+		obj.set("fill", recvdObj.fill);
+	if(recvdObj.stroke)
+		obj.set("stroke", recvdObj.stroke);
+	if (obj.text) 
+		obj.text = recvdObj.text;
+}
+ 
 App.Shapes.registerpallette("basic", {
     collectionName: 'basic',
     shapes: {
@@ -31,6 +49,12 @@ App.Shapes.registerpallette("basic", {
                 canvas.add(rect);
                
             },
+			modifyAction: function(args)
+			{
+				var obj = App.Main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				setProperties(obj, recvdObj);												
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -117,6 +141,12 @@ App.Shapes.registerpallette("basic", {
                 cir.pallette = args.pallette;
 			    canvas.add(cir);
             },
+			modifyAction: function(args)
+			{
+				var obj = App.Main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				setProperties(obj, recvdObj);												
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -283,6 +313,12 @@ App.Shapes.registerpallette("basic", {
 				canvas.add(textSample);
 				
             },
+			modifyAction: function(args)
+			{
+				var obj = App.Main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				setProperties(obj, recvdObj);												
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -348,11 +384,17 @@ App.Shapes.registerpallette("basic", {
                 defaultvalue: 0
             }]
         },
-        path: {
+        drawingpath: {
             displayName: "path",
             activeIcon: "brush_w.png",
             inactiveIcon: "brush_g.png",
-            toolAction: null
+            toolAction: null,
+			modifyAction: function(args)
+			{
+				var obj = App.Main.getObjectById(args.uid);
+				var recvdObj = args.object;
+				setProperties(obj, recvdObj);
+			}
 			
         } // end of path
 
