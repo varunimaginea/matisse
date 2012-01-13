@@ -6,15 +6,16 @@
  */
 
 
-(function($){
 
-    App.Setup = {};
-
+define("App.Setup",["javascripts/app",
+    "shapes","shapes.svg","shapes.basicshapes",
+    "shapes.wireframe","main"],function(){
     //Dom Ready function
-    $(function(){
+    jQuery(function(){
         //call all the functions, that are to be called on document ready here
         App.Main.init();
 
     });
+    }
+);
 
-})(jQuery);
