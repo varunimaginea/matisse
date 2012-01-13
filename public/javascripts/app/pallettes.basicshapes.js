@@ -348,12 +348,40 @@ App.Shapes.registerpallette("basic", {
                 defaultvalue: 0
             }]
         },
-        path: {
+        drawingpath: {
             displayName: "path",
             activeIcon: "brush_w.png",
             inactiveIcon: "brush_g.png",
-            toolAction: null
-			
+            toolAction: null,
+			properties: [{
+                name: 'left',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("left", args.property);
+                },
+                defaultvalue: 100
+            }, {
+                name: 'top',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("top", args.property);
+                },
+                defaultvalue: 100
+            },	{
+                name: 'scaleX',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleX", args.property);
+                },
+                defaultvalue: 1
+            }, {
+                name: 'scaleY',
+                type: 'number',
+                action: function (args) {
+                    (args.obj).set("scaleY", args.property);
+                },
+                defaultvalue: 1
+            }]
         } // end of path
 
     } // end of shapes

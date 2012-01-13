@@ -420,7 +420,8 @@
                     document.getElementById("c").style.cursor = 'default';
                     var obj = e.memo.path;
                     obj.uid = uniqid();
-                    obj.name = "drawingpath"
+                    obj.name = "drawingpath";
+					obj.pallette = App.palletteName;
                     matisse.sendDrawMsg({
                         action: 'drawpath',
                         pallette: App.palletteName,
@@ -431,7 +432,8 @@
                             width: obj.width,
                             height: obj.height,
                             path: obj.path,
-                            name:obj.name
+                            name:obj.name,
+							pallete:App.palletteName
                         }]
                     });
                     App.xPoints = [];
@@ -456,9 +458,10 @@
      */
     function modifyObject(args) {
         var obj = getObjectById(args.uid);
-
+		
         if(obj) {
             var recvdObj = args.object;
+			console.log("recvdObj pallette = "+recvdObj.pallette+" recvdObj name ="+recvdObj.name);
             obj.set("left", recvdObj.left);
             obj.set("top", recvdObj.top);
             obj.set("scaleX", recvdObj.scaleX);
@@ -623,7 +626,7 @@
 	 *  @return obj - Object
      */
     function getDefaultDataFromArray(arr) {
-        if (arr == undefined) return "undefined";
+        if (arr == undefined) return null;
         var obj = {};
         for (var i = 0; i < arr.length; i++) {
             obj[arr[i].name] = arr[i].defaultvalue;
@@ -803,7 +806,7 @@
         p.name = "drawingpath";
         p.scaleX = 1;
         p.scaleY = 1;
-
+		p.pallete = "basic";
         p.set("left", args.left);
         p.set("top", args.top);
         p.set("width", args.width);
