@@ -7,14 +7,14 @@
 
 
 
-define("App.Setup",["javascripts/app",
-    "shapes","shapes.svg","shapes.basicshapes",
-    "shapes.wireframe","main"],function(){
+define(["app",
+    "app/shapes","app/main","app/shapes.svg","app/shapes.basicshapes",
+    "app/shapes.wireframe"],function(App,Shapes,Main){
+    console.log(arguments);
     //Dom Ready function
-    jQuery(function(){
+    $(function(){
         //call all the functions, that are to be called on document ready here
-        App.Main.init();
-
+        Main.init();
     });
     }
 );

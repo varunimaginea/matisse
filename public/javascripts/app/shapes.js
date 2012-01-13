@@ -5,9 +5,14 @@
  * About this : Utility to Create all the shapes,Based on the type specified
  *
  */
-    App.Shapes.registerpallette = function(palletteName, palletteDesc) {
-         App.pallette[palletteName] = palletteDesc;
-    }
+
+define(["app"],function(App){
+    return {
+            registerpallette : function(palletteName, palletteDesc) {
+            App.pallette[palletteName] = palletteDesc;
+         }
+    };
+});
 
 
 

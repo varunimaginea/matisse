@@ -6,23 +6,22 @@
  */
 
     //Defining the global name space
-    window.App = {}; // global Object cointainer
-    //Properties of the global name space
-    App.fillColor = "#AAAAAA";
-    App.points = {};
-    App.pallette = {};
-    App.textEl;
-    App.drawShape = false;
-    App.action;
-    App.shapeArgs;
-    App.currTool;
-    App.xPoints = [],
-    App.yPoints = [];
-    App.xOffset
-    App.yOffset;
-    App.palletteName;
-    App.associateText = {};
-    App.focusInput = "stroke";
-
-	//Defining shapes name space
-	App.Shapes = {};
+    define(function(){
+        return {
+            fillColor : "#AAAAAA",
+            points : {},
+            pallette : {},
+            textEl : null,
+            drawShape : false,
+            action : null,
+            shapeArgs : null,
+            currTool : null,
+            xPoints : [],
+            yPoints : [],
+            xOffset : null,
+            yOffset : null,
+            associateText : {},
+            focusInput : "stroke",
+            Shapes : {}
+        };
+    });
