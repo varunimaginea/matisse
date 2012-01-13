@@ -457,7 +457,8 @@
                 document.getElementById("c").style.cursor = 'default';
                 var obj = e.memo.path;
                 obj.uid = uniqid();
-                obj.name = "drawingpath"
+                obj.name = "drawingpath";
+				obj.pallette = App.palletteName;
                 //alert("mousedown"+canvas.isDrawingMode);
                 matisse.sendDrawMsg({
                     action: 'drawpath',
@@ -501,7 +502,7 @@
         if (obj) {
             //canvas.setActiveObject(obj);
             var recvdObj = args.object;
-            console.log('RECEEEEEEEEEEVD OBJECT =============' + recvdObj.type + '   ' + obj.type + '   ' + recvdObj.name)
+            console.log('RECEEEEEEEEEEVD OBJECT =============' + recvdObj.type + '   ' + recvdObj.pallette + '   ' + recvdObj.name)
             obj.set("left", recvdObj.left);
             obj.set("top", recvdObj.top);
             obj.set("scaleX", recvdObj.scaleX);
