@@ -1,5 +1,5 @@
 /**
- * User: Bahvani Shankar
+ * User: Bhavani Shankar
  * Date: 01/13/12
  * Time: 11:16 AM
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
@@ -29,7 +29,7 @@
     var canvasWidth,canvasHeight;
 
     /**
-     * current active reference
+     * current active icon reference
      */
     var $currActiveIcon;
 
@@ -673,10 +673,10 @@
 
 	/**
      *  Handle MouseMove and MouseDown events - when user trying to draw a shape on canvas
-     *  @method  handleMouseEvents
+     *  @method  afterToolSelectMouseHandler
      *  @param none
      */
-    function handleMouseEvents() {
+    function afterToolSelectMouseHandler() {
         $("#canvasId").mousedown(function (event) {
             if (!canvas.isDrawingMode && App.drawShape) {
                 App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
@@ -1020,7 +1020,7 @@
 
         //document.getElementById("drawing-mode").onclick = drawingButtonListener;
         $('#chatbutton').click(chatButtonListener);
-        handleMouseEvents()
+        afterToolSelectMouseHandler();
         $('#accordion').accordion();
         setAccordinContentHeight();
     }
