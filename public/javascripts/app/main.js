@@ -1,5 +1,5 @@
 /**
- * User: Bhavani Shankar
+ * User: Bahvani Shankar
  * Date: 01/13/12
  * Time: 11:16 AM
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
@@ -22,7 +22,7 @@
 
 
     /**
-     * current active icon reference
+     * current active reference
      */
     var $currActiveIcon;
 
@@ -523,10 +523,10 @@
 
 	/**
      *  Handle MouseMove and MouseDown events - when user trying to draw a shape on canvas
-     *  @method  afterToolSelectMouseHandler
+     *  @method  handleMouseEvents
      *  @param none
      */
-    function afterToolSelectMouseHandler() {
+    function handleMouseEvents() {
         $("#canvasId").mousedown(function (event) {
             if (!canvas.isDrawingMode && matisse.drawShape) {
                 matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset; //offset
@@ -871,7 +871,7 @@
 
         //document.getElementById("drawing-mode").onclick = drawingButtonListener;
         $('#chatbutton').click(chatButtonListener);
-        afterToolSelectMouseHandler();
+        handleMouseEvents()
         $('#accordion').accordion();
         matisse.ui.setAccordinContentHeight();
     }
