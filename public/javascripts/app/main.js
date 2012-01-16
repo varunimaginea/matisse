@@ -5,7 +5,9 @@
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
- */ (function ($) {
+ */ 
+ 
+   (function ($) {
 
     /**
      *	create canvas object
@@ -265,15 +267,10 @@
 
     }
 
-
     /**
-     *  Modify object when receive a notification from server 
+     *  When receive a notification from server to modify the other side when it gets modified.
      *  @method  modifyObject
-     *  @param args - args array/object
-     */
-    /**
-     * To modify the object on the other side when it gets modified.
-     * @param args - received object and object's id.
+     *  @param rgs - received object and object's id.
      */
     function modifyObject(args) {
         var obj = matisse.main.getObjectById(args[0].uid);
@@ -346,8 +343,7 @@
         }
         return obj;
     }
-
-
+	
     /**
      *  Sends the message typed by user to chat window and also notify it to Server
      *  @method  chatButtonListener
@@ -365,8 +361,6 @@
             }]
         });
     }
-
-    
 
     /**
      *  Sets the property of a shape when a notification received from server
@@ -407,8 +401,6 @@
             });
         }
     }
-
-
 
     /**
      * Creates a property panel with various properties based on object selected
@@ -451,7 +443,5 @@
         $('#accordion').accordion();
         matisse.ui.setAccordinContentHeight();
     }
-
-   
 
 })(jQuery);
