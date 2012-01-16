@@ -13,7 +13,7 @@
     //Dom Ready function
     $(function(){
         //call all the functions, that are to be called on document ready here
-        matisse.Main.init();
+        matisse.main.init();
 
     });
 

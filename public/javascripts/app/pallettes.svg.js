@@ -15,7 +15,7 @@ matisse.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
-                 matisse.Main.loadSVG(args);
+                 matisse.main.loadSVG(args);
             },
 
             properties: [{
@@ -78,7 +78,7 @@ matisse.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = '17.svg';
                 args.name = 'pathgroup2';
-                 matisse.Main.loadSVG(args);
+                 matisse.main.loadSVG(args);
             },
 
             properties: [{
@@ -141,7 +141,7 @@ matisse.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = 'button.svg';
                 args.name = 'pathgroup2';
-                matisse.Main.loadSVG(args);
+                matisse.main.loadSVG(args);
             },
 
             properties: [{

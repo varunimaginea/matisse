@@ -94,12 +94,54 @@ matisse.util = {
             h = document.getElementById('div1').clientHeight;
         obj.remove();
         return h;
+    },
+	
+	/**
+     * Returns unique id to attach to an object
+	 * @method uniqid
+     * @param null
+     */
+
+    uniqid: function() {
+        var newDate = new Date;
+        return this.randomString()+newDate.getTime();
+    },
+	
+	/**
+     * Returns Random String 
+	 * @method randomString
+     * @param null
+     */
+    randomString: function() {
+        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+        var string_length = 8;
+        var randomstring = '';
+        for (var i=0; i<string_length; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum,rnum+1);
+        }
+        return randomstring;
+    },
+	
+	/**
+     * Calculate the offset value for the canvas and return it
+     * @method getOffset 
+	 * @param el 
+     */
+    getOffset: function(el) {
+        var _x = 0;
+        var _y = 0;
+        while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+            _x += el.offsetLeft - el.scrollLeft;
+            _y += el.offsetTop - el.scrollTop;
+            el = el.offsetParent;
+        }
+        return {
+            top: _y,
+            left: _x
+        };
     }
-
-
-
-
-
+	
 
 
 

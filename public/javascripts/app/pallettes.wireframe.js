@@ -29,7 +29,7 @@ matisse.Shapes.registerpallette("wireframe", {
 							stroke: '#000000'							
 						});			
 			objects.push(text);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -111,7 +111,7 @@ matisse.Shapes.registerpallette("wireframe", {
 			});						
 			objects.push(border);
 			objects.push(text);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -182,7 +182,7 @@ matisse.Shapes.registerpallette("wireframe", {
 						});					
 			objects.push(border);
 			objects.push(text);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -259,7 +259,7 @@ matisse.Shapes.registerpallette("wireframe", {
 			objects.push(checkbox);
 			objects.push(text);
 			objects.push(tick);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -352,7 +352,7 @@ matisse.Shapes.registerpallette("wireframe", {
 				txt.left = -(-(txt_width)/2 - text_left);
 				args.width = width;		
 				args.height = 30;
-				matisse.Main.loadWireframe(args, objects);
+				matisse.main.loadWireframe(args, objects);
             },
 
             properties: [{
@@ -446,7 +446,7 @@ matisse.Shapes.registerpallette("wireframe", {
 			objects.push(innerRect);
 			objects.push(triangle);
 			objects.push(text);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -514,7 +514,7 @@ matisse.Shapes.registerpallette("wireframe", {
 					);				
 			objects.push(outerRect);
 			objects.push(innerRect);			
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -613,7 +613,7 @@ matisse.Shapes.registerpallette("wireframe", {
 			objects.push(rightLine1);
 			objects.push(leftLine2);
 			objects.push(rightLine2);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -696,7 +696,7 @@ matisse.Shapes.registerpallette("wireframe", {
 			objects.push(diagonal2);	
 			objects.push(rect);				
 			objects.push(textobj);
-			matisse.Main.loadWireframe(args, objects);	
+			matisse.main.loadWireframe(args, objects);	
 		},
 		properties:[{
                 name: 'left',
@@ -762,7 +762,7 @@ matisse.Shapes.registerpallette("wireframe", {
 						});	
 			objects.push(rect);						
 			objects.push(text);
-			matisse.Main.loadWireframe(args, objects);			
+			matisse.main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',

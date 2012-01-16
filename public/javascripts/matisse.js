@@ -18,7 +18,7 @@
 		matisse.currTool;
 		matisse.xPoints = [],
 		matisse.yPoints = [];
-		matisse.xOffset
+		matisse.xOffset;
 		matisse.yOffset;
 		matisse.palletteName;
 		matisse.associateText = {};
