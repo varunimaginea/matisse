@@ -5,7 +5,7 @@
  * About this : Define all SVGs here
  */
 
-App.Shapes.registerpallette("svg", {
+matisse.Shapes.registerpallette("svg", {
     collectionName: 'svg',
     shapes: {
         pathgroup1: {
@@ -15,7 +15,7 @@ App.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
-                 App.Main.loadSVG(args);
+                 matisse.Main.loadSVG(args);
             },
 
             properties: [{
@@ -78,7 +78,7 @@ App.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = '17.svg';
                 args.name = 'pathgroup2';
-                 App.Main.loadSVG(args);
+                 matisse.Main.loadSVG(args);
             },
 
             properties: [{
@@ -141,7 +141,7 @@ App.Shapes.registerpallette("svg", {
             toolAction: function (args) {
                 args.svg = 'button.svg';
                 args.name = 'pathgroup2';
-                App.Main.loadSVG(args);
+                matisse.Main.loadSVG(args);
             },
 
             properties: [{

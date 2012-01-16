@@ -5,8 +5,8 @@
  * About this : Utility to Create all the shapes,Based on the type specified
  *
  */
-    App.Shapes.registerpallette = function(palletteName, palletteDesc) {
-         App.pallette[palletteName] = palletteDesc;
+    matisse.Shapes.registerpallette = function(palletteName, palletteDesc) {
+         matisse.pallette[palletteName] = palletteDesc;
     }
 
 

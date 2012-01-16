@@ -5,7 +5,7 @@
  * About this : Define all Basic Shape.s here
  */
 
-App.Shapes.registerpallette("basic", {
+matisse.Shapes.registerpallette("basic", {
     collectionName: 'basic',
     shapes: {
         rectangle: {

@@ -7,7 +7,7 @@
 
 
 
-App.Shapes.registerpallette("wireframe", {
+matisse.Shapes.registerpallette("wireframe", {
     collectionName: 'wireframe',
     shapes: {	
 	label:{
@@ -17,8 +17,8 @@ App.Shapes.registerpallette("wireframe", {
 		toolAction: function (args) {
 			var objects = [],
 				txt = args.paths ? args.paths[0].text : "label me";
-			args.width = args.paths ? args.paths[0].width : App.Main.getStringWidth(txt) + 20;
-			args.height = args.paths ? args.paths[0].height : App.Main.getStringHeight(txt) + 20;		
+			args.width = args.paths ? args.paths[0].width : matisse.util.getStringWidth(txt) + 20;
+			args.height = args.paths ? args.paths[0].height : matisse.util.getStringHeight(txt) + 20;		
 			var text = new fabric.Text(txt, 
 						{	
 							fontSize : 20, 
@@ -29,7 +29,7 @@ App.Shapes.registerpallette("wireframe", {
 							stroke: '#000000'							
 						});			
 			objects.push(text);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -75,8 +75,8 @@ App.Shapes.registerpallette("wireframe", {
 		toolAction: function (args) {
 			var objects = [],
 				txt = args.paths ? args.paths[1].text : "click me";
-			args.width = App.Main.getStringWidth(txt)+1 ;
-			args.height = App.Main.getStringHeight(txt)+4;			
+			args.width = matisse.util.getStringWidth(txt)+1 ;
+			args.height = matisse.util.getStringHeight(txt)+4;			
 				
 			var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 2},
 											 {x:-args.width/2 + 2, y: args.height/2},
@@ -111,7 +111,7 @@ App.Shapes.registerpallette("wireframe", {
 			});						
 			objects.push(border);
 			objects.push(text);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -182,7 +182,7 @@ App.Shapes.registerpallette("wireframe", {
 						});					
 			objects.push(border);
 			objects.push(text);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -233,7 +233,7 @@ App.Shapes.registerpallette("wireframe", {
 				side = 14,
 				_stroke =  args.paths ? args.paths[2].stroke : "#000000",
 				_fill = "#000000";				
-			args.width = args.width ? args.width : App.Main.getStringWidth(text) + side + (2 * margin) + space;
+			args.width = args.width ? args.width : matisse.util.getStringWidth(text) + side + (2 * margin) + space;
 			args.height = 30;					
 			var checkbox_left = -(args.width / 2) + margin;
 			var checkbox = new fabric.Polygon(      
@@ -249,7 +249,7 @@ App.Shapes.registerpallette("wireframe", {
 							fontSize : 20, 
 							fontFamily : "delicious_500", 
 							fontWeight : 20,
-							left : args.paths ? args.paths[1].left : -(-(App.Main.getStringWidth(text))/2 - text_left),
+							left : args.paths ? args.paths[1].left : -(-(matisse.util.getStringWidth(text))/2 - text_left),
 							top : 0,
 							fill: _fill,
 							stroke: _stroke
@@ -259,7 +259,7 @@ App.Shapes.registerpallette("wireframe", {
 			objects.push(checkbox);
 			objects.push(text);
 			objects.push(tick);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -344,7 +344,7 @@ App.Shapes.registerpallette("wireframe", {
 				objects.push(outer_circle);
 				objects.push(inner_circle);
 				objects.push(txt);
-				var txt_width = App.Main.getStringWidth(text);
+				var txt_width = matisse.util.getStringWidth(text);
 				width = txt_width + (2 * _radius) + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
 				outer_circle.left = - ((width/2) - 15);
 				inner_circle.left = outer_circle.left;
@@ -352,7 +352,7 @@ App.Shapes.registerpallette("wireframe", {
 				txt.left = -(-(txt_width)/2 - text_left);
 				args.width = width;		
 				args.height = 30;
-				App.Main.loadWireframe(args, objects);
+				matisse.Main.loadWireframe(args, objects);
             },
 
             properties: [{
@@ -413,7 +413,7 @@ App.Shapes.registerpallette("wireframe", {
 				margin = 15,				
 				space = 5,
 				side = 25;
-			args.width = args.width ? args.width : App.Main.getStringWidth(text) + side + (2 * margin);
+			args.width = args.width ? args.width : matisse.util.getStringWidth(text) + side + (2 * margin);
 			args.height = 20;
 			var outerRect = new fabric.Rect(
 						{
@@ -446,7 +446,7 @@ App.Shapes.registerpallette("wireframe", {
 			objects.push(innerRect);
 			objects.push(triangle);
 			objects.push(text);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -514,7 +514,7 @@ App.Shapes.registerpallette("wireframe", {
 					);				
 			objects.push(outerRect);
 			objects.push(innerRect);			
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -613,7 +613,7 @@ App.Shapes.registerpallette("wireframe", {
 			objects.push(rightLine1);
 			objects.push(leftLine2);
 			objects.push(rightLine2);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',
@@ -696,7 +696,7 @@ App.Shapes.registerpallette("wireframe", {
 			objects.push(diagonal2);	
 			objects.push(rect);				
 			objects.push(textobj);
-			App.Main.loadWireframe(args, objects);	
+			matisse.Main.loadWireframe(args, objects);	
 		},
 		properties:[{
                 name: 'left',
@@ -742,8 +742,8 @@ App.Shapes.registerpallette("wireframe", {
 		toolAction: function (args) {
 			var objects = [],
 				txt = args.paths ? args.paths[1].text : "************";
-			args.width = App.Main.getStringWidth(txt) + 30;
-			args.height = App.Main.getStringHeight(txt);	
+			args.width = matisse.util.getStringWidth(txt) + 30;
+			args.height = matisse.util.getStringHeight(txt);	
 			var rect = new fabric.Rect(
 							{left: args.left,
 							top: args.top,
@@ -762,7 +762,7 @@ App.Shapes.registerpallette("wireframe", {
 						});	
 			objects.push(rect);						
 			objects.push(text);
-			App.Main.loadWireframe(args, objects);			
+			matisse.Main.loadWireframe(args, objects);			
 		},
 		properties: [{
                 name: 'left',

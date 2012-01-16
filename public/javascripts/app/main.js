@@ -12,21 +12,14 @@
     /**
      * @namespace
      */
-    App.Main = {};
+    matisse.Main = {};
 
     // create canvas object
     window.canvas = new fabric.Canvas('c', {
         backgroundColor: '#FFFFFF'
     });
 
-    /** width and height of panels for resize */
-    var bodyWidth,bodyHeight;
-    var initialBodyWidth = $(window).width() > 960 ? $(window).width() : 960,
-        initialBodyHeight = $(window).height() > 800 ? $(window).height() : 800;
-    var topPanelHeight;
-    var leftPanelWidth,leftPanelHeight;
-    var accordionContentHeight;
-    var canvasWidth,canvasHeight;
+
 
     /**
      * current active reference
@@ -40,19 +33,19 @@
 
     /**
      * Initializes the application
-     * @method App.Main.init
+     * @method matisse.Main.init
      * @param none
      *
      */
 
-    App.Main.init = function(){
-        initWidthAndHeightOfPanels();
-        resizeWindow();
-        setCanvasSize();
-        bindResizeWindow();
+    matisse.Main.init = function(){
+        matisse.ui.initWidthAndHeightOfPanels();
+         matisse.ui.resizeWindow();
+         matisse.ui.setCanvasSize();
+         matisse.ui.bindResizeWindow();
         canvas.isSelectMode = true;
-        App.xOffset = getOffset(document.getElementById('canvasId')).left;
-        App.yOffset = getOffset(document.getElementById('canvasId')).top;
+        matisse.xOffset = getOffset(document.getElementById('canvasId')).left;
+        matisse.yOffset = getOffset(document.getElementById('canvasId')).top;
 
         addTools();
 
@@ -67,150 +60,7 @@
 		newButtonClickHanlder();
     }
 
-    /**
-     * function to initialize width and heights
-	 * @method initWidthAndHeightOfPanels
-	 * @param none
-     */
-    function initWidthAndHeightOfPanels(){
-        bodyWidth = $(window).width() - 2;
-        bodyHeight = $(window).height();
-        topPanelHeight = 100;
-        leftPanelWidth = 100;
-        leftPanelHeight = bodyHeight - topPanelHeight;
-        canvasWidth = bodyWidth - leftPanelWidth;
-        canvasHeight = bodyHeight - topPanelHeight - 23;
-    }
    
-    /**
-     * method to resize panels on resize of browser window
-	 * @method resizeWindow
-	 * @param none
-     */
-    function resizeWindow(){
-        resizeBody();
-        resizeHeader();
-        resizeMainPanel();
-        resizeLeftPanel();
-        setAccordinContentHeight();
-        resizeCanvas();
-    }
-	
-	/**
-     * method to resize the document body
-	 * @method resizeBody
-	 * @param none
-     */
-    function resizeBody(){
-        $('#_body').width(bodyWidth + 2);
-        $('#_body').height(bodyHeight);
-    }
-
-    /**
-     * method to set header width and height
-	 * @method resizeHeader
-	 * @param none
-     */
-    function resizeHeader() {
-        $('#header').width(bodyWidth);
-        $('#header').height(topPanelHeight);
-    }
-
-    /**
-     * Set Outer panel width and height
-     * @method resizeMainPanel
-	 * @param none
-     */
-    function resizeMainPanel() {
-        $('#outer').height(leftPanelHeight);
-        $('#outer').width(bodyWidth);
-    }
-
-    /**
-     * Set left panel width and height
-     * @method resizeLeftPanel
-	 * @param none
-     */
-    function resizeLeftPanel() {
-        $('#leftdiv').width(leftPanelWidth);
-        $('#leftdiv').height(leftPanelHeight);
-    }
-
-    /**
-     * Set Canvas width and height
-     * @method resizeCanvas
-	 * @param none
-     */
-    function resizeCanvas() {
-        $('#canvasId').height(canvasHeight);
-        $('#canvasId').width(canvasWidth);
-        //canvas.setDimensions({width:canvasWidth, height:canvasHeight});
-    }
-
-    /**
-     * Set Accordian width and height
-	 * @method setAccordinContentHeight
-	 * @param none
-     */
-    function setAccordinContentHeight() {
-        var $accordionHeaders = $('.ui-accordion-header');
-        var accordionHeaderHeight = 0;
-        $accordionHeaders.each(function(i,s){
-            accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
-        });
-        accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));
-        $('.ui-accordion-content').height(accordionContentHeight);
-    }
-
-    /**
-     * Bind resizing of window to panels
-	 * @method bindResizeWindow
-	 * @param none
-     */
-    function bindResizeWindow() {
-        $(window).resize(function () {
-            initWidthAndHeightOfPanels();
-            resizeWindow();
-            setCanvasSize();
-        });
-    }
-
-    /**
-     * Applies color picked from picker to object
-     * @method pickerUpdate
-     * @param (String) color value
-     *
-     */
-
-    function pickerUpdate(color) {
-        if (App.focusInput == "") return;
-        var obj = canvas.getActiveObject();
-        obj.set(App.focusInput, color);
-        $('#' + App.focusInput).val(color);
-        $('#' + App.focusInput).css('background', color);
-        matisse.sendDrawMsg({
-            action: "modified",
-            args: [{
-                uid: obj.uid,
-                object: obj
-            }]
-        });
-        canvas.renderAll();
-    }
-
-
-    /**
-     * Sets the Canvas width and height based on browser window size
-     * @method setCanvasSize
-     * @param none
-     *
-     */
-    function setCanvasSize() {
-        width = (bodyWidth > initialBodyWidth ) ? (bodyWidth - 100) : ((initialBodyWidth > 1060) ? (initialBodyWidth - 100) : 960);
-        height = (bodyHeight > initialBodyHeight) ? (bodyHeight - 100) : ((initialBodyHeight > 900) ? (initialBodyHeight - 100) : 800);
-        canvas.setDimensions({width:width, height:height});
-    }
-
 	/**
      * Initializes the Properties Window, hide it initially
      * @method initPropWindow
@@ -293,7 +143,7 @@
      *
      */
 
-    matisse.onDraw = function (data) {
+    matisse.com.onDraw = function (data) {
         if(data && data.args)
         {
             if (data.action == undefined || data.action == null) {
@@ -315,8 +165,8 @@
             } else if(data.action == "importimage") {
                 loadImage(data.args[0]);
             } else {
-                if (App.pallette[data.pallette] != undefined) {
-                    App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+                if (matisse.pallette[data.pallette] != undefined) {
+                    matisse.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
                 }
             }
         }
@@ -346,11 +196,11 @@
      *
      */
     function updatePropertyPanel(obj) {
-        if(App.pallette[App.palletteName] == null) return;
+        if(matisse.pallette[matisse.palletteName] == null) return;
         if(canvas.getActiveGroup()) return;
         if (obj && obj.name && obj.pallette)
         {
-            properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[obj.name].properties);
+            properties = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[obj.name].properties);
             jQuery.each(properties, function (i, value) {
                 $('#' + i).val(obj[i]);
             })
@@ -369,7 +219,7 @@
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
         objectsInGroup.forEach(function (obj) {
-            matisse.sendDrawMsg({
+            matisse.com.sendDrawMsg({
                 action: "modified",
                 name: obj.name,
                 pallette: obj.pallette,
@@ -396,7 +246,7 @@
                         return;
                     }
                     var obj = e.memo.target;
-                    matisse.sendDrawMsg({
+                    matisse.com.sendDrawMsg({
                         action: "modified",
                         name: obj.name,
                         pallette: obj.pallette,
@@ -416,15 +266,15 @@
                     canvas.isSelectMode = true;
                     canvas.isDrawingMode = false;
                     resetIconSelection();
-                    App.drawShape = false;
+                    matisse.drawShape = false;
                     document.getElementById("c").style.cursor = 'default';
                     var obj = e.memo.path;
                     obj.uid = uniqid();
                     obj.name = "drawingpath";
-					obj.pallette = App.palletteName;
-                    matisse.sendDrawMsg({
+					obj.pallette = matisse.palletteName;
+                    matisse.com.sendDrawMsg({
                         action: 'drawpath',
-                        pallette: App.palletteName,
+                        pallette: matisse.palletteName,
                         args: [{
                             uid: obj.uid,
                             left: obj.left,
@@ -433,11 +283,11 @@
                             height: obj.height,
                             path: obj.path,
                             name:obj.name,
-							pallete:App.palletteName
+							pallete:matisse.palletteName
                         }]
                     });
-                    App.xPoints = [];
-                    App.yPoints = [];
+                    matisse.xPoints = [];
+                    matisse.yPoints = [];
                     break;
                 case 'object:selected':
                     var obj = e.memo.target;
@@ -599,18 +449,18 @@
         canvas.isSelectMode = false;
         var toolId = $(e.target).attr('id');
         currentTool = toolId;
-        App.currTool = e.target;
+        matisse.currTool = e.target;
         $(e.target).removeClass(toolId).addClass(toolId+"_click");
         document.getElementById("c").style.cursor = 'default'
-        App.drawShape = true;
-        App.action = e.target.id;
-        App.palletteName = $(e.target).attr('data-parent');
+        matisse.drawShape = true;
+        matisse.action = e.target.id;
+        matisse.palletteName = $(e.target).attr('data-parent');
 	    if(e.target.id !="path") {
-            var obj = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[e.target.id].properties);
+            var obj = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[e.target.id].properties);
             obj.uid = uniqid();
-            App.shapeArgs = [obj];
+            matisse.shapeArgs = [obj];
         }
-        if (App.action != "path") {
+        if (matisse.action != "path") {
             canvas.isDrawingMode = false;
         } else {
             document.getElementById("c").style.cursor = 'crosshair';
@@ -644,9 +494,9 @@
             obj: canvas.getActiveObject(),
             property: val
         }]
-        for (var i = 0; i < App.pallette[App.palletteName].shapes[objName].properties.length; i++) {
-            if (App.pallette[App.palletteName].shapes[objName].properties[i].name == prop) {
-                App.pallette[App.palletteName].shapes[objName].properties[i].action.apply(this, arr);
+        for (var i = 0; i < matisse.pallette[matisse.palletteName].shapes[objName].properties.length; i++) {
+            if (matisse.pallette[matisse.palletteName].shapes[objName].properties[i].name == prop) {
+                matisse.pallette[matisse.palletteName].shapes[objName].properties[i].action.apply(this, arr);
                 canvas.renderAll();
                 canvas.getActiveObject().setCoords();
             }
@@ -663,7 +513,7 @@
         msg = "from $:" + msg + "\n";
         var txt = document.createTextNode(msg)
         $("#chattext").append(txt);
-        matisse.sendDrawMsg({
+        matisse.com.sendDrawMsg({
             action: "chat",
             args: [{
                 text: msg
@@ -678,46 +528,46 @@
      */
     function handleMouseEvents() {
         $("#canvasId").mousedown(function (event) {
-            if (!canvas.isDrawingMode && App.drawShape) {
-                App.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset; //offset
-                App.points.y = event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset; //offset
-                App.shapeArgs[0].left = App.points.x;
-                App.shapeArgs[0].top = App.points.y;
-                App.shapeArgs[0].name = App.action;
-                App.shapeArgs[0].pallette = App.palletteName;
-                App.pallette[App.palletteName].shapes[App.action].toolAction.apply(this, App.shapeArgs);
-                matisse.sendDrawMsg({
-                    pallette: App.palletteName,
-                    action: App.action,
-                    args: App.shapeArgs
+            if (!canvas.isDrawingMode && matisse.drawShape) {
+                matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset; //offset
+                matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset; //offset
+                matisse.shapeArgs[0].left = matisse.points.x;
+                matisse.shapeArgs[0].top = matisse.points.y;
+                matisse.shapeArgs[0].name = matisse.action;
+                matisse.shapeArgs[0].pallette = matisse.palletteName;
+                matisse.pallette[matisse.palletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
+                matisse.com.sendDrawMsg({
+                    pallette: matisse.palletteName,
+                    action: matisse.action,
+                    args: matisse.shapeArgs
                 });
 
                 canvas.isSelectMode = true;
-                App.drawShape = false;
+                matisse.drawShape = false;
                 resetIconSelection();
             }
 
             if (canvas.isDrawingMode) {
-                App.xPoints = [];
-                App.yPoints = [];
-                App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
-                App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
+                matisse.xPoints = [];
+                matisse.yPoints = [];
+                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
+                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
 
             }
         });
         // drawingModeEl.innerHTML = 'Cancel drawing mode';
         $("#canvasId").mousemove(function (event) {
             if (canvas.isDrawingMode) {
-                App.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - App.xOffset);
-                App.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - App.yOffset);
+                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
+                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
                 // msg += event.pageX + ", " + event.pageY + "\n :";
             }
             else {
                 var obj = canvas.getActiveObject();
-                if(obj && App.associateText[obj.name]) {
-                    App.associateText[obj.name].left = obj.left;
-                    App.associateText[obj.name].top = obj.top;
-                    App.associateText[obj.name].setAngle(obj.getAngle());
+                if(obj && matisse.associateText[obj.name]) {
+                    matisse.associateText[obj.name].left = obj.left;
+                    matisse.associateText[obj.name].top = obj.top;
+                    matisse.associateText[obj.name].setAngle(obj.getAngle());
                 }
             }
 
@@ -748,7 +598,7 @@
 
         if (activeObject) {
             canvas.remove(activeObject);
-            matisse.sendDrawMsg({
+            matisse.com.sendDrawMsg({
                 action: "delete",
                 args: [{
                     uid: activeObject.uid
@@ -833,7 +683,7 @@
             {
                 objct.paths[2].stroke = '#ffffff';
             }
-            matisse.sendDrawMsg({
+            matisse.com.sendDrawMsg({
                 action: "modified",
                 args: [{
                     uid: objct.uid,
@@ -859,7 +709,7 @@
             {
                 objct.paths[1].fill = '#eeeeee';
             }
-            matisse.sendDrawMsg({
+            matisse.com.sendDrawMsg({
                 action: "modified",
                 args: [{
                     uid: objct.uid,
@@ -887,7 +737,7 @@
             {
                 objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
                 objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: objct.uid,
@@ -911,10 +761,10 @@
             var colorPicker;
             $('#prop').remove();
             objName = obj.name;
-            App.palletteName = obj.pallette;
-            if(App.pallette[App.palletteName] == null ) return;
+            matisse.palletteName = obj.pallette;
+            if(matisse.pallette[matisse.palletteName] == null ) return;
             if (objName == undefined || objName == 'drawingpath') return;
-            properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
+            properties = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[objName].properties);
             var props = {};
             $('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
             jQuery.each(properties, function (i, val) {
@@ -924,20 +774,20 @@
                     val = obj[i]
                 }
                 if (i === "fill" || i === "stroke") {
-                    var inputTag = "<input style='width:100px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
+                    var inputTag = "<input style='width:100px' onKeyPress='return matisse.util.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
 
                 } else {
-                    var inputTag = "<input type='text' style='width:100px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
+                    var inputTag = "<input type='text' style='width:100px' onKeyPress='return matisse.util.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
                 }
                 var $propTableDiv = $("#proptable");
                 $propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
                 var inBox = $("#" + i);
 
                 $(":input").focus(function () {
-                    App.focusInput = '';
+                    matisse.focusInput = '';
                     id = this.id;
                     if (id == 'fill' || id == 'stroke') {
-                        App.focusInput = id;
+                        matisse.focusInput = id;
                         var prop = $(this).position();
                         $('#colorpicker').show();
                         var ht = $propTableDiv.height();
@@ -948,7 +798,7 @@
                     }
                 });
                 $(":input").blur(function () {
-                    App.focusInput = '';
+                    matisse.focusInput = '';
                     id = this.id;
                     if (id == 'fill' || id == 'stroke') {
                         $('#colorpicker').hide();
@@ -964,7 +814,8 @@
                     canvas.renderAll();
                     canvas.getActiveObject().setCoords();
                     // applyProperty(objName, i, $("#" + i).val());
-                    matisse.sendDrawMsg({
+					console.log('changed val = '+val+ ' of ' +i)
+                    matisse.com.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: obj.uid,
@@ -975,7 +826,7 @@
                 // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
             });
             colorPicker = $.farbtastic("#colorpicker");
-            colorPicker.linkTo(pickerUpdate);
+            colorPicker.linkTo(matisse.ui.pickerUpdate);
             $('#colorpicker').hide();
             initPropWindow();
             if (obj.name == 'text') textInputHandler(obj, null);
@@ -1010,7 +861,7 @@
 
     function addTools() {
         //$('#leftdiv').draggable()
-        createAllPallettes(App.pallette);
+        createAllPallettes(matisse.pallette);
 
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click( function() {
@@ -1022,7 +873,7 @@
         $('#chatbutton').click(chatButtonListener);
         handleMouseEvents()
         $('#accordion').accordion();
-        setAccordinContentHeight();
+        matisse.ui.setAccordinContentHeight();
     }
 
 
@@ -1043,9 +894,9 @@
 	 * @param palletteName
      */
     function createPallette(palletteName){
-        var pallette_DisplayName = App.pallette[palletteName].collectionName;
+        var pallette_DisplayName = matisse.pallette[palletteName].collectionName;
         updateAccordian(pallette_DisplayName);
-        var shapesObj = App.pallette[palletteName];
+        var shapesObj = matisse.pallette[palletteName];
         var html = '<div class="scroller scroller-up"></div>';
         html += '<div class="shapesHolder">';
         html += '<div class="scrollerContentHolder">';
@@ -1116,38 +967,7 @@
         };
     }
 	
-	/**
-     * Calculate width of the given text string and return it
-     * @method getStringWidth 
-	 * @str
-     */
-    App.Main.getStringWidth = function(str)
-    {
-        var font = '20px delicious_500',
-            obj = $('<div id=div1>' + str + '</div>')
-                .css({'position': 'absolute', 'float': 'left', 'white-space': 'pre-wrap', 'visibility': 'hidden', 'font': font})
-                .appendTo($('body')),
-            w = document.getElementById('div1').clientWidth;
-        obj.remove();
-        return w;
-    }
-
 	
-	/**
-     * Calculate height of the given text string and return it
-     * @method getStringHeight 
-	 * @param str
-     */
-    App.Main.getStringHeight = function(str)
-    {
-        var font = '20px delicious_500',
-            obj = $('<div id=div1>' + str + '</div>')
-                .css({'position': 'absolute', 'float': 'left', 'white-space': 'pre-wrap', 'visibility': 'hidden', 'font': font})
-                .appendTo($('body')),
-            h = document.getElementById('div1').clientHeight;
-        obj.remove();
-        return h;
-    }
 
     function textInputHandler(obj, parent_obj)
     {
@@ -1176,7 +996,7 @@
                 parent_obj.paths[1].left = parent_obj.paths[0].left;
                 var text_left = parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 15;
                 parent_obj.paths[2].left = -(-obj.getWidth()/2 - text_left);
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1205,7 +1025,7 @@
                 parent_obj.paths[2].points[0].x = checkbox_left + 3;
                 parent_obj.paths[2].points[1].x = checkbox_left + 6;
                 parent_obj.paths[2].points[2].x = checkbox_left + 11;
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1228,7 +1048,7 @@
                 parent_obj.height = height;
                 parent_obj.paths[0].width = width;
                 parent_obj.paths[0].height = height;
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1253,7 +1073,7 @@
                 parent_obj.paths[0].width = width;
                 parent_obj.paths[0].height = height;
                 obj.left = -width/2 + obj.getWidth()/2 + 10;
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1276,13 +1096,13 @@
                     this.value = obj.text;
                     var width = 0, height = 0;
                     width = obj.getWidth() + 30;
-                    height = App.Main.getStringHeight(obj.text);
+                    height = matisse.util.getStringHeight(obj.text);
                     (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
                     parent_obj.width = width;
                     parent_obj.height = height;
                     parent_obj.paths[0].width = width;
                     parent_obj.paths[0].height = height;
-                    matisse.sendDrawMsg({
+                    matisse.com.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: parent_obj.uid,
@@ -1296,8 +1116,8 @@
             case "txt_button": 	txt_area.onkeyup = function (e) {
                 var width = 0, height = 0;
                 obj.text = this.value;
-                width = App.Main.getStringWidth(obj.text) + 5;
-                height = App.Main.getStringHeight(obj.text) + 5;
+                width = matisse.util.getStringWidth(obj.text) + 5;
+                height = matisse.util.getStringHeight(obj.text) + 5;
                 (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
                 parent_obj.width = width;
                 parent_obj.paths[0].points[0].x = -width/2;
@@ -1309,7 +1129,7 @@
                 parent_obj.paths[0].points[6].x = -width/2 + 5;
                 parent_obj.paths[0].points[7].x = -width/2;
 
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1336,7 +1156,7 @@
                 parent_obj.paths[2].points[1].x = wdth/2 - 6.5;
                 parent_obj.paths[2].points[2].x = wdth/2 - 10.5;
                 parent_obj.paths[3].left = -wdth/2 + 15 + obj.getWidth()/2;
-                matisse.sendDrawMsg({
+                matisse.com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: parent_obj.uid,
@@ -1351,7 +1171,7 @@
                 txt_area.onkeyup = function (e) {
                     obj.text = this.value;
 
-                    matisse.sendDrawMsg({
+                    matisse.com.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: obj.uid,
@@ -1372,7 +1192,7 @@
     /**
      * To load wireframe objects. group the objects using pathgroup
      */
-    App.Main.loadWireframe = function(args,objects)
+    matisse.Main.loadWireframe = function(args,objects)
     {
         var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
         pathGroup.set({
@@ -1389,7 +1209,7 @@
         canvas.add(pathGroup);
     }
 
-    App.Main.loadSVG = function(args)  {
+    matisse.Main.loadSVG = function(args)  {
 
         fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
             var loadedObject;
@@ -1412,55 +1232,7 @@
 
     }
 	
-	/**
-     * Validation method for input field, checks for the user keypress and allows only numbers
-     * @method numbersonly
-	 * @param myfield, e, dec
-     */
-    App.Main.numbersonly = function(myfield, e, dec) {
-        var key;
-        var keychar;
-
-        if (window.event) key = window.event.keyCode;
-        else if (e) key = e.which;
-        else return true;
-        keychar = String.fromCharCode(key);
-
-        // control keys
-        if ((key == null) || (key == 0) || (key == 8) || (key == 9) || (key == 13) || (key == 27)) return true;
-
-        // numbers
-        else if ((("0123456789").indexOf(keychar) > -1)) return true;
-
-        // decimal point jump
-        else if (dec && (keychar == ".")) {
-            myfield.form.elements[dec].focus();
-            return false;
-        } else return false;
-    }
-
-	/**
-     * Validation method for input field, checks for the user keypress and allows only letters
-     * @method letternumber
-	 * @param e
-     */
-    App.Main.letternumber = function(e) {
-        var key;
-        var keychar;
-
-        if (window.event) key = window.event.keyCode;
-        else if (e) key = e.which;
-        else return true;
-        keychar = String.fromCharCode(key);
-        keychar = keychar.toLowerCase();
-
-        // control keys
-        if ((key == null) || (key == 0) || (key == 8) || (key == 9) || (key == 13) || (key == 27)) return true;
-
-        // alphas and numbers
-        else if ((("abcdefghijklmnopqrstuvwxyz0123456789").indexOf(keychar) > -1)) return true;
-        else return false;
-    }
+	
 
     $(".scroller-up").live("click", function(){
         var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
@@ -1561,18 +1333,5 @@
 		});
 	}
 
-  
-
    
-
-    /* Throws Error if the value is null.
-     */
-    function assertNotNull(value, str) {
-        if (value == null || (value.pallette) == null || (value.name) == null) {
-            throw new Error(str);
-            canvas.activeObject = null;
-            return false;
-        }
-        return true;
-    }
 })(jQuery);

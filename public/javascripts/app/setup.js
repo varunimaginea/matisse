@@ -8,12 +8,12 @@
 
 (function($){
 
-    App.Setup = {};
+    matisse.Setup = {};
 
     //Dom Ready function
     $(function(){
         //call all the functions, that are to be called on document ready here
-        App.Main.init();
+        matisse.Main.init();
 
     });
 
