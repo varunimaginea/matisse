@@ -1,27 +1,18 @@
 /**
- * User: Bahvani Shankar
+ * User: Bhavani Shankar
  * Date: 01/13/12
  * Time: 11:16 AM
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */ (function ($) {
-    var currentTool = "";
-    /**
-     * @namespace
-     */
-    matisse.main = {};
 
-    // create canvas object
+    /**
+     *	create canvas object
+     */
     window.canvas = new fabric.Canvas('c', {
         backgroundColor: '#FFFFFF'
     });
-
-
-    /**
-     * current active reference
-     */
-    var $currActiveIcon;
 
     /**
      * by default selection mode is false 
@@ -34,7 +25,6 @@
      * @param none
      *
      */
-
     matisse.main.init = function () {
         matisse.ui.initWidthAndHeightOfPanels();
         matisse.ui.resizeWindow();
@@ -64,7 +54,7 @@
      * @param none
      *
      */
-     matisse.main.initPropWindow = function() {
+    matisse.main.initPropWindow = function () {
         $('#propdiv').dialog();
         $('#propdiv').dialog({
             width: 'auto',
@@ -134,8 +124,8 @@
         })
         $('#propdiv').dialog('open')
     }
-	
-	 /**
+
+    /**
      * Handler for Save Button Click
      * @method saveButtonClickHandler
      * @param none
@@ -188,7 +178,6 @@
      *  @param data - shape(data.shape) and args array (data.args)
      *
      */
-
     matisse.com.onDraw = function (data) {
         if (data && data.args) {
             if (data.action == undefined || data.action == null) {
@@ -222,8 +211,7 @@
      * @property id
      * @type object
      */
-
-    matisse.main.getObjectById = function(id) {
+    matisse.main.getObjectById = function (id) {
         var obj;
         var objs = canvas.getObjects();
         objs.forEach(function (object) {
@@ -240,7 +228,7 @@
      *  @param obj - Object
      *
      */
-     matisse.main.updatePropertyPanel = function(obj) {
+    matisse.main.updatePropertyPanel = function (obj) {
         if (matisse.pallette[matisse.palletteName] == null) return;
         if (canvas.getActiveGroup()) return;
         if (obj && obj.name && obj.pallette) {
@@ -253,7 +241,7 @@
             }
         }
     }
-	
+
     /**
      *  Notify Server about Group Moved
      *  @method  notifyServerGroupMoved
@@ -277,24 +265,24 @@
 
     }
 
-    
+
     /**
      *  Modify object when receive a notification from server 
- *  @method  modifyObject
+     *  @method  modifyObject
      *  @param args - args array/object
      */
-    	/**
-	 * To modify the object on the other side when it gets modified.
-	 * @param args - received object and object's id.
-	 */
+    /**
+     * To modify the object on the other side when it gets modified.
+     * @param args - received object and object's id.
+     */
     function modifyObject(args) {
-        var obj = matisse.main.getObjectById(args[0].uid);		
-        if(obj) {          
-			matisse.pallette[obj.pallette].shapes[obj.name].modifyAction ? matisse.pallette[obj.pallette].shapes[obj.name].modifyAction.apply(this, args) : null;	            
+        var obj = matisse.main.getObjectById(args[0].uid);
+        if (obj) {
+            matisse.pallette[obj.pallette].shapes[obj.name].modifyAction ? matisse.pallette[obj.pallette].shapes[obj.name].modifyAction.apply(this, args) : null;
             canvas.setActiveObject(obj)
-            updatePropertyPanel(obj)
+            matisse.main.updatePropertyPanel(obj)
             obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
-        }       
+        }
         canvas.renderAll();
     }
 
@@ -304,27 +292,26 @@
      *  @method  resetIconSelection
      *  @param none
      */
-    matisse.main.resetIconSelection = function() {
-        if ($currActiveIcon) {
-            $currActiveIcon.attr("src", $currActiveIcon.attr('data-inactive'));
-            $currActiveIcon.parent().parent().removeClass('shape-active');
+    matisse.main.resetIconSelection = function () {
+        if (matisse.$currActiveIcon) {
+            matisse.$currActiveIcon.attr("src", matisse.$currActiveIcon.attr('data-inactive'));
+            matisse.$currActiveIcon.parent().parent().removeClass('shape-active');
         }
     }
 
-   
+
     /**
      *  Handles the tools icon click events
      *  @method  handleToolClick
      *  @param e object
      */
-    function handleToolClick(e) {
+    matisse.main.handleToolClick = function (e) {
         matisse.main.resetIconSelection();
         $(e.target).attr("src", $(e.target).attr('data-active'));
         $(e.target).parent().parent().addClass('shape-active');
-        $currActiveIcon = $(e.target);
+        matisse.$currActiveIcon = $(e.target);
         canvas.isSelectMode = false;
         var toolId = $(e.target).attr('id');
-        currentTool = toolId;
         matisse.currTool = e.target;
         $(e.target).removeClass(toolId).addClass(toolId + "_click");
         document.getElementById("c").style.cursor = 'default'
@@ -360,7 +347,7 @@
         return obj;
     }
 
-   
+
     /**
      *  Sends the message typed by user to chat window and also notify it to Server
      *  @method  chatButtonListener
@@ -477,21 +464,18 @@
      * @method createPropertiesPanel
      * @param obj
      */
-    matisse.main.createPropertiesPanel = function(obj) { /*$('#propdiv').dialog();*/
+    matisse.main.createPropertiesPanel = function (obj) { /*$('#propdiv').dialog();*/
 
-         if (obj.pallette && obj && obj.name) {
-            console.log('CREATE PROP PANEL');           
+        if (obj.pallette && obj && obj.name) {
             $('#prop').remove();
             objName = obj.name;
             matisse.palletteName = obj.pallette;
-            if(matisse.pallette[matisse.palletteName] == null ) return;
+            if (matisse.pallette[matisse.palletteName] == null) return;
             if (objName == undefined || objName == 'drawingpath') return;
             properties = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[objName].properties);
-			 console.log('properties ='+properties);
-			if (properties)
-			{
-				matisse.pallette[matisse.palletteName].shapes[objName].applyProperties ? matisse.pallette[matisse.palletteName].shapes[objName].applyProperties(properties) : null;
-			}           
+            if (properties) {
+                matisse.pallette[matisse.palletteName].shapes[objName].applyProperties ? matisse.pallette[matisse.palletteName].shapes[objName].applyProperties(properties) : null;
+            }
         }
     }
 
@@ -503,11 +487,10 @@
 
     matisse.main.addTools = function () {
         //$('#leftdiv').draggable()
-        this.createAllPallettes(matisse.pallette);
+        matisse.pallettes.createAllPallettes(matisse.pallette);
 
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {
-            currentTool = "deleteTool";
             deleteObjects();
         });
 
@@ -517,46 +500,6 @@
         $('#accordion').accordion();
         matisse.ui.setAccordinContentHeight();
     }
-
-
-    /**
-     * Loop through all pallettes and call createPallette for each pallette found
-     * @method createAllPallettes
-     * @param palletteObj
-     */
-    matisse.main.createAllPallettes = function(palletteObj) {
-        for (var palletteName in palletteObj) {
-            this.createPallette(palletteName);
-        }
-    }
-
-    /**
-     * Create a  pallette for each type of pallette and add it in toolbar
-     * @method createPallette
-     * @param palletteName
-     */
-    matisse.main.createPallette = function(palletteName) {
-        var pallette_DisplayName = matisse.pallette[palletteName].collectionName;
-        matisse.ui.updateAccordian(pallette_DisplayName);
-        var shapesObj = matisse.pallette[palletteName];
-        var html = '<div class="scroller scroller-up"></div>';
-        html += '<div class="shapesHolder">';
-        html += '<div class="scrollerContentHolder">';
-        for (var i in shapesObj.shapes) {
-            var shape = shapesObj.shapes[i]
-            var shape_DisplayName = shape.displayName;
-            var src = '/images/' + shape.inactiveIcon;
-            var activesrc = '/images/' + shape.activeIcon;
-            var shapeHolder = '<div class="shape-holder" id="shape-holder-' + shape_DisplayName + '">';
-            shapeHolder += '<div id="shape"><img class="tool" id="' + shape_DisplayName + '" src="' + src + '" data-active="' + activesrc + '" data-inactive="' + src + '" data-parent="' + pallette_DisplayName + '" width="64" height="64" /></div><div id="shape-label">' + shape_DisplayName + '</div></div>';
-            html += shapeHolder;
-        }
-        html += '</div></div>';
-        html += '<div class="scroller scroller-down"></div>';
-        $(document.getElementById(pallette_DisplayName)).append(html);
-        $('.tool').click(handleToolClick);
-    }
-
 
     /**
      * Listen for keyboard events and do necessary action
@@ -578,6 +521,5 @@
             }
         }
     }
-
 
 })(jQuery);

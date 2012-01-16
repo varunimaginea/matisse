@@ -24,6 +24,7 @@
 		matisse.associateText = {};
 		matisse.focusInput = "stroke";
 		//Defining shapes name space
-		matisse.Shapes = {};
+		matisse.pallettes = {};
 		matisse.Properties = {};
-	
+		matisse.$currActiveIcon;
+		matisse.main = {};

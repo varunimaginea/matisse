@@ -142,7 +142,7 @@ function progressHandler(objct)
 /**
  * To register wireframe pallette
  */
-matisse.Shapes.registerpallette("wireframe", {
+matisse.pallettes.registerpallette("wireframe", {
     collectionName: 'wireframe',
     shapes: {	
 		label:{ // Label wireframe object

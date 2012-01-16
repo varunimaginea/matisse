@@ -22,7 +22,7 @@ updateProperties = function(obj, recvdObj)
 	if (obj.text) 
 		obj.text = recvdObj.text;
 }
-matisse.Shapes.registerpallette("basic", {
+matisse.pallettes.registerpallette("basic", {
     collectionName: 'basic',
     shapes: {
         rectangle: {
