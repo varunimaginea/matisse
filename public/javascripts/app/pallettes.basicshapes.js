@@ -5,6 +5,23 @@
  * About this : Define all Basic Shape.s here
  */
 
+/**
+ * To set the properties of the object with the received object
+ */
+updateProperties = function(obj, recvdObj)
+{
+	obj.left = recvdObj.left;
+	obj.top = recvdObj.top;
+	obj.scaleX = recvdObj.scaleX;
+	obj.scaleY = recvdObj.scaleY;
+	obj.setAngle(recvdObj.angle);
+	if(recvdObj.fill)
+		obj.set("fill", recvdObj.fill);
+	if(recvdObj.stroke)
+		obj.set("stroke", recvdObj.stroke);
+	if (obj.text) 
+		obj.text = recvdObj.text;
+}
 matisse.Shapes.registerpallette("basic", {
     collectionName: 'basic',
     shapes: {
@@ -31,6 +48,16 @@ matisse.Shapes.registerpallette("basic", {
                 canvas.add(rect);
                
             },
+			modifyAction: function(args)
+			{
+				var obj = matisse.main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				matisse.Properties._applyProperties(props);
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -117,6 +144,16 @@ matisse.Shapes.registerpallette("basic", {
                 cir.pallette = args.pallette;
 			    canvas.add(cir);
             },
+			modifyAction: function(args)
+			{
+				var obj = matisse.main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				matisse.Properties._applyProperties(props);
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -283,6 +320,36 @@ matisse.Shapes.registerpallette("basic", {
 				canvas.add(textSample);
 				
             },
+			modifyAction: function(args)
+			{
+				var obj = matisse.main.getObjectById(args.uid);
+				var recvdObj = args.object;				
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				matisse.Properties._applyProperties(props);
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = canvas.getActiveObject().text;
+				}
+				txt_area.onkeyup = function (e) {
+                    canvas.getActiveObject().text = this.value;
+
+                    matisse.com.sendDrawMsg({
+                        action: "modified",
+                        args: [{
+                            uid: canvas.getActiveObject().uid,
+                            object: canvas.getActiveObject(),
+                            text: canvas.getActiveObject().text
+                        }]
+                    });
+                    canvas.getActiveObject().setCoords();
+                    canvas.renderAll();
+                }        
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -353,6 +420,12 @@ matisse.Shapes.registerpallette("basic", {
             activeIcon: "brush_w.png",
             inactiveIcon: "brush_g.png",
             toolAction: null,
+	    modifyAction: function(args)
+			{
+				var obj = matisse.main.getObjectById(args.uid);
+				var recvdObj = args.object;
+				updateProperties(obj, recvdObj);
+			},
 			properties: [{
                 name: 'left',
                 type: 'number',
@@ -381,7 +454,8 @@ matisse.Shapes.registerpallette("basic", {
                     (args.obj).set("scaleY", args.property);
                 },
                 defaultvalue: 1
-            }]
+            }],
+	    
         } // end of path
 
     } // end of shapes

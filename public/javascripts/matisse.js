@@ -25,4 +25,5 @@
 		matisse.focusInput = "stroke";
 		//Defining shapes name space
 		matisse.Shapes = {};
+		matisse.Properties = {};
 	
