@@ -44,7 +44,7 @@
         matisse.xOffset = matisse.util.getOffset(document.getElementById('canvasId')).left;
         matisse.yOffset = matisse.util.getOffset(document.getElementById('canvasId')).top;
 
-        addTools();
+        this.addTools();
 
         document.onkeydown = keyDown;
         $('#chaticon').click(openChatWindow);
@@ -152,7 +152,7 @@
             } else if (data.action == "modifiedbyvalue") {
                 setObjectProperty(data.args[0]);
             } else if (data.action == "drawpath") {
-                drawPath(data.args[0])
+                matisse.fabric.drawPath(data.args[0])
             } else if (data.action == "chat") {
                 var txt = document.createTextNode(data.args[0].text)
                 $("#chattext").append(txt);
@@ -349,24 +349,21 @@
      *  @method  resetIconSelection
      *  @param none
      */
-    function resetIconSelection() {
+    matisse.main.resetIconSelection = function() {
         if ($currActiveIcon) {
             $currActiveIcon.attr("src", $currActiveIcon.attr('data-inactive'));
             $currActiveIcon.parent().parent().removeClass('shape-active');
         }
     }
 
-    function scrollUp(e) {
-        $(this).siblings(".scrollerContentHolder").css("top", "yellow");
-    }
-
+   
     /**
      *  Handles the tools icon click events
      *  @method  handleToolClick
      *  @param e object
      */
     function handleToolClick(e) {
-        resetIconSelection();
+        matisse.main.resetIconSelection();
         $(e.target).attr("src", $(e.target).attr('data-active'));
         $(e.target).parent().parent().addClass('shape-active');
         $currActiveIcon = $(e.target);
@@ -468,7 +465,7 @@
 
                 canvas.isSelectMode = true;
                 matisse.drawShape = false;
-                resetIconSelection();
+                matisse.main.resetIconSelection();
             }
 
             if (canvas.isDrawingMode) {
@@ -539,31 +536,7 @@
     }
 
 
-    /**
-     * Draw free-hand drawing path when notification received from server
-     * @method drawPath
-     * @param args
-     */
-    function drawPath(args) {
-        var p = new fabric.Path(args.path);
-        p.fill = null;
-        p.stroke = '#FF000';
-        p.strokeWidth = 1;
-        p.uid = args.uid;
-        p.name = "drawingpath";
-        p.scaleX = 1;
-        p.scaleY = 1;
-        p.pallete = "basic";
-        p.set("left", args.left);
-        p.set("top", args.top);
-        p.set("width", args.width);
-        p.set("height", args.height);
-        canvas.add(p);
-        canvas.renderAll();
-        p.setCoords();
-
-
-    }
+    
 
     function checkboxSelectionHandler(objct) {
         $("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>check</input> </td></tr>");
@@ -750,9 +723,9 @@
      * @param none
      */
 
-    function addTools() {
+    matisse.main.addTools = function () {
         //$('#leftdiv').draggable()
-        createAllPallettes(matisse.pallette);
+        this.createAllPallettes(matisse.pallette);
 
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {
@@ -773,9 +746,9 @@
      * @method createAllPallettes
      * @param palletteObj
      */
-    function createAllPallettes(palletteObj) {
+    matisse.main.createAllPallettes = function(palletteObj) {
         for (var palletteName in palletteObj) {
-            createPallette(palletteName);
+            this.createPallette(palletteName);
         }
     }
 
@@ -784,7 +757,7 @@
      * @method createPallette
      * @param palletteName
      */
-    function createPallette(palletteName) {
+    matisse.main.createPallette = function(palletteName) {
         var pallette_DisplayName = matisse.pallette[palletteName].collectionName;
         matisse.ui.updateAccordian(pallette_DisplayName);
         var shapesObj = matisse.pallette[palletteName];
@@ -1105,54 +1078,6 @@
 
 
 
-    $(".scroller-up").live("click", function () {
-        var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
-        var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
-        var parentHeight = $(this).parent().css('height');
-        var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
-
-        scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
-        parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
-        scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
-
-        if (scrollerContentHolderHeight > parentHeight) {
-            if (scrollerContentHolderTop < -30) {
-                $("#wireframe .scroller-down").css("background-color", "#8F98A6");
-                var newTop = (scrollerContentHolderTop - (-shapeHeight));
-                $(this).siblings().find(".scrollerContentHolder").stop().animate({
-                    "top": newTop
-                }, "slow");
-            } else {
-                $("#wireframe .scroller-up").css("background-color", "#aaa");
-            }
-        }
-    });
-
-    $(".scroller-down").live("click", function () {
-        var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
-        var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
-        var parentHeight = $(this).parent().css('height');
-        var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
-
-        scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
-        parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
-        scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
-
-        var carouselArrowheight = 18;
-        var accordianHeight = $(".ui-accordion-content").height() - (carouselArrowheight * 2);
-        var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();
-        if (scrollerContentHolderHeight > parentHeight) {
-            if (-(scrollerContentHolderTop) < (sumOfShapesHeight - accordianHeight - 30)) {
-                $("#wireframe .scroller-up").css("background-color", "#8F98A6");
-                var newTop = (scrollerContentHolderTop - shapeHeight);
-                $(this).siblings().find(".scrollerContentHolder").stop().animate({
-                    "top": newTop
-                }, "slow");
-            } else {
-                $("#wireframe .scroller-down").css("background-color", "#aaa");
-            }
-        }
-    });
 
     /**
      * Handler for Save Button Click

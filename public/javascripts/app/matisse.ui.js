@@ -171,3 +171,59 @@ matisse.ui = {
 
 
 }
+
+/*============================*/
+/** carousal implementation **/
+/*============================*/
+    $(".scroller-up").live("click", function () {
+        var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
+        var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
+        var parentHeight = $(this).parent().css('height');
+        var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
+
+        scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
+        parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
+        scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
+
+        if (scrollerContentHolderHeight > parentHeight) {
+            if (scrollerContentHolderTop < -30) {
+                $("#wireframe .scroller-down").css("background-color", "#8F98A6");
+                var newTop = (scrollerContentHolderTop - (-shapeHeight));
+                $(this).siblings().find(".scrollerContentHolder").stop().animate({
+                    "top": newTop
+                }, "slow");
+            } else {
+                $("#wireframe .scroller-up").css("background-color", "#aaa");
+            }
+        }
+    });
+
+    $(".scroller-down").live("click", function () {
+        var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
+        var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
+        var parentHeight = $(this).parent().css('height');
+        var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
+
+        scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
+        parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
+        scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
+
+        var carouselArrowheight = 18;
+        var accordianHeight = $(".ui-accordion-content").height() - (carouselArrowheight * 2);
+        var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();
+        if (scrollerContentHolderHeight > parentHeight) {
+            if (-(scrollerContentHolderTop) < (sumOfShapesHeight - accordianHeight - 30)) {
+                $("#wireframe .scroller-up").css("background-color", "#8F98A6");
+                var newTop = (scrollerContentHolderTop - shapeHeight);
+                $(this).siblings().find(".scrollerContentHolder").stop().animate({
+                    "top": newTop
+                }, "slow");
+            } else {
+                $("#wireframe .scroller-down").css("background-color", "#aaa");
+            }
+        }
+    });
+	
+	 function scrollUp(e) {
+        $(this).siblings(".scrollerContentHolder").css("top", "yellow");
+    }

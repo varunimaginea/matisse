@@ -2,7 +2,7 @@
  * User: Bahvani Shankar,Pradeep
  * Date: 12/26/11
  * Time: 11:16 AM
- * About matisse. : matisse. is the Main Name space
+ * About matisse : matisse is the Main Name space
  */
 
     //Defining the global name space
