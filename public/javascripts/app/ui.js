@@ -34,12 +34,14 @@ matisse.ui = {
 	 * @param none
      */
     resizeWindow: function (){
-       this.resizeBody();
-        this.resizeHeader();
-        this.resizeMainPanel();
-        this.resizeLeftPanel();
-       this.setAccordinContentHeight();
-       this.resizeCanvas();
+	console.log('this ====')
+	console.log(this);
+      this.resizeBody();
+      this.resizeHeader();
+      this.resizeMainPanel();
+      this.resizeLeftPanel();
+      this.setAccordinContentHeight();
+      this.resizeCanvas();
     },
 	
 	/**
@@ -102,10 +104,10 @@ matisse.ui = {
         var $accordionHeaders = $('.ui-accordion-header');
         var accordionHeaderHeight = 0;
         $accordionHeaders.each(function(i,s){
-           this.accordionHeaderHeight = this.accordionHeaderHeight+$(s).outerHeight(true);
+           accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
         });
-        this.accordionContentHeight = (this.leftPanelHeight-(this.accordionHeaderHeight+25));
-        $('.ui-accordion-content').height(this.accordionContentHeight);
+        var accordionContentHeight = (this.leftPanelHeight-(accordionHeaderHeight+25));
+        $('.ui-accordion-content').height(accordionContentHeight);
     },
 
     /**
@@ -115,9 +117,9 @@ matisse.ui = {
      */
     bindResizeWindow: function () {
         $(window).resize(function () {
-            this.initWidthAndHeightOfPanels();
-            resizeWindow();
-            setCanvasSize();
+            matisse.ui.initWidthAndHeightOfPanels();
+            matisse.ui.resizeWindow();
+            matisse.ui.setCanvasSize();
         });
     },
 
@@ -155,6 +157,15 @@ matisse.ui = {
         width = (this.bodyWidth > this.initialBodyWidth ) ? (this.bodyWidth - 100) : ((this.initialBodyWidth > 1060) ? (this.initialBodyWidth - 100) : 960);
         height = (this.bodyHeight > this.initialBodyHeight) ? (this.bodyHeight - 100) : ((this.initialBodyHeight > 900) ? (this.initialBodyHeight - 100) : 800);
         canvas.setDimensions({width:width, height:height});
+    },
+	
+	/**
+     * Update accordion
+     * @method updateAccordian
+	 * @param pallette_DisplayName
+     */
+    updateAccordian: function (pallette_DisplayName){
+        $("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
     }
 
 

@@ -20,7 +20,6 @@
     });
 
 
-
     /**
      * current active reference
      */
@@ -587,6 +586,7 @@
             canvas.renderAll();
         }
     }
+	
 	/**
      *  Check for the active object or group object and remove them from canvas
      *  @method  deleteObjects
@@ -613,8 +613,6 @@
             });
         }
     }
-
-
 
     /**
      * Returns unique id to attach to an object
@@ -895,7 +893,7 @@
      */
     function createPallette(palletteName){
         var pallette_DisplayName = matisse.pallette[palletteName].collectionName;
-        updateAccordian(pallette_DisplayName);
+        matisse.ui.updateAccordian(pallette_DisplayName);
         var shapesObj = matisse.pallette[palletteName];
         var html = '<div class="scroller scroller-up"></div>';
         html += '<div class="shapesHolder">';
@@ -915,15 +913,7 @@
         $('.tool').click(handleToolClick);
     }
 	
-	/**
-     * Update accordion
-     * @method updateAccordian
-	 * @param pallette_DisplayName
-     */
-    function updateAccordian(pallette_DisplayName){
-        $("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
-    }
-
+	
 
 	/**
      * Listen for keyboard events and do necessary action
