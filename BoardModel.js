@@ -37,6 +37,7 @@ var boardModel = module.exports = nohm.model('Board', {
 	    return props;
 	},
 	
+
 	/**
 	 * This is a wrapper around fill and save.
 	 */

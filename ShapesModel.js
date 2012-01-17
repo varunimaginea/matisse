@@ -69,7 +69,6 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	    var self = this;
 		
 	console.log("===================");
-	//console.log(data.args);
 	//console.log(data.url);
 	//console.log(data.shapeId);
 	console.log(data);

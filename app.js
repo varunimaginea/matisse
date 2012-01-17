@@ -135,8 +135,7 @@ app.listen(8000);
 
 io.sockets.on('connection', function (socket) {
     socket.emit('eventConnect',{message:'welcome'});
-    
-	
+    	
 	socket.on("setUrl",function(location,data){
 	    var wb_url = location.replace("/", "");
 	    socket.join(wb_url);
