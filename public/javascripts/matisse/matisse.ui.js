@@ -162,10 +162,10 @@ matisse.ui = {
 	/**
      * Update accordion
      * @method updateAccordian
-	 * @param pallette_DisplayName
+	 * @param palette_DisplayName
      */
-    updateAccordian: function (pallette_DisplayName){
-        $("#accordion").append('<h3><a href="#">'+pallette_DisplayName+'</a></h3><div height="100%" id="'+pallette_DisplayName+'"></div>');
+    updateAccordian: function (palette_DisplayName){
+        $("#accordion").append('<h3><a href="#">'+palette_DisplayName+'</a></h3><div height="100%" id="'+palette_DisplayName+'"></div>');
     }
 
 

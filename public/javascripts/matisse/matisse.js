@@ -10,7 +10,7 @@
 		//Properties of the global name space
 		matisse.fillColor = "#AAAAAA";
 		matisse.points = {};
-		matisse.pallette = {};
+		matisse.palette = {};
 		matisse.textEl;
 		matisse.drawShape = false;
 		matisse.action;
@@ -20,11 +20,11 @@
 		matisse.yPoints = [];
 		matisse.xOffset;
 		matisse.yOffset;
-		matisse.palletteName;
+		matisse.paletteName;
 		matisse.associateText = {};
 		matisse.focusInput = "stroke";
 		//Defining shapes name space
-		matisse.pallettes = {};
+		matisse.palettes = {};
 		matisse.Properties = {};
 		matisse.$currActiveIcon;
 		matisse.main = {};

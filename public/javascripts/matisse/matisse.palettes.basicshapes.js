@@ -1,5 +1,5 @@
 /**
- * User: Bahvani Shankar,Pradeep
+ * User: Bhavani Shankar,Pradeep
  * Date: 12/28/11
  * Time: 11:16 AM
  * About this : Define all Basic Shape.s here
@@ -22,7 +22,7 @@ updateProperties = function(obj, recvdObj)
 	if (obj.text) 
 		obj.text = recvdObj.text;
 }
-matisse.pallettes.registerpallette("basic", {
+matisse.palettes.registerpalette("basic", {
     collectionName: 'basic',
     shapes: {
         rectangle: {
@@ -42,7 +42,7 @@ matisse.pallettes.registerpallette("basic", {
                 });
                 rect.uid = args.uid;
 				rect.name = 'rectangle';
-                rect.pallette = args.pallette;
+                rect.palette = args.palette;
 				rect.setAngle(args.angle)
 				//rect.selectable = false;
                 canvas.add(rect);
@@ -141,7 +141,7 @@ matisse.pallettes.registerpallette("basic", {
 				cir.setAngle(args.angle)
                 cir.uid = args.uid;
                 cir.name = "circle";
-                cir.pallette = args.pallette;
+                cir.palette = args.palette;
 			    canvas.add(cir);
             },
 			modifyAction: function(args)
@@ -233,7 +233,7 @@ matisse.pallettes.registerpallette("basic", {
 				tri.setAngle(args.angle)
                 tri.uid = args.uid;
                 tri.name = "triangle";
-                tri.pallette = args.pallette;
+                tri.palette = args.palette;
 				
 				canvas.add(tri);
             },
@@ -315,7 +315,7 @@ matisse.pallettes.registerpallette("basic", {
                 //alert(textSample)
                 textSample.uid = args.uid;
                 textSample.name = "text";
-                textSample.pallette = args.pallette;
+                textSample.palette = args.palette;
 				textSample.customName = "text";
 				canvas.add(textSample);
 				

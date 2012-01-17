@@ -10,7 +10,7 @@ matisse.events = {
         if (evt) {
             var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
             if (key == "46" && evt.altKey) {
-                deleteObjects();
+                matisse.main.deleteObjects();
             } else if (key == "38" && evt.ctrlKey) {
                 var obj = canvas.getActiveObject();
                 if (obj) canvas.bringForward(obj);
@@ -34,10 +34,10 @@ matisse.events = {
                 matisse.shapeArgs[0].left = matisse.points.x;
                 matisse.shapeArgs[0].top = matisse.points.y;
                 matisse.shapeArgs[0].name = matisse.action;
-                matisse.shapeArgs[0].pallette = matisse.palletteName;
-                matisse.pallette[matisse.palletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
+                matisse.shapeArgs[0].palette = matisse.paletteName;
+                matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
                 matisse.com.sendDrawMsg({
-                    pallette: matisse.palletteName,
+                    palette: matisse.paletteName,
                     action: matisse.action,
                     args: matisse.shapeArgs
                 });

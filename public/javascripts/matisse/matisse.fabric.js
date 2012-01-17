@@ -19,7 +19,7 @@ matisse.fabric = {
                 matisse.com.sendDrawMsg({
                     action: "modified",
                     name: obj.name,
-                    pallette: obj.pallette,
+                    palette: obj.palette,
                     args: [{
                         uid: obj.uid,
                         object: obj
@@ -41,10 +41,10 @@ matisse.fabric = {
                 var obj = e.memo.path;
                 obj.uid = matisse.util.uniqid();
                 obj.name = "drawingpath";
-                obj.pallette = matisse.palletteName;
+                obj.palette = matisse.paletteName;
                 matisse.com.sendDrawMsg({
                     action: 'drawpath',
-                    pallette: matisse.palletteName,
+                    palette: matisse.paletteName,
                     args: [{
                         uid: obj.uid,
                         left: obj.left,
@@ -53,7 +53,7 @@ matisse.fabric = {
                         height: obj.height,
                         path: obj.path,
                         name: obj.name,
-                        pallete: matisse.palletteName
+                        pallete: matisse.paletteName
                     }]
                 });
                 matisse.xPoints = [];

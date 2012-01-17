@@ -3,7 +3,7 @@ matisse.util = {
 
  /* Throws Error if the value is null. */
  assertNotNull:function (value, str) {
-        if (value == null || (value.pallette) == null || (value.name) == null) {
+        if (value == null || (value.palette) == null || (value.name) == null) {
             throw new Error(str);
             canvas.activeObject = null;
             return false;

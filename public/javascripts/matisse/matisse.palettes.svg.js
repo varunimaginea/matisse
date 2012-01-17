@@ -1,11 +1,11 @@
 /**
- * User: Bahvani Shankar,Pradeep
+ * User: Bhavani Shankar,Pradeep
  * Date: 12/28/11
  * Time: 11:16 AM
  * About this : Define all SVGs here
  */
 
-matisse.Shapes.registerpallette("svg", {
+matisse.Shapes.registerpalette("svg", {
     collectionName: 'svg',
     shapes: {
         pathgroup1: {

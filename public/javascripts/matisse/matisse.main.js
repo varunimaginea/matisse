@@ -152,7 +152,7 @@
             args.left = 300;
             args.top = 200;
             args.uid = matisse.util.uniqid();
-            args.pallette = 'imagepallette';
+            args.palette = 'imagepalette';
             loadImage(args);
         });
     }
@@ -201,8 +201,8 @@
             } else if (data.action == "importimage") {
                 loadImage(data.args[0]);
             } else {
-                if (matisse.pallette[data.pallette] != undefined) {
-                    matisse.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
+                if (matisse.palette[data.palette] != undefined) {
+                    matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
                 }
             }
         }
@@ -231,10 +231,10 @@
      *
      */
     matisse.main.updatePropertyPanel = function (obj) {
-        if (matisse.pallette[matisse.palletteName] == null) return;
+        if (matisse.palette[matisse.paletteName] == null) return;
         if (canvas.getActiveGroup()) return;
-        if (obj && obj.name && obj.pallette) {
-            properties = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[obj.name].properties);
+        if (obj && obj.name && obj.palette) {
+            properties = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[obj.name].properties);
             jQuery.each(properties, function (i, value) {
                 $('#' + i).val(obj[i]);
             })
@@ -257,7 +257,7 @@
             matisse.com.sendDrawMsg({
                 action: "modified",
                 name: obj.name,
-                pallette: obj.pallette,
+                palette: obj.palette,
                 args: [{
                     uid: obj.uid,
                     object: obj
@@ -275,7 +275,7 @@
     function modifyObject(args) {
         var obj = matisse.main.getObjectById(args[0].uid);
         if (obj) {
-            matisse.pallette[obj.pallette].shapes[obj.name].modifyAction ? matisse.pallette[obj.pallette].shapes[obj.name].modifyAction.apply(this, args) : null;
+            matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
             canvas.setActiveObject(obj)
             matisse.main.updatePropertyPanel(obj)
             obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
@@ -314,9 +314,9 @@
         document.getElementById("c").style.cursor = 'default'
         matisse.drawShape = true;
         matisse.action = e.target.id;
-        matisse.palletteName = $(e.target).attr('data-parent');
+        matisse.paletteName = $(e.target).attr('data-parent');
         if (e.target.id != "path") {
-            var obj = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[e.target.id].properties);
+            var obj = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[e.target.id].properties);
             obj.uid = matisse.util.uniqid();
             matisse.shapeArgs = [obj];
         }
@@ -380,7 +380,7 @@
      *  @method  deleteObjects
      *  @param none
      */
-    function deleteObjects() {
+     matisse.main.deleteObjects = function() {
         var activeObject = canvas.getActiveObject(),
             activeGroup = canvas.getActiveGroup();
 
@@ -409,15 +409,15 @@
      */
     matisse.main.createPropertiesPanel = function (obj) { /*$('#propdiv').dialog();*/
 
-        if (obj.pallette && obj && obj.name) {
+        if (obj.palette && obj && obj.name) {
             $('#prop').remove();
             objName = obj.name;
-            matisse.palletteName = obj.pallette;
-            if (matisse.pallette[matisse.palletteName] == null) return;
+            matisse.paletteName = obj.palette;
+            if (matisse.palette[matisse.paletteName] == null) return;
             if (objName == undefined || objName == 'drawingpath') return;
-            properties = getDefaultDataFromArray(matisse.pallette[matisse.palletteName].shapes[objName].properties);
+            properties = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
             if (properties) {
-                matisse.pallette[matisse.palletteName].shapes[objName].applyProperties ? matisse.pallette[matisse.palletteName].shapes[objName].applyProperties(properties) : null;
+                matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(properties) : null;
             }
         }
     }
@@ -430,7 +430,7 @@
 
     matisse.main.addTools = function () {
         //$('#leftdiv').draggable()
-        matisse.pallettes.createAllPallettes(matisse.pallette);
+        matisse.palettes.createAllPallettes(matisse.palette);
 
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {

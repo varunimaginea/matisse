@@ -2,7 +2,7 @@
  * User: Divya
  * Date: 01/16/12
  * Time: 04:19 PM
- * About this : Utility to apply specified properties to the pallette 
+ * About this : Utility to apply specified properties to the palette 
  */
  matisse.Properties._applyProperties = function(properties) {        
 	var props = {};

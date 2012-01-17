@@ -20,7 +20,7 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 		'notEmpty'
 	    ]
 	},
-	pallette: {
+	palette: {
 	    type: 'string',
 	    index: true,
 	    validations: [

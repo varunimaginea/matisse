@@ -105,7 +105,7 @@ app.resource('api', {
                     if (err) {
                     return next(err);
                     }
-                    shapes.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args, board_url: props.board_url});
+                    shapes.push({id: this.id, palette: props.palette, action: props.action, args: props.args, board_url: props.board_url});
                     if (++count === len) {
                     res.json(shapes);
                     }
@@ -156,7 +156,7 @@ io.sockets.on('connection', function (socket) {
                         if (err) {
                             return next(err);
                         }
-                        boards.push({id: this.id, pallette: props.pallette, action: props.action, args: props.args});
+                        boards.push({id: this.id, palette: props.palette, action: props.action, args: props.args});
 
                         if (++count === len)
                         {
@@ -164,7 +164,7 @@ io.sockets.on('connection', function (socket) {
                             //console.log("::::::: ");
                             //socket.emit('eventDraw',boards);
                         }
-                        socket.emit('eventDraw',eval({pallette: props.pallette, action: props.action, args: [props.args]}));
+                        socket.emit('eventDraw',eval({palette: props.palette, action: props.action, args: [props.args]}));
 
                     });
                 });
@@ -214,8 +214,8 @@ io.sockets.on('connection', function (socket) {
 
                         data.args.name = props.args.name;
                         data.args.uid = props.shapeId;
-                        data.args.pallette = props.pallette;
-                        data.pallette = props.pallette;
+                        data.args.palette = props.palette;
+                        data.palette = props.palette;
                         data.action = props.action;
 
                         console.log("===================");

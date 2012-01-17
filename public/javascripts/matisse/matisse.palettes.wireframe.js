@@ -24,7 +24,7 @@
 	pathGroup.setCoords(); 
 	pathGroup.name = args.name;
 	pathGroup.uid = args.uid;
-	pathGroup.pallette = args.pallette;
+	pathGroup.palette = args.palette;
 	canvas.add(pathGroup);	
 	
 }
@@ -140,9 +140,9 @@ function progressHandler(objct)
     }
 
 /**
- * To register wireframe pallette
+ * To register wireframe palette
  */
-matisse.pallettes.registerpallette("wireframe", {
+matisse.palettes.registerpalette("wireframe", {
     collectionName: 'wireframe',
     shapes: {	
 		label:{ // Label wireframe object
@@ -1392,7 +1392,7 @@ matisse.pallettes.registerpallette("wireframe", {
                 });
                 rect.uid = args.uid;
 				rect.name = 'div';
-                rect.pallette = args.pallette;
+                rect.palette = args.palette;
 				rect.setAngle(args.angle);				
                 canvas.add(rect);               
             },
