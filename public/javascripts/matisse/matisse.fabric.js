@@ -53,7 +53,7 @@ matisse.fabric = {
                         height: obj.height,
                         path: obj.path,
                         name: obj.name,
-                        pallete: matisse.paletteName
+                        palette: matisse.paletteName
                     }]
                 });
                 matisse.xPoints = [];
@@ -85,7 +85,7 @@ matisse.fabric = {
         p.name = "drawingpath";
         p.scaleX = 1;
         p.scaleY = 1;
-        p.pallete = "basic";
+        p.palette = "basic";
         p.set("left", args.left);
         p.set("top", args.top);
         p.set("width", args.width);

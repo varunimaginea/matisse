@@ -54,20 +54,12 @@ matisse.events = {
                 matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
             }
         });
-        // drawingModeEl.innerHTML = 'Cancel drawing mode';
+       
         $("#canvasId").mousemove(function (event) {
             if (canvas.isDrawingMode) {
                 matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
                 matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
-                // msg += event.pageX + ", " + event.pageY + "\n :";
-            } else {
-                var obj = canvas.getActiveObject();
-                if (obj && matisse.associateText[obj.name]) {
-                    matisse.associateText[obj.name].left = obj.left;
-                    matisse.associateText[obj.name].top = obj.top;
-                    matisse.associateText[obj.name].setAngle(obj.getAngle());
-                }
-            }
+             } 
 
         });
     }
