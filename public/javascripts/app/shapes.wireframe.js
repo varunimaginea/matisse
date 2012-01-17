@@ -9,8 +9,8 @@
  * To load wireframe objects. group the objects using pathgroup
  */
  loadWireframe = function(args,objects)
- {
-	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
+ {	
+	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});	
     pathGroup.set({
 		left: args.left,
 		top: args.top,
@@ -19,16 +19,17 @@
 		scaleY: args.scaleY
         }
 	);
-	pathGroup.setCoords();        
+	pathGroup.setCoords(); 
 	pathGroup.name = args.name;
 	pathGroup.uid = args.uid;
 	pathGroup.pallette = args.pallette;
-	canvas.add(pathGroup);
+	canvas.add(pathGroup);	
+	
 }
 /**
- * To set the properties of the object with the received object
+ * To set the properties of the object with the received object when an object is modified.
  */
-setProperties = function(obj, recvdObj)
+updateProperties = function(obj, recvdObj)
 {
 	obj.left = recvdObj.left;
 	obj.top = recvdObj.top;
@@ -42,6 +43,100 @@ setProperties = function(obj, recvdObj)
 	if (obj.text) 
 		obj.text = recvdObj.text;
 }
+
+/**
+ * To check or uncheck the checkbox on the canvas dynamically
+ */
+checkboxSelectionHandler = function(objct)
+{
+	$("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>check</input> </td></tr>");
+	var chkbox = document.getElementById('chkbox');
+	objct.paths[2].stroke == '#000000' ? chkbox.checked = true : chkbox.checked = false;
+	chkbox.onmousedown = function()
+	{
+		if (!chkbox.checked)
+		{
+			objct.paths[2].stroke = '#000000';
+		}
+		else
+		{
+			objct.paths[2].stroke = '#ffffff';
+		}
+		matisse.sendDrawMsg({
+			action: "modified",
+			args: [{
+				uid: objct.uid,
+				object: objct
+                }]
+            }
+		);
+		canvas.renderAll();
+	}
+}
+
+/**
+ * To select or deselect the radio button on the canvas dynamically
+ */ 
+ function radioSelectionHandler(objct)
+ {
+	$("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>select</input> </td></tr>");
+	var chkbox = document.getElementById('chkbox');
+	objct.paths[1].fill == '#555555' ? chkbox.checked = true : chkbox.checked = false;
+	chkbox.onmousedown = function()
+	{
+		if (!chkbox.checked)
+		{
+			objct.paths[1].fill = '#555555';
+		}
+		else
+		{
+			objct.paths[1].fill = '#eeeeee';
+		}
+		matisse.sendDrawMsg({
+			action: "modified",
+			args: [{
+				uid: objct.uid,
+				object: objct,
+				text:objct.text
+                }]
+            }
+		);
+            canvas.renderAll();
+        }
+    }
+	
+/**
+ * To select or deselect the radio button on the canvas dynamically
+ */ 
+
+function progressHandler(objct)
+    {
+        $("#proptable").append("<tr><td><input id='txtbox' type='text'>Progress %</input> </td></tr>");
+        var txtbox = document.getElementById('txtbox');
+        var wdth = objct.paths[0].width;
+        txtbox.onfocus = function(e)
+        {
+            this.value = (wdth/2 + objct.paths[1].points[1].x) * (100/wdth);
+        }
+        txtbox.onkeyup = function(e)
+        {
+
+            if (this.value <= 100 && this.value >= 0)
+            {
+                objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
+                objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
+                matisse.sendDrawMsg({
+                    action: "modified",
+                    args: [{
+                        uid: objct.uid,
+                        object: objct
+                    }]
+                });
+                canvas.renderAll();
+            }
+        }
+    }
+
 /**
  * To register wireframe pallette
  */
@@ -73,12 +168,45 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
 				obj.height = recvdObj.height;
 				obj.paths[0].width = recvdObj.paths[0].width;
 				obj.paths[0].height = recvdObj.paths[0].height;
 				obj.paths[0].text = recvdObj.paths[0].text;								
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[0].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var width = 0, height = 0;					
+					obj.paths[0].text = this.value;
+					canvas.renderAll();
+					width = obj.paths[0].getWidth() + 10;
+					height = obj.paths[0].height + 5;
+					(width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
+					(height - obj.height) > 0 ? obj.top += (height - obj.height)/2 : obj.top = obj.top;
+					obj.width = width;
+					obj.height = height;
+					obj.paths[0].width = width;
+					obj.paths[0].height = height;
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
 			},
 			properties: [
 				{
@@ -172,7 +300,7 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
 				obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
 				obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
@@ -183,6 +311,42 @@ App.Shapes.registerpallette("wireframe", {
 				obj.paths[0].points[6].x = recvdObj.paths[0].points[6].x;
 				obj.paths[0].points[7].x = recvdObj.paths[0].points[7].x;
 				obj.paths[1].text = recvdObj.paths[1].text;								
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[1].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var width = 0, height = 0;
+					obj.paths[1].text = this.value;
+					width = App.Main.getStringWidth(obj.paths[1].text) + 5;
+					height = App.Main.getStringHeight(obj.paths[1].text) + 5;
+					(width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
+					obj.width = width;
+					obj.paths[0].points[0].x = -width/2;
+					obj.paths[0].points[1].x = -width/2 + 5;
+					obj.paths[0].points[2].x = width/2 - 5;
+					obj.paths[0].points[3].x = width/2;
+					obj.paths[0].points[4].x = width/2;
+					obj.paths[0].points[5].x = width/2 - 5;
+					obj.paths[0].points[6].x = -width/2 + 5;
+					obj.paths[0].points[7].x = -width/2;
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
 			},
 			properties: [
 				{
@@ -265,12 +429,47 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
 				obj.height = recvdObj.height;
 				obj.paths[0].width = recvdObj.paths[0].width;
 				obj.paths[0].height = recvdObj.paths[0].height;
 				obj.paths[1].text = recvdObj.paths[1].text;							
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[1].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var width = 0, height = 0;
+					obj.paths[1].text = this.value;
+					canvas.renderAll();
+					width = obj.paths[1].getWidth() + 15;
+					(width <= 150)? width = 150 : width = width;
+					height = obj.paths[1].height + 5;
+					(width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
+					(height - obj.height) > 0 ? obj.top += (height - obj.height)/2 : obj.top = obj.top;
+					obj.width = width;
+					obj.height = height;
+					obj.paths[0].width = width;
+					obj.paths[0].height = height;
+					obj.paths[1].left = -width/2 + obj.paths[1].getWidth()/2 + 10;
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
 			},
 			properties: [
 				{
@@ -362,7 +561,7 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);				
+				updateProperties(obj, recvdObj);				
 				obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
 				obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
 				obj.paths[0].points[2].x = recvdObj.paths[0].points[2].x;
@@ -374,6 +573,45 @@ App.Shapes.registerpallette("wireframe", {
 				obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
 				obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
 				obj.width = recvdObj.width;						
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[1].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var wdth = 0;
+					obj.paths[1].text = this.value;
+					canvas.renderAll();
+					wdth = obj.paths[1].getWidth() + 14 + 15 + 30;
+					(wdth - obj.width) > 0 ? obj.left += (wdth - obj.width)/2 : obj.left = obj.left;
+					obj.width = wdth;
+					var checkbox_left = -wdth/2 + 15;
+					var text_left = checkbox_left + 14 + 15;
+					obj.paths[0].points[0].x = checkbox_left;
+					obj.paths[0].points[1].x = checkbox_left + 14;
+					obj.paths[0].points[2].x = checkbox_left + 14;
+					obj.paths[0].points[3].x = checkbox_left;
+					obj.paths[1].left = -(-(obj.paths[1].getWidth())/2 - text_left);
+					obj.paths[2].points[0].x = checkbox_left + 3;
+					obj.paths[2].points[1].x = checkbox_left + 6;
+					obj.paths[2].points[2].x = checkbox_left + 11;
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
+				checkboxSelectionHandler(obj);
 			},
 			properties: [
 				{
@@ -476,13 +714,46 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;		
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
 				obj.paths[0].fill = recvdObj.paths[0].fill;
 				obj.paths[0].left = recvdObj.paths[0].left;
 				obj.paths[1].left = recvdObj.paths[1].left;
 				obj.paths[2].left = recvdObj.paths[2].left;
 				obj.paths[2].text = recvdObj.paths[2].text;
 				obj.width = recvdObj.width;						
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[2].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var wdth = 0;
+					obj.paths[2].text = this.value;
+					canvas.renderAll();
+					wdth = obj.paths[2].getWidth() + (2 * obj.paths[1].radius) + 15 + 30;
+					(wdth - obj.width) > 0 ? obj.left += (wdth - obj.width)/2 : obj.left = obj.left;
+					obj.width = wdth;
+					obj.paths[0].left = -((wdth/2) - 15);
+					obj.paths[1].left = obj.paths[0].left;
+					var text_left = obj.paths[0].left + (2 * obj.paths[1].radius) + 15;
+					obj.paths[2].left = -(-obj.paths[2].getWidth()/2 - text_left);
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
+				radioSelectionHandler(obj);
 			},
             properties: [
 				{
@@ -584,7 +855,7 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
 				obj.paths[0].width = recvdObj.paths[0].width;
 				obj.paths[1].points[0].x = recvdObj.paths[1].points[0].x;
@@ -595,6 +866,43 @@ App.Shapes.registerpallette("wireframe", {
 				obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
 				obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
 				obj.paths[3].text = recvdObj.paths[3].text;						
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[3].text;
+				}
+				txt_area.onkeyup = function (e) {
+					var wdth = 0;
+					obj.paths[3].text = this.value;
+					canvas.renderAll();
+					wdth = obj.paths[3].getWidth() + obj.paths[1].width + 30;
+					(wdth - obj.width) > 0 ? obj.left += (wdth - obj.width)/2 : obj.left = obj.left;
+					obj.width = wdth;
+					obj.paths[0].width = wdth;
+					obj.paths[1].points[0].x = wdth/2 -22;
+					obj.paths[1].points[1].x = wdth/2;
+					obj.paths[1].points[2].x = wdth/2;
+					obj.paths[1].points[3].x = wdth/2 - 22;
+					obj.paths[2].points[0].x = wdth/2 - 15.5;
+					obj.paths[2].points[1].x = wdth/2 - 6.5;
+					obj.paths[2].points[2].x = wdth/2 - 10.5;
+					obj.paths[3].left = -wdth/2 + 15 + obj.paths[3].getWidth()/2;
+					matisse.sendDrawMsg({
+						action: "modified",
+						args: [{
+							uid: obj.uid,
+							object: obj
+						}]
+					});
+					obj.setCoords();
+					canvas.renderAll();
+				};
 			},
 			properties: [
 				{
@@ -639,6 +947,119 @@ App.Shapes.registerpallette("wireframe", {
 				}
 			]	// End of properties for combo
 		},	//End of shape combo
+		slider:{	//Slider wireframe object
+			displayName: "slider",
+			activeIcon: "slider_w.png",
+			inactiveIcon: "slider_g.png",
+			toolAction: function (args) {
+				var objects = [];				
+				args.width = 200;
+				args.height = 5;
+				var outerRect = new fabric.Rect(
+					{
+						width: args.width,
+						height: args.height,
+						fill: '#dfdfdf',
+						stroke: '#8f8f8f'
+					}
+				);			
+				var innerRect = new fabric.Rect(
+					{
+						width: 10,
+						height: 15,
+						fill: '#8f8f8f',
+						stroke: '#9f9f9f'
+					}
+				);	
+				var leftLine1 = new fabric.Polygon(      
+                    [{x: -60,y:2.5 },{x:-59.95 , y:2.5},{x:-59.95 , y:10},{x:-60, y:10}],
+					{
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
+					}
+				);	
+				var leftLine2 = new fabric.Polygon(      
+                    [{x: -40,y:2.5 },{x:-39.95 , y:2.5},{x:-39.95 , y:7},{x:-40, y:7}],
+					{
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
+					}
+				);						
+				var rightLine1 = new fabric.Polygon(      
+                    [{x: 60,y:2.5 },{x:59.95 , y:2.5},{x:59.95 , y:10},{x:60, y:10}],
+					{
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA'						
+					}
+				);
+				var rightLine2 = new fabric.Polygon(      
+                    [{x: 40,y:2.5 },{x:39.95 , y:2.5},{x:39.95 , y:7},{x:40, y:7}],
+					{
+						fill: '#AAAAAA', 
+						stroke:'#AAAAAA	'						
+					}
+				);	
+				objects.push(outerRect);
+				objects.push(innerRect);				
+				objects.push(leftLine1);
+				objects.push(rightLine1);
+				objects.push(leftLine2);
+				objects.push(rightLine2);
+				loadWireframe(args, objects);			
+			},
+			modifyAction: function(args)
+			{
+				var obj = App.Main.getObjectById(args.uid);
+				var recvdObj = args.object;	
+				updateProperties(obj, recvdObj);
+			},
+			applyProperties: function(props)
+			{				
+				App.Properties._applyProperties(props);
+			},
+			properties: [
+				{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, 
+				{
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				},
+				{
+					name: 'angle',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("angle", args.property);
+					},
+					defaultvalue: 0
+				},
+				{
+					name: 'scaleX',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleX", args.property);
+					},
+					defaultvalue: 1
+				},
+				{
+					name: 'scaleY',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleY", args.property);
+					},
+					defaultvalue: 1
+				}
+			]	//End of properties for slider
+		},	//End of shape slider
 		
 		progressbar: {	// progressbar wireframe object
 			displayName: "progressbar",
@@ -672,9 +1093,14 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);				
+				updateProperties(obj, recvdObj);				
 				obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
 				obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;					
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				progressHandler(canvas.getActiveObject());
 			},
 			properties: [
 				{
@@ -718,117 +1144,7 @@ App.Shapes.registerpallette("wireframe", {
 					defaultvalue: 1
 				}
 			]	//End of properties for progressbar
-		},	//End of shape progressbar
-		
-		slider:{	//Slider wireframe object
-			displayName: "slider",
-			activeIcon: "slider_w.png",
-			inactiveIcon: "slider_g.png",
-			toolAction: function (args) {
-				var objects = [];				
-				args.width = 200;
-				args.height = 5;
-				var outerRect = new fabric.Rect(
-					{
-						width: args.width,
-						height: args.height,
-						fill: '#dfdfdf',
-						stroke: '#8f8f8f'
-					}
-					);			
-				var innerRect = new fabric.Rect(
-					{
-						width: 10,
-						height: 15,
-						fill: '#8f8f8f',
-						stroke: '#9f9f9f'
-					}
-					);	
-				var leftLine1 = new fabric.Polygon(      
-                    [{x: -60,y:2.5 },{x:-59.95 , y:2.5},{x:-59.95 , y:10},{x:-60, y:10}],
-					{
-						fill: '#AAAAAA', 
-						stroke:'#AAAAAA'						
-					}
-					);	
-				var leftLine2 = new fabric.Polygon(      
-                    [{x: -40,y:2.5 },{x:-39.95 , y:2.5},{x:-39.95 , y:7},{x:-40, y:7}],
-					{
-						fill: '#AAAAAA', 
-						stroke:'#AAAAAA'						
-					}
-					);						
-				var rightLine1 = new fabric.Polygon(      
-                    [{x: 60,y:2.5 },{x:59.95 , y:2.5},{x:59.95 , y:10},{x:60, y:10}],
-					{
-						fill: '#AAAAAA', 
-						stroke:'#AAAAAA'						
-					}
-					);
-				var rightLine2 = new fabric.Polygon(      
-                    [{x: 40,y:2.5 },{x:39.95 , y:2.5},{x:39.95 , y:7},{x:40, y:7}],
-					{
-						fill: '#AAAAAA', 
-						stroke:'#AAAAAA	'						
-					}
-					);	
-				objects.push(outerRect);
-				objects.push(innerRect);	
-				objects.push(leftLine1);
-				objects.push(rightLine1);
-				objects.push(leftLine2);
-				objects.push(rightLine2);
-				loadWireframe(args, objects);			
-			},
-			modifyAction: function(args)
-			{
-				var obj = App.Main.getObjectById(args.uid);
-				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);
-			},
-			properties: [
-				{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, 
-				{
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				},
-				{
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				},
-				{
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 1
-				},
-				{
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					efaultvalue: 1
-				}
-			]	//End of properties for slider
-		},	//End of shape slider
+		},	//End of shape progressbar	
 	
 		image:{	//Image wireframe object
 			displayName: "image",
@@ -882,7 +1198,11 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);
+				updateProperties(obj, recvdObj);
+			},
+			applyProperties: function(props)
+			{				
+				App.Properties._applyProperties(props);
 			},
 			properties:[
 				{
@@ -965,12 +1285,49 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);				
+				updateProperties(obj, recvdObj);				
 				obj.width = recvdObj.width;
 				obj.height = recvdObj.height;
 				obj.paths[0].width = recvdObj.paths[0].width;
 				obj.paths[0].height = recvdObj.paths[0].height;
 				obj.paths[1].text = recvdObj.paths[1].text;								
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				var obj = canvas.getActiveObject();
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = obj.paths[1].text;
+				}
+				txt_area.onkeyup = function(e){
+                    obj.paths[1].text = "";
+                    for (var i = 0; i < this.value.length; i++)
+                    {
+                        obj.paths[1].text += '*';
+                    }
+                    canvas.renderAll();
+                    this.value = obj.paths[1].text;
+                    var width = 0, height = 0;
+                    width = obj.paths[1].getWidth() + 30;
+                    height = App.Main.getStringHeight(obj.paths[1].text);
+                    (width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
+                    obj.width = width;
+                    obj.height = height;
+                    obj.paths[0].width = width;
+                    obj.paths[0].height = height;
+                    matisse.sendDrawMsg({
+                        action: "modified",
+                        args: [{
+                            uid: obj.uid,
+                            object: obj
+                        }]
+                    });
+                    obj.setCoords();
+                    canvas.renderAll();
+                };
 			},
 			properties: [
 				{
@@ -1041,7 +1398,11 @@ App.Shapes.registerpallette("wireframe", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;	
-				setProperties(obj, recvdObj);								
+				updateProperties(obj, recvdObj);								
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
 			},
             properties: [
 				{
@@ -1109,7 +1470,7 @@ App.Shapes.registerpallette("wireframe", {
 					defaultvalue: 0
 				}
 			]	//End of properties for Div
-        }	//End of shape Div
+        }	//End of shape Div		
 		
 	} // end of shapes
 });	//End of wireframes

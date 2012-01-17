@@ -17,9 +17,6 @@
     // create canvas object
     window.canvas = new fabric.Canvas('c', {
         backgroundColor: '#FFFFFF'
-        //backgroundImage: '/images/combobox_w.png'
-        //HOVER_CURSOR: 'pointer'
-
     });
 
     /** width and height of panels for resize */
@@ -47,24 +44,19 @@
      */
 
     App.Main.init = function(){
-        initWidthAndHeightOfPanels();
-        //resetWidthAndHeightOfPanels();
+        initWidthAndHeightOfPanels();      
         resizeWindow();
         setCanvasSize();
         bindResizeWindow();
-        canvas.isSelectMode = true;
-        //setCanvasSize();
+        canvas.isSelectMode = true;       
         App.xOffset = getOffset(document.getElementById('canvasId')).left;
         App.yOffset = getOffset(document.getElementById('canvasId')).top;
-
         addTools();
-
         document.onkeydown = keyDown;
         $('#chaticon').click(openChatBox);
         $('#propicon').click(openProp);
-
         initChatWindow();
-        initPropWindow();
+        App.Main.initPropWindow();
         addObservers();
     }
 
@@ -80,33 +72,7 @@
         canvasWidth = bodyWidth - leftPanelWidth;
         canvasHeight = bodyHeight - topPanelHeight - 23;
     }
-    /**
-     * function to reset width and heights
-     */
-    function resetWidthAndHeightOfPanels(){
-
-        var windowHeight = $(window).height();
-        var windowWidth = $(window).width();
-
-        if(windowWidth >960 ) {
-            bodyWidth = windowWidth;
-        } else {
-            bodyWidth = 960;
-        }
-
-        if(windowHeight >800 ) {
-            bodyHeight = windowHeight;
-        }
-        else {
-            bodyHeight = 800;
-        }
-        //bodyHeight = $(window).height();
-        //bodyWidth = $(window).width();
-        topPanelHeight = 100;
-        leftPanelHeight = windowHeight-100;
-        canvasHeight = bodyHeight-130;
-        canvasWidth = bodyWidth-130;
-    }
+   
     /**
      * method to resize panels on resize of window
      */
@@ -156,8 +122,7 @@
      */
     function resizeCanvas() {
         $('#canvasId').height(canvasHeight);
-        $('#canvasId').width(canvasWidth);
-        //canvas.setDimensions({width:canvasWidth, height:canvasHeight});
+        $('#canvasId').width(canvasWidth);       
     }
 
     /**
@@ -169,8 +134,7 @@
         $accordionHeaders.each(function(i,s){
             accordionHeaderHeight = accordionHeaderHeight+$(s).outerHeight(true);
         });
-        accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));
-        //  console.log(accordionHeaderHeight);
+        accordionContentHeight = (leftPanelHeight-(accordionHeaderHeight+25));       
         $('.ui-accordion-content').height(accordionContentHeight);
     }
 
@@ -192,7 +156,7 @@
      *
      */
 
-    function pickerUpdate(color) {
+    App.Main.pickerUpdate = function(color) {
         if (App.focusInput == "") return;
         var obj = canvas.getActiveObject();
         obj.set(App.focusInput, color);
@@ -208,7 +172,6 @@
         canvas.renderAll();
     }
 
-
     /**
      * Sets the canvas width and height based on browser window size
      * @method setCanvasSize
@@ -222,8 +185,7 @@
         canvas.setDimensions({width:width, height:height});
     }
 
-
-    function initPropWindow() {
+    App.Main.initPropWindow = function() {
         $('#propdiv').dialog();
         $('#propdiv').dialog({
             width: 'auto',
@@ -310,6 +272,7 @@
                 loadImage(data.args[0]);
             } else {
                 if (App.pallette[data.pallette] != undefined) {
+					console.log(data.action);
                     App.pallette[data.pallette].shapes[data.action].toolAction.apply(this, data.args);
                 }
             }
@@ -530,26 +493,6 @@
         return obj;
     }
 
-
-    function applyProperty(objName, prop, val) {
-        var arr = [{
-            obj: canvas.getActiveObject(),
-            property: val
-        }]
-        for (var i = 0; i < App.pallette[App.palletteName].shapes[objName].properties.length; i++) {
-            if (App.pallette[App.palletteName].shapes[objName].properties[i].name == prop) {
-                App.pallette[App.palletteName].shapes[objName].properties[i].action.apply(this, arr);
-                canvas.renderAll();
-                canvas.getActiveObject().setCoords();
-            }
-        }
-    }
-//called when 'delete button' clicked
-
-    function deleteButtonListener(e) {
-        deleteObjects();
-    }
-
     function chatButtonListener(e) {
         var msg = $("#chat").val();
         msg = "from $:" + msg + "\n";
@@ -700,186 +643,21 @@
         p.setCoords();
         //this.fire('path:created', { path: p });
        
-    }
+    }    
 
-    function checkboxSelectionHandler(objct)
-    {
-        $("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>check</input> </td></tr>");
-        var chkbox = document.getElementById('chkbox');
-        objct.paths[2].stroke == '#000000' ? chkbox.checked = true : chkbox.checked = false;
-        chkbox.onmousedown = function()
-        {
-            if (!chkbox.checked)
-            {
-                objct.paths[2].stroke = '#000000';
-            }
-            else
-            {
-                objct.paths[2].stroke = '#ffffff';
-            }
-            matisse.sendDrawMsg({
-                action: "modified",
-                args: [{
-                    uid: objct.uid,
-                    object: objct
-                }]
-            });
-            canvas.renderAll();
-        }
-    }
-
-    function radioSelectionHandler(objct)
-    {
-        $("#proptable").append("<tr><td><input id='chkbox' type='checkbox'>select</input> </td></tr>");
-        var chkbox = document.getElementById('chkbox');
-        objct.paths[1].fill == '#555555' ? chkbox.checked = true : chkbox.checked = false;
-        chkbox.onmousedown = function()
-        {
-            if (!chkbox.checked)
-            {
-                objct.paths[1].fill = '#555555';
-            }
-            else
-            {
-                objct.paths[1].fill = '#eeeeee';
-            }
-            matisse.sendDrawMsg({
-                action: "modified",
-                args: [{
-                    uid: objct.uid,
-                    object: objct,
-                    text:objct.text
-                }]
-            });
-            canvas.renderAll();
-        }
-    }
-
-    function progressHandler(objct)
-    {
-        $("#proptable").append("<tr><td><input id='txtbox' type='text'>Progress %</input> </td></tr>");
-        var txtbox = document.getElementById('txtbox');
-        var wdth = objct.paths[0].width;
-        txtbox.onfocus = function(e)
-        {
-            this.value = (wdth/2 + objct.paths[1].points[1].x) * (100/wdth);
-        }
-        txtbox.onkeyup = function(e)
-        {
-
-            if (this.value <= 100 && this.value >= 0)
-            {
-                objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
-                objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: objct.uid,
-                        object: objct
-                    }]
-                });
-                canvas.renderAll();
-            }
-        }
-    }
-
-    function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/
-
+    function createPropertiesPanel(obj) { /*$('#propdiv').dialog();*/		
         if (obj.pallette && obj && obj.name) {
-            console.log('CREATE PROP PANEL');
-            var val;
-            var colorPicker;
+            console.log('CREATE PROP PANEL');           
             $('#prop').remove();
             objName = obj.name;
             App.palletteName = obj.pallette;
             if(App.pallette[App.palletteName] == null ) return;
             if (objName == undefined || objName == 'drawingpath') return;
             properties = getDefaultDataFromArray(App.pallette[App.palletteName].shapes[objName].properties);
-            var props = {};
-            //alert(obj.width);
-            $('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
-            jQuery.each(properties, function (i, val) {
-                if (i == 'angle') {
-                    val = obj.getAngle()
-                } else {
-                    val = obj[i]
-                }
-                if (i === "fill" || i === "stroke") {
-                    var inputTag = "<input style='width:100px' onKeyPress='return App.Main.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
-
-                } else {
-                    var inputTag = "<input type='text' style='width:100px' onKeyPress='return App.Main.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
-                }
-                var $propTableDiv = $("#proptable");
-                $propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
-                var inBox = $("#" + i);
-
-                $(":input").focus(function () {
-                    App.focusInput = '';
-                    id = this.id;
-                    if (id == 'fill' || id == 'stroke') {
-                        App.focusInput = id;
-                        var prop = $(this).position();
-                        $('#colorpicker').show();
-                        var ht = $propTableDiv.height();
-                        var cssObj = {'position':'absolute', 'left':5, 'top': prop.top+20};
-                        $('#colorpicker').css(cssObj);
-                        $( "#propdiv").dialog({ height:530});
-
-                    }
-                });
-                $(":input").blur(function () {
-                    App.focusInput = '';
-                    id = this.id;
-                    if (id == 'fill' || id == 'stroke') {
-                        $('#colorpicker').hide();
-                        $( "#propdiv").dialog({ height:'auto'});
-                    }
-                });
-                inBox.keyup(function () {
-                    if (!canvas.getActiveObject()) return;
-                    var actObj = canvas.getActiveObject();
-                    var val = $("#" + i).val();
-                    actObj.set(i, val);
-                    if (i == 'angle') actObj.setAngle(val);
-                    canvas.renderAll();
-                    canvas.getActiveObject().setCoords();
-                    // applyProperty(objName, i, $("#" + i).val());
-                    matisse.sendDrawMsg({
-                        action: "modified",
-                        args: [{
-                            uid: obj.uid,
-                            object: obj
-                        }]
-                    });
-                });
-                // getDataFromArray(panel[obj].properties)[i].action.apply(this, $("#"+i).val())
-            });
-            colorPicker = $.farbtastic("#colorpicker");
-            colorPicker.linkTo(pickerUpdate);
-            $('#colorpicker').hide();
-            initPropWindow();
-            if (obj.name == 'text') textInputHandler(obj, null);
-            if (obj && obj.pallette == "wireframe" && obj.getObjects) {
-                var objcts = obj.getObjects();
-                for (var o in objcts) {
-                    if (objcts[o].type == "text") {
-                        textInputHandler(objcts[o], obj);
-                        break;
-                    }
-                }
-                switch (obj.name) {
-                    case "checkbox":
-                        checkboxSelectionHandler(obj);
-                        break;
-                    case "radio":
-                        radioSelectionHandler(obj);
-                        break;
-                    case "progressbar":
-                        progressHandler(obj);
-                        break;
-                }
-            }
+			if (properties)
+			{
+				App.pallette[App.palletteName].shapes[objName].applyProperties ? App.pallette[App.palletteName].shapes[objName].applyProperties(properties) : null;
+			}           
         }
     }
 
@@ -994,250 +772,7 @@
             h = document.getElementById('div1').clientHeight;
         obj.remove();
         return h;
-    }
-
-    function textInputHandler(obj, parent_obj)
-    {
-
-        $("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
-        var txt_area = document.getElementById("txtarea");
-        txt_area.onfocus = function()
-        {
-            txt_area.innerHTML = obj.text;
-        }
-        if(parent_obj) {
-            var wireframeObject = parent_obj.name;
-        }
-
-
-        switch(wireframeObject)
-        {
-            case "radio":	txt_area.onkeyup = function (e) {
-                var wdth = 0;
-                obj.text = this.value;
-                canvas.renderAll();
-                wdth = obj.getWidth() + (2 * parent_obj.paths[1].radius) + 15 + 30;
-                (wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                parent_obj.width = wdth;
-                parent_obj.paths[0].left = -((wdth/2) - 15);
-                parent_obj.paths[1].left = parent_obj.paths[0].left;
-                var text_left = parent_obj.paths[0].left + (2 * parent_obj.paths[1].radius) + 15;
-                parent_obj.paths[2].left = -(-obj.getWidth()/2 - text_left);
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            };
-                break;
-
-            case "checkbox":	txt_area.onkeyup = function (e) {
-                var wdth = 0;
-                obj.text = this.value;
-                canvas.renderAll();
-                wdth = obj.getWidth() + 14 + 15 + 30;
-                (wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                parent_obj.width = wdth;
-                var checkbox_left = -wdth/2 + 15;
-                var text_left = checkbox_left + 14 + 15;
-                parent_obj.paths[0].points[0].x = checkbox_left;
-                parent_obj.paths[0].points[1].x = checkbox_left + 14;
-                parent_obj.paths[0].points[2].x = checkbox_left + 14;
-                parent_obj.paths[0].points[3].x = checkbox_left;
-                parent_obj.paths[1].left = -(-(obj.getWidth())/2 - text_left);
-                parent_obj.paths[2].points[0].x = checkbox_left + 3;
-                parent_obj.paths[2].points[1].x = checkbox_left + 6;
-                parent_obj.paths[2].points[2].x = checkbox_left + 11;
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            };
-                break;
-            case "label":		txt_area.onkeyup = function (e) {
-                var width = 0, height = 0;
-                obj.text = this.value;
-                canvas.renderAll();
-                width = obj.getWidth() + 10;
-                height = obj.height + 5;
-                (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                (height - parent_obj.height) > 0 ? parent_obj.top += (height - parent_obj.height)/2 : parent_obj.top = parent_obj.top;
-                parent_obj.width = width;
-                parent_obj.height = height;
-                parent_obj.paths[0].width = width;
-                parent_obj.paths[0].height = height;
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            };
-                break;
-            case "textbox":		txt_area.onkeyup = function (e) {
-                var width = 0, height = 0;
-                obj.text = this.value;
-                canvas.renderAll();
-                width = obj.getWidth() + 15;
-                (width <= 150)? width = 150 : width = width;
-                height = obj.height + 5;
-                (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                (height - parent_obj.height) > 0 ? parent_obj.top += (height - parent_obj.height)/2 : parent_obj.top = parent_obj.top;
-                parent_obj.width = width;
-                parent_obj.height = height;
-                parent_obj.paths[0].width = width;
-                parent_obj.paths[0].height = height;
-                obj.left = -width/2 + obj.getWidth()/2 + 10;
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            };
-                break;
-
-            case "password":
-                txt_area.onkeyup = function(e){
-                    obj.text = "";
-                    for (var i = 0; i < this.value.length; i++)
-                    {
-                        obj.text += '*';
-                    }
-                    canvas.renderAll();
-                    this.value = obj.text;
-                    var width = 0, height = 0;
-                    width = obj.getWidth() + 30;
-                    height = App.Main.getStringHeight(obj.text);
-                    (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                    parent_obj.width = width;
-                    parent_obj.height = height;
-                    parent_obj.paths[0].width = width;
-                    parent_obj.paths[0].height = height;
-                    matisse.sendDrawMsg({
-                        action: "modified",
-                        args: [{
-                            uid: parent_obj.uid,
-                            object: parent_obj
-                        }]
-                    });
-                    parent_obj.setCoords();
-                    canvas.renderAll();
-                };
-                break;
-            case "txt_button": 	txt_area.onkeyup = function (e) {
-                var width = 0, height = 0;
-                obj.text = this.value;
-                width = App.Main.getStringWidth(obj.text) + 5;
-                height = App.Main.getStringHeight(obj.text) + 5;
-                (width - parent_obj.width) > 0 ? parent_obj.left += (width - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                parent_obj.width = width;
-                parent_obj.paths[0].points[0].x = -width/2;
-                parent_obj.paths[0].points[1].x = -width/2 + 5;
-                parent_obj.paths[0].points[2].x = width/2 - 5;
-                parent_obj.paths[0].points[3].x = width/2;
-                parent_obj.paths[0].points[4].x = width/2;
-                parent_obj.paths[0].points[5].x = width/2 - 5;
-                parent_obj.paths[0].points[6].x = -width/2 + 5;
-                parent_obj.paths[0].points[7].x = -width/2;
-
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            };
-                break;
-            case "combo":	txt_area.onkeyup = function (e){
-                var wdth = 0;
-                obj.text = this.value;
-                canvas.renderAll();
-                wdth = obj.getWidth() + parent_obj.paths[1].width + 30;
-                (wdth - parent_obj.width) > 0 ? parent_obj.left += (wdth - parent_obj.width)/2 : parent_obj.left = parent_obj.left;
-                parent_obj.width = wdth;
-                parent_obj.paths[0].width = wdth;
-                parent_obj.paths[1].points[0].x = wdth/2 -22;
-                parent_obj.paths[1].points[1].x = wdth/2;
-                parent_obj.paths[1].points[2].x = wdth/2;
-                parent_obj.paths[1].points[3].x = wdth/2 - 22;
-                parent_obj.paths[2].points[0].x = wdth/2 - 15.5;
-                parent_obj.paths[2].points[1].x = wdth/2 - 6.5;
-                parent_obj.paths[2].points[2].x = wdth/2 - 10.5;
-                parent_obj.paths[3].left = -wdth/2 + 15 + obj.getWidth()/2;
-                matisse.sendDrawMsg({
-                    action: "modified",
-                    args: [{
-                        uid: parent_obj.uid,
-                        object: parent_obj
-                    }]
-                });
-                parent_obj.setCoords();
-                canvas.renderAll();
-            }
-                break;
-            default:
-                txt_area.onkeyup = function (e) {
-                    obj.text = this.value;
-
-                    matisse.sendDrawMsg({
-                        action: "modified",
-                        args: [{
-                            uid: obj.uid,
-                            object: obj,
-                            text:obj.text
-                        }]
-                    });
-                    obj.setCoords();
-                    canvas.renderAll();
-                }
-                break;
-
-
-        }
-    }    
-
-    App.Main.loadSVG = function(args)  {
-
-        fabric.loadSVGFromURL('images/svg/' + args.svg, function (objects, options) {
-            //   console.log("OBJECTS LENGTH :::"+objects.length)
-            var loadedObject;
-            if (objects.length > 1) {
-                loadedObject = new fabric.PathGroup(objects, options);
-            } else {
-                loadedObject = objects[0];
-            }
-
-            loadedObject.set({
-                left: args.left,
-                top: args.top,
-                angle: 0
-            });
-            loadedObject.name = args.name;
-            loadedObject.pallette = args.pallette;
-            loadedObject.scaleToWidth(100).setCoords();
-            canvas.add(loadedObject);
-        });
-
-    }
+    }     
 
     function showTextEditor() {
         $('#texteditdiv').dialog();

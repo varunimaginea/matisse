@@ -26,3 +26,4 @@
 
 	//Defining shapes name space
 	App.Shapes = {};
+	App.Properties = {};

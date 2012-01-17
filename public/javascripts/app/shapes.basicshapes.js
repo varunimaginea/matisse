@@ -8,7 +8,7 @@
 /**
  * To set the properties of the object with the received object
  */
-setProperties = function(obj, recvdObj)
+updateProperties = function(obj, recvdObj)
 {
 	obj.left = recvdObj.left;
 	obj.top = recvdObj.top;
@@ -22,7 +22,7 @@ setProperties = function(obj, recvdObj)
 	if (obj.text) 
 		obj.text = recvdObj.text;
 }
- 
+
 App.Shapes.registerpallette("basic", {
     collectionName: 'basic',
     shapes: {
@@ -53,7 +53,11 @@ App.Shapes.registerpallette("basic", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);												
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
 			},
             properties: [{
                 name: 'left',
@@ -145,7 +149,11 @@ App.Shapes.registerpallette("basic", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);												
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
 			},
             properties: [{
                 name: 'left',
@@ -317,7 +325,31 @@ App.Shapes.registerpallette("basic", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;				
-				setProperties(obj, recvdObj);												
+				updateProperties(obj, recvdObj);												
+			},
+			applyProperties: function(props)
+			{
+				App.Properties._applyProperties(props);
+				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
+				var txt_area = document.getElementById("txtarea");
+				txt_area.onfocus = function()
+				{
+					txt_area.innerHTML = canvas.getActiveObject().text;
+				}
+				txt_area.onkeyup = function (e) {
+                    canvas.getActiveObject().text = this.value;
+
+                    matisse.sendDrawMsg({
+                        action: "modified",
+                        args: [{
+                            uid: canvas.getActiveObject().uid,
+                            object: canvas.getActiveObject(),
+                            text: canvas.getActiveObject().text
+                        }]
+                    });
+                    canvas.getActiveObject().setCoords();
+                    canvas.renderAll();
+                }        
 			},
             properties: [{
                 name: 'left',
@@ -393,9 +425,8 @@ App.Shapes.registerpallette("basic", {
 			{
 				var obj = App.Main.getObjectById(args.uid);
 				var recvdObj = args.object;
-				setProperties(obj, recvdObj);
-			}
-			
+				updateProperties(obj, recvdObj);
+			}			
         } // end of path
 
     } // end of shapes

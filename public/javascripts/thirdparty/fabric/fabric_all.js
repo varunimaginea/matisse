@@ -5220,7 +5220,7 @@ fabric.util.string = {
     * @param e {Event} Event object fired on mousemove
     *
     */
-    __onMouseMove: function (e) {
+    __onMouseMove: function (e) {	
       if(!this.isSelectMode && !this.isDrawingMode) return;
       if (this.isDrawingMode) {
         if (this._isCurrentlyDrawing) {
@@ -5247,8 +5247,7 @@ fabric.util.string = {
         // what part of the pictures we are hovering to change the caret symbol.
         // We won't do that while dragging or rotating in order to improve the
         // performance.
-        var target = this.findTarget(e);
-        
+        var target = this.findTarget(e);        
         if (!target) {  
           // image/text was hovered-out from, we remove its borders
           for (var i = this._objects.length; i--; ) {
@@ -5409,7 +5408,6 @@ fabric.util.string = {
         var corner = !!target._findTargetCorner 
                       && (!activeGroup || !activeGroup.contains(target)) 
                       && target._findTargetCorner(e, this._offset, canvasHolder);
-        
         if (!corner) {
           s.cursor = this.HOVER_CURSOR;
         }
@@ -5702,21 +5700,21 @@ fabric.util.string = {
     containsPoint: function (e, target) {
       var pointer = this.getPointer(e),
           xy = this._normalizePointer(target, pointer),
+		 
           x = xy.x, 
-          y = xy.y;
-      
+          y = xy.y;      
       // http://www.geog.ubc.ca/courses/klink/gis.notes/ncgia/u32.html
       // http://idav.ucdavis.edu/~okreylos/TAship/Spring2000/PointInPolygon.html
       
       // we iterate through each object. If target found, return it.
       var iLines = target._getImageLines(target.oCoords),
-          xpoints = target._findCrossPoints(x, y, iLines);
-      
+          xpoints = target._findCrossPoints(x, y, iLines);		
       // if xcount is odd then we clicked inside the object
       // For the specific case of square images xcount === 1 in all true cases
       if ((xpoints && xpoints % 2 === 1) || target._findTargetCorner(e, this._offset, this.wrapperEl.parentNode)) {
+		
         return true;
-      }
+      }	 
       return false;
     },
     
@@ -5752,18 +5750,16 @@ fabric.util.string = {
     findTarget: function (e, skipGroup) {
       
       var target,
-          pointer = this.getPointer(e);
-      
+          pointer = this.getPointer(e);      
       // first check current group (if one exists)
-      var activeGroup = this.getActiveGroup();
-      
+      var activeGroup = this.getActiveGroup();      
       if (activeGroup && !skipGroup && this.containsPoint(e, activeGroup)) {
         target = activeGroup;
         return target;
       }
       
       // then check all of the objects on canvas
-      for (var i = this._objects.length; i--; ) {
+      for (var i = this._objects.length; i--; ) {		
         if (this._objects[i] && this.containsPoint(e, this._objects[i])) {
           target = this._objects[i];
           this.relatedTarget = target;
@@ -7597,7 +7593,10 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
      * @return {String|Boolean} corner code (tl, tr, bl, br, etc.), or false if nothing is found
      */
     _findTargetCorner: function(e, offset, _canvasHolder) {		
-      if (!this.hasControls) return false;
+      if (!this.hasControls) 
+	  {		
+		return false;
+	  }	 
       var _scrollLeft = _canvasHolder ? _canvasHolder.scrollLeft : 0,
           _scrollTop = _canvasHolder ? _canvasHolder.scrollTop : 0;
       var pointer = getPointer(e),
