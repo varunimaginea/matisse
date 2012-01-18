@@ -1,12 +1,12 @@
 /* fabric related methods */
-
-matisse.fabric = {
-
+define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"], function(matisse, util, com, properties) {
+	
 	/**
      *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
      *  @method  observe
      *  @param eventName
      */
+	return { 
     observe: function (eventName) {
         canvas.observe(eventName, function (e) {
             switch (eventName) {
@@ -16,7 +16,7 @@ matisse.fabric = {
                     return;
                 }
                 var obj = e.memo.target;
-                matisse.com.sendDrawMsg({
+                com.sendDrawMsg({
                     action: "modified",
                     name: obj.name,
                     palette: obj.palette,
@@ -25,7 +25,7 @@ matisse.fabric = {
                         object: obj
                     }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
                 })
-                matisse.main.updatePropertyPanel(obj);
+                properties.updatePropertyPanel(obj);
                 break;
             case "selection:cleared":
                 $('#prop').remove();
@@ -39,10 +39,10 @@ matisse.fabric = {
                 matisse.drawShape = false;
                 document.getElementById("c").style.cursor = 'default';
                 var obj = e.memo.path;
-                obj.uid = matisse.util.uniqid();
+                obj.uid = util.uniqid();
                 obj.name = "drawingpath";
                 obj.palette = matisse.paletteName;
-                matisse.com.sendDrawMsg({
+                com.sendDrawMsg({
                     action: 'drawpath',
                     palette: matisse.paletteName,
                     args: [{
@@ -69,34 +69,9 @@ matisse.fabric = {
             }
 
         })
-    },
-	
-	/**
-     * Draw free-hand drawing path when notification received from server
-     * @method drawPath
-     * @param args
-     */
-    drawPath: function (args) {
-        var p = new fabric.Path(args.path);
-        p.fill = null;
-        p.stroke = '#FF000';
-        p.strokeWidth = 1;
-        p.uid = args.uid;
-        p.name = "drawingpath";
-        p.scaleX = 1;
-        p.scaleY = 1;
-        p.palette = "basic";
-        p.set("left", args.left);
-        p.set("top", args.top);
-        p.set("width", args.width);
-        p.set("height", args.height);
-        canvas.add(p);
-        canvas.renderAll();
-        p.setCoords();
-
-
     }
+	
+	
+} 
 
-
-
-}
+});

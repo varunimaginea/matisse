@@ -6,15 +6,14 @@
  */
 
 
-(function($){
-
+define( ["matisse",  "matisse.main", "matisse.fabric", "matisse.com",  "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.events"] , function (matisse, main, mfabric, com, palettes) {
     matisse.Setup = {};
-
+	matisse.main = main;
     //Dom Ready function
     $(function(){
         //call all the functions, that are to be called on document ready here
-        matisse.main.init();
-
+		main.init();
+		main.initPropWindow();
     });
 
-})(jQuery);
+})

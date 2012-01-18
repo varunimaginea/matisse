@@ -1,6 +1,6 @@
 /*matisse.ui*/
-
-matisse.ui = {
+define(["matisse", "matisse.com"], function(matisse, com) {
+return {
 
 	/** width and height of panels for resize */
     bodyWidth: '',
@@ -34,9 +34,7 @@ matisse.ui = {
 	 * @param none
      */
     resizeWindow: function (){
-	console.log('this ====')
-	console.log(this);
-      this.resizeBody();
+	  this.resizeBody();
       this.resizeHeader();
       this.resizeMainPanel();
       this.resizeLeftPanel();
@@ -116,35 +114,15 @@ matisse.ui = {
 	 * @param none
      */
     bindResizeWindow: function () {
+		var thisObj = this;
         $(window).resize(function () {
-            matisse.ui.initWidthAndHeightOfPanels();
-            matisse.ui.resizeWindow();
-            matisse.ui.setCanvasSize();
+           thisObj.initWidthAndHeightOfPanels();
+           thisObj.resizeWindow();
+           thisObj.setCanvasSize();
         });
     },
 
-    /**
-     * Applies color picked from picker to object
-     * @method pickerUpdate
-     * @param (String) color value
-     *
-     */
-
-    pickerUpdate: function (color) {
-        if (matisse.focusInput == "") return;
-        var obj = canvas.getActiveObject();
-        obj.set(matisse.focusInput, color);
-        $('#' + matisse.focusInput).val(color);
-        $('#' + matisse.focusInput).css('background', color);
-        matisse.com.sendDrawMsg({
-            action: "modified",
-            args: [{
-                uid: obj.uid,
-                object: obj
-            }]
-        });
-        canvas.renderAll();
-    },
+    
 
 
     /**
@@ -227,3 +205,4 @@ matisse.ui = {
 	 function scrollUp(e) {
         $(this).siblings(".scrollerContentHolder").css("top", "yellow");
     }
+});

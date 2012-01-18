@@ -1,5 +1,5 @@
 /**
- * User: Bahvani Shankar,Pradeep
+ * User: Bhavani Shankar,Pradeep
  * Date: 12/28/11
  * Time: 11:16 AM
  * About this : Define all wireframes here
@@ -8,6 +8,7 @@
 /**
  * To load wireframe objects. group the objects using pathgroup
  */
+ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.properties", "matisse.com"], function(matisse, palettes, util, objproperties, com) {
  loadWireframe = function(args,objects)
  {	
 	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
@@ -64,7 +65,7 @@ checkboxSelectionHandler = function(objct)
 		{
 			objct.paths[2].stroke = '#ffffff';
 		}
-		matisse.com.sendDrawMsg({
+		com.sendDrawMsg({
 			action: "modified",
 			args: [{
 				uid: objct.uid,
@@ -94,7 +95,7 @@ checkboxSelectionHandler = function(objct)
 		{
 			objct.paths[1].fill = '#eeeeee';
 		}
-		matisse.com.sendDrawMsg({
+		com.sendDrawMsg({
 			action: "modified",
 			args: [{
 				uid: objct.uid,
@@ -127,7 +128,7 @@ function progressHandler(objct)
             {
                 objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
                 objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
-                matisse.com.sendDrawMsg({
+                com.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: objct.uid,
@@ -142,7 +143,7 @@ function progressHandler(objct)
 /**
  * To register wireframe palette
  */
-matisse.palettes.registerpalette("wireframe", {
+palettes.registerpalette("wireframe", {
     collectionName: 'wireframe',
     shapes: {	
 		label:{ // Label wireframe object
@@ -152,8 +153,8 @@ matisse.palettes.registerpalette("wireframe", {
 			toolAction: function (args) {
 				var objects = [],
 					txt = args.paths ? args.paths[0].text : "label me";
-				args.width = args.paths ? args.paths[0].width : matisse.util.getStringWidth(txt) + 20;
-				args.height = args.paths ? args.paths[0].height : matisse.util.getStringHeight(txt) + 20;		
+				args.width = args.paths ? args.paths[0].width : util.getStringWidth(txt) + 20;
+				args.height = args.paths ? args.paths[0].height : util.getStringHeight(txt) + 20;		
 				var text = new fabric.Text(txt, 
 					{	
 						fontSize : 20, 
@@ -168,7 +169,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
@@ -179,7 +180,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -199,7 +200,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.height = height;
 					obj.paths[0].width = width;
 					obj.paths[0].height = height;
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -261,8 +262,8 @@ matisse.palettes.registerpalette("wireframe", {
 			toolAction: function (args) {
 				var objects = [],
 				txt = args.paths ? args.paths[1].text : "click me";
-				args.width = matisse.util.getStringWidth(txt)+1 ;
-				args.height = matisse.util.getStringHeight(txt)+4;				
+				args.width = util.getStringWidth(txt)+1 ;
+				args.height = util.getStringHeight(txt)+4;				
 				var border = new fabric.Polygon([{x:-args.width/2,y:args.height/2 - 2},
 											{x:-args.width/2 + 2, y: args.height/2},
 											{x:args.width/2 - 2, y: args.height/2},
@@ -300,7 +301,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
@@ -316,7 +317,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -327,8 +328,8 @@ matisse.palettes.registerpalette("wireframe", {
 				txt_area.onkeyup = function (e) {
 					var width = 0, height = 0;
 					obj.paths[1].text = this.value;
-					width = matisse.util.getStringWidth(obj.paths[1].text) + 5;
-					height = matisse.util.getStringHeight(obj.paths[1].text) + 5;
+					width = util.getStringWidth(obj.paths[1].text) + 5;
+					height = util.getStringHeight(obj.paths[1].text) + 5;
 					(width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
 					obj.width = width;
 					obj.paths[0].points[0].x = -width/2;
@@ -339,7 +340,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.paths[0].points[5].x = width/2 - 5;
 					obj.paths[0].points[6].x = -width/2 + 5;
 					obj.paths[0].points[7].x = -width/2;
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -429,7 +430,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
@@ -440,7 +441,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -462,7 +463,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.paths[0].width = width;
 					obj.paths[0].height = height;
 					obj.paths[1].left = -width/2 + obj.paths[1].getWidth()/2 + 10;
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -529,7 +530,7 @@ matisse.palettes.registerpalette("wireframe", {
 				side = 14,
 				_stroke =  args.paths ? args.paths[2].stroke : "#000000",
 				_fill = "#000000";				
-				args.width = args.width ? args.width : matisse.util.getStringWidth(text) + side + (2 * margin) + space;
+				args.width = args.width ? args.width : util.getStringWidth(text) + side + (2 * margin) + space;
 				args.height = 30;					
 				var checkbox_left = -(args.width / 2) + margin;
 				var checkbox = new fabric.Polygon(      
@@ -545,7 +546,7 @@ matisse.palettes.registerpalette("wireframe", {
 						fontSize : 20, 
 						fontFamily : "delicious_500", 
 						fontWeight : 20,
-						left : args.paths ? args.paths[1].left : -(-(matisse.util.getStringWidth(text))/2 - text_left),
+						left : args.paths ? args.paths[1].left : -(-(util.getStringWidth(text))/2 - text_left),
 						top : 0,
 						fill: _fill,
 						stroke: _stroke
@@ -561,7 +562,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function (args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);				
 				obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
@@ -578,7 +579,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -603,7 +604,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.paths[2].points[0].x = checkbox_left + 3;
 					obj.paths[2].points[1].x = checkbox_left + 6;
 					obj.paths[2].points[2].x = checkbox_left + 11;
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -702,7 +703,7 @@ matisse.palettes.registerpalette("wireframe", {
 				objects.push(outer_circle);
 				objects.push(inner_circle);
 				objects.push(txt);
-				var txt_width = matisse.util.getStringWidth(text);
+				var txt_width = util.getStringWidth(text);
 				width = txt_width + (2 * _radius) + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
 				outer_circle.left = - ((width/2) - 15);
 				inner_circle.left = outer_circle.left;
@@ -714,7 +715,7 @@ matisse.palettes.registerpalette("wireframe", {
             },
 			modifyAction: function (args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;		
 				updateProperties(obj, recvdObj);
 				obj.paths[0].fill = recvdObj.paths[0].fill;
@@ -726,7 +727,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -745,7 +746,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.paths[1].left = obj.paths[0].left;
 					var text_left = obj.paths[0].left + (2 * obj.paths[1].radius) + 15;
 					obj.paths[2].left = -(-obj.paths[2].getWidth()/2 - text_left);
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -819,7 +820,7 @@ matisse.palettes.registerpalette("wireframe", {
 					margin = 15,				
 					space = 5,
 					side = 25;
-				args.width = args.width ? args.width : matisse.util.getStringWidth(text) + side + (2 * margin);
+				args.width = args.width ? args.width : util.getStringWidth(text) + side + (2 * margin);
 				args.height = 20;
 				var outerRect = new fabric.Rect(
 					{
@@ -855,7 +856,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function (args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);
 				obj.width = recvdObj.width;
@@ -871,7 +872,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -895,7 +896,7 @@ matisse.palettes.registerpalette("wireframe", {
 					obj.paths[2].points[1].x = wdth/2 - 6.5;
 					obj.paths[2].points[2].x = wdth/2 - 10.5;
 					obj.paths[3].left = -wdth/2 + 15 + obj.paths[3].getWidth()/2;
-					matisse.com.sendDrawMsg({
+					com.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -1011,13 +1012,13 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);
 			},
 			applyProperties: function(props)
 			{				
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 			},
 			properties: [
 				{
@@ -1093,7 +1094,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);				
 				obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
@@ -1101,7 +1102,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				progressHandler(canvas.getActiveObject());
 			},
 			properties: [
@@ -1198,13 +1199,13 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);
 			},
 			applyProperties: function(props)
 			{				
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 			},
 			properties:[
 				{
@@ -1257,8 +1258,8 @@ matisse.palettes.registerpalette("wireframe", {
 			toolAction: function (args) {
 				var objects = [],
 					txt = args.paths ? args.paths[1].text : "************";
-				args.width = matisse.util.getStringWidth(txt) + 30;
-				args.height = matisse.util.getStringHeight(txt);	
+				args.width = util.getStringWidth(txt) + 30;
+				args.height = util.getStringHeight(txt);	
 				var rect = new fabric.Rect(
 					{
 						left: args.left,
@@ -1285,7 +1286,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);				
 				obj.width = recvdObj.width;
@@ -1296,7 +1297,7 @@ matisse.palettes.registerpalette("wireframe", {
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				var obj = canvas.getActiveObject();
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
@@ -1314,13 +1315,13 @@ matisse.palettes.registerpalette("wireframe", {
                     this.value = obj.paths[1].text;
                     var width = 0, height = 0;
                     width = obj.paths[1].getWidth() + 30;
-                    height = matisse.util.getStringHeight(obj.paths[1].text);
+                    height = util.getStringHeight(obj.paths[1].text);
                     (width - obj.width) > 0 ? obj.left += (width - obj.width)/2 : obj.left = obj.left;
                     obj.width = width;
                     obj.height = height;
                     obj.paths[0].width = width;
                     obj.paths[0].height = height;
-                    matisse.com.sendDrawMsg({
+                    com.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: obj.uid,
@@ -1398,13 +1399,13 @@ matisse.palettes.registerpalette("wireframe", {
             },
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;	
 				updateProperties(obj, recvdObj);								
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 			},
             properties: [
 				{
@@ -1476,3 +1477,4 @@ matisse.palettes.registerpalette("wireframe", {
 		
 	} // end of shapes
 });	//End of wireframes
+});

@@ -2,29 +2,31 @@
  * User: Bahvani Shankar,Pradeep
  * Date: 12/26/11
  * Time: 11:16 AM
- * About matisse : matisse is the Main Name space
+ * About matisse : matisse is the Main Namespace
  */
-
-    //Defining the global name space
-    window.matisse = { };// global Object cointainer
-		//Properties of the global name space
-		matisse.fillColor = "#AAAAAA";
-		matisse.points = {};
-		matisse.palette = {};
-		matisse.textEl;
-		matisse.drawShape = false;
-		matisse.action;
-		matisse.shapeArgs;
-		matisse.currTool;
-		matisse.xPoints = [],
-		matisse.yPoints = [];
-		matisse.xOffset;
-		matisse.yOffset;
-		matisse.paletteName;
-		matisse.associateText = {};
-		matisse.focusInput = "stroke";
-		//Defining shapes name space
-		matisse.palettes = {};
-		matisse.Properties = {};
-		matisse.$currActiveIcon;
-		matisse.main = {};
+	//Defining the global name space
+	define( function() {
+    return {  
+		fillColor : "#AAAAAA",
+		points : {},
+		palette: {},
+		textEl: null,
+		drawShape : false,
+		action: null,
+		shapeArgs: null,
+		currTool: null,
+		xPoints : [],
+		yPoints : [],
+		xOffset:null,
+		yOffset:null,
+		paletteName:null,
+		associateText: {},
+		focusInput : "stroke",
+		palettes : {},
+		Properties : {},
+		$currActiveIcon : null,
+		main:{},
+		events:{}
+		
+	};
+ })

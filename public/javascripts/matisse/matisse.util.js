@@ -1,5 +1,6 @@
 /** matisse.util **/
-matisse.util = {
+define(["matisse"], function(matisse) {
+return  {
 
  /* Throws Error if the value is null. */
  assertNotNull:function (value, str) {
@@ -140,9 +141,39 @@ matisse.util = {
             top: _y,
             left: _x
         };
-    }
+    },
+	/**
+     * Searches for the object with the given id and returns that object
+     * @property id
+     * @type object
+     */
+    getObjectById:function (id) {
+        var obj;
+        var objs = canvas.getObjects();
+        objs.forEach(function (object) {
+            if (object.uid == id) {
+                obj = object;
+            }
+        });
+        return obj;
+    },
 	
-
+	/**
+     *  Creates an proeperties object from a  given array and returns that object
+     *  @method  getDefaultDataFromArray
+     *  @param arr - Array of properties
+     *  @return obj - Object
+     */
+    getDefaultDataFromArray: function(arr) {
+        if (arr == undefined) return null;
+        var obj = {};
+        for (var i = 0; i < arr.length; i++) {
+            obj[arr[i].name] = arr[i].defaultvalue;
+        }
+        return obj;
+    }
 
 
 }
+
+});

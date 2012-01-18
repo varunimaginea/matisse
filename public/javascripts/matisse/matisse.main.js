@@ -5,9 +5,8 @@
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
- */ 
- 
-   (function ($) {
+ */
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.com", "matisse.palettes.properties"], function (matisse, ui, util, mfabric, palettes, events, com, properties) {
 
     /**
      *	create canvas object
@@ -21,50 +20,223 @@
      */
     canvas.isSelectMode = false;
 
-    /**
-     * Initializes the application
-     * @method matisse.main.init
-     * @param none
-     *
-     */
-    matisse.main.init = function () {
-        matisse.ui.initWidthAndHeightOfPanels();
-        matisse.ui.resizeWindow();
-        matisse.ui.setCanvasSize();
-        matisse.ui.bindResizeWindow();
-        canvas.isSelectMode = true;
-        matisse.xOffset = matisse.util.getOffset(document.getElementById('canvasId')).left;
-        matisse.yOffset = matisse.util.getOffset(document.getElementById('canvasId')).top;
+    var main = {
+        /**
+         * Initializes the application
+         * @method main.init
+         * @param none
+         *
+         */
+        init: function () {
+            ui.initWidthAndHeightOfPanels();
+            ui.resizeWindow();
+            ui.setCanvasSize();
+            ui.bindResizeWindow();
+            canvas.isSelectMode = true;
+            matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left;
+            matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top;
 
-        this.addTools();
+            addTools();
 
-        document.onkeydown = matisse.events.keyDown;
-        $('#chaticon').click(openChatWindow);
-        $('#propicon').click(openPropertiesPanel);
+            document.onkeydown = events.keyDown;
+            $('#chaticon').click(openChatWindow);
+            $('#propicon').click(openPropertiesPanel);
 
-        initChatWindow();
-        this.initPropWindow();
-        addObservers();
-        saveButtonClickHandler();
-        newButtonClickHanlder();
-    }
+            initChatWindow();
+
+            addObservers();
+            saveButtonClickHandler();
+            newButtonClickHanlder();
+        },
+        /**
+         *  Handles the tools icon click events
+         *  @method  handleToolClick
+         *  @param e object
+         */
+        handleToolClick: function (e) {
+            // resetIconSelection();
+            $(e.target).attr("src", $(e.target).attr('data-active'));
+            $(e.target).parent().parent().addClass('shape-active');
+            matisse.$currActiveIcon = $(e.target);
+            canvas.isSelectMode = false;
+            var toolId = $(e.target).attr('id');
+            matisse.currTool = e.target;
+            $(e.target).removeClass(toolId).addClass(toolId + "_click");
+            document.getElementById("c").style.cursor = 'default'
+            matisse.drawShape = true;
+            matisse.action = e.target.id;
+            matisse.paletteName = $(e.target).attr('data-parent');
+            if (e.target.id != "path") {
+                var obj = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[e.target.id].properties);
+                obj.uid = util.uniqid();
+                matisse.shapeArgs = [obj];
+            }
+            if (matisse.action != "path") {
+                canvas.isDrawingMode = false;
+            } else {
+                document.getElementById("c").style.cursor = 'crosshair';
+                canvas.isDrawingMode = true;
+                return;
+            }
+        },
+
+        /**
+         *  Reset Current seltected tool Icon when object is drawn on canvas
+         *  @method  resetIconSelection
+         *  @param none
+         */
+        resetIconSelection: function () {
+            if (matisse.$currActiveIcon) {
+                matisse.$currActiveIcon.attr("src", matisse.$currActiveIcon.attr('data-inactive'));
+                matisse.$currActiveIcon.parent().parent().removeClass('shape-active');
+            }
+        },
+        /**
+         * Creates a property panel with various properties based on object selected
+         * @method createPropertiesPanel
+         * @param obj
+         */
+        createPropertiesPanel: function (obj) { /*$('#propdiv').dialog();*/
+            if (obj.palette && obj && obj.name) {
+                $('#prop').remove();
+                objName = obj.name;
+                matisse.paletteName = obj.palette;
+                if (matisse.palette[matisse.paletteName] == null) return;
+                if (objName == undefined || objName == 'drawingpath') return;
+                properties = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
+                if (properties) {
+                    matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(properties) : null;
+                }
+            }
+        },
+
+        /**
+         * Initializes the Properties Window, hide it initially
+         * @method initPropWindow
+         * @param none
+         *
+         */
+        initPropWindow: function () {
+            $('#propdiv').dialog();
+            $('#propdiv').dialog({
+                width: 'auto',
+                height: 'auto',
+                resizable: false
+            });
+            $('#propdiv').dialog('close');
+        },
 
 
-    /**
-     * Initializes the Properties Window, hide it initially
-     * @method initPropWindow
-     * @param none
-     *
-     */
-    matisse.main.initPropWindow = function () {
-        $('#propdiv').dialog();
-        $('#propdiv').dialog({
-            width: 'auto',
-            height: 'auto',
-            resizable: false
-        });
-        $('#propdiv').dialog('close');
-    }
+        /**
+         *  Check for the active object or group object and remove them from canvas
+         *  @method  deleteObjects
+         *  @param none
+         */
+        deleteObjects: function () {
+            var activeObject = canvas.getActiveObject(),
+                activeGroup = canvas.getActiveGroup();
+
+            if (activeObject) {
+                canvas.remove(activeObject);
+                com.sendDrawMsg({
+                    action: "delete",
+                    args: [{
+                        uid: activeObject.uid
+                    }]
+                })
+                $('#prop').remove();
+            } else if (activeGroup) {
+                var objectsInGroup = activeGroup.getObjects();
+                canvas.discardActiveGroup();
+                objectsInGroup.forEach(function (object) {
+                    canvas.remove(object);
+                });
+            }
+        },
+        /**
+         *  When receive a notification from server to modify the other side when it gets modified.
+         *  @method  modifyObject
+         *  @param rgs - received object and object's id.
+         */
+        modifyObject: function (args) {
+            var obj = util.getObjectById(args[0].uid);
+            console.log("modify object");
+            console.log(obj);
+            if (obj) {
+                matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
+                canvas.setActiveObject(obj)
+                properties.updatePropertyPanel(obj)
+                obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+            }
+            canvas.renderAll();
+        },
+        /**
+         * Draw free-hand drawing path when notification received from server
+         * @method drawPath
+         * @param args
+         */
+        drawPath: function (args) {
+            var p = new fabric.Path(args.path);
+            p.fill = null;
+            p.stroke = '#FF000';
+            p.strokeWidth = 1;
+            p.uid = args.uid;
+            p.name = "drawingpath";
+            p.scaleX = 1;
+            p.scaleY = 1;
+            p.palette = "basic";
+            p.set("left", args.left);
+            p.set("top", args.top);
+            p.set("width", args.width);
+            p.set("height", args.height);
+            canvas.add(p);
+            canvas.renderAll();
+            p.setCoords();
+        },
+        /**
+         *  Handle MouseMove and MouseDown events - when user trying to draw a shape on canvas
+         *  @method  handleMouseEvents
+         *  @param none
+         */
+        handleMouseEvents: function () {
+            $("#canvasId").mousedown(function (event) {
+                if (!canvas.isDrawingMode && matisse.drawShape) {
+                    matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset; //offset
+                    matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset; //offset
+                    matisse.shapeArgs[0].left = matisse.points.x;
+                    matisse.shapeArgs[0].top = matisse.points.y;
+                    matisse.shapeArgs[0].name = matisse.action;
+                    matisse.shapeArgs[0].palette = matisse.paletteName;
+                    matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
+                    com.sendDrawMsg({
+                        palette: matisse.paletteName,
+                        action: matisse.action,
+                        args: matisse.shapeArgs
+                    });
+
+                    canvas.isSelectMode = true;
+                    matisse.drawShape = false;
+                    matisse.main.resetIconSelection();
+                }
+
+                if (canvas.isDrawingMode) {
+                    matisse.xPoints = [];
+                    matisse.yPoints = [];
+                    matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
+                    matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
+                }
+            });
+
+            $("#canvasId").mousemove(function (event) {
+                if (canvas.isDrawingMode) {
+                    matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
+                    matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
+                }
+
+            });
+        }
+    } // end of 'return'
+
     /**
      * Initializes the Chat Window, hide it initially
      * @method initChatWindow
@@ -83,11 +255,11 @@
      *
      */
     function addObservers() {
-        matisse.fabric.observe('object:modified');
-        matisse.fabric.observe('path:created');
-        matisse.fabric.observe('selection:cleared');
-        matisse.fabric.observe('object:moved');
-        matisse.fabric.observe('object:selected');
+        mfabric.observe('object:modified');
+        mfabric.observe('path:created');
+        mfabric.observe('selection:cleared');
+        mfabric.observe('object:moved');
+        mfabric.observe('object:selected');
     }
     /**
      * Open Chat Window when user clicks on chat icon
@@ -132,7 +304,7 @@
      * @method saveButtonClickHandler
      * @param none
      */
-    saveButtonClickHandler = function () {
+    function saveButtonClickHandler() {
         $('#saveicon').bind("click", function () {
             var data = canvas.toDataURL('png')
             matisse.saveImage(data);
@@ -144,26 +316,25 @@
      * @method importImageButtonClickHandler
      * @param none
      */
-    importImageButtonClickHandler = function () {
+    function importImageButtonClickHandler() {
         $('#loadicon').bind("click", function () {
             var args = {};
             args.path = 'images/conventional-html-layout.png';
             args.name = "importimage";
             args.left = 300;
             args.top = 200;
-            args.uid = matisse.util.uniqid();
+            args.uid = util.uniqid();
             args.palette = 'imagepalette';
             loadImage(args);
         });
     }
-
 
     /**
      * Handler for New Document Button Click
      * @method newButtonClickHanlder
      * @param none
      */
-    newButtonClickHanlder = function () {
+    function newButtonClickHanlder() {
         $('#newdocicon').bind("click", function () {
             var pageURL = document.location.href;
             // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
@@ -171,77 +342,6 @@
             pageURL = pageURL.substr(0, indx)
             window.open(pageURL + '/boards/', "mywindow");
         });
-    }
-
-
-    /**
-     *  Called when other users add, modify or delete any object
-     *  @method  matisse.onDraw
-     *  @param data - shape(data.shape) and args array (data.args)
-     *
-     */
-    matisse.com.onDraw = function (data) {
-        if (data && data.args) {
-            if (data.action == undefined || data.action == null) {
-                return;
-            }
-            if (data.action == "modified") {
-                modifyObject(data.args)
-            } else if (data.action == "modifiedbyvalue") {
-                setObjectProperty(data.args[0]);
-            } else if (data.action == "drawpath") {
-                matisse.fabric.drawPath(data.args[0])
-            } else if (data.action == "chat") {
-                var txt = document.createTextNode(data.args[0].text)
-                $("#chattext").append(txt);
-            } else if (data.action == "delete") {
-                var obj = getObjectById(data.args[0].uid);
-                canvas.remove(obj);
-                $('#prop').remove();
-            } else if (data.action == "importimage") {
-                loadImage(data.args[0]);
-            } else {
-                if (matisse.palette[data.palette] != undefined) {
-                    matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
-                }
-            }
-        }
-    }
-
-    /**
-     * Searches for the object with the given id and returns that object
-     * @property id
-     * @type object
-     */
-    matisse.main.getObjectById = function (id) {
-        var obj;
-        var objs = canvas.getObjects();
-        objs.forEach(function (object) {
-            if (object.uid == id) {
-                obj = object;
-            }
-        });
-        return obj;
-    }
-
-    /**
-     *  Updates proeperties panel with current selected object properites
-     *  @method  updatePropertyPanel
-     *  @param obj - Object
-     *
-     */
-    matisse.main.updatePropertyPanel = function (obj) {
-        if (matisse.palette[matisse.paletteName] == null) return;
-        if (canvas.getActiveGroup()) return;
-        if (obj && obj.name && obj.palette) {
-            properties = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[obj.name].properties);
-            jQuery.each(properties, function (i, value) {
-                $('#' + i).val(obj[i]);
-            })
-            if (obj.getAngle()) {
-                $('#angle').val(obj.getAngle());
-            }
-        }
     }
 
     /**
@@ -254,7 +354,7 @@
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
         objectsInGroup.forEach(function (obj) {
-            matisse.com.sendDrawMsg({
+            com.sendDrawMsg({
                 action: "modified",
                 name: obj.name,
                 palette: obj.palette,
@@ -267,83 +367,8 @@
 
     }
 
-    /**
-     *  When receive a notification from server to modify the other side when it gets modified.
-     *  @method  modifyObject
-     *  @param rgs - received object and object's id.
-     */
-    function modifyObject(args) {
-        var obj = matisse.main.getObjectById(args[0].uid);
-        if (obj) {
-            matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
-            canvas.setActiveObject(obj)
-            matisse.main.updatePropertyPanel(obj)
-            obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
-        }
-        canvas.renderAll();
-    }
 
 
-    /**
-     *  Reset Current seltected tool Icon when object is drawn on canvas
-     *  @method  resetIconSelection
-     *  @param none
-     */
-    matisse.main.resetIconSelection = function () {
-        if (matisse.$currActiveIcon) {
-            matisse.$currActiveIcon.attr("src", matisse.$currActiveIcon.attr('data-inactive'));
-            matisse.$currActiveIcon.parent().parent().removeClass('shape-active');
-        }
-    }
-
-
-    /**
-     *  Handles the tools icon click events
-     *  @method  handleToolClick
-     *  @param e object
-     */
-    matisse.main.handleToolClick = function (e) {
-        matisse.main.resetIconSelection();
-        $(e.target).attr("src", $(e.target).attr('data-active'));
-        $(e.target).parent().parent().addClass('shape-active');
-        matisse.$currActiveIcon = $(e.target);
-        canvas.isSelectMode = false;
-        var toolId = $(e.target).attr('id');
-        matisse.currTool = e.target;
-        $(e.target).removeClass(toolId).addClass(toolId + "_click");
-        document.getElementById("c").style.cursor = 'default'
-        matisse.drawShape = true;
-        matisse.action = e.target.id;
-        matisse.paletteName = $(e.target).attr('data-parent');
-        if (e.target.id != "path") {
-            var obj = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[e.target.id].properties);
-            obj.uid = matisse.util.uniqid();
-            matisse.shapeArgs = [obj];
-        }
-        if (matisse.action != "path") {
-            canvas.isDrawingMode = false;
-        } else {
-            document.getElementById("c").style.cursor = 'crosshair';
-            canvas.isDrawingMode = true;
-            return;
-        }
-    }
-
-    /**
-     *  Creates an proeperties object from a  given array and returns that object
-     *  @method  getDefaultDataFromArray
-     *  @param arr - Array of properties
-     *  @return obj - Object
-     */
-    function getDefaultDataFromArray(arr) {
-        if (arr == undefined) return null;
-        var obj = {};
-        for (var i = 0; i < arr.length; i++) {
-            obj[arr[i].name] = arr[i].defaultvalue;
-        }
-        return obj;
-    }
-	
     /**
      *  Sends the message typed by user to chat window and also notify it to Server
      *  @method  chatButtonListener
@@ -354,7 +379,7 @@
         msg = "from $:" + msg + "\n";
         var txt = document.createTextNode(msg)
         $("#chattext").append(txt);
-        matisse.com.sendDrawMsg({
+        com.sendDrawMsg({
             action: "chat",
             args: [{
                 text: msg
@@ -376,72 +401,21 @@
     }
 
     /**
-     *  Check for the active object or group object and remove them from canvas
-     *  @method  deleteObjects
-     *  @param none
-     */
-     matisse.main.deleteObjects = function() {
-        var activeObject = canvas.getActiveObject(),
-            activeGroup = canvas.getActiveGroup();
-
-        if (activeObject) {
-            canvas.remove(activeObject);
-            matisse.com.sendDrawMsg({
-                action: "delete",
-                args: [{
-                    uid: activeObject.uid
-                }]
-            })
-            $('#prop').remove();
-        } else if (activeGroup) {
-            var objectsInGroup = activeGroup.getObjects();
-            canvas.discardActiveGroup();
-            objectsInGroup.forEach(function (object) {
-                canvas.remove(object);
-            });
-        }
-    }
-
-    /**
-     * Creates a property panel with various properties based on object selected
-     * @method createPropertiesPanel
-     * @param obj
-     */
-    matisse.main.createPropertiesPanel = function (obj) { /*$('#propdiv').dialog();*/
-
-        if (obj.palette && obj && obj.name) {
-            $('#prop').remove();
-            objName = obj.name;
-            matisse.paletteName = obj.palette;
-            if (matisse.palette[matisse.paletteName] == null) return;
-            if (objName == undefined || objName == 'drawingpath') return;
-            properties = getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
-            if (properties) {
-                matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(properties) : null;
-            }
-        }
-    }
-
-    /**
      * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
      * @method addTools
      * @param none
      */
 
-    matisse.main.addTools = function () {
-        //$('#leftdiv').draggable()
-        matisse.palettes.createAllPallettes(matisse.palette);
-
+    function addTools() {
+        palettes.createAllPallettes(matisse.palette);
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {
             deleteObjects();
         });
-
-        //document.getElementById("drawing-mode").onclick = drawingButtonListener;
         $('#chatbutton').click(chatButtonListener);
-        matisse.events.handleMouseEvents()
+        main.handleMouseEvents()
         $('#accordion').accordion();
-        matisse.ui.setAccordinContentHeight();
+        ui.setAccordinContentHeight();
     }
-
-})(jQuery);
+    return main;
+})

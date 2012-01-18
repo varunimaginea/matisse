@@ -8,6 +8,7 @@
 /**
  * To set the properties of the object with the received object
  */
+ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.com", "matisse.util"], function(matisse, main, palettes, objproperties, com, util) {
 updateProperties = function(obj, recvdObj)
 {
 	obj.left = recvdObj.left;
@@ -22,7 +23,8 @@ updateProperties = function(obj, recvdObj)
 	if (obj.text) 
 		obj.text = recvdObj.text;
 }
-matisse.palettes.registerpalette("basic", {
+
+palettes.registerpalette("basic", {
     collectionName: 'basic',
     shapes: {
         rectangle: {
@@ -50,13 +52,13 @@ matisse.palettes.registerpalette("basic", {
             },
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);												
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 			},
             properties: [{
                 name: 'left',
@@ -146,13 +148,13 @@ matisse.palettes.registerpalette("basic", {
             },
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);												
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 			},
             properties: [{
                 name: 'left',
@@ -322,13 +324,13 @@ matisse.palettes.registerpalette("basic", {
             },
 			modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;				
 				updateProperties(obj, recvdObj);												
 			},
 			applyProperties: function(props)
 			{
-				matisse.Properties._applyProperties(props);
+				objproperties._applyProperties(props);
 				$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 				var txt_area = document.getElementById("txtarea");
 				txt_area.onfocus = function()
@@ -338,7 +340,7 @@ matisse.palettes.registerpalette("basic", {
 				txt_area.onkeyup = function (e) {
                     canvas.getActiveObject().text = this.value;
 
-                    matisse.com.sendDrawMsg({
+                    com.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: canvas.getActiveObject().uid,
@@ -422,7 +424,7 @@ matisse.palettes.registerpalette("basic", {
             toolAction: null,
 	    modifyAction: function(args)
 			{
-				var obj = matisse.main.getObjectById(args.uid);
+				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;
 				updateProperties(obj, recvdObj);
 			},
@@ -460,4 +462,6 @@ matisse.palettes.registerpalette("basic", {
 
     } // end of shapes
 } // end of basic shapes
+
 );
+});
