@@ -99,8 +99,7 @@ checkboxSelectionHandler = function(objct)
 			action: "modified",
 			args: [{
 				uid: objct.uid,
-				object: objct,
-				text:objct.text
+				object: objct
                 }]
             }
 		);
@@ -717,9 +716,9 @@ palettes.registerpalette("wireframe", {
 			{
 				var obj = util.getObjectById(args.uid);
 				var recvdObj = args.object;		
-				updateProperties(obj, recvdObj);
-				obj.paths[0].fill = recvdObj.paths[0].fill;
+				updateProperties(obj, recvdObj);				
 				obj.paths[0].left = recvdObj.paths[0].left;
+				obj.paths[1].fill = recvdObj.paths[1].fill;
 				obj.paths[1].left = recvdObj.paths[1].left;
 				obj.paths[2].left = recvdObj.paths[2].left;
 				obj.paths[2].text = recvdObj.paths[2].text;

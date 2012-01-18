@@ -12,8 +12,7 @@ define( ["matisse",  "matisse.main", "matisse.fabric", "matisse.com",  "matisse.
     //Dom Ready function
     $(function(){
         //call all the functions, that are to be called on document ready here
-		main.init();
-		main.initPropWindow();
+		main.init();		
     });
 
 })

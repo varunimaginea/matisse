@@ -4,7 +4,7 @@
  * Time: 04:19 PM
  * About this : Utility to apply specified properties to the palette 
  */
- define(["matisse", "matisse.util", "matisse.ui"], function(matisse, util, ui) {
+ define(["matisse", "matisse.util", "matisse.ui", "matisse.com", "matisse.toolbuttons.handlers"], function(matisse, util, ui, com, toolHandlers) {
  return {
 	 _applyProperties : function(properties) {        
 		var props = {};
@@ -14,17 +14,26 @@
 				val = canvas.getActiveObject().getAngle();
 			} else {
 				val = canvas.getActiveObject()[i];
-			}
-			
+			}			
 			if (i === "fill" || i === "stroke") {
-				var inputTag = "<input style='width:100px' onKeyPress='return util.letternumber(event)' class= 'color' id='" + i + "' value='" + val + "'></input></div>";
+				var inputTag = "<input style='width:100px' onKeyPress = keyPressed_letterNumber()  class= 'color' id='" + i + "' value='" + val + "'></input></div>";
 			} else {
-				var inputTag = "<input type='text' style='width:100px' onKeyPress='return util.numbersonly(this, event)' id='" + i + "' value='" + val + "'></input>";
+				var inputTag = "<input type='text' style='width:100px' onKeyPress = keyPressed_numbersOnly() id='" + i + "' value='" + val + "'></input>";
 			}
 			
 			var $propTableDiv = $("#proptable");
 			$propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
 			var inBox = $("#" + i);
+			
+			keyPressed_letterNumber = function(e)
+			{
+				return util.letternumber(e);
+			}
+			
+			keyPressed_numbersOnly = function(e)
+			{
+				return util.numbersonly(this, e);
+			}
 			
 			$(":input").focus(function () {
 				matisse.focusInput = '';
@@ -57,7 +66,7 @@
 				if (i == 'angle') actObj.setAngle(val);
 				canvas.renderAll();
 				canvas.getActiveObject().setCoords();			
-				matisse.sendDrawMsg({
+				com.sendDrawMsg({
 					action: "modified",
 					args: [{
 						uid: actObj.uid,
@@ -74,7 +83,7 @@
 			obj.set(matisse.focusInput, color);
 			$('#' + matisse.focusInput).val(color);
 			$('#' + matisse.focusInput).css('background', color);
-			matisse.com.sendDrawMsg({
+			com.sendDrawMsg({
 				action: "modified",
 				args: [{
 					uid: obj.uid,
@@ -84,7 +93,7 @@
 			canvas.renderAll();
 		});
 		$('#colorpicker').hide();
-		matisse.main.initPropWindow();
+		toolHandlers.initPropWindow();
 	},
 	/**
      *  Updates proeperties panel with current selected object properites
@@ -104,7 +113,25 @@
                 $('#angle').val(obj.getAngle());
             }
         }
-    }
+    },
 	
+	/**
+	 * Creates a property panel with various properties based on object selected
+	 * @method createPropertiesPanel
+	 * @param obj
+	 */
+	createPropertiesPanel: function (obj) { /*$('#propdiv').dialog();*/
+		if (obj.palette && obj && obj.name) {
+			$('#prop').remove();
+			objName = obj.name;
+			matisse.paletteName = obj.palette;
+			if (matisse.palette[matisse.paletteName] == null) return;
+			if (objName == undefined || objName == 'drawingpath') return;
+			_properties = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
+			if (_properties) {
+				matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(_properties) : null;
+			}
+		}
+	}
  }
 });

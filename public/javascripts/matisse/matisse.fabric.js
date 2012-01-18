@@ -63,8 +63,8 @@ define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"]
                 var obj = e.memo.target;
                 if (canvas.getActiveGroup()) {
                     return;
-                }
-                matisse.main.createPropertiesPanel(obj);
+                }				
+                properties.createPropertiesPanel(obj);
                 break;
             }
 

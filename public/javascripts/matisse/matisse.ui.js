@@ -121,9 +121,18 @@ return {
            thisObj.setCanvasSize();
         });
     },
-
-    
-
+	
+	/**
+     *  Reset Current seltected tool Icon when object is drawn on canvas
+     *  @method  resetIconSelection
+     *  @param none
+     */
+	resetIconSelection: function () {
+		if (matisse.$currActiveIcon) {
+			matisse.$currActiveIcon.attr("src", matisse.$currActiveIcon.attr('data-inactive'));
+			matisse.$currActiveIcon.parent().parent().removeClass('shape-active');
+		}
+	},
 
     /**
      * Sets the Canvas width and height based on browser window size
@@ -177,6 +186,7 @@ return {
     });
 
     $(".scroller-down").live("click", function () {
+		console.log("in scroller-down click");
         var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
         var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
         var parentHeight = $(this).parent().css('height');

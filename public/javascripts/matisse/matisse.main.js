@@ -6,7 +6,7 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.com", "matisse.palettes.properties"], function (matisse, ui, util, mfabric, palettes, events, com, properties) {
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.com", "matisse.palettes.properties", "matisse.toolbuttons.handlers"], function (matisse, ui, util, mfabric, palettes, events, com, properties, toolHandlers) {
 
     /**
      *	create canvas object
@@ -39,22 +39,22 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             addTools();
 
             document.onkeydown = events.keyDown;
-            $('#chaticon').click(openChatWindow);
-            $('#propicon').click(openPropertiesPanel);
+            $('#chaticon').click(toolHandlers.openChatWindow);
+            $('#propicon').click(toolHandlers.openPropertiesPanel);
 
-            initChatWindow();
+            toolHandlers.initChatWindow();
 
             addObservers();
-            saveButtonClickHandler();
-            newButtonClickHanlder();
+            toolHandlers.saveButtonClickHandler();
+            toolHandlers.newButtonClickHanlder();
         },
+		
         /**
-         *  Handles the tools icon click events
+         *  Handles the palette tools icon click events
          *  @method  handleToolClick
          *  @param e object
          */
-        handleToolClick: function (e) {
-            // resetIconSelection();
+        handleToolClick: function (e) {            
             $(e.target).attr("src", $(e.target).attr('data-active'));
             $(e.target).parent().parent().addClass('shape-active');
             matisse.$currActiveIcon = $(e.target);
@@ -79,53 +79,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                 return;
             }
         },
-
-        /**
-         *  Reset Current seltected tool Icon when object is drawn on canvas
-         *  @method  resetIconSelection
-         *  @param none
-         */
-        resetIconSelection: function () {
-            if (matisse.$currActiveIcon) {
-                matisse.$currActiveIcon.attr("src", matisse.$currActiveIcon.attr('data-inactive'));
-                matisse.$currActiveIcon.parent().parent().removeClass('shape-active');
-            }
-        },
-        /**
-         * Creates a property panel with various properties based on object selected
-         * @method createPropertiesPanel
-         * @param obj
-         */
-        createPropertiesPanel: function (obj) { /*$('#propdiv').dialog();*/
-            if (obj.palette && obj && obj.name) {
-                $('#prop').remove();
-                objName = obj.name;
-                matisse.paletteName = obj.palette;
-                if (matisse.palette[matisse.paletteName] == null) return;
-                if (objName == undefined || objName == 'drawingpath') return;
-                properties = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
-                if (properties) {
-                    matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(properties) : null;
-                }
-            }
-        },
-
-        /**
-         * Initializes the Properties Window, hide it initially
-         * @method initPropWindow
-         * @param none
-         *
-         */
-        initPropWindow: function () {
-            $('#propdiv').dialog();
-            $('#propdiv').dialog({
-                width: 'auto',
-                height: 'auto',
-                resizable: false
-            });
-            $('#propdiv').dialog('close');
-        },
-
 
         /**
          *  Check for the active object or group object and remove them from canvas
@@ -198,55 +151,11 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          *  @method  handleMouseEvents
          *  @param none
          */
-        handleMouseEvents: function () {
-            $("#canvasId").mousedown(function (event) {
-                if (!canvas.isDrawingMode && matisse.drawShape) {
-                    matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset; //offset
-                    matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset; //offset
-                    matisse.shapeArgs[0].left = matisse.points.x;
-                    matisse.shapeArgs[0].top = matisse.points.y;
-                    matisse.shapeArgs[0].name = matisse.action;
-                    matisse.shapeArgs[0].palette = matisse.paletteName;
-                    matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
-                    com.sendDrawMsg({
-                        palette: matisse.paletteName,
-                        action: matisse.action,
-                        args: matisse.shapeArgs
-                    });
-
-                    canvas.isSelectMode = true;
-                    matisse.drawShape = false;
-                    matisse.main.resetIconSelection();
-                }
-
-                if (canvas.isDrawingMode) {
-                    matisse.xPoints = [];
-                    matisse.yPoints = [];
-                    matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
-                    matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
-                }
-            });
-
-            $("#canvasId").mousemove(function (event) {
-                if (canvas.isDrawingMode) {
-                    matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
-                    matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
-                }
-
-            });
+        handleMouseEvents: function () {			
+			$('#canvasId').bind('mousedown', events.mouseDown);            
+			$('#canvasId').bind('mousemove', events.mouseMove);            
         }
-    } // end of 'return'
-
-    /**
-     * Initializes the Chat Window, hide it initially
-     * @method initChatWindow
-     * @param none
-     *
-     */
-    function initChatWindow() {
-        $('#chatdialog').dialog();
-        $('#chatdialog').dialog('close');
-    }
+    } // end of 'return'    
 
     /**
      * Regiser observers to observe any object changes like resize, rotate, move etc
@@ -260,90 +169,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         mfabric.observe('selection:cleared');
         mfabric.observe('object:moved');
         mfabric.observe('object:selected');
-    }
-    /**
-     * Open Chat Window when user clicks on chat icon
-     * @method openChatWindow
-     * @param none
-     *
-     */
-    function openChatWindow() {
-        $('#chatdialog').dialog({
-            width: 200
-        });
-        var dialog_width = $("#chatdialog").dialog("option", "width");
-        var win_width = $(window).width();
-        $('#chatdialog').dialog({
-            position: [win_width - dialog_width, 100]
-        })
-
-        $('#chatdialog').dialog('open')
-        $('#chatdialog').dialog({
-            resizable: false
-        });
-
-    }
-
-    /**
-     * Open a Properties panel for currently selected object
-     * @method openPropertiesPanel
-     * @param none
-     */
-    function openPropertiesPanel() {
-        if (canvas.getActiveObject() == undefined) return;
-        var dialog_width = $("#chatdialog").dialog("option", "width");
-        var win_width = $(window).width();
-        $('#propdiv').dialog({
-            position: [win_width - dialog_width, 300]
-        })
-        $('#propdiv').dialog('open')
-    }
-
-    /**
-     * Handler for Save Button Click
-     * @method saveButtonClickHandler
-     * @param none
-     */
-    function saveButtonClickHandler() {
-        $('#saveicon').bind("click", function () {
-            var data = canvas.toDataURL('png')
-            matisse.saveImage(data);
-        });
-    }
-
-    /**
-     * Handler for Import Image Button Click
-     * @method importImageButtonClickHandler
-     * @param none
-     */
-    function importImageButtonClickHandler() {
-        $('#loadicon').bind("click", function () {
-            var args = {};
-            args.path = 'images/conventional-html-layout.png';
-            args.name = "importimage";
-            args.left = 300;
-            args.top = 200;
-            args.uid = util.uniqid();
-            args.palette = 'imagepalette';
-            loadImage(args);
-        });
-    }
-
-    /**
-     * Handler for New Document Button Click
-     * @method newButtonClickHanlder
-     * @param none
-     */
-    function newButtonClickHanlder() {
-        $('#newdocicon').bind("click", function () {
-            var pageURL = document.location.href;
-            // get the index of '/' from url (ex:http://localhost:8000/qd7kt3vd)
-            var indx = pageURL.indexOf('/');
-            pageURL = pageURL.substr(0, indx)
-            window.open(pageURL + '/boards/', "mywindow");
-        });
-    }
-
+    }   
+   
     /**
      *  Notify Server about Group Moved
      *  @method  notifyServerGroupMoved
@@ -365,27 +192,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             })
         });
 
-    }
-
-
-
-    /**
-     *  Sends the message typed by user to chat window and also notify it to Server
-     *  @method  chatButtonListener
-     *  @param e - event object
-     */
-    function chatButtonListener(e) {
-        var msg = $("#chat").val();
-        msg = "from $:" + msg + "\n";
-        var txt = document.createTextNode(msg)
-        $("#chattext").append(txt);
-        com.sendDrawMsg({
-            action: "chat",
-            args: [{
-                text: msg
-            }]
-        });
-    }
+    }   
 
     /**
      *  Sets the property of a shape when a notification received from server
@@ -412,8 +219,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         $('#deleteTool').click(function () {
             deleteObjects();
         });
-        $('#chatbutton').click(chatButtonListener);
-        main.handleMouseEvents()
+        $('#chatbutton').click(toolHandlers.chatButtonListener);
+        main.handleMouseEvents();
         $('#accordion').accordion();
         ui.setAccordinContentHeight();
     }
