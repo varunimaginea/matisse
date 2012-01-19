@@ -6,7 +6,7 @@
  *
  */
  
- define(["matisse", "matisse.main", "matisse.ui"], function(matisse, main, ui) {
+ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function(matisse, main, ui, util) {
 		
     return {
 	registerpalette : function(paletteName, paletteDesc) {
@@ -23,7 +23,7 @@
 			for (var paletteName in paletteObj) {
 				this.createPallette(paletteName);
 			}
-			$('.tool').click(matisse.main.handleToolClick);
+			$('.tool').click(this.handleToolClick);
     },
 	/**
      * Create a  palette for each type of palette and add it in toolbar
@@ -51,6 +51,38 @@
         $(document.getElementById(palette_DisplayName)).append(html);
 		
     }
+	,
+		
+	/**
+	 *  Handles the palette tools icon click events
+	 *  @method  handleToolClick
+	 *  @param e object
+	 */
+	handleToolClick: function (e) {            
+		$(e.target).attr("src", $(e.target).attr('data-active'));
+		$(e.target).parent().parent().addClass('shape-active');
+		matisse.$currActiveIcon = $(e.target);
+		canvas.isSelectMode = false;
+		var toolId = $(e.target).attr('id');
+		matisse.currTool = e.target;
+		$(e.target).removeClass(toolId).addClass(toolId + "_click");
+		document.getElementById("c").style.cursor = 'default'
+		matisse.drawShape = true;
+		matisse.action = e.target.id;
+		matisse.paletteName = $(e.target).attr('data-parent');
+		if (e.target.id != "path") {
+			var obj = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[e.target.id].properties);
+			obj.uid = util.uniqid();
+			matisse.shapeArgs = [obj];
+		}
+		if (matisse.action != "path") {
+			canvas.isDrawingMode = false;
+		} else {
+			document.getElementById("c").style.cursor = 'crosshair';
+			canvas.isDrawingMode = true;
+			return;
+		}
+	}
 	}
 
     

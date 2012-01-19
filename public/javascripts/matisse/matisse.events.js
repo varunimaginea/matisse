@@ -1,17 +1,17 @@
 /*matisse.events*/
 define(["matisse", "matisse.com", "matisse.ui" ], function(matisse, com, ui) {
-return {
+return {		
 	/**
 	 * Listen for keyboard events and do necessary action
 	 * @method keyDown 
 	 * @param e keyevent
 	 */
-	keyDown: function (e) {
+	keyDown: function (e) {		
 		var evt = (e) ? e : (window.event) ? window.event : null;
 		if (evt) {
 			var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
 			if (key == "46" && evt.altKey) {
-				matisse.main.deleteObjects();
+				matisse.main.deleteObjects(com);
 			} else if (key == "38" && evt.ctrlKey) {
 				var obj = canvas.getActiveObject();
 				if (obj) canvas.bringForward(obj);
@@ -63,6 +63,29 @@ return {
 			matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
 			matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
 		}
-	}
+	},
+	
+	/**
+     *  Notify Server about Group Moved
+     *  @method  notifyServerGroupMoved
+     *  @param none
+     */
+    notifyServerGroupMoved: function() {
+        activeGroup = canvas.getActiveGroup();
+        var objectsInGroup = activeGroup.getObjects();
+        canvas.discardActiveGroup();
+        objectsInGroup.forEach(function (obj) {
+            com.sendDrawMsg({
+                action: "modified",
+                name: obj.name,
+                palette: obj.palette,
+                args: [{
+                    uid: obj.uid,
+                    object: obj
+                }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
+            })
+        });
+    }
+	
 }
 });

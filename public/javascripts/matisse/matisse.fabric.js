@@ -1,5 +1,5 @@
 /* fabric related methods */
-define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"], function(matisse, util, com, properties) {
+define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties", "matisse.ui", "matisse.events"], function(matisse, util, com, properties, ui, events) {
 	
 	/**
      *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
@@ -12,7 +12,7 @@ define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"]
             switch (eventName) {
             case "object:modified":
                 if (canvas.getActiveGroup()) {
-                    notifyServerGroupMoved();
+                    events.notifyServerGroupMoved();
                     return;
                 }
                 var obj = e.memo.target;
@@ -35,7 +35,7 @@ define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"]
             case 'path:created':
                 canvas.isSelectMode = true;
                 canvas.isDrawingMode = false;
-                matisse.main.resetIconSelection();
+                ui.resetIconSelection();
                 matisse.drawShape = false;
                 document.getElementById("c").style.cursor = 'default';
                 var obj = e.memo.path;
@@ -70,8 +70,6 @@ define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties"]
 
         })
     }
-	
-	
 } 
 
 });

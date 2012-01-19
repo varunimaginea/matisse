@@ -48,37 +48,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             toolHandlers.saveButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
         },
-		
-        /**
-         *  Handles the palette tools icon click events
-         *  @method  handleToolClick
-         *  @param e object
-         */
-        handleToolClick: function (e) {            
-            $(e.target).attr("src", $(e.target).attr('data-active'));
-            $(e.target).parent().parent().addClass('shape-active');
-            matisse.$currActiveIcon = $(e.target);
-            canvas.isSelectMode = false;
-            var toolId = $(e.target).attr('id');
-            matisse.currTool = e.target;
-            $(e.target).removeClass(toolId).addClass(toolId + "_click");
-            document.getElementById("c").style.cursor = 'default'
-            matisse.drawShape = true;
-            matisse.action = e.target.id;
-            matisse.paletteName = $(e.target).attr('data-parent');
-            if (e.target.id != "path") {
-                var obj = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[e.target.id].properties);
-                obj.uid = util.uniqid();
-                matisse.shapeArgs = [obj];
-            }
-            if (matisse.action != "path") {
-                canvas.isDrawingMode = false;
-            } else {
-                document.getElementById("c").style.cursor = 'crosshair';
-                canvas.isDrawingMode = true;
-                return;
-            }
-        },
 
         /**
          *  Check for the active object or group object and remove them from canvas
@@ -112,9 +81,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          *  @param rgs - received object and object's id.
          */
         modifyObject: function (args) {
-            var obj = util.getObjectById(args[0].uid);
-            console.log("modify object");
-            console.log(obj);
+            var obj = util.getObjectById(args[0].uid);            
             if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
                 canvas.setActiveObject(obj)
@@ -169,31 +136,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         mfabric.observe('selection:cleared');
         mfabric.observe('object:moved');
         mfabric.observe('object:selected');
-    }   
-   
-    /**
-     *  Notify Server about Group Moved
-     *  @method  notifyServerGroupMoved
-     *  @param none
-     */
-    function notifyServerGroupMoved() {
-        activeGroup = canvas.getActiveGroup();
-        var objectsInGroup = activeGroup.getObjects();
-        canvas.discardActiveGroup();
-        objectsInGroup.forEach(function (obj) {
-            com.sendDrawMsg({
-                action: "modified",
-                name: obj.name,
-                palette: obj.palette,
-                args: [{
-                    uid: obj.uid,
-                    object: obj
-                }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
-            })
-        });
-
-    }   
-
+    }
+	
     /**
      *  Sets the property of a shape when a notification received from server
      *  @method  setObjectProperty
@@ -217,9 +161,10 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         palettes.createAllPallettes(matisse.palette);
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {
+			console.log(this);
             deleteObjects();
         });
-        $('#chatbutton').click(toolHandlers.chatButtonListener);
+        $('#chatbutton').click(toolHandlers.chatButtonListener);		
         main.handleMouseEvents();
         $('#accordion').accordion();
         ui.setAccordinContentHeight();
