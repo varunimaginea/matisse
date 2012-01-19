@@ -1,6 +1,6 @@
 /*matisse.ui*/
 define(["matisse", "matisse.com"], function(matisse, com) {
-return {
+var ui = {
 
 	/** width and height of panels for resize */
     bodyWidth: '',
@@ -153,16 +153,15 @@ return {
      */
     updateAccordian: function (palette_DisplayName){
         $("#accordion").append('<h3><a href="#">'+palette_DisplayName+'</a></h3><div height="100%" id="'+palette_DisplayName+'"></div>');
-    }
-
-
-
-}
-
-/*============================*/
-/** carousal implementation **/
-/*============================*/
-    $(".scroller-up").live("click", function () {
+    },
+	
+	/**
+	* Carousal implementation 
+	*
+	*
+	*/
+	corousal: function () {
+		$(".scroller-up").live("click", function () {
         var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
         var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
         var parentHeight = $(this).parent().css('height');
@@ -212,7 +211,16 @@ return {
         }
     });
 	
-	 function scrollUp(e) {
+	function scrollUp(e) {
         $(this).siblings(".scrollerContentHolder").css("top", "yellow");
     }
+	
+	}
+
+}
+
+ui.corousal();
+return ui;
+
+    
 });
