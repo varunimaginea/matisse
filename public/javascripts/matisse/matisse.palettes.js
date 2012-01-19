@@ -58,7 +58,8 @@
 	 *  @method  handleToolClick
 	 *  @param e object
 	 */
-	handleToolClick: function (e) {            
+	handleToolClick: function (e) {
+		ui.resetIconSelection();
 		$(e.target).attr("src", $(e.target).attr('data-active'));
 		$(e.target).parent().parent().addClass('shape-active');
 		matisse.$currActiveIcon = $(e.target);

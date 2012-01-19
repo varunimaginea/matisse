@@ -30,7 +30,6 @@ define(["matisse", "matisse.util", "matisse.com", "matisse.palettes.properties",
             case "selection:cleared":
                 $('#prop').remove();
                 $('#propdiv').dialog('close');
-
                 break;
             case 'path:created':
                 canvas.isSelectMode = true;

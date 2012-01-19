@@ -1,6 +1,6 @@
 /**
  * User: Bhavani Shankar
- * Date: 01/13/12
+ * Date: 01/19/12
  * Time: 11:16 AM
  * About this : This is the main javascipt file to handle adding, editing, deleting all elements on canvas (text, rectangle, circle etc)
  * Uses 'Fabric.js' library for client side
@@ -156,7 +156,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
      * @method addTools
      * @param none
      */
-
     function addTools() {
         palettes.createAllPallettes(matisse.palette);
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
