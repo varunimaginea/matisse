@@ -137,19 +137,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
     }
 	
     /**
-     *  Sets the property of a shape when a notification received from server
-     *  @method  setObjectProperty
-     *  @param args
-     */
-    function setObjectProperty(args) {
-        var obj = util.getObjectById(args.uid);
-        if (obj) {
-            obj.set(args.property, args.value);
-            canvas.renderAll();
-        }
-    }
-
-    /**
      * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
      * @method addTools
      * @param none
