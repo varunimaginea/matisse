@@ -4,7 +4,7 @@
  * Time: 04:19 PM
  * About this : Utility to apply specified properties to the palette 
  */
- define(["matisse", "matisse.util", "matisse.ui", "matisse.com", "matisse.toolbuttons.handlers"], function(matisse, util, ui, com, toolHandlers) {
+ define(["matisse", "matisse.util", "matisse.ui", "matisse.comm", "matisse.toolbuttons.handlers"], function(matisse, util, ui, comm, toolHandlers) {
  return {
 	 _applyProperties : function(properties) {        
 		var props = {};
@@ -66,7 +66,7 @@
 				if (i == 'angle') actObj.setAngle(val);
 				canvas.renderAll();
 				canvas.getActiveObject().setCoords();			
-				com.sendDrawMsg({
+				comm.sendDrawMsg({
 					action: "modified",
 					args: [{
 						uid: actObj.uid,
@@ -83,7 +83,7 @@
 			obj.set(matisse.focusInput, color);
 			$('#' + matisse.focusInput).val(color);
 			$('#' + matisse.focusInput).css('background', color);
-			com.sendDrawMsg({
+			comm.sendDrawMsg({
 				action: "modified",
 				args: [{
 					uid: obj.uid,

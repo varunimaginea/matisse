@@ -9,12 +9,10 @@ define(["matisse", "matisse.util"],function(matisse, util) {
 		},
 		sendDrawMsg: function(data){
 			var loc = document.location.pathname;
-			console.log("socket emit ");
 			this.socket.emit("eventDraw",loc,data);
 		},
 		onDraw: function(data){
 			//Dummy method must override
-			
 		},
 		onConnect: function(data){
 			var loc = document.location.pathname;

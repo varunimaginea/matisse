@@ -1,5 +1,5 @@
 /*matisse.events*/
-define(["matisse", "matisse.com", "matisse.ui" ], function(matisse, com, ui) {
+define(["matisse", "matisse.comm", "matisse.ui" ], function(matisse, comm, ui) {
 return {		
 	/**
 	 * Listen for keyboard events and do necessary action
@@ -11,7 +11,7 @@ return {
 		if (evt) {
 			var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
 			if (key == "46" && evt.altKey) {
-				matisse.main.deleteObjects(com);
+				matisse.main.deleteObjects();
 			} else if (key == "38" && evt.ctrlKey) {
 				var obj = canvas.getActiveObject();
 				if (obj) canvas.bringForward(obj);
@@ -36,7 +36,7 @@ return {
 			matisse.shapeArgs[0].name = matisse.action;
 			matisse.shapeArgs[0].palette = matisse.paletteName;
 			matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
-			com.sendDrawMsg({
+			comm.sendDrawMsg({
 				palette: matisse.paletteName,
 				action: matisse.action,
 				args: matisse.shapeArgs
@@ -75,7 +75,7 @@ return {
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
         objectsInGroup.forEach(function (obj) {
-            com.sendDrawMsg({
+            comm.sendDrawMsg({
                 action: "modified",
                 name: obj.name,
                 palette: obj.palette,

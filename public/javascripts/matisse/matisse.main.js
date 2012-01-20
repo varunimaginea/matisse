@@ -6,7 +6,7 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.com", "matisse.palettes.properties", "matisse.toolbuttons.handlers"], function (matisse, ui, util, mfabric, palettes, events, com, properties, toolHandlers) {
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.comm", "matisse.palettes.properties", "matisse.toolbuttons.handlers"], function (matisse, ui, util, mfabric, palettes, events, comm, properties, toolHandlers) {
 	"use strict";
     /**
      *	create canvas object
@@ -84,8 +84,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             var obj = util.getObjectById(args[0].uid);            
             if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
-                canvas.setActiveObject(obj)
-                properties.updatePropertyPanel(obj)
+                canvas.setActiveObject(obj);
+                properties.updatePropertyPanel(obj);
                 obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
             }
             canvas.renderAll();
@@ -122,7 +122,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			$('#canvasId').bind('mousedown', events.mouseDown);            
 			$('#canvasId').bind('mousemove', events.mouseMove);            
         }
-    } // end of 'return'    
+    }; // end of 'return'    
 
     /**
      * Regiser observers to observe any object changes like resize, rotate, move etc
@@ -174,30 +174,30 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 	*  @param data - shape(data.shape) and args array (data.args)
 	*
 	*/
-	com.onDraw = function (data) {
+	comm.onDraw = function (data) {
 		if (data && data.args) {
-			if (data.action == undefined || data.action == null) {
+			if (data.action === undefined || data.action === null) {
 				return;
 			}
-			if (data.action == "modified") {
-				matisse.main.modifyObject(data.args)
-			} else if (data.action == "drawpath") {
-				matisse.main.drawPath(data.args[0])
-			} else if (data.action == "chat") {
-				var txt = document.createTextNode(data.args[0].text)
+			if (data.action === "modified") {
+				matisse.main.modifyObject(data.args);
+			} else if (data.action === "drawpath") {
+				matisse.main.drawPath(data.args[0]);
+			} else if (data.action === "chat") {
+				var txt = document.createTextNode(data.args[0].text);
 				$("#chattext").append(txt);
-			} else if (data.action == "delete") {
+			} else if (data.action === "delete") {
 				var obj = util.getObjectById(data.args[0].uid);
 				canvas.remove(obj);
 				$('#prop').remove();
-			} else if (data.action == "importimage") {
+			} else if (data.action === "importimage") {
 				matisse.main.loadImage(data.args[0]);
 			} else {
-				if (matisse.palette[data.palette] != undefined) {
+				if (matisse.palette[data.palette] !== undefined) {
 					matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
 				}
 			}
 		}
-	}
+	};
     return main;
-})
+});

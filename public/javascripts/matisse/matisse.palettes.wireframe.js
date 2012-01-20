@@ -8,7 +8,7 @@
 /**
  * To load wireframe objects. group the objects using pathgroup
  */
- define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.properties", "matisse.com"], function(matisse, palettes, util, objproperties, com) {
+ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.properties", "matisse.comm"], function(matisse, palettes, util, objproperties, comm) {
  loadWireframe = function(args,objects)
  {	
 	var pathGroup = new fabric.PathGroup(objects, {width:args.width, height: args.height});
@@ -65,7 +65,7 @@ checkboxSelectionHandler = function(objct)
 		{
 			objct.paths[2].stroke = '#ffffff';
 		}
-		com.sendDrawMsg({
+		comm.sendDrawMsg({
 			action: "modified",
 			args: [{
 				uid: objct.uid,
@@ -95,7 +95,7 @@ checkboxSelectionHandler = function(objct)
 		{
 			objct.paths[1].fill = '#eeeeee';
 		}
-		com.sendDrawMsg({
+		comm.sendDrawMsg({
 			action: "modified",
 			args: [{
 				uid: objct.uid,
@@ -127,7 +127,7 @@ function progressHandler(objct)
             {
                 objct.paths[1].points[1].x = (wdth * this.value/100) - (wdth/2);
                 objct.paths[1].points[2].x = (wdth * this.value/100) - (wdth/2);
-                com.sendDrawMsg({
+                comm.sendDrawMsg({
                     action: "modified",
                     args: [{
                         uid: objct.uid,
@@ -199,7 +199,7 @@ palettes.registerpalette("wireframe", {
 					obj.height = height;
 					obj.paths[0].width = width;
 					obj.paths[0].height = height;
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -339,7 +339,7 @@ palettes.registerpalette("wireframe", {
 					obj.paths[0].points[5].x = width/2 - 5;
 					obj.paths[0].points[6].x = -width/2 + 5;
 					obj.paths[0].points[7].x = -width/2;
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -462,7 +462,7 @@ palettes.registerpalette("wireframe", {
 					obj.paths[0].width = width;
 					obj.paths[0].height = height;
 					obj.paths[1].left = -width/2 + obj.paths[1].getWidth()/2 + 10;
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -603,7 +603,7 @@ palettes.registerpalette("wireframe", {
 					obj.paths[2].points[0].x = checkbox_left + 3;
 					obj.paths[2].points[1].x = checkbox_left + 6;
 					obj.paths[2].points[2].x = checkbox_left + 11;
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -745,7 +745,7 @@ palettes.registerpalette("wireframe", {
 					obj.paths[1].left = obj.paths[0].left;
 					var text_left = obj.paths[0].left + (2 * obj.paths[1].radius) + 15;
 					obj.paths[2].left = -(-obj.paths[2].getWidth()/2 - text_left);
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -895,7 +895,7 @@ palettes.registerpalette("wireframe", {
 					obj.paths[2].points[1].x = wdth/2 - 6.5;
 					obj.paths[2].points[2].x = wdth/2 - 10.5;
 					obj.paths[3].left = -wdth/2 + 15 + obj.paths[3].getWidth()/2;
-					com.sendDrawMsg({
+					comm.sendDrawMsg({
 						action: "modified",
 						args: [{
 							uid: obj.uid,
@@ -1320,7 +1320,7 @@ palettes.registerpalette("wireframe", {
                     obj.height = height;
                     obj.paths[0].width = width;
                     obj.paths[0].height = height;
-                    com.sendDrawMsg({
+                    comm.sendDrawMsg({
                         action: "modified",
                         args: [{
                             uid: obj.uid,

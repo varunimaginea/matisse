@@ -12,7 +12,6 @@ return  {
         return true;
     },
 
-
 	/**
      * Validation method for input field, checks for the user keypress and allows only numbers
      * @method numbersonly
