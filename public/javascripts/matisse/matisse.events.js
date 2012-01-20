@@ -1,5 +1,5 @@
 /*matisse.events*/
-define(["matisse", "matisse.comm", "matisse.ui" ], function(matisse, comm, ui) {
+define(["matisse", "matisse.ui", "matisse.comm" ], function(matisse, ui, comm) {
 return {		
 	/**
 	 * Listen for keyboard events and do necessary action
