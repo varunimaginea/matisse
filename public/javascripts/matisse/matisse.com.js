@@ -14,38 +14,7 @@ define(["matisse", "matisse.util"],function(matisse, util) {
 		},
 		onDraw: function(data){
 			//Dummy method must override
-			console.log("DRAW from com.js");
-			/**
-			*  Called when other users add, modify or delete any object
-			*  @method  matisse.onDraw
-			*  @param data - shape(data.shape) and args array (data.args)
-			*
-			*/
-			if (data && data.args) {
-				if (data.action == undefined || data.action == null) {
-					return;
-				}
-				if (data.action == "modified") {
-					matisse.main.modifyObject(data.args)
-				} else if (data.action == "modifiedbyvalue") {
-					matisse.main.setObjectProperty(data.args[0]);
-				} else if (data.action == "drawpath") {
-					matisse.main.drawPath(data.args[0])
-				} else if (data.action == "chat") {
-					var txt = document.createTextNode(data.args[0].text)
-					$("#chattext").append(txt);
-				} else if (data.action == "delete") {
-					var obj = util.getObjectById(data.args[0].uid);
-					canvas.remove(obj);
-					$('#prop').remove();
-				} else if (data.action == "importimage") {
-					matisse.main.loadImage(data.args[0]);
-				} else {
-					if (matisse.palette[data.palette] != undefined) {
-						matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
-					}
-				}
-			}
+			
 		},
 		onConnect: function(data){
 			var loc = document.location.pathname;
