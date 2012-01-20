@@ -1,4 +1,8 @@
-
+/**
+* About this : Client side socket connection and communicaiton handler
+ * 
+ * 
+*/
 define(["matisse", "matisse.util"],function(matisse, util) {
 	 var com = {
 		connectHandler: function(data){
