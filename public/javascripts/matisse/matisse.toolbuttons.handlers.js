@@ -1,5 +1,5 @@
 /*matisse.events*/
-define(["matisse", "matisse.comm"], function(matisse, comm) {
+define(["matisse" ], function(matisse) {
 return {
 	/**
      * Handler for Save Button Click
@@ -120,7 +120,7 @@ return {
         msg = "from $:" + msg + "\n";
         var txt = document.createTextNode(msg)
         $("#chattext").append(txt);
-        comm.sendDrawMsg({
+        matisse.comm.sendDrawMsg({
             action: "chat",
             args: [{
                 text: msg

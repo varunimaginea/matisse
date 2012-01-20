@@ -5,7 +5,7 @@
  * About this : To set the properties of the object with the received object
  */
 
-require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.comm", "matisse.util"], function(matisse, main, palettes, objproperties, comm, util) {
+require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.util"], function(matisse, main, palettes, objproperties, util) {
 	updateProperties = function (obj, recvdObj) {
 		obj.left = recvdObj.left;
 		obj.top = recvdObj.top;
@@ -328,7 +328,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					};
 					txt_area.onkeyup = function (e) {
 						canvas.getActiveObject().text = this.value;
-						comm.sendDrawMsg({
+						matisse.comm.sendDrawMsg({
 							action: "modified",
 							args: [{
 								uid: canvas.getActiveObject().uid,

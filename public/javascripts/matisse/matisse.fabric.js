@@ -1,5 +1,5 @@
 /* fabric related methods */
-define(["matisse", "matisse.util", "matisse.comm", "matisse.palettes.properties", "matisse.ui", "matisse.events"], function(matisse, util, comm, properties, ui, events) {
+define(["matisse", "matisse.util",  "matisse.palettes.properties", "matisse.ui", "matisse.events"], function(matisse, util, properties, ui, events) {
 	
 	/**
      *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
@@ -16,7 +16,7 @@ define(["matisse", "matisse.util", "matisse.comm", "matisse.palettes.properties"
                     return;
                 }
                 var obj = e.memo.target;
-                comm.sendDrawMsg({
+                matisse.comm.sendDrawMsg({
                     action: "modified",
                     name: obj.name,
                     palette: obj.palette,
@@ -41,7 +41,7 @@ define(["matisse", "matisse.util", "matisse.comm", "matisse.palettes.properties"
                 obj.uid = util.uniqid();
                 obj.name = "drawingpath";
                 obj.palette = matisse.paletteName;
-                comm.sendDrawMsg({
+                matisse.comm.sendDrawMsg({
                     action: 'drawpath',
                     palette: matisse.paletteName,
                     args: [{

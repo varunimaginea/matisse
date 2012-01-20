@@ -106,7 +106,6 @@ return  {
         var newDate = new Date;
         return this.randomString()+newDate.getTime();
     },
-	
 	/**
      * Returns Random String 
 	 * @method randomString
@@ -122,7 +121,6 @@ return  {
         }
         return randomstring;
     },
-	
 	/**
      * Calculate the offset value for the canvas and return it
      * @method getOffset 
@@ -156,7 +154,6 @@ return  {
         });
         return obj;
     },
-	
 	/**
      *  Creates an proeperties object from a  given array and returns that object
      *  @method  getDefaultDataFromArray
@@ -171,8 +168,6 @@ return  {
         }
         return obj;
     }
-
-
 }
 
 });

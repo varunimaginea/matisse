@@ -1,5 +1,5 @@
 /*matisse.ui*/
-define(["matisse", "matisse.comm"], function (matisse, comm) {
+define(["matisse", ], function (matisse) {
 	"use strict";
 	var ui = {
 		/** width and height of panels for resize */

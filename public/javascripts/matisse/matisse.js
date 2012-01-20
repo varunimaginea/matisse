@@ -26,6 +26,7 @@
 		Properties : {},
 		$currActiveIcon : null,
 		main:{},
+		comm:{},
 		events:{}
 		
 	};

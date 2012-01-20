@@ -6,7 +6,7 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.comm", "matisse.palettes.properties", "matisse.toolbuttons.handlers"], function (matisse, ui, util, mfabric, palettes, events, comm, properties, toolHandlers) {
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.palettes.properties", "matisse.toolbuttons.handlers", "matisse.comm"], function (matisse, ui, util, mfabric, palettes, events,  properties, toolHandlers, comm) {
 	"use strict";
     /**
      *	create canvas object
@@ -14,12 +14,10 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
     window.canvas = new fabric.Canvas('c', {
         backgroundColor: '#FFFFFF'
     });
-
     /**
      * by default selection mode is false 
      */
     canvas.isSelectMode = false;
-
     var main = {
         /**
          * Initializes the application
@@ -174,7 +172,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 	*  @param data - shape(data.shape) and args array (data.args)
 	*
 	*/
-	comm.onDraw = function (data) {
+	comm.prototype.onDraw = function (data) {
+		console.log("on draw called");
 		if (data && data.args) {
 			if (data.action === undefined || data.action === null) {
 				return;

@@ -2,7 +2,7 @@
  * User: Bhavani Shankar
  * Date: 01/19/12
  * Time: 11:16 AM
- * About this : Utility to Create all the shapes,Based on the type specified
+ * About this : Utility to Create all the shapes, based on the type specified
  *
  */
 define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (matisse, main, ui, util) {
