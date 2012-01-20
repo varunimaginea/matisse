@@ -58,7 +58,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 
             if (activeObject) {
                 canvas.remove(activeObject);
-                com.sendDrawMsg({
+                matisse.comm.sendDrawMsg({
                     action: "delete",
                     args: [{
                         uid: activeObject.uid

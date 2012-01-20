@@ -36,7 +36,7 @@ return {
 			matisse.shapeArgs[0].name = matisse.action;
 			matisse.shapeArgs[0].palette = matisse.paletteName;
 			matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
-			comm.sendDrawMsg({
+			matisse.comm.sendDrawMsg({
 				palette: matisse.paletteName,
 				action: matisse.action,
 				args: matisse.shapeArgs
@@ -75,7 +75,7 @@ return {
         var objectsInGroup = activeGroup.getObjects();
         canvas.discardActiveGroup();
         objectsInGroup.forEach(function (obj) {
-            comm.sendDrawMsg({
+            matisse.comm.sendDrawMsg({
                 action: "modified",
                 name: obj.name,
                 palette: obj.palette,

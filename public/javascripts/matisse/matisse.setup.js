@@ -9,6 +9,7 @@ define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.p
     $(function(){
 		var serverURL = 'http://localhost';//change it to server ip or local ip for testing from other machines
 		var comm = new Comm(serverURL); 
+		matisse.comm = comm;
 		matisse.main = main;
         //call all the functions, that are to be called on document ready here;
 		main.init();		
