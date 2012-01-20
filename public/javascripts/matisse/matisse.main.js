@@ -7,7 +7,7 @@
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
 define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.com", "matisse.palettes.properties", "matisse.toolbuttons.handlers"], function (matisse, ui, util, mfabric, palettes, events, com, properties, toolHandlers) {
-
+	"use strict";
     /**
      *	create canvas object
      */
@@ -65,7 +65,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                     args: [{
                         uid: activeObject.uid
                     }]
-                })
+                });
                 $('#prop').remove();
             } else if (activeGroup) {
                 var objectsInGroup = activeGroup.getObjects();
@@ -144,7 +144,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
      *  @param args
      */
     function setObjectProperty(args) {
-        var obj = getObjectById(args.uid);
+        var obj = util.getObjectById(args.uid);
         if (obj) {
             obj.set(args.property, args.value);
             canvas.renderAll();
@@ -160,13 +160,44 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         palettes.createAllPallettes(matisse.palette);
         $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
         $('#deleteTool').click(function () {
-			console.log(this);
-            deleteObjects();
+			main.deleteObjects();
         });
         $('#chatbutton').click(toolHandlers.chatButtonListener);		
         main.handleMouseEvents();
         $('#accordion').accordion();
         ui.setAccordinContentHeight();
     }
+		
+	/**
+	*  Called when other users add, modify or delete any object
+	*  @method  matisse.onDraw
+	*  @param data - shape(data.shape) and args array (data.args)
+	*
+	*/
+	com.onDraw = function (data) {
+		if (data && data.args) {
+			if (data.action == undefined || data.action == null) {
+				return;
+			}
+			if (data.action == "modified") {
+				matisse.main.modifyObject(data.args)
+			} else if (data.action == "drawpath") {
+				matisse.main.drawPath(data.args[0])
+			} else if (data.action == "chat") {
+				var txt = document.createTextNode(data.args[0].text)
+				$("#chattext").append(txt);
+			} else if (data.action == "delete") {
+				var obj = util.getObjectById(data.args[0].uid);
+				canvas.remove(obj);
+				$('#prop').remove();
+			} else if (data.action == "importimage") {
+				matisse.main.loadImage(data.args[0]);
+			} else {
+				if (matisse.palette[data.palette] != undefined) {
+					matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
+				}
+			}
+		}
+	}
     return main;
 })
