@@ -38,7 +38,7 @@ define(["matisse"], function (matisse) {
 			this.resizeMainPanel();
 			this.resizeLeftPanel();
 			this.setAccordinContentHeight();
-			this.resizeCanvas();
+			this.resizeCanvas();			
 		},
 		/**
 		 * method to resize the document body
@@ -92,14 +92,25 @@ define(["matisse"], function (matisse) {
 		 * @param none
 		 */
 	    setAccordinContentHeight: function () {
-			var $accordionHeaders = $('.ui-accordion-header');
+			var $accordionHeaders = $('.ui-accordion-header');			
 			var accordionHeaderHeight = 0;
-			$accordionHeaders.each(function (i, s) {
-				accordionHeaderHeight = accordionHeaderHeight + $(s).outerHeight(true);
+			$accordionHeaders.each(function (i, s) {				
+				accordionHeaderHeight = accordionHeaderHeight + $(s).outerHeight(true);				
 			});
 			var accordionContentHeight = (this.leftPanelHeight - (accordionHeaderHeight + 25));
 			$('.ui-accordion-content').height(accordionContentHeight);
+			this.setCarousalHeight(accordionContentHeight);			
 		},
+
+		/**
+		 * Set carousal height
+		 * @method setCarousalHeight
+		 * @param accordionContentHeight - height of the accordion content
+		 */
+		setCarousalHeight: function (accordionContentHeight) {
+			$('.shapesHolder').height(accordionContentHeight - 28); // 28 = 2 * 14 where, 14px is the height of down and up arrows of carousal
+		},
+		
 		/**
 		 * Bind resizing of window to panels
 		 * @method bindResizeWindow
@@ -181,17 +192,15 @@ define(["matisse"], function (matisse) {
 				scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
 				parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
 				scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
-				if (scrollerContentHolderHeight > parentHeight) {
-					if (scrollerContentHolderTop < -30) {
-						$("#wireframe .scroller-down").css("background-color", "#8F98A6");
-						var newTop = (scrollerContentHolderTop - (-shapeHeight));
-						$(this).siblings().find(".scrollerContentHolder").stop().animate({
-							"top": newTop
-						}, "slow");
-					} else {
-						$("#wireframe .scroller-up").css("background-color", "#aaa");
-					}
-				}
+				if (scrollerContentHolderTop < -30) {
+					$(".scroller-down").css("background-color", "#8F98A6");
+					var newTop = (scrollerContentHolderTop - (-shapeHeight));
+					$(this).siblings().find(".scrollerContentHolder").stop().animate({
+						"top": newTop
+					}, "slow");
+				} else {
+					$(".scroller-up").css("background-color", "#aaa");
+				}				
 			});
 			$(".scroller-down").live("click", function () {
 				var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
@@ -206,13 +215,13 @@ define(["matisse"], function (matisse) {
 				var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();
 				if (scrollerContentHolderHeight > parentHeight) {
 					if (-(scrollerContentHolderTop) < (sumOfShapesHeight - accordianHeight - 30)) {
-						$("#wireframe .scroller-up").css("background-color", "#8F98A6");
+						$(".scroller-up").css("background-color", "#8F98A6");
 						var newTop = (scrollerContentHolderTop - shapeHeight);
 						$(this).siblings().find(".scrollerContentHolder").stop().animate({
 							"top": newTop
 						}, "slow");
 					} else {
-						$("#wireframe .scroller-down").css("background-color", "#aaa");
+						$(".scroller-down").css("background-color", "#aaa");
 					}
 				}
 			});
