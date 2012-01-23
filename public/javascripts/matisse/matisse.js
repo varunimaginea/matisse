@@ -27,7 +27,9 @@
 		$currActiveIcon : null,
 		main:{},
 		comm:{},
-		events:{}
+		events:{},
+		hLine:{},
+		vLine:{}
 		
 	};
  })

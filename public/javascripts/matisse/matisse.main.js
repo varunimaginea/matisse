@@ -30,6 +30,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             ui.resizeWindow();
             ui.setCanvasSize();
             ui.bindResizeWindow();
+			ui.drawHVLines();
             canvas.isSelectMode = true;
             matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left;
             matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top;
@@ -134,6 +135,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         mfabric.observe('selection:cleared');
         mfabric.observe('object:moved');
         mfabric.observe('object:selected');
+		mfabric.observe('object:moving');
     }
 	
     /**
