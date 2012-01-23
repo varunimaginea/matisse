@@ -47,7 +47,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 			}
 			html += '</div></div>';
 			html += '<div class="scroller scroller-down"></div>';
-			$(document.getElementById(palette_DisplayName)).append(html);
+			$(document.getElementById(palette_DisplayName)).append(html);			
 		},
 		/**
 		 *  Handles the palette tools icon click events
