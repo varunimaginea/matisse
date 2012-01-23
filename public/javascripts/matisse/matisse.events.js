@@ -11,19 +11,22 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
 			var evt = (e) ? e : (window.event) ? window.event : null;
 			if (evt) {
 				var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
-				if (key === "46" && evt.altKey) {
+				if (key === "46" && evt.altKey) { // ALT + DELETE
 					matisse.main.deleteObjects();
-				} else if (key === "38" && evt.ctrlKey) {
+				} else if (key === "38" && evt.ctrlKey) { // CONTROL + Up Arrow
 					var obj = canvas.getActiveObject();
 					if (obj) {
 						canvas.bringForward(obj);
 					}
-				} else if (key === "40" && evt.ctrlKey) {
+				} else if (key === "40" && evt.ctrlKey) { // CONTROL + Down Arrow
 					var obj = canvas.getActiveObject();
 					if (obj) {
 						canvas.sendBackwards(obj);
 					}
-				}
+				} else if (key == "27") // when escape pressed
+				{
+					closePopup()
+				} /* when ALT+upArrow pressed*/
 			}
 		},
 
@@ -92,4 +95,12 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
 			});
 		}
 	};
+	function closePopup() {
+        var popEl = document.getElementById('popUpDiv');
+        var closeEl = document.getElementById('closediv');
+        var blanketEl = document.getElementById('blanket');
+        if (popEl.style.display != 'none') popEl.style.display = 'none';
+        if (closeEl.style.display != 'none') closeEl.style.display = 'none';
+        if (blanketEl.style.display != 'none') blanketEl.style.display = 'none'
+    }
 });
