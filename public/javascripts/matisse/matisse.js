@@ -4,9 +4,10 @@
  * Time: 11:16 AM
  * About matisse : matisse is the Main Namespace
  */
-	//Defining the global name space
-	define( function() {
-    return {  
+//Defining the global name space
+define(function () {
+    "use strict";
+	return {
 		fillColor : "#AAAAAA",
 		points : {},
 		palette: {},
@@ -17,19 +18,18 @@
 		currTool: null,
 		xPoints : [],
 		yPoints : [],
-		xOffset:null,
-		yOffset:null,
-		paletteName:null,
+		xOffset: null,
+		yOffset: null,
+		paletteName: null,
 		associateText: {},
-		focusInput : "stroke",
-		palettes : {},
-		Properties : {},
-		$currActiveIcon : null,
-		main:{},
-		comm:{},
-		events:{},
-		hLine:{},
-		vLine:{}
-		
+		focusInput: "stroke",
+		palettes: {},
+		Properties: {},
+		$currActiveIcon: null,
+		main: {},
+		comm: {},
+		events: {},
+		hLine: {},
+		vLine: {}
 	};
- })
+});

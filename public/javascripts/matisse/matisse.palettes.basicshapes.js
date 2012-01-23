@@ -5,8 +5,9 @@
  * About this : To set the properties of the object with the received object
  */
 
-require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.util"], function(matisse, main, palettes, objproperties, util) {
-	updateProperties = function (obj, recvdObj) {
+require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.util"], function (matisse, main, palettes, objproperties, util) {
+	"use strict";
+	var updateProperties = function (obj, recvdObj) {
 		obj.left = recvdObj.left;
 		obj.top = recvdObj.top;
 		obj.scaleX = recvdObj.scaleX;
@@ -14,7 +15,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		obj.setAngle(recvdObj.angle);
 		if (recvdObj.fill) {
 			obj.set("fill", recvdObj.fill);
-		}	
+		}
 		if (recvdObj.stroke) {
 			obj.set("stroke", recvdObj.stroke);
 		}
@@ -49,8 +50,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				},
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;				
-					updateProperties(obj, recvdObj);												
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
@@ -143,8 +144,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				},
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;				
-					updateProperties(obj, recvdObj);												
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
@@ -312,12 +313,11 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					textSample.palette = args.palette;
 					textSample.customName = "text";
 					canvas.add(textSample);
-					
 				},
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;				
-					updateProperties(obj, recvdObj);												
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
@@ -338,7 +338,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						});
 						canvas.getActiveObject().setCoords();
 						canvas.renderAll();
-					}; 
+					};
 				},
 				properties: [{
 					name: 'left',
@@ -439,6 +439,5 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				}]
 			} // end of path
 		} // end of shapes
-	} // end of basic shapes
-	);
+	}); // end of basic shapes
 });

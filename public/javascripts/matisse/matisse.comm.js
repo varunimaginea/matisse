@@ -5,18 +5,18 @@
 */
 define(function () {
     /*constructor*/
+	"use strict";
 	function Comm(url) {
-		this.socket = io.connect(url); 
-		var objRef =this;
+		this.socket = io.connect(url);
+		var objRef = this;
 		this.socket.on("eventDraw", function (data) {
 			objRef.drawHandler(data);
 		});
 		this.socket.on('eventConnect', function (data) {
-			console.log("We are now connected");
-			objRef.connectHandler(data);	
+			objRef.connectHandler(data);
 		});
 	}
-	(function(){
+	(function () {
 		this.connectHandler = function (data) {
 			this.onConnect(data);
 		};
