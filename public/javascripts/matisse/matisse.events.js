@@ -11,22 +11,22 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
 			var evt = (e) ? e : (window.event) ? window.event : null;
 			if (evt) {
 				var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
-				if (key === "46" && evt.altKey) { // ALT + DELETE
+				if (key == "46" && evt.altKey) { // ALT + DELETE
 					matisse.main.deleteObjects();
-				} else if (key === "38" && evt.ctrlKey) { // CONTROL + Up Arrow
+				} else if (key == "38" && evt.ctrlKey) { // CONTROL + Up Arrow
 					var obj = canvas.getActiveObject();
 					if (obj) {
 						canvas.bringForward(obj);
 					}
-				} else if (key === "40" && evt.ctrlKey) { // CONTROL + Down Arrow
+				} else if (key == "40" && evt.ctrlKey) { // CONTROL + Down Arrow
 					var obj = canvas.getActiveObject();
 					if (obj) {
 						canvas.sendBackwards(obj);
 					}
-				} else if (key == "27") // when escape pressed
+				} else if (key == "27") // when Escape key pressed
 				{
 					closePopup()
-				} /* when ALT+upArrow pressed*/
+				} 
 			}
 		},
 
