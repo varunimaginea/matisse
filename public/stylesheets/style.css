@@ -207,18 +207,18 @@ div.scroller{
 	cursor:pointer;
 }
 
-#wireframe .scroller-up{
+.scroller-up{
 	height: 14px;
 	background: #AAAAAA url('../images/up_arrow.png') no-repeat center center;
 }
 
-#wireframe .scroller-down{
-	height: 18px;
+.scroller-down{
+	height: 14px;
 	background: #8F98A6 url('../images/down_arrow.png') no-repeat center center;
 }
 
 .shapesHolder{
-height:95%; overflow:hidden;
+	overflow:hidden;
 }
 
 .scrollerContentHolder{
