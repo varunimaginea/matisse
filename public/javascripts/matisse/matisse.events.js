@@ -9,28 +9,67 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
 		 * @param e keyevent
 		 */
 		keyDown: function (e) {
-			var evt = (e) ? e : (window.event) ? window.event : null;
-			if (evt) {
-				
-				var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));				
-				if (key == "46" && evt.altKey) { // ALT + DELETE			
-					matisse.main.deleteObjects();
-				} else if (key == "38" && evt.ctrlKey) { // CONTROL + Up Arrow
-					var obj = canvas.getActiveObject();
-					if (obj) {
-						canvas.bringForward(obj);
-					}
-				} else if (key == "40" && evt.ctrlKey) { // CONTROL + Down Arrow
-					var obj = canvas.getActiveObject();
-					if (obj) {
-						canvas.sendBackwards(obj);
-					}
-				} else if (key == "27") // when escape pressed
-				{
-					closePopup()
-				} /* when ALT+upArrow pressed*/
-			}
-		},
+            var evt = (e) ? e : (window.event) ? window.event : null;
+            if (evt) {
+                var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
+                if (key == "46" && evt.altKey) { // ALT + DELETE
+                    matisse.main.deleteObjects();
+                } else if (key == "38" && evt.ctrlKey) { // CONTROL + Up Arrow
+                    var obj = canvas.getActiveObject();
+                    if (obj) {
+                        canvas.bringForward(obj);
+                    }
+                } else if (key == "40" && evt.ctrlKey) { // CONTROL + Down Arrow
+                    var obj = canvas.getActiveObject();
+                    if (obj) {
+                        canvas.sendBackwards(obj);
+                    }
+                } else if (key == "27") { // when Escape key pressed
+                    closePopup()
+                } else if (key == "37" && evt.shiftKey) {
+                    var obj = canvas.getActiveObject();
+                    var objleft = obj.left;
+
+                    obj.set('left', objleft - (matisse.horIndent * matisse.indentMultiplier));
+                    onObjectMoveByKey(obj);
+                } else if (key == "37") {
+                    var obj = canvas.getActiveObject();
+                    var objleft = obj.left;
+                    obj.set('left', objleft - matisse.horIndent);
+                    onObjectMoveByKey(obj)
+                } else if (key == "39" && evt.shiftKey) {
+                    var obj = canvas.getActiveObject();
+                    var objleft = obj.left;
+                    obj.set('left', objleft + (matisse.horIndent * matisse.indentMultiplier));
+                    onObjectMoveByKey(obj);
+                } else if (key == "39") {
+                    var obj = canvas.getActiveObject();
+                    var objleft = obj.left;
+                    obj.set('left', objleft + matisse.horIndent);
+                    onObjectMoveByKey(obj)
+                } else if (key == "38" && evt.shiftKey) {
+                    var obj = canvas.getActiveObject();
+                    var objtop = obj.top;
+                    obj.set('top', objtop - matisse.verIndent * matisse.indentMultiplier);
+                    onObjectMoveByKey(obj)
+                } else if (key == "38") {
+                    var obj = canvas.getActiveObject();
+                    var objtop = obj.top;
+                    obj.set('top', objtop - matisse.verIndent);
+                    onObjectMoveByKey(obj)
+                } else if (key == "40" && evt.shiftKey) {
+                    var obj = canvas.getActiveObject();
+                    var objtop = obj.top;
+                    obj.set('top', objtop + matisse.verIndent * matisse.indentMultiplier);
+                    onObjectMoveByKey(obj)
+                } else if (key == "40") {
+                    var obj = canvas.getActiveObject();
+                    var objtop = obj.top;
+                    obj.set('top', objtop + matisse.verIndent);
+                    onObjectMoveByKey(obj)
+                }
+            }
+        },
 
         /**
          * Listen for mouse down event and do necessary action
