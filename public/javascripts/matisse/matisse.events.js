@@ -72,7 +72,7 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
         },
 
         /**
-         * Listen for mouse down event and do necessary action
+         * Listen for mouse down(on canvas after shape tool is selected) event and do necessary action
          * @method mouseDown 
          * @param e mouseevent
          */
