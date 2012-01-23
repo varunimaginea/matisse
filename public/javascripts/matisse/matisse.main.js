@@ -80,7 +80,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          *  @param rgs - received object and object's id.
          */
         modifyObject: function (args) {
-            var obj = util.getObjectById(args[0].uid);            
+            var obj = util.getObjectById(args[0].uid);
             if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
                 canvas.setActiveObject(obj);
@@ -117,10 +117,10 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          *  @method  handleMouseEvents
          *  @param none
          */
-        handleMouseEvents: function () {			
-			$('#canvasId').bind('mousedown', events.mouseDown);            
-			$('#canvasId').bind('mousemove', events.mouseMove);            
-        }
+        handleMouseEvents: function () {
+			$('#canvasId').bind('mousedown', events.mouseDown);
+			$('#canvasId').bind('mousemove', events.mouseMove);
+		}
     }; // end of 'return'    
 
     /**
@@ -137,7 +137,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         mfabric.observe('object:selected');
 		mfabric.observe('object:moving');
     }
-	
+
     /**
      * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
      * @method addTools
@@ -149,12 +149,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         $('#deleteTool').click(function () {
 			main.deleteObjects();
         });
-        $('#chatbutton').click(toolHandlers.chatButtonListener);		
+        $('#chatbutton').click(toolHandlers.chatButtonListener);
         main.handleMouseEvents();
         $('#accordion').accordion();
         ui.setAccordinContentHeight();
     }
-		
+
 	/**
 	*  Called when other users add, modify or delete any object
 	*  @method  matisse.onDraw
@@ -162,7 +162,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 	*
 	*/
 	comm.prototype.onDraw = function (data) {
-		console.log("on draw called");
 		if (data && data.args) {
 			if (data.action === undefined || data.action === null) {
 				return;

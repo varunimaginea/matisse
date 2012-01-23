@@ -1,5 +1,5 @@
 /*matisse.ui*/
-define(["matisse", ], function (matisse) {
+define(["matisse"], function (matisse) {
 	"use strict";
 	var ui = {
 		/** width and height of panels for resize */
@@ -94,7 +94,7 @@ define(["matisse", ], function (matisse) {
 	    setAccordinContentHeight: function () {
 			var $accordionHeaders = $('.ui-accordion-header');
 			var accordionHeaderHeight = 0;
-			$accordionHeaders.each(function(i, s) {
+			$accordionHeaders.each(function (i, s) {
 				accordionHeaderHeight = accordionHeaderHeight + $(s).outerHeight(true);
 			});
 			var accordionContentHeight = (this.leftPanelHeight - (accordionHeaderHeight + 25));
@@ -144,29 +144,29 @@ define(["matisse", ], function (matisse) {
 			$("#accordion").append('<h3><a href="#">' + palette_DisplayName + '</a></h3><div height="100%" id="' + palette_DisplayName + '"></div>');
 		},
 		drawHVLines: function () {
-		var width = this.canvasWidth;
-		var height = this.canvasWidth;	
-        matisse.hLine = new fabric.Line([0, -10, width, -10], {
-            eanbled: false,
-            stroke: '#ff0000',
-            left: width / 2
-        })
-        matisse.vLine = new fabric.Line([-10, 0, -10, height], {
-            eanbled: false,
-            stroke: '#ff0000',
-            top: height / 2
-        })
-        matisse.vLine.name = 'vline';
-        matisse.hLine.name = 'hline';
-        canvas.add(matisse.hLine);
-        canvas.add(matisse.vLine);
-        matisse.hLine.set('fill', '#ff0000');
-        matisse.vLine.set('fill', '#ff0000');
-        matisse.hLine.set('strokeWidth', '.5');
-        matisse.vLine.set('strokeWidth', '.5');
-        //disableObject(line);
-        //	fabric.util.makeElementUnselectable(line)
-    },
+			var width = this.canvasWidth;
+			var height = this.canvasWidth;
+			matisse.hLine = new fabric.Line([0, -10, width, -10], {
+				eanbled: false,
+				stroke: '#ff0000',
+				left: width / 2
+			});
+			matisse.vLine = new fabric.Line([-10, 0, -10, height], {
+				eanbled: false,
+				stroke: '#ff0000',
+				top: height / 2
+			});
+			matisse.vLine.name = 'vline';
+			matisse.hLine.name = 'hline';
+			canvas.add(matisse.hLine);
+			canvas.add(matisse.vLine);
+			matisse.hLine.set('fill', '#ff0000');
+			matisse.vLine.set('fill', '#ff0000');
+			matisse.hLine.set('strokeWidth', '.5');
+			matisse.vLine.set('strokeWidth', '.5');
+			//disableObject(line);
+			//	fabric.util.makeElementUnselectable(line)
+		},
 		/**
 		* Carousal implementation 
 		*
@@ -194,7 +194,6 @@ define(["matisse", ], function (matisse) {
 				}
 			});
 			$(".scroller-down").live("click", function () {
-				console.log("in scroller-down click");
 				var scrollerContentHolderHeight = $(this).siblings().find(".scrollerContentHolder").css('height');
 				var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
 				var parentHeight = $(this).parent().css('height');
@@ -223,6 +222,5 @@ define(["matisse", ], function (matisse) {
 		}
 	};
 	ui.corousal();
-	
 	return ui;
 });
