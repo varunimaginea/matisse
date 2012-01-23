@@ -29,7 +29,9 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 				var $propTableDiv = $("#proptable");
 				$propTableDiv.append("<tr class='" + i + "tr'><td ><label style = 'text-align: right' for='" + i + "'>" + i + ": </label></td><td >" + inputTag + "</td></tr>");
 				var inBox = $("#" + i);
-
+				if(i === "width" || i === "height") {
+					inBox.prop('disabled', true);
+				}
 				$(":input").focus(function () {
 					matisse.focusInput = '';
 					var id = this.id;
