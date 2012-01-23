@@ -121,7 +121,8 @@ define(["matisse"], function (matisse) {
 			var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
 			var string_length = 8;
 			var randomstring = '';
-			for (var i = 0; i < string_length; i++) {
+			var i = 0;
+			for (i = 0; i < string_length; i++) {
 				var rnum = Math.floor(Math.random() * chars.length);
 				randomstring += chars.substring(rnum,rnum+1);
 			}
@@ -154,7 +155,7 @@ define(["matisse"], function (matisse) {
 			var obj;
 			var objs = canvas.getObjects();
 			objs.forEach(function (object) {
-				if (object.uid == id) {
+				if (object.uid === id) {
 					obj = object;
 				}
 			});
@@ -166,14 +167,17 @@ define(["matisse"], function (matisse) {
 		 *  @param arr - Array of properties
 		 *  @return obj - Object
 		 */
-		getDefaultDataFromArray: function(arr) {
-			if (arr == undefined) return null;
+		getDefaultDataFromArray: function (arr) {
+			if (arr === undefined) {
+				return null;
+			}
 			var obj = {};
-			for (var i = 0; i < arr.length; i++) {
+			var i = 0;
+			for (i = 0; i < arr.length; i++) {
 				obj[arr[i].name] = arr[i].defaultvalue;
 			}
 			return obj;
 		}
-}
+	};
 
 });
