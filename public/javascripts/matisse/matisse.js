@@ -30,6 +30,9 @@ define(function () {
 		comm: {},
 		events: {},
 		hLine: {},
-		vLine: {}
+		vLine: {},
+		horIndent : 1,
+		verIndent : 1,
+		indentMultiplier : 10,
 	};
 });
