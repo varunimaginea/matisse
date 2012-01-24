@@ -34,5 +34,6 @@ define(function () {
 		horIndent : 1,
 		verIndent : 1,
 		indentMultiplier : 10,
+		imageTag: null
 	};
 });
