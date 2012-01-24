@@ -203,13 +203,16 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				matisse.imageTag = args.path;
 				document.getElementById('icons-wrapper').insertBefore(span, null);
 			}
-						
+			var img = document.getElementById('myimage')
+			var _width = img.clientWidth;
+			var _height = img.clientHeight;		
+			console.log(args.angle+'  '+args.uid+'  '+args.top+'   '+args.left+' width = '+_width+'   '+_height+'  scalex ='+args.scaleX+'  '+args.scaleY);
 			//console.log('args.width ='+args.width+'  args.height ='+args.height+ 'width from tag ='+_width);	
 			var fabImage = new fabric.Image("myimage", {
 				left: args.left,
 				top: args.top,
-				width: args.width,
-				height: args.height,
+				width: _width,
+				height: _height,
 				scaleX: args.scaleX,
 				scaleY: args.scaleY
 			});
@@ -218,10 +221,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			fabImage.name = args.name;
 			fabImage.palette = args.palette;
 			fabImage.path = args.path;
-			fabImage.setAngle(args.angle);
+			if(args.angle) fabImage.setAngle(args.angle);
 			canvas.renderAll();
 			fabImage.setCoords();
 			$('#myimage').remove();
+			
+			
 			if(args.self) {
 				matisse.comm.sendDrawMsg({
 					action: 'importimage',
