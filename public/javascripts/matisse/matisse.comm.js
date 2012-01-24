@@ -1,11 +1,11 @@
 /**
- * About this : Client side socket connection and communicaiton handler
+ * Comm: Client side socket connection and communicaiton handler
  * 
  * 
 */
 define(function () {
-    /*constructor*/
-	"use strict";
+   	"use strict";
+	/*constructor*/
 	function Comm(url) {
 		this.socket = io.connect(url);
 		var objRef = this;
