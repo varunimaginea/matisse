@@ -22,6 +22,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 						action: "modified",
 						name: obj.name,
 						palette: obj.palette,
+						path: obj.path,
 						args: [{
 							uid: obj.uid,
 							object: obj
