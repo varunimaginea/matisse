@@ -127,7 +127,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 		 * @method addTools
 		 * @param none
 		 */
-		addTools: function() {
+		addTools: function () {
 			palettes.createAllPallettes(matisse.palette);
 			$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 			$('#deleteTool').click(function () {
@@ -144,7 +144,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 		 * @param none
 		 *
 		 */
-		addObservers: function() {
+		addObservers: function () {
 			mfabric.observe('object:modified');
 			mfabric.observe('path:created');
 			mfabric.observe('selection:cleared');
@@ -158,7 +158,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 		*  @param data - shape(data.shape) and args array (data.args)
 		*
 		*/
-		commOnDraw: function() {
+		commOnDraw: function () {
 			comm.prototype.onDraw =  function (data) {
 				if (data && data.args) {
 					if (data.action === undefined || data.action === null) {
