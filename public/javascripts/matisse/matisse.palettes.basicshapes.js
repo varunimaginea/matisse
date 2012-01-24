@@ -400,46 +400,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					defaultvalue: 0
 				}]
 			},
-			drawingpath: {
-				displayName: "path",
-				activeIcon: "brush_w.png",
-				inactiveIcon: "brush_g.png",
-				toolAction: null,
-				modifyAction: function (args) {
-					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;
-					updateProperties(obj, recvdObj);
-				},
-				properties: [{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				},	{
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleX", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleY", args.property);
-					},
-					defaultvalue: 1
-				}]
-			}, // end of path
+			
 			importimage: {
 				displayName: "importimage",
 				activeIcon: "rectangle_w.png",
@@ -517,7 +478,47 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					},
 					defaultvalue: 0
 				}]
-			}
+			},
+			drawingpath: {
+				displayName: "path",
+				activeIcon: "brush_w.png",
+				inactiveIcon: "brush_g.png",
+				toolAction: null,
+				modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
+				},
+				properties: [{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				},	{
+					name: 'scaleX',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleX", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'scaleY',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleY", args.property);
+					},
+					defaultvalue: 1
+				}]
+			}, // end of path
 		} // end of shapes
 	}); // end of basic shapes
 });
