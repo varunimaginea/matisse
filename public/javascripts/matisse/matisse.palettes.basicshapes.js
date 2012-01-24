@@ -22,6 +22,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		if (obj.text) {
 			obj.text = recvdObj.text;
 		}
+		if(recvdObj.path)
+		obj.path = recvdObj.path;
 	};
 	palettes.registerpalette("basic", {
 		collectionName: 'basic',
@@ -437,7 +439,85 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					},
 					defaultvalue: 1
 				}]
-			} // end of path
+			}, // end of path
+			importimage: {
+				displayName: "importimage",
+				activeIcon: "rectangle_w.png",
+				inactiveIcon: "rectangle_g.png",
+				toolAction: null,/*function (args) {
+					var rect = new fabric.Rect({
+						width: args.width,
+						height: args.height,
+						left: args.left,
+						top: args.top
+						
+					});
+					rect.uid = args.uid;
+					rect.name = 'myimage';
+					rect.palette = args.palette;
+					
+					//rect.selectable = false;
+					canvas.add(rect);
+				},*/
+				modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
+				},
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+				},
+				properties: [{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'width',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("width", args.property / args.obj.scaleX);
+					},
+					defaultvalue: 200
+				}, {
+					name: 'height',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("height", args.property / args.obj.scaleY);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'scaleX',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleX", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'scaleY',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleY", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'angle',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("angle", args.property);
+					},
+					defaultvalue: 0
+				}]
+			}
 		} // end of shapes
 	}); // end of basic shapes
 });
