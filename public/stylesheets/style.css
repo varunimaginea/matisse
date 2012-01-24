@@ -264,3 +264,13 @@ font-size:14px;
 color:white;
 }
 
+input.file {
+	position: relative;
+	top:20px;
+	width:16px;
+	height:16px;
+	text-align: right;
+	visibility:hidden;
+	z-index: 2;
+}
+
