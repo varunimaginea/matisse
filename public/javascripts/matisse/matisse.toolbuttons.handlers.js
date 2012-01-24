@@ -1,5 +1,5 @@
 /*matisse.events*/
-define(["matisse"], function (matisse) {
+define(["matisse", "matisse.util"], function (matisse, util) {
     "use strict";
     return {
         /**
@@ -135,7 +135,56 @@ define(["matisse"], function (matisse) {
         },
         helpButtonListener: function () {
             $('#helpicon').bind("click", showHelp);
-        }
-    }
+        },
+		/**
+		* importImageButtonListener
+		*
+		*/
+		importImageButtonListener: function() {
+			$("#loadicon").click(function () {
+			$("#inputfile").click(); //show().focus().click().hide();
+			});
+			$('#inputfile').change(this.fileSelected);
+			$('#inputfile').bind("mouseup", function () {
+				console.log('Click was triggered');
+			});
+		},
 
+		fileSelected: function() {
+			var oFile = document.getElementById('inputfile').files[0];
+			var filepath = document.getElementById('inputfile').value;
+			var oReader = new FileReader();
+			// Closure to capture the file information.
+			var thisRef = this;
+			
+			oReader.onload = (function (theFile) {
+				return function (e) {
+					//console.log("src====="+e.target.result);
+					// Render thumbnail.
+					var span = document.createElement('span');
+					matisse.imageTag = ['<img id="myimage" class="thumb" src="', e.target.result, '" title="', theFile.name, '"/>'].join('');
+					span.innerHTML = matisse.imageTag;
+					document.getElementById('icons-wrapper').insertBefore(span, null);
+					var args = {};
+					args.left = 100;
+					args.top = 300;
+					args.path = matisse.imageTag;
+					args.width = $('#myimage').width();
+					args.height = $('#myimage').height();
+					args.uid = util.uniqid();
+					args.name = "importimage";
+					args.palette = 'basic';
+					args.self = true;
+					$('#myimage').bind('onload', matisse.main.addImageToCanvas(args));
+				};
+			})(oFile);
+
+			// Read in the image file as a data URL.
+			oReader.readAsDataURL(oFile);
+			console.log('file ==========' + filepath)
+		}
+
+		
+	} // end of return;
+ 
 });
