@@ -156,35 +156,36 @@ define(["matisse", "matisse.util"], function (matisse, util) {
 			var oReader = new FileReader();
 			// Closure to capture the file information.
 			var thisRef = this;
-			
 			oReader.onload = (function (theFile) {
 				return function (e) {
 					//console.log("src====="+e.target.result);
-					// Render thumbnail.
 					var span = document.createElement('span');
-					matisse.imageTag = ['<img id="myimage" class="thumb" src="', e.target.result, '" title="', theFile.name, '"/>'].join('');
+					matisse.imageTag = ['<img id="myimage" src="', e.target.result, '" title="', theFile.name, '"/>'].join('');
 					span.innerHTML = matisse.imageTag;
 					document.getElementById('icons-wrapper').insertBefore(span, null);
+					var img = document.getElementById('myimage')
+					var _width = img.clientWidth;
+					var _height = img.clientHeight;
+					console.log('_width ='+_width);
 					var args = {};
 					args.left = 100;
 					args.top = 300;
+					args.scaleX = 1;
+					args.scaleY = 1;
+					args.angle = 0;
 					args.path = matisse.imageTag;
-					args.width = $('#myimage').width();
-					args.height = $('#myimage').height();
+					args.width = _width;
+					args.height = _height;
 					args.uid = util.uniqid();
-					args.name = "importimage";
+					args.name = 'importimage';
 					args.palette = 'basic';
 					args.self = true;
 					$('#myimage').bind('onload', matisse.main.addImageToCanvas(args));
 				};
 			})(oFile);
-
 			// Read in the image file as a data URL.
 			oReader.readAsDataURL(oFile);
 			console.log('file ==========' + filepath)
 		}
-
-		
 	} // end of return;
- 
 });
