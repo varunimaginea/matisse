@@ -38,7 +38,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 			var i;
 			for (i in shapesObj.shapes) {
 				var shape = shapesObj.shapes[i];
-				if(shape == "importimage") continue;
+				if(shape.displayName == "importimage") continue;
 				var shape_DisplayName = shape.displayName;
 				var src = '/images/' + shape.inactiveIcon;
 				var activesrc = '/images/' + shape.activeIcon;
