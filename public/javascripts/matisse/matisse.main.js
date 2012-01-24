@@ -189,28 +189,38 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			};
 		},
 		addImageToCanvas : function (args) {
-			if(args.path == undefined) return
+			console.log("add image to canvas called");
+			if(args.path == undefined) {
+				args.path = ['<img id="myimage" class="thumb" src="', args.src, '" title="', args.name, '"/>'].join('');
+				//console.log('args.path ===='+args.path);
+				//$('#myimage').bind('onload', matisse.main.addImageToCanvas(args));
+			}
+
 			if(!args.self)
 			{
 				var span = document.createElement('span');
 				span.innerHTML =args.path;
 				matisse.imageTag = args.path;
 				document.getElementById('icons-wrapper').insertBefore(span, null);
-			}	
-				
-			
+			}
+						
+			//console.log('args.width ='+args.width+'  args.height ='+args.height+ 'width from tag ='+_width);	
 			var fabImage = new fabric.Image("myimage", {
 				left: args.left,
 				top: args.top,
 				width: args.width,
-				height: args.height
+				height: args.height,
+				scaleX: args.scaleX,
+				scaleY: args.scaleY
 			});
 			canvas.add(fabImage);
 			fabImage.uid = args.uid;
 			fabImage.name = args.name;
 			fabImage.palette = args.palette;
-			fabImage.setCoords();
+			fabImage.path = args.path;
+			fabImage.setAngle(args.angle);
 			canvas.renderAll();
+			fabImage.setCoords();
 			$('#myimage').remove();
 			if(args.self) {
 				matisse.comm.sendDrawMsg({
@@ -221,7 +231,9 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						left: fabImage.left,
 						top: fabImage.top,
 						width: fabImage.width,
-						height: fabImage.height,
+						height: fabImage.height,	
+						scaleX: fabImage.scaleX,
+						scaleY: fabImage.scaleY,
 						name: fabImage.name,
 						path: args.path,
 						palette: args.palette
