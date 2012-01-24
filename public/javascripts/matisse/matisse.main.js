@@ -35,7 +35,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left;
             matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top;
 
-            addTools();
+            this.addTools();
 
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);
@@ -43,7 +43,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 
             toolHandlers.initChatWindow();
 
-            addObservers();
+            this.addObservers();
             toolHandlers.saveButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
@@ -121,71 +121,71 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         handleMouseEvents: function () {
 			$('#canvasId').bind('mousedown', events.mouseDown);
 			$('#canvasId').bind('mousemove', events.mouseMove);
-		}
-    }; // end of 'return'    
-
-    /**
-     * Regiser observers to observe any object changes like resize, rotate, move etc
-     * @method addObservers
-     * @param none
-     *
-     */
-    function addObservers() {
-        mfabric.observe('object:modified');
-        mfabric.observe('path:created');
-        mfabric.observe('selection:cleared');
-        mfabric.observe('object:moved');
-        mfabric.observe('object:selected');
-		mfabric.observe('object:moving');
-    }
-
-    /**
-     * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
-     * @method addTools
-     * @param none
-     */
-    function addTools() {
-        palettes.createAllPallettes(matisse.palette);
-        $('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
-        $('#deleteTool').click(function () {
-			main.deleteObjects();
-        });
-        $('#chatbutton').click(toolHandlers.chatButtonListener);
-        main.handleMouseEvents();
-        $('#accordion').accordion();
-        ui.setAccordinContentHeight();
-    }
-
-	/**
-	*  Called when other users add, modify or delete any object
-	*  @method  matisse.onDraw
-	*  @param data - shape(data.shape) and args array (data.args)
-	*
-	*/
-	comm.prototype.onDraw = function (data) {
-		if (data && data.args) {
-			if (data.action === undefined || data.action === null) {
-				return;
-			}
-			if (data.action === "modified") {
-				matisse.main.modifyObject(data.args);
-			} else if (data.action === "drawpath") {
-				matisse.main.drawPath(data.args[0]);
-			} else if (data.action === "chat") {
-				var txt = document.createTextNode(data.args[0].text);
-				$("#chattext").append(txt);
-			} else if (data.action === "delete") {
-				var obj = util.getObjectById(data.args[0].uid);
-				canvas.remove(obj);
-				$('#prop').remove();
-			} else if (data.action === "importimage") {
-				matisse.main.loadImage(data.args[0]);
-			} else {
-				if (matisse.palette[data.palette] !== undefined) {
-					matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
+		},
+		/**
+		 * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
+		 * @method addTools
+		 * @param none
+		 */
+		addTools: function() {
+			palettes.createAllPallettes(matisse.palette);
+			$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
+			$('#deleteTool').click(function () {
+				main.deleteObjects();
+			});
+			$('#chatbutton').click(toolHandlers.chatButtonListener);
+			main.handleMouseEvents();
+			$('#accordion').accordion();
+			ui.setAccordinContentHeight();
+		},
+		/**
+		 * Regiser observers to observe any object changes like resize, rotate, move etc
+		 * @method addObservers
+		 * @param none
+		 *
+		 */
+		addObservers: function() {
+			mfabric.observe('object:modified');
+			mfabric.observe('path:created');
+			mfabric.observe('selection:cleared');
+			mfabric.observe('object:moved');
+			mfabric.observe('object:selected');
+			mfabric.observe('object:moving');
+		},
+		/**
+		*  Called when other users add, modify or delete any object
+		*  @method  matisse.onDraw
+		*  @param data - shape(data.shape) and args array (data.args)
+		*
+		*/
+		commOnDraw: function() {
+			comm.prototype.onDraw =  function (data) {
+				if (data && data.args) {
+					if (data.action === undefined || data.action === null) {
+						return;
+					}
+					if (data.action === "modified") {
+						matisse.main.modifyObject(data.args);
+					} else if (data.action === "drawpath") {
+						matisse.main.drawPath(data.args[0]);
+					} else if (data.action === "chat") {
+						var txt = document.createTextNode(data.args[0].text);
+						$("#chattext").append(txt);
+					} else if (data.action === "delete") {
+						var obj = util.getObjectById(data.args[0].uid);
+						canvas.remove(obj);
+						$('#prop').remove();
+					} else if (data.action === "importimage") {
+						matisse.main.loadImage(data.args[0]);
+					} else {
+						if (matisse.palette[data.palette] !== undefined) {
+							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
+						}
+					}
 				}
-			}
-		}
-	};
+			};
+		}	
+    }; // end of 'return'    
+	main.commOnDraw();
     return main;
 });
