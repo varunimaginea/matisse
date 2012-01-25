@@ -179,7 +179,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						canvas.remove(obj);
 						$('#prop').remove();
 					} else if (data.action === "importimage") {
-						matisse.main.addImageToCanvas(data.args[0]);
+						matisse.main.addImageToCanvasFromServer(data.args[0]);
 					} else {
 						if (matisse.palette[data.palette] !== undefined) {
 							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
@@ -188,31 +188,22 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				}
 			};
 		},
+		addImageToCanvasFromServer : function(args) {
+			var img = new Image();
+			img.onload = function() {
+				args.image = this;
+				args.width = this.width;
+				args.height = this.height;
+				matisse.main.addImageToCanvas(args);	
+			}
+			img.src = args.src;
+		},
 		addImageToCanvas : function (args) {
-			console.log("add image to canvas called");
-			if(args.path == undefined) {
-				args.path = ['<img id="myimage" class="thumb" src="', args.src, '" title="', args.name, '"/>'].join('');
-				//console.log('args.path ===='+args.path);
-				//$('#myimage').bind('onload', matisse.main.addImageToCanvas(args));
-			}
-
-			if(!args.self)
-			{
-				var span = document.createElement('span');
-				span.innerHTML =args.path;
-				matisse.imageTag = args.path;
-				document.getElementById('icons-wrapper').insertBefore(span, null);
-			}
-			var img = document.getElementById('myimage')
-			var _width = img.clientWidth;
-			var _height = img.clientHeight;		
-			console.log(args.angle+'  '+args.uid+'  '+args.top+'   '+args.left+' width = '+_width+'   '+_height+'  scalex ='+args.scaleX+'  '+args.scaleY);
-			//console.log('args.width ='+args.width+'  args.height ='+args.height+ 'width from tag ='+_width);	
-			var fabImage = new fabric.Image("myimage", {
+			var fabImage = new fabric.Image(args.image, {
 				left: args.left,
 				top: args.top,
-				width: _width,
-				height: _height,
+				width: args.width,
+				height: args.height,
 				scaleX: args.scaleX,
 				scaleY: args.scaleY
 			});
@@ -220,14 +211,11 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			fabImage.uid = args.uid;
 			fabImage.name = args.name;
 			fabImage.palette = args.palette;
-			fabImage.path = args.path;
 			if(args.angle) fabImage.setAngle(args.angle);
 			canvas.renderAll();
 			fabImage.setCoords();
-			$('#myimage').remove();
-			
-			
 			if(args.self) {
+				args.self = false;
 				matisse.comm.sendDrawMsg({
 					action: 'importimage',
 					palette: fabImage.palette,
@@ -240,7 +228,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						scaleX: fabImage.scaleX,
 						scaleY: fabImage.scaleY,
 						name: fabImage.name,
-						path: args.path,
+						image:args.image,
+						src:args.src,
 						palette: args.palette
 					}]
 				});
