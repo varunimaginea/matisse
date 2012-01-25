@@ -132,10 +132,10 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
         switch (position) {
         case "left":
             (operator === "plus") ? vLine.set('left', obj.left + (obj.width * obj.scaleX) / 2) : vLine.set('left', obj.left - (obj.width * obj.scaleX) / 2);
-            break;
+		break;
         case "top":
             (operator === "plus") ? hLine.set('top', obj.top + (obj.height * obj.scaleY) / 2) : hLine.set('top', obj.top - (obj.height * obj.scaleY) / 2);
-            break;
+        break;
         }
         canvas.renderAll();
         hLine.setCoords();
