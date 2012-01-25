@@ -18,18 +18,19 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
                     var obj = canvas.getActiveObject();
                     if (obj) {
                         canvas.bringForward(obj);
+						notifyZindexChange(obj, 'forward');
                     }
                 } else if (key == "40" && evt.ctrlKey) { // CONTROL + Down Arrow
                     var obj = canvas.getActiveObject();
                     if (obj) {
                         canvas.sendBackwards(obj);
+						notifyZindexChange(obj, 'backward');
                     }
                 } else if (key == "27") { // when Escape key pressed
                     closePopup()
                 } else if (key == "37" && evt.shiftKey) {
                     var obj = canvas.getActiveObject();
                     var objleft = obj.left;
-
                     obj.set('left', objleft - (matisse.horIndent * matisse.indentMultiplier));
                     onObjectMoveByKey(obj);
                 } else if (key == "37") {
@@ -124,15 +125,7 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
             var objectsInGroup = activeGroup.getObjects();
             canvas.discardActiveGroup();
             objectsInGroup.forEach(function (obj) {
-                matisse.comm.sendDrawMsg({
-                    action: "modified",
-                    name: obj.name,
-                    palette: obj.palette,
-                    args: [{
-                        uid: obj.uid,
-                        object: obj
-                    }] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
-                });
+                notifyObjModify(obj);
             });
         }
     };
@@ -153,5 +146,29 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
         canvas.fire('object:moving', {
             target: obj
         });
+		notifyObjModify(obj);
     }
+	function notifyObjModify(obj) {
+		matisse.comm.sendDrawMsg({
+			action: "modified",
+			name: obj.name,
+			palette: obj.palette,
+			args: [{
+				uid: obj.uid,
+				object: obj
+			}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
+		});
+	}
+	function notifyZindexChange(obj, changType) {
+		matisse.comm.sendDrawMsg({
+			action: "zindexchange",
+			name: obj.name,
+			palette: obj.palette,
+			args: [{
+				uid: obj.uid,
+				object: obj,
+				change : changType,
+			}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
+		});
+	}
 });
