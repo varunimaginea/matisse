@@ -82,10 +82,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          *  @param rgs - received object and object's id.
          */
         modifyObject: function (args) {
-			
-            var obj = util.getObjectById(args[0].uid);
-			console.log('obj.palette ='+obj.palette+' name ='+obj.name)
-            if (obj) {
+			var obj = util.getObjectById(args[0].uid);
+			if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
                 canvas.setActiveObject(obj);
                 properties.updatePropertyPanel(obj);
@@ -188,6 +186,11 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				}
 			};
 		},
+		/**
+		 * Adding image to canvas when data received from Server 
+		 * @method addImageToCanvasFromServer
+		 * @param args - image source and other properties
+		 */
 		addImageToCanvasFromServer : function(args) {
 			var img = new Image();
 			img.onload = function() {
@@ -196,9 +199,16 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				args.height = this.height;
 				matisse.main.addImageToCanvas(args);	
 			}
+			/* args.src - image source as dataURL */
 			img.src = args.src;
 		},
+		/**
+		 * Adding image to canvas when user selects an image from local storage
+		 * @method addImageToCanvas
+		 * @param args - image source and other properties
+		 */
 		addImageToCanvas : function (args) {
+			/* args.image - HTML Element */
 			var fabImage = new fabric.Image(args.image, {
 				left: args.left,
 				top: args.top,
