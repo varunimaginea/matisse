@@ -120,7 +120,7 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
          *  @param none
          */
         notifyServerGroupMoved: function () {
-            activeGroup = canvas.getActiveGroup();
+            var activeGroup = canvas.getActiveGroup();
             var objectsInGroup = activeGroup.getObjects();
             canvas.discardActiveGroup();
             objectsInGroup.forEach(function (obj) {
