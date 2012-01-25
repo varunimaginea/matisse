@@ -79,7 +79,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         /**
          *  When receive a notification from server to modify the other side when it gets modified.
          *  @method  modifyObject
-         *  @param rgs - received object and object's id.
+         *  @param args - received object and object's id.
          */
         modifyObject: function (args) {
 			var obj = util.getObjectById(args[0].uid);
@@ -87,7 +87,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
                 canvas.setActiveObject(obj);
                 properties.updatePropertyPanel(obj);
-                obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+				obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
             }
             canvas.renderAll();
         },
@@ -149,7 +149,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			mfabric.observe('object:modified');
 			mfabric.observe('path:created');
 			mfabric.observe('selection:cleared');
-			mfabric.observe('object:moved');
 			mfabric.observe('object:selected');
 			mfabric.observe('object:moving');
 		},
@@ -178,7 +177,17 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						$('#prop').remove();
 					} else if (data.action === "importimage") {
 						matisse.main.addImageToCanvasFromServer(data.args[0]);
-					} else {
+					} else if (data.action === "zindexchange") {
+						var obj = util.getObjectById(data.args[0].uid);
+						if(data.args[0].change === 'forward') {
+							canvas.bringForward(obj);
+							canvas.renderAll();
+						} else {
+							canvas.sendBackwards(obj);
+							canvas.renderAll();
+						}
+					}	
+					else {
 						if (matisse.palette[data.palette] !== undefined) {
 							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
 						}
