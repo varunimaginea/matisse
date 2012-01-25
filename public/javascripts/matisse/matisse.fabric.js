@@ -28,6 +28,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 							object: obj
 						}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
 					});
+					matisse.hLine.set('top', -10);
+					matisse.vLine.set('left', -10);
 					properties.updatePropertyPanel(obj);
 					break;
 				case "selection:cleared":
