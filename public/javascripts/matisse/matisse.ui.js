@@ -122,6 +122,7 @@ define(["matisse"], function (matisse) {
 				thisObj.initWidthAndHeightOfPanels();
 			    thisObj.resizeWindow();
 			    thisObj.setCanvasSize();
+				thisObj.drawHVLines();
 			});
 		},
 		/**
@@ -155,6 +156,8 @@ define(["matisse"], function (matisse) {
 			$("#accordion").append('<h3><a href="#">' + palette_DisplayName + '</a></h3><div height="100%" id="' + palette_DisplayName + '"></div>');
 		},
 		drawHVLines: function () {
+			canvas.remove(matisse.hLine);
+			canvas.remove(matisse.vLine);
 			var width = this.canvasWidth;
 			var height = this.canvasWidth;
 			matisse.hLine = new fabric.Line([0, -10, width, -10], {
