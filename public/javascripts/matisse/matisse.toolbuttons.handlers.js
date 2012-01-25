@@ -137,25 +137,23 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             $('#helpicon').bind("click", showHelp);
         },
 		/**
-		* importImageButtonListener
-		*
+		* Triggering 'inputfile click' when clicked on 'loadicon' - Fake file upload
+		* @method - importImageButtonListener
 		*/
 		importImageButtonListener: function() {
 			$("#loadicon").click(function () {
-			$("#inputfile").click(); //show().focus().click().hide();
+				$("#inputfile").click(); 
 			});
 			$('#inputfile').change(this.fileSelected);
-			$('#inputfile').bind("mouseup", function () {
-				console.log('Click was triggered');
-			});
 		},
-
+		/**
+		* When user selects a file from local system, load that file and add it to canvas
+		* @method - fileSelected
+		*/
 		fileSelected: function() {
 			var oFile = document.getElementById('inputfile').files[0];
 			var filepath = document.getElementById('inputfile').value;
 			var oReader = new FileReader();
-			// Closure to capture the file information.
-			var thisRef = this;
 			oReader.onload = (function (theFile) {
 				return function (e) {
 					var args = {};
@@ -182,7 +180,6 @@ define(["matisse", "matisse.util"], function (matisse, util) {
 			})(oFile);
 			// Read in the image file as a data URL.
 			oReader.readAsDataURL(oFile);
-			
 		}
 	} // end of return;
 });
