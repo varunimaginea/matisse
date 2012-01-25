@@ -147,7 +147,6 @@ io.sockets.on('connection', function (socket) {
 			var len = ids.length;
 			var count = 0;
 			if (len === 0) {
-			//console.log("::::::: "+boards);
 			} else {
                 ids.forEach(function (id) {
                     var board = new ShapesModel();
@@ -159,8 +158,6 @@ io.sockets.on('connection', function (socket) {
 
                         if (++count === len)
                         {
-                            //res.json(boards);
-                            //console.log("::::::: ");
                             //socket.emit('eventDraw',boards);
                         }
                         socket.emit('eventDraw',eval({palette: props.palette, action: props.action, args: [props.args]}));
@@ -197,10 +194,9 @@ io.sockets.on('connection', function (socket) {
             data.shapeId = data.args.uid;
             data.board_url = url;
 
-            if(data.action == "modified")
+            if(data.action == "modified" || data.action == "zindexchange")
             {
                 data.args = data.args.object;
-                console.log("***** data args:"+data.args);
                 ShapesModel.find({shapeId:data.shapeId}, function (err, id) {
                     if (err) {
                         console.log(err);
@@ -216,17 +212,10 @@ io.sockets.on('connection', function (socket) {
                         data.args.palette = props.palette;
                         data.palette = props.palette;
                         data.action = props.action;
-
-                        console.log("===================");
-                        console.log("***** before shape Updated:"+shape);
-
                         shape.store(data,function(err){
                             //console.log("***** Error in URL:"+url+" Err:"+err);
                         });
-                                socket.broadcast.to(url).emit('eventDraw',shape);
-
-                        console.log("***** after shape Updated:"+shape);
-                        console.log("===================");
+                        socket.broadcast.to(url).emit('eventDraw',shape);
                     });
                 });
             } else if(data.action == "delete") {
@@ -248,12 +237,7 @@ io.sockets.on('connection', function (socket) {
                 });
 
             } else {
-                //console.log("===================");
-                //console.log(data.args.uid);
-                //console.log("===================");
-
                 newShape.store(data,function(err){
-                    //console.log("***** Error in URL:"+url+" Err:"+err);
                 });
                 socket.broadcast.to(url).emit('eventDraw',newShape);
 
