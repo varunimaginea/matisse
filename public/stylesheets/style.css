@@ -83,6 +83,13 @@ label {
 	height:16px;
 }
 
+.combo {
+	position:relative;
+	top:20px;
+	width:100px;
+	height:20px;
+}
+
 * html #outer{height:100%;} /* IE6 and under treat height as min-height anyway*/
 
 
