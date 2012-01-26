@@ -180,6 +180,17 @@ define(["matisse", "matisse.util"], function (matisse, util) {
 			})(oFile);
 			// Read in the image file as a data URL.
 			oReader.readAsDataURL(oFile);
+		},
+		
+		bindCointerCombo: function () {
+			$("#container").bind("change", function (e) {
+				var val = document.getElementById("container").value;
+				var img = '/images/'+val+'.png'
+				canvas.setOverlayImage(img, canvas.renderAll.bind(canvas));
+			})
 		}
+
+		
+		
 	} // end of return;
 });
