@@ -12,8 +12,9 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
      *	create canvas object
      */
     window.canvas = new fabric.Canvas('c', {
-        backgroundColor: '#FFFFFF'
+        //backgroundColor: '#FFFFFF'
     });
+	canvas.setOverlayImage('/images/bg_overlay_iphone.png', canvas.renderAll.bind(canvas));
     /**
      * by default selection mode is false 
      */
@@ -48,6 +49,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
+			toolHandlers.bindCointerCombo();
         },
 
         /**
