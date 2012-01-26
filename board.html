@@ -37,6 +37,12 @@
         <div id="icons-wrapper">
             <div id="version">0.4 preview</div>
             <div id="menuicons">
+				<label for ='container' class ="combo"> selectdevice </label>
+				<select id='container' class="combo">
+				  <option value="iphone_overlay">iPhone</option>
+				  <option value="ipad_overlay">iPad</option>
+				   <option value="blackberry_overlay">BlackBerry</option>
+				</select>
 				<input type = "file" id = "inputfile" class="file" accept="image/*" single/>
 				<img class="topicons" id="newdocicon" src="/images/new_doc.png" alt="new canvas" />
 				<img class="topicons" id="loadicon" src="/images/load.png" alt="Load Image" />
@@ -53,7 +59,7 @@
 			<div id="leftdiv">
 				<div id="accordion"></div>
 			</div>
-			<div id="canvasId">
+			<div id="canvasId" bgcolor="#CCCCFF">
 				<canvas id="c" class="ui-corner-all"></canvas>
 			</div>
 		</div>
