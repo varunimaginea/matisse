@@ -13,6 +13,8 @@ define(["matisse"], function (matisse) {
 		accordionContentHeight: '',
 		canvasWidth: '',
 		canvasHeight: '',
+		deviceWidth: '',
+		deviceHeight: '',
 		/**
 		 * function to initialize width and heights
 		 * @method initWidthAndHeightOfPanels
@@ -24,8 +26,8 @@ define(["matisse"], function (matisse) {
 			this.topPanelHeight = 100;
 			this.leftPanelWidth = 100;
 			this.leftPanelHeight = this.bodyHeight - this.topPanelHeight;
-			this.canvasWidth = this.bodyWidth - this.leftPanelWidth;
-			this.canvasHeight = this.bodyHeight - this.topPanelHeight - 23;
+			//this.canvasWidth = 800;//this.bodyWidth - this.leftPanelWidth;
+			//this.canvasHeight = 600;//this.bodyHeight - this.topPanelHeight - 23;
 		},
 		/**
 		 * method to resize panels on resize of browser window
@@ -83,12 +85,13 @@ define(["matisse"], function (matisse) {
 		 * @param none
 		 */
 	    resizeCanvas: function () {
-			$('#containerDiv').height(this.canvasHeight);
-			$('#containerDiv').width(this.canvasWidth);
-			$('#containerBody').height(this.canvasHeight - 10); //Should be set to container height and width
-			$('#containerBody').width(this.canvasWidth - 10);	
-			$('#canvasId').height(this.canvasHeight - 15); //Should be set to container inner height and width
-			$('#canvasId').width(this.canvasWidth - 15);			
+			$('#containerDiv').height(this.bodyHeight);
+			$('#containerDiv').width(this.bodyWidth);
+			$('#containerBody').height(this.deviceHeight); //Should be set to container height and width
+			$('#containerBody').width(this.deviceWidth);	
+			$('#canvasId').height(this.canvasHeight); //Should be set to container inner height and width
+			$('#canvasId').width(this.canvasWidth);		
+			canvas.setDimensions({width: this.canvasWidth, height: this.canvasHeight});
 		},
 		/**
 		 * Set Accordian width and height
