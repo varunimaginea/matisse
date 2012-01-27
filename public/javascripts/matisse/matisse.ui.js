@@ -83,8 +83,12 @@ define(["matisse"], function (matisse) {
 		 * @param none
 		 */
 	    resizeCanvas: function () {
-			$('#canvasId').height(this.canvasHeight);
-			$('#canvasId').width(this.canvasWidth);
+			$('#containerDiv').height(this.canvasHeight);
+			$('#containerDiv').width(this.canvasWidth);
+			$('#containerBody').height(this.canvasHeight - 10); //Should be set to container height and width
+			$('#containerBody').width(this.canvasWidth - 10);	
+			$('#canvasId').height(this.canvasHeight - 15); //Should be set to container inner height and width
+			$('#canvasId').width(this.canvasWidth - 15);			
 		},
 		/**
 		 * Set Accordian width and height
