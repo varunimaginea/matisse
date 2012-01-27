@@ -11,6 +11,7 @@ define(function () {
 		fillColor : "#AAAAAA",
 		points : {},
 		palette: {},
+		containers: {},
 		textEl: null,
 		drawShape : false,
 		action: null,
