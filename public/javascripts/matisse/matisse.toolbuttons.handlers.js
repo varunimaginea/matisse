@@ -182,7 +182,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
 			oReader.readAsDataURL(oFile);
 		},
 		
-		bindCointerCombo: function () {
+		bindContainerCombo: function () {
 			$("#container").bind("change", function (e) {
 				var val = document.getElementById("container").value;
 				var img = '/images/'+val+'.png'
