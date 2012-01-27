@@ -14,7 +14,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
     window.canvas = new fabric.Canvas('c', {
         //backgroundColor: '#FFFFFF'
     });
-	canvas.setOverlayImage('/images/bg_overlay_iphone.png', canvas.renderAll.bind(canvas));
+	//canvas.setOverlayImage('/images/bg_overlay_iphone.png', canvas.renderAll.bind(canvas));
     /**
      * by default selection mode is false 
      */
@@ -33,9 +33,13 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             ui.bindResizeWindow();
 			ui.drawHVLines();
             canvas.isSelectMode = true;
-            matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left;
-            matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top;
-
+			
+			
+            matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left+matisse.xOffset;
+            matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top+ matisse.yOffset;
+			
+			console.log('matisse.xOffset ='+util.getOffset(document.getElementById('canvasId')).left);
+			console.log('matisse.yOffset ='+util.getOffset(document.getElementById('canvasId')).top);
             this.addTools();
 
             document.onkeydown = events.keyDown;
@@ -49,7 +53,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
-			toolHandlers.bindContainerCombo();
+			//toolHandlers.bindContainerCombo();
         },
 
         /**
