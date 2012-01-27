@@ -49,7 +49,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
-			toolHandlers.bindCointerCombo();
+			toolHandlers.bindContainerCombo();
         },
 
         /**
