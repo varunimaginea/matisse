@@ -121,19 +121,22 @@ overflow:hidden;
 float:none;
 overflow:auto;
 background-color:#FFF;
+position:relative;
 }
 
 #containerDiv{
 	float:none;
 	overflow:auto;
-	background-color:#474747
+	background-color:#AAB0BB;
+	position:relative;
 }
 
 
 #containerBody{
 	float:none;
 	overflow:auto;
-	background-color:#D3DAE5
+	background-color:#D3DAE5;
+	position:relative;
 }
 
 #leftdiv p {padding-left:2px;padding-right:2px}
