@@ -118,10 +118,23 @@ overflow:hidden;
 
 
 #canvasId{
-float:right;
+float:none;
 overflow:auto;
+background-color:#FFF;
 }
 
+#containerDiv{
+	float:none;
+	overflow:auto;
+	background-color:#474747
+}
+
+
+#containerBody{
+	float:none;
+	overflow:auto;
+	background-color:#D3DAE5
+}
 
 #leftdiv p {padding-left:2px;padding-right:2px}
 #right {display:none; width:0px; height:0px;}
