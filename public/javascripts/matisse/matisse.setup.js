@@ -5,11 +5,12 @@
  * About this :Entry Point File, All Dom Ready functions need to be defined here
  */
 
-define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"] , function (matisse, mfabric, Comm, main, containers, palettes) {
+define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"] , function (matisse, mfabric, Comm, main, containers, palettes, layouts) {
     //Dom Ready function
     "use strict";
 	$(function () {
 		containers.createContainerList();
+		layouts.createLayoutsList();
 		/*show popup with list of device containers */
 		popup('popUpDiv', 'blank', 300, 600);
 		var serverURL = 'http://localhost';//change it to server ip or local ip for testing from other machines

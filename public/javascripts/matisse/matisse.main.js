@@ -29,7 +29,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         init: function () {
             ui.initWidthAndHeightOfPanels();
             ui.resizeWindow();
-            ui.setCanvasSize();
+            //ui.setCanvasSize();
             ui.bindResizeWindow();
 			ui.drawHVLines();
             canvas.isSelectMode = true;
@@ -54,6 +54,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
 			//toolHandlers.bindContainerCombo();
+			toolHandlers.bindLayoutCombo();
         },
 
         /**
@@ -196,6 +197,9 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 					else {
 						if (matisse.palette[data.palette] !== undefined) {
 							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
+						}
+						else if (matisse.layout[data.palette] !== undefined) {							
+							matisse.layout[data.palette].layouts[data.action].toolAction();
 						}
 					}
 				}

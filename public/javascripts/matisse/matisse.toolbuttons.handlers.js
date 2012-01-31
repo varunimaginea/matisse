@@ -1,5 +1,5 @@
 /*matisse.events*/
-define(["matisse", "matisse.util"], function (matisse, util) {
+define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse, util, layoutsContent) {
     "use strict";
     return {
         /**
@@ -187,6 +187,23 @@ define(["matisse", "matisse.util"], function (matisse, util) {
 				var val = document.getElementById("container").value;
 				var img = '/images/'+val+'.png'
 				canvas.setOverlayImage(img, canvas.renderAll.bind(canvas));
+			})
+		},
+
+		bindLayoutCombo: function () {
+			$("#layout").bind("change", function (e) {
+				var val = document.getElementById("layout").value;					
+				console.log("in bind layout: "+val);
+				var obj = matisse.layout.content.layouts[val].toolAction();
+				console.log(obj);
+				matisse.comm.sendDrawMsg({			
+					action: val,
+					palette: "content",
+					args: [{
+						uid: obj.uid,
+						object: obj						
+					}]
+				});				
 			})
 		}
 

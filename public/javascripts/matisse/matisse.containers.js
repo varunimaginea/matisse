@@ -5,7 +5,7 @@
  * About this : Utility to Create all the shapes, based on the type specified
  *
  */
-define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (matisse, main, ui, util) {
+define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layouts"], function (matisse, main, ui, util, layouts) {
     "use strict";
 	return {
 		registercontainer : function (containerName, containerDesc) {
@@ -60,6 +60,8 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 				matisse.deviceOffsetX = contObj.xOffset;
 				matisse.deviceOffsetY = contObj.yOffset;
 				console.log(containerName);//alert('clicked'+e)
+				var val = document.getElementById('layouts').value;
+				layouts.setLayoutType(val);
 			});
 					
 		}

@@ -4977,9 +4977,10 @@ fabric.util.string = {
       if (this._shouldClearSelection(e)) {
         var deviceOffsetX = this.wrapperEl.parentNode.style.left.substr(0, this.wrapperEl.parentNode.style.left.length-2);
 		var deviceOffsetY = this.wrapperEl.parentNode.style.top.substr(0, this.wrapperEl.parentNode.style.top.length-2);
-        this._groupSelector = {
-		  ex: pointer.x + this.wrapperEl.parentNode.scrollLeft-deviceOffsetX,
-          ey: pointer.y + this.wrapperEl.parentNode.scrollTop-deviceOffsetY,
+        var deviceHolder = this.wrapperEl.parentNode.parentNode;
+        this._groupSelector = {		  
+		  ex: pointer.x + this.wrapperEl.parentNode.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX,
+          ey: pointer.y + this.wrapperEl.parentNode.scrollTop + deviceHolder.scrollTop - deviceOffsetY,
           top: 0,
           left: 0
         };
@@ -5136,15 +5137,16 @@ fabric.util.string = {
       
       var pointer = this.getPointer(e);
       var canvasHolder = this.wrapperEl.parentNode;
+      var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
       this._freeDrawingXPoints.length = this._freeDrawingYPoints.length = 0;
       
-      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft - deviceOffsetX);
-      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop - deviceOffsetY);
+      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX);
+      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - deviceOffsetY);
       
       this.contextTop.beginPath();
-      this.contextTop.moveTo(pointer.x + canvasHolder.scrollLeft - deviceOffsetX, pointer.y + canvasHolder.scrollTop - deviceOffsetY);
+      this.contextTop.moveTo(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX, pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - deviceOffsetY);
       this.contextTop.strokeStyle = this.freeDrawingColor;
       this.contextTop.lineWidth = this.freeDrawingLineWidth;
       this.contextTop.lineCap = this.contextTop.lineJoin = 'round';
@@ -5158,12 +5160,13 @@ fabric.util.string = {
       var pointer = this.getPointer(e);  
 	 
       var canvasHolder = this.wrapperEl.parentNode;
+          var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
-      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft - deviceOffsetX);
-      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop - deviceOffsetY);
+      this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX);
+      this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - deviceOffsetY);
       
-      this.contextTop.lineTo(pointer.x + canvasHolder.scrollLeft-deviceOffsetX, pointer.y + canvasHolder.scrollTop-deviceOffsetY);
+      this.contextTop.lineTo(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX, pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - deviceOffsetY);
       this.contextTop.stroke();
     },
     
@@ -5237,13 +5240,14 @@ fabric.util.string = {
       
       var groupSelector = this._groupSelector;
       var canvasHolder = this.wrapperEl.parentNode;
+	  var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
-	   var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
+	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
       // We initially clicked in an empty area, so we draw a box for multiple selection.
       if (groupSelector !== null) {
         var pointer = getPointer(e);
-        groupSelector.left = pointer.x + canvasHolder.scrollLeft - this._offset.left - groupSelector.ex - deviceOffsetX;
-        groupSelector.top = pointer.y + canvasHolder.scrollTop- this._offset.top - groupSelector.ey - deviceOffsetY;
+        groupSelector.left = pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - this._offset.left - groupSelector.ex - deviceOffsetX;
+        groupSelector.top = pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - this._offset.top - groupSelector.ey - deviceOffsetY;
         this.renderTop();
       }
       else if (!this._currentTransform) {
@@ -7611,8 +7615,8 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
      * @return {String|Boolean} corner code (tl, tr, bl, br, etc.), or false if nothing is found
      */
     _findTargetCorner: function(e, offset, _canvasHolder) {		
-	  var deviceOffsetX = _canvasHolder.style.left.substr(0, _canvasHolder.style.left.length-2);
-	  var deviceOffsetY = _canvasHolder.style.top.substr(0, _canvasHolder.style.top.length-2);
+	  var deviceOffsetX = _canvasHolder ? _canvasHolder.style.left.substr(0, _canvasHolder.style.left.length-2) : 0;
+	  var deviceOffsetY = _canvasHolder ? _canvasHolder.style.top.substr(0, _canvasHolder.style.top.length-2) : 0;
       if (!this.hasControls) return false;
       var _scrollLeft = _canvasHolder ? _canvasHolder.scrollLeft : 0,
           _scrollTop = _canvasHolder ? _canvasHolder.scrollTop : 0;
