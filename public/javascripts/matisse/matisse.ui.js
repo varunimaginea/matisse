@@ -3,18 +3,18 @@ define(["matisse"], function (matisse) {
 	"use strict";
 	var ui = {
 		/** width and height of panels for resize */
-		bodyWidth: '',
-		bodyHeight: '',
+		bodyWidth: null,
+		bodyHeight: null,
 		initialBodyWidth: $(window).width() > 960 ? $(window).width() : 960,
 		initialBodyHeight: $(window).height() > 800 ? $(window).height() : 800,
-		topPanelHeight: '',
-		leftPanelWidth: '',
-		leftPanelHeight: '',
-		accordionContentHeight: '',
-		canvasWidth: '',
-		canvasHeight: '',
-		deviceWidth: '',
-		deviceHeight: '',
+		topPanelHeight: null,
+		leftPanelWidth: null,
+		leftPanelHeight: null,
+		accordionContentHeight: null,
+		canvasWidth: null,
+		canvasHeight: null,
+		deviceWidth: null,
+		deviceHeight: null,
 		/**
 		 * function to initialize width and heights
 		 * @method initWidthAndHeightOfPanels

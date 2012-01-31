@@ -9,11 +9,14 @@ define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.c
     //Dom Ready function
     "use strict";
 	$(function () {
-		containers.createContainerList();
-		/*show popup with list of device containers */
-		popup('popUpDiv', 'blank', 300, 600);
 		var serverURL = 'http://localhost';//change it to server ip or local ip for testing from other machines
 		var comm = new Comm(serverURL);
+		comm.onContainerDraw = function(data) {
+			console.log('container ==>>>>>'+data)
+			matisse.containerName = data;
+			containers.createContainerList();
+		}
+		
 		matisse.comm = comm;
 		matisse.main = main;
         //call all the functions, that are to be called on document ready here;

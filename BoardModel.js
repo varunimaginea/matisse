@@ -13,6 +13,9 @@ var boardModel = module.exports = nohm.model('Board', {
 	    validations: [
 		'notEmpty'
 	    ]
+	},
+	container: {
+	    type: 'string'
 	}
     },
     methods: {

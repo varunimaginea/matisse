@@ -9,6 +9,10 @@ define(function () {
 	function Comm(url) {
 		this.socket = io.connect(url);
 		var objRef = this;
+		this.socket.on("containerDraw", function (data) {
+			console.log('container =='+data);
+			objRef.drawContainerHandler(data);
+		});
 		this.socket.on("eventDraw", function (data) {
 			objRef.drawHandler(data);
 		});
@@ -22,6 +26,13 @@ define(function () {
 		};
 		this.drawHandler = function (data) {
 			this.onDraw(data);
+		};
+		this.drawContainerHandler = function (data) {
+			this.onContainerDraw(data);
+		};
+		this.sendContainerInfo = function(data) {
+			var loc = document.location.pathname;
+			this.socket.emit("setContainer", loc, data);
 		};
 		this.sendDrawMsg = function (data) {
 			var loc = document.location.pathname;

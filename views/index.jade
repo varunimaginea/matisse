@@ -1,2 +1,17 @@
-h1 Welcome to #{title}
-a(href='/boards/')[New Board]
+div#introContainer			
+	p
+		img(src="images/mattise_whitebg.png")
+	- if(everyauth.loggedIn)
+		- if(everyauth.twitter)
+			p
+				img(class="rightFloater",src="#{everyauth.twitter.user.profile_image_url}")
+			p
+				h2 Hi #{everyauth.twitter.user.name}!
+			p
+				a(href='/boards/') Create Board 
+				font(size="3") | 
+				a(href="/logout") Logout
+	- else
+		p.rightFloater
+			a(href='/auth/twitter', style='border: 0px')
+				img(style='border: 0px', src='images/sign-in-with-twitter-l.png')

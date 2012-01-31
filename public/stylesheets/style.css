@@ -10,6 +10,7 @@ font-size: 12px;
 
 a {
 color:#00B7FF;
+text-decoration:none;
 }
 
 h2 span {
@@ -137,6 +138,7 @@ position:relative;
 	overflow:auto;
 	background-color:#D3DAE5;
 	position:relative;
+	
 }
 
 #leftdiv p {padding-left:2px;padding-right:2px}
@@ -296,3 +298,16 @@ input.file {
 	z-index: 2;
 }
 
+.rightFloater{
+	float:right;
+}
+
+#introContainer{
+   width: 300px;
+   height: 300px;
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   margin-left: -150px;
+   margin-top: -150px;
+}
