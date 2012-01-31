@@ -80,8 +80,8 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
         mouseDown: function (event) {
             if (!canvas.isDrawingMode && matisse.drawShape) {
 				console.log('onmouse down matisse.xOffset ='+matisse.xOffset)
-                matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset; //offset
-                matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset; //offset
+                matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
+                matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset; //offset
                 matisse.shapeArgs[0].left = matisse.points.x;
                 matisse.shapeArgs[0].top = matisse.points.y;
                 matisse.shapeArgs[0].name = matisse.action;
@@ -99,8 +99,8 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
             if (canvas.isDrawingMode) {
                 matisse.xPoints = [];
                 matisse.yPoints = [];
-                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
-                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
+                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
+                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);
             }
         },
 
@@ -111,8 +111,8 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
          */
         mouseMove: function (event) {
             if (canvas.isDrawingMode) {
-                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft - matisse.xOffset);
-                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop - matisse.yOffset);
+                matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
+                matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);
             }
         },
 

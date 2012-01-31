@@ -85,8 +85,8 @@ define(["matisse"], function (matisse) {
 		 * @param none
 		 */
 	    resizeCanvas: function () {
-			$('#containerDiv').height(this.bodyHeight);
-			$('#containerDiv').width(this.bodyWidth);
+			$('#containerDiv').height($(window).height() - this.topPanelHeight - 23);
+			$('#containerDiv').width($(window).width() - this.leftPanelWidth);
 			$('#containerBody').height(this.deviceHeight); //Should be set to container height and width
 			$('#containerBody').width(this.deviceWidth);	
 			$('#canvasId').height(this.canvasHeight); //Should be set to container inner height and width
@@ -128,7 +128,7 @@ define(["matisse"], function (matisse) {
 			$(window).resize(function () {
 				thisObj.initWidthAndHeightOfPanels();
 			    thisObj.resizeWindow();
-			    thisObj.setCanvasSize();
+			    //thisObj.setCanvasSize();
 				thisObj.drawHVLines();
 			});
 		},

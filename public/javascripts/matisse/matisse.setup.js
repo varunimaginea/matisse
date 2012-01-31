@@ -5,7 +5,7 @@
  * About this :Entry Point File, All Dom Ready functions need to be defined here
  */
 
-define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"] , function (matisse, mfabric, Comm, main, containers, palettes) {
+define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"] , function (matisse, mfabric, Comm, main, containers, palettes, layouts) {
     //Dom Ready function
     "use strict";
 	$(function () {
@@ -20,6 +20,6 @@ define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.c
 		matisse.comm = comm;
 		matisse.main = main;
         //call all the functions, that are to be called on document ready here;
-		//main.init();
+		//main.init()
 	});
 });

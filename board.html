@@ -40,7 +40,18 @@
         <div id="icons-wrapper">
             <div id="version">0.4 preview</div>
             <div id="menuicons">
-				<label for ='container' class ="combo"> selectdevice </label>
+				<span for ='layout' class ="combo"> selectLayout: </span>
+				<select id='layout' class="combo">
+					<option value="default">default</option>
+					<option value="blank">blank</option>
+					<option value="column_header">column_header</option>
+					<option value="column_header_footer">column_header_footer</option>
+					<option value="two_column_header">two_column_header</option>
+					<option value="two_column_header_footer">two_column_header_footer</option>
+					<option value="three_column_header">three_column_header</option>
+					<option value="three_column_header_footer">three_column_header_footer</option>
+				</select>
+				<span for ='container' class ="combo"> selectDevice: </span>
 				<select id='container' class="combo">
 				  <option value="iphone_overlay">iPhone</option>
 				  <option value="ipad_overlay">iPad</option>
