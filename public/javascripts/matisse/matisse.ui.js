@@ -181,7 +181,7 @@ define(["matisse"], function (matisse) {
 			canvas.remove(matisse.vLine);
 			
 			var width = this.canvasWidth;
-			var height = this.canvasWidth;
+			var height = this.canvasHeight;
 			matisse.hLine = new fabric.Line([0, -10, width, -10], {
 				eanbled: false,
 				stroke: '#ff0000',
