@@ -214,8 +214,5 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
 				});				
 			})
 		}
-
-		
-		
 	} // end of return;
 });
