@@ -70,6 +70,8 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			ui.deviceWidth = contObj.width;
 			ui.canvasWidth = contObj.canvasWidth;
 			ui.canvasHeight = contObj.canvasHeight;
+			ui.deviceInnerHeight = contObj.innerHeight;
+			ui.deviceInnerWidth = contObj.innerWidth;
 			matisse.xOffset = contObj.xOffset;
 			matisse.yOffset = contObj.yOffset;
 			matisse.main.init();

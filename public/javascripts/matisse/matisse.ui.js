@@ -15,6 +15,8 @@ define(["matisse"], function (matisse) {
 		canvasHeight: null,
 		deviceWidth: null,
 		deviceHeight: null,
+		deiviceInnerHeight: null,
+		deviceInnerWidth: null,
 		/**
 		 * function to initialize width and heights
 		 * @method initWidthAndHeightOfPanels
@@ -89,8 +91,8 @@ define(["matisse"], function (matisse) {
 			$('#containerDiv').width($(window).width() - this.leftPanelWidth);
 			$('#containerBody').height(this.deviceHeight); //Should be set to container height and width
 			$('#containerBody').width(this.deviceWidth);	
-			$('#canvasId').height(this.canvasHeight); //Should be set to container inner height and width
-			$('#canvasId').width(this.canvasWidth);		
+			$('#canvasId').height(this.deviceInnerHeight); //Should be set to container inner height and width
+			$('#canvasId').width(this.deviceInnerWidth);		
 			canvas.setDimensions({width: this.canvasWidth, height: this.canvasHeight});
 		},
 		/**
@@ -149,9 +151,9 @@ define(["matisse"], function (matisse) {
 		 * @param none
 		 *
 		 */
-		setCanvasSize: function () {
-			var width = (this.bodyWidth > this.initialBodyWidth) ? (this.bodyWidth - 100) : ((this.initialBodyWidth > 1060) ? (this.initialBodyWidth - 100) : 960);
-			var height = (this.bodyHeight > this.initialBodyHeight) ? (this.bodyHeight - 100) : ((this.initialBodyHeight > 900) ? (this.initialBodyHeight - 100) : 800);
+		setCanvasSize: function () {			
+			var width = this.canvasWidth;
+			var height = this.canvasHeight;
 			canvas.setDimensions({width: width, height: height});
 		},
 		/**
