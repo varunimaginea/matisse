@@ -55,6 +55,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			toolHandlers.importImageButtonListener();
 			//toolHandlers.bindContainerCombo();
 			toolHandlers.bindLayoutCombo();
+			toolHandlers.logoutButtonClickHandler();
         },
 
         /**
