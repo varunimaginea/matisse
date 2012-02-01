@@ -137,7 +137,11 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
             (operator === "plus") ? hLine.set('top', obj.top + (obj.height * obj.scaleY) / 2) : hLine.set('top', obj.top - (obj.height * obj.scaleY) / 2);
         break;
         }
-        canvas.renderAll();
+		canvas.bringForward(vLine);
+		canvas.bringForward(hLine);
+		vLine.setCoords();
         hLine.setCoords();
+		canvas.renderAll();
+        
     }
 });
