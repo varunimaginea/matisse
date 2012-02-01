@@ -129,7 +129,9 @@ position:relative;
 	float:none;
 	overflow:auto;
 	background-color:#AAB0BB;
-	position:relative;
+	position:absolute;
+	left:100px;
+	top:103px;
 }
 
 
