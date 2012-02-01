@@ -10,7 +10,6 @@ define(function () {
 		this.socket = io.connect(url);
 		var objRef = this;
 		this.socket.on("containerDraw", function (data) {
-			console.log('container =='+data);
 			objRef.drawContainerHandler(data);
 		});
 		this.socket.on("eventDraw", function (data) {

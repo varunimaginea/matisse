@@ -11,7 +11,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 		containerName: null,
 		currSelection:null,
 		registercontainer : function (containerName, containerDesc) {
-			console.log('contname ='+containerName);
 			matisse.containers[containerName] = containerDesc;
 		},
 		
@@ -29,7 +28,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			}
 			var html = '<div id="containerlist" style="padding:15px"><p>Select a Device</p>';
 			for (var contName in matisse.containers) {
-				console.log('containerName===='+contName);//alert('clicked'+e)
 				var containerObj = matisse.containers[contName];
 				var container_DisplayName = containerObj.displayName;
 				var src = '/images/' + containerObj.src;
@@ -52,7 +50,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 				$('#'+thisRef.currSelection).css('background-color', 'transparent');
 				$(this).css('background-color', '#ff0');
 				thisRef.currSelection = this.id;
-				console.log('>>>'+thisRef.currSelection)
 				thisRef.containerName = e.target.id.toLowerCase();
 				
 			});
@@ -78,7 +75,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			matisse.yOffset = contObj.yOffset;
 			matisse.main.init();
 			var imagsrc = '/images/'+contObj.src;
-			console.log('src ='+imagsrc);
 			$('#containerBody').css('background-image', 'url(' + imagsrc + ')');
 			$('#containerBody').css('position', 'relative');
 				var cssObj = {
@@ -91,7 +87,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			$('.canvas-container').css('height', contObj.canvasHeight);
 			matisse.deviceOffsetX = contObj.xOffset;
 			matisse.deviceOffsetY = contObj.yOffset;
-			console.log(containerName);//alert('clicked'+e)
 			if(type == 'new') {
 				closePopup('popUpDiv');
 				closePopup('blanket');

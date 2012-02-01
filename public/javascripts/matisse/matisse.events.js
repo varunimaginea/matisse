@@ -79,8 +79,7 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
          */
         mouseDown: function (event) {
             if (!canvas.isDrawingMode && matisse.drawShape) {
-				console.log('onmouse down matisse.xOffset ='+matisse.xOffset)
-                matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
+				matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
                 matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset; //offset
                 matisse.shapeArgs[0].left = matisse.points.x;
                 matisse.shapeArgs[0].top = matisse.points.y;

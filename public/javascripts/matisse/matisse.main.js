@@ -34,12 +34,9 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			ui.drawHVLines();
             canvas.isSelectMode = true;
 			
-			
-            matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left+matisse.xOffset;
+			matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left+matisse.xOffset;
             matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top+ matisse.yOffset;
-			
-			console.log('matisse.xOffset ='+util.getOffset(document.getElementById('canvasId')).left);
-			console.log('matisse.yOffset ='+util.getOffset(document.getElementById('canvasId')).top);
+					
             this.addTools();
 
             document.onkeydown = events.keyDown;

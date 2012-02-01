@@ -18,7 +18,7 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				xOffset: 53,
 				yOffset: 134,
 				canvasWidth: 330,
-				canvasHeight: 500
+				canvasHeight: 800
 			});
 	containers.registercontainer( 'ipad' , {		
 				displayName: "iPad",

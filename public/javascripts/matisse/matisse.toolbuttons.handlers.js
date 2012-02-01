@@ -203,9 +203,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
 		bindLayoutCombo: function () {
 			$("#layout").bind("change", function (e) {
 				var val = document.getElementById("layout").value;					
-				console.log("in bind layout: "+val);
 				var obj = matisse.layout.content.layouts[val].toolAction();
-				console.log(obj);
 				matisse.comm.sendDrawMsg({			
 					action: val,
 					palette: "content",
