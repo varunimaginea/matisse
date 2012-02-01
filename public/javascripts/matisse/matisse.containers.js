@@ -44,7 +44,8 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			}
 			html+="<input type='button' value='Ok' onclick=onButtonClick() />"
 			$(document.getElementById('result')).append(html);
-			popup('popUpDiv', 'blank', 300, 600);
+			popup('popUpDiv', 'closediv', 300, 600);
+			$('#closediv').css('display', 'none');
 			
 			$('.container-holder').click(function(e) {
 				if(thisRef.currSelection)
@@ -63,6 +64,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 					action: "setContainer",
 					containerName:this.containerName
 			});
+			$('#closediv').css('display', 'block');
 		},
 		setContainer: function(containerName, type) {
 			var contObj = matisse.containers[containerName];
