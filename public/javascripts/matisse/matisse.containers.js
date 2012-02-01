@@ -27,35 +27,32 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 				return;
 			}
 			var html = '<div id="containerlist" style="padding:15px"><p>Select a Device</p>';
+			var containerHolder = "<select id='containers' >"
 			for (var contName in matisse.containers) {
 				var containerObj = matisse.containers[contName];
 				var container_DisplayName = containerObj.displayName;
-				var src = '/images/' + containerObj.src;
+				console.log('contName ='+contName);
+				console.log('container_DisplayName ='+container_DisplayName);
+				containerHolder += '<option value='+contName+ ' id='+container_DisplayName+'>'+container_DisplayName;
+				//var src = '/images/' + containerObj.src;
+				//containerHolder += '<div style="padding:15px" class = "container-holder" id="containerholder_' + container_DisplayName + '">';
+				//containerHolder += '<div class="container_image"><img id="' + container_DisplayName + '" src="' + src + '" width="64" height="64" /></div><div id="container-label">' + container_DisplayName + '</div></div>';
 				
-				var containerHolder = '<div style="padding:15px" class = "container-holder" id="container-holder-' + container_DisplayName + '">';
-				containerHolder += '<div class="container_image"><img id="' + container_DisplayName + '" src="' + src + '" width="64" height="64" /></div><div id="container-label">' + container_DisplayName + '</div></div>';
-				html += containerHolder;
 			}
+			html += containerHolder;
 			onButtonClick = function() {
-				if(thisRef.containerName)
+				//if(thisRef.containerName)
 				thisRef.onOkClick();
 			}
-			html+="<input type='button' value='Ok' onclick=onButtonClick() />"
 			$(document.getElementById('result')).append(html);
+			var btndiv ="<div style='padding:15px'><br><input type='button' value='Ok' onclick=onButtonClick() /></div>"
+			$(document.getElementById('result')).append(btndiv);
 			popup('popUpDiv', 'closediv', 300, 600);
 			$('#closediv').css('display', 'none');
-			
-			$('.container-holder').click(function(e) {
-				if(thisRef.currSelection)
-				$('#'+thisRef.currSelection).css('background-color', 'transparent');
-				$(this).css('background-color', '#ff0');
-				thisRef.currSelection = this.id;
-				thisRef.containerName = e.target.id.toLowerCase();
-				
-			});
-					
 		},
 		onOkClick: function() {
+			this.containerName = document.getElementById('containers').value;
+			console.log('...'+this.containerName);
 			this.setContainer(this.containerName, 'new');
 			matisse.comm.sendContainerInfo({
 					action: "setContainer",
