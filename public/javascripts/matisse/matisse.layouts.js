@@ -28,6 +28,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 		},
 		
 		setLayoutType: function (type) {
+			console.log(arguments.callee.caller.toString());
 			var opt = document.getElementById(type);
 			var group = opt.parentElement.label;				
 			var obj = matisse.layout[group].layouts[type].toolAction();			

@@ -12,9 +12,10 @@ define( ["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.c
 		var serverURL = 'http://localhost';//change it to server ip or local ip for testing from other machines
 		var comm = new Comm(serverURL);
 		comm.onContainerDraw = function(data) {
-			console.log('container ==>>>>>'+data)
 			matisse.containerName = data;
+			layouts.createLayoutsList();
 			containers.createContainerList();
+			
 		}
 		
 		matisse.comm = comm;
