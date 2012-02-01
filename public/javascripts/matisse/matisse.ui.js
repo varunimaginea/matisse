@@ -1,4 +1,9 @@
-/*matisse.ui*/
+/**
+ * Author: Bahvani Shankar
+ * Date: 12/26/11
+ * Time: 11:16 AM
+ * About matisse.ui : matisse.ui is the module to set all ui related things like canvas, accordian, carousal etc.
+ */
 define(["matisse"], function (matisse) {
 	"use strict";
 	var ui = {
@@ -164,9 +169,17 @@ define(["matisse"], function (matisse) {
 		updateAccordian: function (palette_DisplayName) {
 			$("#accordion").append('<h3><a href="#">' + palette_DisplayName + '</a></h3><div height="100%" id="' + palette_DisplayName + '"></div>');
 		},
+		
+		/**
+		 * Draws Horizontal and Vertical lines that are used as guilde lines for object alignment
+		 * @method drawHVLines
+		 * @param none
+		 */
 		drawHVLines: function () {
+			//remove first, needs to redraw when window is resized
 			canvas.remove(matisse.hLine);
 			canvas.remove(matisse.vLine);
+			
 			var width = this.canvasWidth;
 			var height = this.canvasWidth;
 			matisse.hLine = new fabric.Line([0, -10, width, -10], {
