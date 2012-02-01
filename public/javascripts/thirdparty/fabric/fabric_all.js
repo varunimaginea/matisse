@@ -4701,7 +4701,7 @@ fabric.util.string = {
      */
     _initEvents: function () {
       var _this = this;
-      
+      fabric.window.resized = false;
       this._onMouseDown = function (e) {
         _this.__onMouseDown(e);
         
@@ -4734,7 +4734,8 @@ fabric.util.string = {
       };
       
       this._onResize = function (e) { 
-        _this.calcOffset();
+        fabric.window.resized = true;
+		_this.calcOffset();
       };
       
 
@@ -4977,6 +4978,10 @@ fabric.util.string = {
       if (this._shouldClearSelection(e)) {
         var deviceOffsetX = this.wrapperEl.parentNode.style.left.substr(0, this.wrapperEl.parentNode.style.left.length-2);
 		var deviceOffsetY = this.wrapperEl.parentNode.style.top.substr(0, this.wrapperEl.parentNode.style.top.length-2);
+		if (fabric.window.resized) {
+			deviceOffsetX = 0;
+			deviceOffsetY = 0;
+		}
         var deviceHolder = this.wrapperEl.parentNode.parentNode;
         this._groupSelector = {		  
 		  ex: pointer.x + this.wrapperEl.parentNode.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX,
@@ -5059,6 +5064,10 @@ fabric.util.string = {
       }
       var deviceOffsetX = _canvasHolder.style.left.substr(0, _canvasHolder.style.left.length-2);
 	  var deviceOffsetY = _canvasHolder.style.top.substr(0, _canvasHolder.style.top.length-2);
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
 	  var deviceHolder = _canvasHolder.parentNode.parentNode;
       this._currentTransform = {
 		target: target,
@@ -5141,6 +5150,10 @@ fabric.util.string = {
       var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
       this._freeDrawingXPoints.length = this._freeDrawingYPoints.length = 0;
       
       this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX);
@@ -5164,6 +5177,10 @@ fabric.util.string = {
           var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
       this._freeDrawingXPoints.push(pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX);
       this._freeDrawingYPoints.push(pointer.y + canvasHolder.scrollTop + deviceHolder.scrollTop - deviceOffsetY);
       
@@ -5244,6 +5261,10 @@ fabric.util.string = {
 	  var deviceHolder = canvasHolder.parentNode.parentNode;
 	  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 	  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
       // We initially clicked in an empty area, so we draw a box for multiple selection.
       if (groupSelector !== null) {
         var pointer = getPointer(e);
@@ -5284,6 +5305,10 @@ fabric.util.string = {
 		 
 		  var deviceOffsetX = canvasHolder.style.left.substr(0, canvasHolder.style.left.length-2);
 		  var deviceOffsetY = canvasHolder.style.top.substr(0, canvasHolder.style.top.length-2);
+		  if (fabric.window.resized) {
+			deviceOffsetX = 0;
+			deviceOffsetY = 0;
+		  }
         // object is being transformed (scaled/rotated/moved/etc.)
         var pointer = getPointer(e), 
             x = pointer.x + canvasHolder.scrollLeft + deviceHolder.scrollLeft - deviceOffsetX, 
@@ -5744,6 +5769,10 @@ fabric.util.string = {
     
 	  var deviceOffsetX = this.wrapperEl.parentNode.style.left.substr(0, this.wrapperEl.parentNode.style.left.length-2);
 	  var deviceOffsetY = this.wrapperEl.parentNode.style.top.substr(0, this.wrapperEl.parentNode.style.top.length-2);
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
 	  var deviceHolder = this.wrapperEl.parentNode.parentNode.parentNode;
       var activeGroup = this.getActiveGroup(), 
           x = pointer.x + this.wrapperEl.parentNode.scrollLeft + deviceHolder.scrollLeft -deviceOffsetX, //Matisse :: Fix for selection of objects when a canvas is inside a div with scroll
@@ -7621,6 +7650,10 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
 	  var deviceHolder = _canvasHolder ? _canvasHolder.parentNode.parentNode : null;
 	  var deviceScrollLeft = deviceHolder ? deviceHolder.scrollLeft : 0;
 	  var deviceScrollTop = deviceHolder ? deviceHolder.scrollTop : 0;
+	  if (fabric.window.resized) {
+		deviceOffsetX = 0;
+		deviceOffsetY = 0;
+	  }
       if (!this.hasControls) return false;
       var _scrollLeft = _canvasHolder ? _canvasHolder.scrollLeft : 0,
           _scrollTop = _canvasHolder ? _canvasHolder.scrollTop : 0;
