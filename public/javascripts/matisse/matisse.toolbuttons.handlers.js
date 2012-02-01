@@ -133,6 +133,16 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
                 }]
             });
         },
+		/**
+         * Handler for Logout Button Click
+         * @method logoutButtonClickHandler
+         * @param none
+         */
+        logoutButtonClickHandler: function () {
+            $('#logouticon').bind("click", function () {
+                window.location="/logout";
+            });
+        },
         helpButtonListener: function () {
             $('#helpicon').bind("click", showHelp);
         },
