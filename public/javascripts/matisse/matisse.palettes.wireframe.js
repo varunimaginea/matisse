@@ -161,9 +161,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[0].text;
-					};
+					txt_area.innerHTML = obj.paths[0].text;
+					
 					txt_area.onkeyup = function (e) {
 						var width = 0, height = 0;
 						obj.paths[0].text = this.value;
@@ -291,9 +290,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[1].text;
-					};
+					txt_area.innerHTML = obj.paths[1].text;
+					
 					txt_area.onkeyup = function (e) {
 						var width = 0, height = 0;
 						obj.paths[1].text = this.value;
@@ -407,9 +405,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[1].text;
-					}
+					txt_area.innerHTML = obj.paths[1].text;
+					
 					txt_area.onkeyup = function (e) {
 						var width = 0, height = 0;
 						obj.paths[1].text = this.value;
@@ -537,9 +534,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[1].text;
-					}
+					txt_area.innerHTML = obj.paths[1].text;
+					
 					txt_area.onkeyup = function (e) {
 						var wdth = 0;
 						obj.paths[1].text = this.value;
@@ -678,9 +674,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[2].text;
-					}
+					txt_area.innerHTML = obj.paths[2].text;
+					
 					txt_area.onkeyup = function (e) {
 						var wdth = 0;
 						obj.paths[2].text = this.value;
@@ -812,9 +807,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[3].text;
-					}
+					txt_area.innerHTML = obj.paths[3].text;
+					
 					txt_area.onkeyup = function (e) {
 						var wdth = 0;
 						obj.paths[3].text = this.value;
@@ -1199,9 +1193,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = canvas.getActiveObject();
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = obj.paths[1].text;
-					}
+					txt_area.innerHTML = obj.paths[1].text;
+					
 					txt_area.onkeyup = function (e) {
 						obj.paths[1].text = "";
 						for (var i = 0; i < this.value.length; i++)
