@@ -162,9 +162,7 @@ position:relative;
 }
 
 #menuicons{
-/*margin: 55px 20px 0px 0px;*/
-float: right;
-margin: 55px -300px 0 0;
+margin: 55px 20px 0px 0px;
 }
 
 #menuicons img{
@@ -302,7 +300,7 @@ color:white;
 input.file {
 	position: relative;
 	top:20px;
-	width:16px;
+	width:100px;
 	height:16px;
 	text-align: right;
 	visibility:hidden;
