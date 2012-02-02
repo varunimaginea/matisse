@@ -33,8 +33,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					properties.updatePropertyPanel(obj);
 					break;
 				case "selection:cleared":
-					$('#prop').remove();
-					$('#propdiv').dialog('close');
+					//$('#prop').remove();
+					//$('#propdiv').dialog('close');
 					break;
 				case 'path:created':
 					canvas.isSelectMode = true;
