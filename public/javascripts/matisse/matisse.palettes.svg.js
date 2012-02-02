@@ -5,7 +5,7 @@
  * About this : Define all SVGs here
  */
 require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.util"], function (matisse, main, palettes, objproperties, util) {
-	"use strict";
+
 	var updateProperties = function (obj, recvdObj) {
 		obj.left = recvdObj.left;
 		obj.top = recvdObj.top;
@@ -24,6 +24,28 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		if(recvdObj.path)
 		obj.path = recvdObj.path;
 	};
+	loadSVG = function (args) {
+		fabric.loadSVGFromURL('/images/svg/' + args.svg, function (objects, options) {
+            var loadedObject;
+            if (objects.length > 1) {
+                loadedObject = new fabric.PathGroup(objects, options);
+            } else {
+                loadedObject = objects[0];
+            }
+
+            loadedObject.set({
+                left: args.left,
+                top: args.top,
+                angle: 0
+            });
+            loadedObject.name = args.name;
+            loadedObject.palette = args.palette;
+			loadedObject.uid = args.uid;
+            loadedObject.scaleToWidth(100).setCoords();
+            canvas.add(loadedObject);
+        });
+
+    }
 palettes.registerpalette("svg", {
     collectionName: 'svg',
     shapes: {
@@ -34,9 +56,16 @@ palettes.registerpalette("svg", {
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
-                 matisse.main.loadSVG(args);
+                loadSVG(args);
             },
-
+			modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
+				},
+			applyProperties: function (props) {
+				objproperties._applyProperties(props);
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -97,9 +126,16 @@ palettes.registerpalette("svg", {
             toolAction: function (args) {
                 args.svg = '17.svg';
                 args.name = 'pathgroup2';
-                 matisse.main.loadSVG(args);
+                loadSVG(args);
             },
-
+			modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
+				},
+			applyProperties: function (props) {
+				objproperties._applyProperties(props);
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
@@ -159,10 +195,17 @@ palettes.registerpalette("svg", {
             inactiveIcon: "25.svg",
             toolAction: function (args) {
                 args.svg = '25.svg';
-                args.name = 'pathgroup2';
-                matisse.main.loadSVG(args);
+                args.name = 'button';
+                loadSVG(args);
             },
-
+			modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					updateProperties(obj, recvdObj);
+				},
+			applyProperties: function (props) {
+				objproperties._applyProperties(props);
+			},
             properties: [{
                 name: 'left',
                 type: 'number',
