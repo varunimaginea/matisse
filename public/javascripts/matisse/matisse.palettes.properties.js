@@ -139,6 +139,7 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 				if (_properties) {
 					matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(_properties) : null;
 				}
+				toolHandlers.openPropertiesPanel();
 			}
 		}
 	};
