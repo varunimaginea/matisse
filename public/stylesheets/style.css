@@ -153,9 +153,18 @@ position:relative;
     font-size: 13px;
     margin: 5px 30px 0 0;
 }
+#user {
+    color: #AAAAAA;
+    float: right;
+    font-family: arial;
+    font-size: 13px;
+    margin: 5px 30px 0 0;
+}
 
 #menuicons{
-margin: 55px 20px 0px 0px;
+/*margin: 55px 20px 0px 0px;*/
+float: right;
+margin: 55px -300px 0 0;
 }
 
 #menuicons img{

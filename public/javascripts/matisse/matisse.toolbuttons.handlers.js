@@ -123,7 +123,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
          */
         chatButtonListener: function (e) {
             var msg = $("#chat").val();
-            msg = "from $:" + msg + "\n";
+            msg = matisse.userName+': ' + msg + "\n";
             var txt = document.createTextNode(msg);
             $("#chattext").append(txt);
             matisse.comm.sendDrawMsg({

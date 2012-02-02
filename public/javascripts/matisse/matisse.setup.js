@@ -16,6 +16,13 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			layouts.createLayoutsList();
 			containers.createContainerList();
 		}
+		comm.onUserInfo = function(data) {
+			console.log('user name ='+data.twitter.name);
+			if(matisse.userName == null) {
+				matisse.userName = data.twitter.name;
+				$('#user').append('<span>Welcome '+matisse.userName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| </span>')
+			}
+		}
 		matisse.comm = comm;
 		matisse.main = main;
 	});
