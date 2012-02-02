@@ -4,14 +4,33 @@
  * Time: 11:16 AM
  * About this : Define all SVGs here
  */
-
-matisse.Shapes.registerpalette("svg", {
+require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.properties", "matisse.util"], function (matisse, main, palettes, objproperties, util) {
+	"use strict";
+	var updateProperties = function (obj, recvdObj) {
+		obj.left = recvdObj.left;
+		obj.top = recvdObj.top;
+		obj.scaleX = recvdObj.scaleX;
+		obj.scaleY = recvdObj.scaleY;
+		obj.setAngle(recvdObj.angle);
+		if (recvdObj.fill) {
+			obj.set("fill", recvdObj.fill);
+		}
+		if (recvdObj.stroke) {
+			obj.set("stroke", recvdObj.stroke);
+		}
+		if (obj.text) {
+			obj.text = recvdObj.text;
+		}
+		if(recvdObj.path)
+		obj.path = recvdObj.path;
+	};
+palettes.registerpalette("svg", {
     collectionName: 'svg',
     shapes: {
         pathgroup1: {
             displayName: "pathgroup1",
-            displayIcon: "anchor.png",
-            displayIcon2: "anchor.png",
+            activeIcon: "36.svg",
+            inactiveIcon: "36.svg",
             toolAction: function (args) {
                 args.svg = '36.svg'
                 args.name = 'pathgroup1';
@@ -73,8 +92,8 @@ matisse.Shapes.registerpalette("svg", {
         },
         pathgroup2: {
             displayName: "pathgroup2",
-            displayIcon: "thumb.png",
-            displayIcon2: "thumb.png",
+            activeIcon: "17.svg",
+            inactiveIcon: "17.svg",
             toolAction: function (args) {
                 args.svg = '17.svg';
                 args.name = 'pathgroup2';
@@ -136,10 +155,10 @@ matisse.Shapes.registerpalette("svg", {
         },
 		button: {
             displayName: "button",
-            displayIcon: "button.png",
-            displayIcon2: "svg2.jpg",
+            activeIcon: "25.svg",
+            inactiveIcon: "25.svg",
             toolAction: function (args) {
-                args.svg = 'button.svg';
+                args.svg = '25.svg';
                 args.name = 'pathgroup2';
                 matisse.main.loadSVG(args);
             },
@@ -201,3 +220,4 @@ matisse.Shapes.registerpalette("svg", {
     } //end of shapes
 } // end of svg
 );
+})
