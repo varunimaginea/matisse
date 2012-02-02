@@ -302,7 +302,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var textSample = new fabric.Text(textVal, {
 						left: args.left,
 						top: args.top,
-						fontFamily: args.fontFamily,
+						fontFamily: 'delicious_500',
 						angle: args.angle,
 						fill: args.fill,
 						scaleX: args.scaleX,
@@ -356,13 +356,6 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						(args.obj).set("top", args.property);
 					},
 					defaultvalue: 100
-				}, {
-					name: 'fontFamily',
-					type: 'string',
-					action: function (args) {
-						(args.obj).set("fontFamily", args.property);
-					},
-					defaultvalue: 'delicious_500'
 				}, {
 					name: 'scaleX',
 					type: 'number',
