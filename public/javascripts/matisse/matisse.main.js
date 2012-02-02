@@ -104,7 +104,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         drawPath: function (args) {
             var p = new fabric.Path(args.path);
             p.fill = null;
-            p.stroke = '#FF000';
+            p.stroke = args.stroke;
             p.strokeWidth = 1;
             p.uid = args.uid;
             p.name = "drawingpath";

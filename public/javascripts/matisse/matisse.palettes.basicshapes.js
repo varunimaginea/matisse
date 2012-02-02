@@ -480,6 +480,9 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
 				},
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+				},
 				properties: [{
 					name: 'left',
 					type: 'number',
@@ -508,7 +511,15 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						(args.obj).set("scaleY", args.property);
 					},
 					defaultvalue: 1
-				}]
+				}, {
+					name: 'stroke',
+					type: 'string',
+					action: function (args) {
+						(args.obj).set("stroke", args.property);
+					},
+					defaultvalue: '#00FF00'
+				}
+				]
 			}, // end of path
 		} // end of shapes
 	}); // end of basic shapes
