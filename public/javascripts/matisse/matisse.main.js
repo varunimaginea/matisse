@@ -104,7 +104,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         drawPath: function (args) {
             var p = new fabric.Path(args.path);
             p.fill = null;
-            p.stroke = '#FF000';
+            p.stroke = args.stroke;
             p.strokeWidth = 1;
             p.uid = args.uid;
             p.name = "drawingpath";
@@ -156,6 +156,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			mfabric.observe('selection:cleared');
 			mfabric.observe('object:selected');
 			mfabric.observe('object:moving');
+			mfabric.observe('object:scaling');
 		},
 		/**
 		*  Called when other users add, modify or delete any object
