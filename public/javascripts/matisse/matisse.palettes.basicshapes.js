@@ -302,7 +302,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var textSample = new fabric.Text(textVal, {
 						left: args.left,
 						top: args.top,
-						fontFamily: args.fontFamily,
+						fontFamily: 'delicious_500',
 						angle: args.angle,
 						fill: args.fill,
 						scaleX: args.scaleX,
@@ -325,9 +325,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					objproperties._applyProperties(props);
 					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
 					var txt_area = document.getElementById("txtarea");
-					txt_area.onfocus = function () {
-						txt_area.innerHTML = canvas.getActiveObject().text;
-					};
+					txt_area.innerHTML = canvas.getActiveObject().text;
 					txt_area.onkeyup = function (e) {
 						canvas.getActiveObject().text = this.value;
 						matisse.comm.sendDrawMsg({
@@ -356,13 +354,6 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						(args.obj).set("top", args.property);
 					},
 					defaultvalue: 100
-				}, {
-					name: 'fontFamily',
-					type: 'string',
-					action: function (args) {
-						(args.obj).set("fontFamily", args.property);
-					},
-					defaultvalue: 'delicious_500'
 				}, {
 					name: 'scaleX',
 					type: 'number',
@@ -489,6 +480,9 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
 				},
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+				},
 				properties: [{
 					name: 'left',
 					type: 'number',
@@ -517,7 +511,15 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						(args.obj).set("scaleY", args.property);
 					},
 					defaultvalue: 1
-				}]
+				}, {
+					name: 'stroke',
+					type: 'string',
+					action: function (args) {
+						(args.obj).set("stroke", args.property);
+					},
+					defaultvalue: '#00FF00'
+				}
+				]
 			}, // end of path
 		} // end of shapes
 	}); // end of basic shapes

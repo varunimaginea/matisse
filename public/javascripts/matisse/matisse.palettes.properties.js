@@ -132,13 +132,14 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 				if (matisse.palette[matisse.paletteName] === null) {
 					return;
 				}
-				if (objName === undefined || objName === 'drawingpath') {
+				if (objName === undefined ) {
 					return;
 				}
 				var _properties = util.getDefaultDataFromArray(matisse.palette[matisse.paletteName].shapes[objName].properties);
 				if (_properties) {
 					matisse.palette[matisse.paletteName].shapes[objName].applyProperties ? matisse.palette[matisse.paletteName].shapes[objName].applyProperties(_properties) : null;
 				}
+				toolHandlers.openPropertiesPanel();
 			}
 		}
 	};
