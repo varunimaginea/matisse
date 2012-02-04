@@ -1,8 +1,8 @@
 /**
- * User: Bhavani Shankar,Pradeep
+ * User: Bhavani Shankar
  * Date: 12/28/11
  * Time: 11:16 AM
- * About this : To set the properties of the object with the received object
+ * About this : Generates different type of layouts
  */
 
 require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.properties", "matisse.util"], function (matisse, main, layouts, objproperties, util) {
@@ -321,6 +321,6 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					return pathgroup;
 				}
 			}			
-		} // end of shapes
-	}); // end of basic shapes
+		} 
+	}); 
 });
