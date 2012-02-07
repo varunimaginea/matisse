@@ -153,6 +153,13 @@ position:relative;
     font-size: 13px;
     margin: 5px 30px 0 0;
 }
+#user {
+    color: #AAAAAA;
+    float: right;
+    font-family: arial;
+    font-size: 13px;
+    margin: 5px 30px 0 0;
+}
 
 #menuicons{
 margin: 55px 20px 0px 0px;
@@ -293,7 +300,7 @@ color:white;
 input.file {
 	position: relative;
 	top:20px;
-	width:16px;
+	width:100px;
 	height:16px;
 	text-align: right;
 	visibility:hidden;

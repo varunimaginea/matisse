@@ -157,6 +157,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			mfabric.observe('object:selected');
 			mfabric.observe('object:moving');
 			mfabric.observe('object:scaling');
+			mfabric.observe('object:resizing');
 		},
 		/**
 		*  Called when other users add, modify or delete any object

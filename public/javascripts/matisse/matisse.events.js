@@ -109,6 +109,7 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
          * @param e mouseevent
          */
         mouseMove: function (event) {
+			matisse.eventObj = event;
             if (canvas.isDrawingMode) {
                 matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
                 matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);
