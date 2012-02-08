@@ -38,6 +38,7 @@ define(function () {
 		indentMultiplier : 10,
 		imageTag: null,
 		containerName: null,
-		eventObj: {}
+		eventObj: {},
+		layoutURL: null
 	};
 });
