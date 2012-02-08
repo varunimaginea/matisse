@@ -34,7 +34,7 @@ See index.html in this directory for a vanilla html example.
 >   $npm install -d
 >
 
-3) Change the "localhost" to your local machine ip in public/javascripts/com.js.
+3) Change the "localhost" to your local machine ip in public/javascripts/matisse/matisse.setup.js
 
 >
 > var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
