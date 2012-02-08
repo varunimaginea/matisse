@@ -57,7 +57,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
                             height: pathObj.height,
                             path: pathObj.path,
                             name: pathObj.name,
-							palette: matisse.paletteName
+							palette: matisse.paletteName,
+							stroke: pathObj.stroke
 						}]
 					});
 					matisse.xPoints = [];
