@@ -19,11 +19,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 		 */
 		createContainerList: function () {
 			var thisRef = this;
-			if (matisse.containerName !== 'empty') {
-				this.containerName = matisse.containerName;
-				this.setContainer(this.containerName, 'old');
-				return;
-			}
 			var html = '<div id="containerlist" style="padding:15px"><p>Select a Device</p>';
 			var containerHolder = "<select id='containers' >";
 			var contName;
@@ -39,7 +34,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			$(document.getElementById('result')).append(html);
 			var btndiv = "<div style='padding:15px'><br><input type='button' value='Ok' onclick=onButtonClick() /></div>"
 			$(document.getElementById('result')).append(btndiv);
-			popup('popUpDiv', 'closediv', 300, 600);
+			popup('popUpDiv', 'closediv', 300, 300);
 			$('#closediv').css('display', 'none');
 		},
 		onOkClick: function () {
