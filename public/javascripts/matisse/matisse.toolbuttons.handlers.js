@@ -22,7 +22,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
          * @method importImageButtonClickHandler
          * @param none
          */
-        importImageButtonClickHandler: function () {
+       /* importImageButtonClickHandler: function () {
             $('#loadicon').bind("click", function () {
                 var args = {};
                 args.path = 'images/conventional-html-layout.png';
@@ -33,7 +33,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
                 args.palette = 'imagepalette';
                 loadImage(args);
             });
-        },
+        },*/
 
         /**
          * Handler for New Document Button Click
