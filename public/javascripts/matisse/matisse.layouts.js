@@ -8,7 +8,6 @@
 define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (matisse, main, ui, util) {
     
 	return {
-		
 		registerLayout : function (layoutName, layoutDesc) {			
 			matisse.layout[layoutName] = layoutDesc;
 		},

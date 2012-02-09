@@ -19,11 +19,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 		 */
 		createContainerList: function () {
 			var thisRef = this;
-			if (matisse.containerName !== 'empty') {
-				this.containerName = matisse.containerName;
-				this.setContainer(this.containerName, 'old');
-				return;
-			}
 			var html = '<div id="containerlist" style="padding:15px"><p>Select a Device</p>';
 			var containerHolder = "<select id='containers' >";
 			var contName;
@@ -55,7 +50,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			});
 			$('#closediv').css('display', 'block');
 		},
-		setContainer: function (containerName, type) {			
+		setContainer: function (containerName, type) {
 			var contObj = matisse.containers[containerName];
 			ui.deviceHeight = contObj.height;
 			ui.deviceWidth = contObj.width;

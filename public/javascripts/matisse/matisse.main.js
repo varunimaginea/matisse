@@ -103,7 +103,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          */
         drawPath: function (args) {
             var p = new fabric.Path(args.path);
-            p.fill = args.fill;
+            p.fill = null;
             p.stroke = args.stroke;
             p.strokeWidth = 1;
             p.uid = args.uid;
@@ -165,8 +165,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 		*  @param data - shape(data.shape) and args array (data.args)
 		*
 		*/
-		commOnDraw: function () {		
-			comm.prototype.onDraw =  function (data) {			
+		commOnDraw: function () {
+			comm.prototype.onDraw =  function (data) {
 				if (data && data.args) {
 					if (data.action === undefined || data.action === null) {
 						return;
@@ -287,7 +287,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				scaleX: args.scaleX,
 				scaleY: args.scaleY
 			});
-			canvas.add(fabImage);			
+			canvas.add(fabImage);
 			fabImage.uid = args.uid;
 			fabImage.name = args.name;
 			fabImage.palette = args.palette;
