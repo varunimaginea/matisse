@@ -40,6 +40,10 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 		onOkClick: function () {
 			this.containerName = document.getElementById('containers').value;
 			this.setContainer(this.containerName, 'new');
+			var val = document.getElementById('layouts').value;
+				if (val == "uploadLayout") {					
+					$(document.getElementById("result")).append('<input id = "loadLayout" type="file" />');
+				}
 			matisse.comm.sendContainerInfo({
 				action: "setContainer",
 				containerName:this.containerName
@@ -57,8 +61,10 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			matisse.xOffset = contObj.xOffset;
 			matisse.yOffset = contObj.yOffset;
 			matisse.main.init();
-			var imagsrc = '/images/' + contObj.src;
-			$('#containerBody').css('background-image', 'url(' + imagsrc + ')');
+			if (contObj.src) {
+				var imagsrc = '/images/'+contObj.src;
+				$('#containerBody').css('background-image', 'url(' + imagsrc + ')');
+			}			
 			$('#containerBody').css('position', 'relative');
 			var cssObj = {
 				'position': 'relative',
@@ -74,6 +80,9 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 				closePopup('popUpDiv');
 				closePopup('blanket');
 				var val = document.getElementById('layouts').value;
+				if (val == "uploadLayout") {					
+					matisse.layoutURL = document.getElementById("loadLayout").files[0];					
+				}
 				layouts.setLayoutType(val);
 			}	
 		}

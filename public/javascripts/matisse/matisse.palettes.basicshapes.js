@@ -12,6 +12,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		obj.top = recvdObj.top;
 		obj.scaleX = recvdObj.scaleX;
 		obj.scaleY = recvdObj.scaleY;
+		obj.width = recvdObj.width;
+		obj.height = recvdObj.height;
 		obj.setAngle(recvdObj.angle);
 		if (recvdObj.fill) {
 			obj.set("fill", recvdObj.fill);
@@ -148,7 +150,23 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
+					obj.radius = recvdObj.width/2;
 				},
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					
+					if (obj.width/2 == obj.radius) {
+						obj.radius = resizedObj.height/2;
+						obj.width = resizedObj.height;
+					} else if (obj.height/2 == obj.radius) {
+						obj.radius = resizedObj.width/2;
+						obj.height = resizedObj.width;
+					} else {
+						obj.radius = resizedObj.width/2;
+						obj.height = resizedObj.width;
+					}					
+				},
+				
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 				},
@@ -320,6 +338,11 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
+				},
+				resizeAction: function (resizedObj) {					
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.width = resizedObj.width;
+					obj.height = resizedObj.height;
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);

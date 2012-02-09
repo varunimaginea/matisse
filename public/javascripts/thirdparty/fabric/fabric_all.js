@@ -5061,6 +5061,30 @@ fabric.util.string = {
           : (corner === 'mt' || corner === 'mb') 
             ? 'scaleY' 
             : 'rotate';
+		if (corner === 'mr') {
+			action = 'resizeXR';
+		}
+		else if (corner === 'ml') {
+			action = 'resizeXL';
+		}
+		else if (corner === 'mb') {
+			action = 'resizeYB';
+		}
+		else if (corner === 'mt') {
+			action = 'resizeYT';
+		}
+		else if (corner === 'tr') {
+			action = e.shiftKey ? 'rotate' : 'resizeTR';
+		}
+		else if (corner === 'tl') {
+			action = e.shiftKey ? 'rotate' : 'resizeTL';
+		}
+		else if (corner === 'br') {
+			action = e.shiftKey ? 'rotate' : 'resizeBR';
+		}
+		else if (corner === 'bl') {
+			action = e.shiftKey ? 'rotate' : 'resizeBL';
+		}
       }
       var deviceOffsetX = _canvasHolder.style.left.substr(0, _canvasHolder.style.left.length-2);
 	  var deviceOffsetY = _canvasHolder.style.top.substr(0, _canvasHolder.style.top.length-2);
@@ -5320,7 +5344,7 @@ fabric.util.string = {
           // rotate object only if shift key is not pressed 
           // and if it is not a group we are transforming
           
-          if (!e.shiftKey) {
+          if (e.shiftKey) {
             this._rotateObject(x, y);
             
             this.fire('object:rotating', {
@@ -5328,11 +5352,59 @@ fabric.util.string = {
             });
           }
           
-          this._scaleObject(x, y);
-          this.fire('object:scaling', {
+          this._resizeObject(x, y);
+          this.fire('object:resizing', {
             target: this._currentTransform.target
           });
         }
+		else if (this._currentTransform.action === 'resizeXR') {
+			this._resizeObject(x, y, 'r');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeXL') {
+			this._resizeObject(x, y, 'l');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeYB') {
+			this._resizeObject(x, y, 'b');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeYT') {
+			this._resizeObject(x, y, 't');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeTR') {
+			this._resizeObject(x, y, 'tr');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeTL') {
+			this._resizeObject(x, y, 'tl');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeBR') {
+			this._resizeObject(x, y, 'br');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
+		else if (this._currentTransform.action === 'resizeBL') {
+			this._resizeObject(x, y, 'bl');
+			this.fire('object:resizing', {
+				target: this._currentTransform.target
+			});
+		}
         else if (this._currentTransform.action === 'scaleX') {
           this._scaleObject(x, y, 'x');
           
@@ -5403,7 +5475,64 @@ fabric.util.string = {
         target.lockScalingY || target.set('scaleY', t.scaleY * curLen/lastLen);
       }
     },
-
+	
+	_resizeObject: function (x, y, direction) {
+		var target = this._currentTransform.target;
+		var delta = 0;
+		if (direction === 'r') {			
+			delta = x - (target.left + this._offset.left + target.width / 2);
+			target.width += delta;
+			target.left += delta/2;			
+		}
+		else if (direction === 'l') {
+			delta = x - (target.left + this._offset.left - target.width / 2);
+			target.width -= delta;
+			target.left += delta/2;
+		}
+		else if (direction === 'b') {
+			delta = y - (target.top + this._offset.top + target.height / 2);
+			target.height += delta;
+			target.top += delta/2;
+		}
+		else if (direction === 't') {
+			delta = y - (target.top + this._offset.top - target.height / 2);
+			target.height -= delta;
+			target.top += delta/2;
+		}
+		else if (direction === 'tl') {
+			delta = y - (target.top + this._offset.top - target.height / 2);
+			target.height -= delta;
+			target.top += delta/2;
+			delta = x - (target.left + this._offset.left - target.width / 2);
+			target.width -= delta;
+			target.left += delta/2;
+		}
+		else if (direction === 'tr') {
+			delta = y - (target.top + this._offset.top - target.height / 2);
+			target.height -= delta;
+			target.top += delta/2;
+			delta = x - (target.left + this._offset.left + target.width / 2);
+			target.width += delta;
+			target.left += delta/2;
+		}
+		else if (direction === 'bl') {
+			delta = y - (target.top + this._offset.top + target.height / 2);
+			target.height += delta;
+			target.top += delta/2;
+			delta = x - (target.left + this._offset.left - target.width / 2);
+			target.width -= delta;
+			target.left += delta/2;
+		}
+		else if (direction === 'br') {
+			delta = y - (target.top + this._offset.top + target.height / 2);
+			target.height += delta;
+			target.top += delta/2;
+			delta = x - (target.left + this._offset.left + target.width / 2);
+			target.width += delta;
+			target.left += delta/2;
+		}
+	},
+	
     /**
      * Rotates object by invoking its rotate method
      * @method _rotateObject

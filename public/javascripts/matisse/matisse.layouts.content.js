@@ -320,7 +320,46 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					canvas.add(pathgroup);
 					return pathgroup;
 				}
-			}			
+			}
 		} 
 	}); 
+	
+	layouts.registerLayout("custom", {
+		collectionName: 'custom',
+		layouts: {
+			uploadLayout: {
+				displayName: "uploadLayout",
+				toolAction: function() {
+					var oReader = new FileReader();
+					if (matisse.layoutURL) {
+						oReader.onload = (function (theFile) {
+							return function (e) {
+								var args = {};
+								args.left = 100;
+								args.top = 300;
+								args.scaleX = 1;
+								args.scaleY = 1;
+								args.angle = 0;
+								args.uid = util.uniqid();
+								args.name = 'uploadLayout';
+								args.palette = 'custom';
+								args.self = true;
+								var img = new Image();
+								img.onload = function() {
+									args.image = this;
+									args.src = this.src;
+									args.width = canvas.width;
+									args.height = canvas.height;
+									matisse.main.addLayoutToCanvas(args);
+								}
+								img.src = e.target.result
+							};
+						})(matisse.layoutURL);
+						// Read in the image file as a data URL.
+						oReader.readAsDataURL(matisse.layoutURL);
+					}
+				}				
+			}
+		}
+	});
 });
