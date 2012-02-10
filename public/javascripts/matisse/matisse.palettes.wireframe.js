@@ -1347,6 +1347,129 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				}]	//End of properties for password
 			}, 	//End of shape password
 			
+			scrollbar: {	// scrollbar wireframe object
+				displayName: "scrollbar",
+				activeIcon: "scrollbar_w.png",
+				inactiveIcon: "scrollbar_g.png",
+				toolAction: function (args) {
+					var objects = [];
+					var outerRect = new fabric.Rect({
+						width: args.width,
+						height: args.height,
+						left: args.left,
+						top: args.top,
+						fill: '#fff',
+						stroke: '#ddd',
+						scaleX: args.scaleX,
+						scaleY: args.scaleY
+					});
+					var scroll = new fabric.Rect({
+						width: args.width,
+						height: args.height/5,
+						left: args.left,
+						top: args.top,
+						fill: '#ddd',
+						rx: 5,
+						stroke: args.stroke,
+						scaleX: args.scaleX,
+						scaleY: args.scaleY
+					});
+					var upperTriangle = new fabric.Polygon([{x: -args.width/2 + 3,y: -args.height/2 + 10},{x: 0,y: -args.height/2 + 5},{x: args.width/2 - 3 ,y: -args.height/2 + 10}],
+						{fill:'#888',stroke:'#ddd'});
+					var lowerTriangle = new fabric.Polygon([{x: -args.width/2 + 3,y: args.height/2 - 10},{x: 0,y: args.height/2 - 5},{x: args.width/2 - 3 ,y: args.height/2 - 10}],
+						{fill:'#888',stroke:'#ddd'});
+					objects.push(outerRect);
+					objects.push(scroll);
+					objects.push(upperTriangle);
+					objects.push(lowerTriangle);
+					loadWireframe(args, objects);              
+				},
+				modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;	
+					updateProperties(obj, recvdObj);
+					obj.paths[0].width = recvdObj.width;
+					obj.paths[0].height = recvdObj.height;
+					obj.paths[1].width = recvdObj.width;
+					obj.paths[1].height = recvdObj.height/5;										
+					obj.stroke = recvdObj.stroke;
+					obj.paths[2].points = recvdObj.paths[2].points;
+					obj.paths[3].points = recvdObj.paths[3].points;
+				},
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+				},
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);					
+					obj.left = resizedObj.left;
+					obj.top = resizedObj.top;
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					obj.paths[1].width = resizedObj.width;
+					obj.paths[1].height = resizedObj.height/5;
+					obj.paths[2].points = [{x: -resizedObj.width/2 + 3,y: -resizedObj.height/2 + 10},{x: 0,y: -resizedObj.height/2 + 5},{x: resizedObj.width/2 - 3 ,y: -resizedObj.height/2 + 10}];
+					obj.paths[3].points = [{x: -resizedObj.width/2 + 3,y: resizedObj.height/2 - 10},{x: 0,y: resizedObj.height/2 - 5},{x: resizedObj.width/2 - 3 ,y: resizedObj.height/2 - 10}];					
+					obj.stroke = resizedObj.stroke;
+				},
+				properties: [{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+					(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+					(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'width',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("width", args.property / args.obj.scaleX);
+					},
+					defaultvalue: 20
+				}, {
+					name: 'height',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("height", args.property / args.obj.scaleY);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'scaleX',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleX", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'scaleY',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleY", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'stroke',
+					type: 'string',
+					action: function (args) {
+						(args.obj).set("stroke", args.property);
+					},
+					defaultvalue: '#ccc'
+				}, {
+					name: 'angle',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("angle", args.property);
+					},
+					defaultvalue: 0
+				}]	//End of properties for ScrollBar
+			},	//End of shape Scrollbar
+			
 			div: {	// Div wireframe object
 				displayName: "div",
 				activeIcon: "rectangle_w.png",
