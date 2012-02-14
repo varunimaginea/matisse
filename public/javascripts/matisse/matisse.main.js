@@ -198,10 +198,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 					} else {
 						if (matisse.palette[data.palette] !== undefined) {
 							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
-						}
-						else if (matisse.layout[data.palette] !== undefined) {							
-							matisse.layout[data.palette].layouts[data.action].toolAction();
-						}
+						}					
 					}
 				}
 			};

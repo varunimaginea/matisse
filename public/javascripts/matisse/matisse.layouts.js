@@ -36,16 +36,15 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 		setLayoutType: function (type) {
 			var opt = document.getElementById(type);
 			var group = opt.parentElement.label;				
-			var obj = matisse.layout[group].layouts[type].toolAction();	
-			if (obj) {				
-				matisse.comm.sendDrawMsg({			
-					action: type,
-					palette: group,
-					args: [{
-						uid: obj.uid,
-						object: obj						
-					}]
-				});
+			var args = matisse.layout[group].layouts[type].toolAction();	
+			if (args) {	
+				for (var i = 0; i < args.length; i++) {
+					matisse.comm.sendDrawMsg({
+						palette: "basic",
+						action: "rectangle",
+						args: args[i]
+					});
+				}				
 			}
 		}
 	}

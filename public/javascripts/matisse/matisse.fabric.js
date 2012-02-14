@@ -79,7 +79,9 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					var resizingObj = e.memo.target;
 					var props = [];					
 					props.push(resizingObj);
-					matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction ? matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction.apply(null, props) : null;
+					if (matisse.palette[resizingObj.palette]) {
+						matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction ? matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction.apply(null, props) : null;
+					}
 					break;
 				case 'object:scaling':                   
 					var scalingObj = e.memo.target,
