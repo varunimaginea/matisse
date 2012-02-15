@@ -22,6 +22,7 @@ var usersById = {};
 var nextUserId = 0;
 var usersByTwitId = {};
 var userInfo = {};
+
 everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.consumerSecret).findOrCreateUser(function (sess, accessToken, accessSecret, twitUser) {
     var userDetails = usersByTwitId[twitUser.id] || (usersByTwitId[twitUser.id] = addUser('twitter', twitUser));
     userInfo = userDetails;
@@ -31,10 +32,13 @@ everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.co
     };
     var newUser = new UserModel();
     newUser.store(data, function (err) {
-        if (!err) console.log("saved to DB");
-        else console.log("Couldnot Save to DB");
+        if (!err) console.log("saved new user to DB");
+        else console.log("Could not Save user, possibly exist in DB");
     });
-
+	
+	/* 
+	* Code to retrieve users from DB (to check if userID is inserted)
+	*
     UserModel.find(function (err, ids) {
         if (err) {
             console.log(err);
@@ -57,9 +61,56 @@ everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.co
             });
         }
     });
-
+	*/	
     return userDetails;
 }).redirectPath('/');
+
+
+
+everyauth.facebook.appId(conf.fb.appId).appSecret(conf.fb.appSecret).scope('email,user_status').findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
+	var userDetails = usersByFbId[fbUserMetadata.id] || (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+	userInfo = userDetails;
+	console.log(userDetails);
+	/* 
+	* This saves the user into DB
+	*
+    var data = {
+        userID: "fb-" + userDetails.twitter.id
+    };
+	
+    var newUser = new UserModel();
+    newUser.store(data, function (err) {
+        if (!err) console.log("saved new user to DB");
+        else console.log("Could not Save user, possibly exist in DB");
+    });
+	*/
+	return userDetails;
+  })
+  .redirectPath('/');
+
+
+
+everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret).findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
+	var userDetails = usersByFbId[fbUserMetadata.id] || (usersByFbId[fbUserMetadata.id] = addUser('google', fbUserMetadata));
+	userInfo = userDetails;
+	console.log(userDetails);
+	/* 
+	* This saves the user into DB
+	*
+    var data = {
+        userID: "fb-" + userDetails.twitter.id
+    };
+	
+    var newUser = new UserModel();
+    newUser.store(data, function (err) {
+        if (!err) console.log("saved new user to DB");
+        else console.log("Could not Save user, possibly exist in DB");
+    });
+	*/
+	return userDetails;
+  })
+  .redirectPath('/');
+  
 
 function addUser(source, sourceUser) {
     var user;
@@ -210,7 +261,8 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(8000);
-//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
+
 io.sockets.on('connection', function (socket) {
     socket.emit('eventConnect', {
         message: 'welcome'
@@ -221,7 +273,7 @@ io.sockets.on('connection', function (socket) {
         var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
         socket.join(wb_url);
 
-        BoardModel.find(function (err, ids) {
+        BoardModel.find({url:randomnString},function (err, ids) {
             if (err) {
                 console.log(err);
             } else {
@@ -230,18 +282,13 @@ io.sockets.on('connection', function (socket) {
                     board.load(id, function (err, props) {
                         if (err) {
                             return next(err);
-                        } else {
-                            console.log("##" + props + " - " + props.url + " - " + props.container);
-                            if (props.url == randomnString) {
+                        } else {                         
                                 console.log("::: " + props.container);
                                 if (props.container == undefined || props.container == "") {
                                     socket.emit('containerDraw', "empty");
-                                    console.log(":::: EMPTY");
                                 } else {
                                     socket.emit('containerDraw', props.container);
-                                    console.log(":::: not EMPTY: " + props.container);
                                 }
-                            }
                         }
                     });
                 });
@@ -249,9 +296,7 @@ io.sockets.on('connection', function (socket) {
         });
 
 
-        ShapesModel.find({
-            board_url: wb_url
-        }, function (err, ids) {
+        ShapesModel.find({board_url: wb_url}, function (err, ids) {
             if (err) {
                 console.log(err);
             }
@@ -289,10 +334,9 @@ io.sockets.on('connection', function (socket) {
 
     socket.on("setContainer", function (location, data) {
         var wb_url = location.replace("/", "");
-        console.log("got container:" + wb_url + " - " + data.containerName);
         var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
 
-        BoardModel.find(function (err, ids) {
+        BoardModel.find({url:randomnString},function (err, ids) {
             if (err) {
                 console.log(err);
             } else {
@@ -302,15 +346,12 @@ io.sockets.on('connection', function (socket) {
                         if (err) {
                             return next(err);
                         } else {
-                            console.log("##" + props + " - " + props.url + " - " + props.container);
-                            if (props.url == randomnString) {
                                 console.log("updating");
                                 props.container = data.containerName;
 
                                 board.store(props, function (err) {
-                                    //console.log("***** Error in URL:"+url+" Err:"+err);
+                                    console.log("***** Error in updating container for URL:"+url+" Err:"+err);
                                 });
-                            }
                         }
                     });
                 });
