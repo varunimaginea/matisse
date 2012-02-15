@@ -51,7 +51,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
 			//toolHandlers.bindContainerCombo();
-			toolHandlers.bindLayoutCombo();
+			//toolHandlers.bindLayoutCombo();
 			toolHandlers.logoutButtonClickHandler();
         },
 
@@ -156,6 +156,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			mfabric.observe('selection:cleared');
 			mfabric.observe('object:selected');
 			mfabric.observe('object:moving');
+			mfabric.observe('object:scaling');
+			mfabric.observe('object:resizing');
 		},
 		/**
 		*  Called when other users add, modify or delete any object
@@ -191,14 +193,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 							canvas.sendBackwards(obj);
 							canvas.renderAll();
 						}
-					}	
-					else {
+					} else if (data.action === "uploadLayout") {
+						matisse.main.addLayoutToCanvasFromServer(data.args[0]);
+					} else {
 						if (matisse.palette[data.palette] !== undefined) {
 							matisse.palette[data.palette].shapes[data.action].toolAction.apply(this, data.args);
-						}
-						else if (matisse.layout[data.palette] !== undefined) {							
-							matisse.layout[data.palette].layouts[data.action].toolAction();
-						}
+						}					
 					}
 				}
 			};
@@ -218,6 +218,56 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			}
 			/* args.src - image source as dataURL */
 			img.src = args.src;
+		},
+		
+		/**
+		 * Adding layout to canvas when data received from Server 
+		 * @method addLayoutToCanvasFromServer
+		 * @param args - image source and other properties
+		 */
+		addLayoutToCanvasFromServer: function (args) {
+			var img = new Image();
+			img.onload = function() {
+				args.image = this;
+				args.width = this.width;
+				args.height = this.height;
+				matisse.main.addLayoutToCanvas(args);	
+			}
+			/* args.src - image source as dataURL */
+			img.src = args.src;
+		},
+		
+		/**
+		 * Adding layout to canvas as a background image when user selects a layout image from local storage
+		 * @method addLayoutToCanvas
+		 * @param args - image source and other properties
+		 */
+		addLayoutToCanvas: function (args) {
+			/* args.image - HTML Element */
+			var fabImage = new fabric.Image(args.image, {				
+				width: args.width,
+				height: args.height				
+			});			
+			canvas.setBackgroundImage(args.src, function() {
+					canvas.renderAll();
+				});
+			fabImage.uid = args.uid;
+			fabImage.name = args.name;
+			fabImage.palette = args.palette;			
+			if(args.self) {
+				args.self = false;
+				matisse.comm.sendDrawMsg({
+					action: 'uploadLayout',
+					palette: fabImage.palette,
+					args: [{
+						uid: fabImage.uid,						
+						name: fabImage.name,
+						image:args.image,
+						src:args.src,
+						palette: args.palette
+					}]
+				});
+			}
 		},
 		/**
 		 * Adding image to canvas when user selects an image from local storage

@@ -57,7 +57,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
                             height: pathObj.height,
                             path: pathObj.path,
                             name: pathObj.name,
-							palette: matisse.paletteName
+							palette: matisse.paletteName,
+							stroke: pathObj.stroke
 						}]
 					});
 					matisse.xPoints = [];
@@ -74,7 +75,60 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
                     var movingObj = e.memo.target;
                     checkAlign(movingObj);
                     break;
-				}
+				case 'object:resizing':
+					var resizingObj = e.memo.target;
+					var props = [];					
+					props.push(resizingObj);
+					if (matisse.palette[resizingObj.palette]) {
+						matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction ? matisse.palette[resizingObj.palette].shapes[resizingObj.name].resizeAction.apply(null, props) : null;
+					}
+					break;
+				case 'object:scaling':                   
+					var scalingObj = e.memo.target,
+						cursorStyle = canvas.upperCanvasEl.style.cursor,				
+						curLeft = scalingObj.originalState.left,	//left of the object before scaling
+						curTop = scalingObj.originalState.top,	//top of the object before scaling
+						scalingWidth = scalingObj.width,	//object width
+						curWidth = scalingObj.currentWidth,	//object width after scaling
+						scalingHeight = scalingObj.height,	//object height
+						curHeight = scalingObj.currentHeight,	//object height after scaling
+						scaleWidth = 0,
+						scaleHeight = 0;						
+					if (cursorStyle == 'e-resize') {	//when an object is scaled in east direction			
+						scaleWidth = scalingWidth * scalingObj.scaleX;	//object width while scaling
+						scalingObj.left = curLeft + (scaleWidth - curWidth)/2;	//object left after scaling (move towards right)						
+					} else if (cursorStyle == 'w-resize') {	//when an object is scaled in west direction
+						scaleWidth = scalingWidth * scalingObj.scaleX;	//object width while scaling
+						scalingObj.left = curLeft - (scaleWidth - curWidth)/2;	//object left after scaling (move towards left)
+					} else if (cursorStyle == 'n-resize') {	//when an object is scaled in north direction
+						scaleHeight = scalingHeight * scalingObj.scaleY;	//object height while scaling
+						scalingObj.top = curTop - (scaleHeight - curHeight)/2;	//object top after scaling (move towards north)
+					} else if (cursorStyle == 's-resize') {	//when an object is scaled in south direction
+						scaleHeight = scalingHeight * scalingObj.scaleY;	//object height while scaling
+						scalingObj.top = curTop + (scaleHeight - curHeight)/2;	//object top after scaling (move towards south)
+					} else if (cursorStyle == 'ne-resize') {	//when an object is scaled in north east direction, move the left and top in east and north directions
+						scaleHeight = scalingHeight * scalingObj.scaleY;
+						scalingObj.top = curTop - (scaleHeight - curHeight)/2;
+						scaleWidth = scalingWidth * scalingObj.scaleX;
+						scalingObj.left = curLeft + (scaleWidth - curWidth)/2;
+					} else if (cursorStyle == 'nw-resize') {	//when an object is scaled in north west direction, move the left and top in west and north directions
+						scaleHeight = scalingHeight * scalingObj.scaleY;
+						scalingObj.top = curTop - (scaleHeight - curHeight)/2;
+						scaleWidth = scalingWidth * scalingObj.scaleX;
+						scalingObj.left = curLeft - (scaleWidth - curWidth)/2;
+					} else if (cursorStyle == 'se-resize') {	//when an object is scaled in south east direction, move the left and top in east and south directions
+						scaleHeight = scalingHeight * scalingObj.scaleY;
+						scalingObj.top = curTop + (scaleHeight - curHeight)/2;
+						scaleWidth = scalingWidth * scalingObj.scaleX;
+						scalingObj.left = curLeft + (scaleWidth - curWidth)/2;
+					} else if (cursorStyle == 'sw-resize') {	//when an object is scaled in south west direction, move the left and top in west and south directions
+						scaleHeight = scalingHeight * scalingObj.scaleY;
+						scalingObj.top = curTop + (scaleHeight - curHeight)/2;
+						scaleWidth = scalingWidth * scalingObj.scaleX;
+						scalingObj.left = curLeft - (scaleWidth - curWidth)/2;
+					}	
+                    break;		
+					}
 			});
 		}
 	};

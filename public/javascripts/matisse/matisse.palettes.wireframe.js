@@ -30,6 +30,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 	 * To set the properties of the object with the received object when an object is modified.
 	 */
 	var updateProperties = function (obj, recvdObj) {
+		obj.width = recvdObj.width;
+		obj.height = recvdObj.height;
 		obj.left = recvdObj.left;
 		obj.top = recvdObj.top;
 		obj.scaleX = recvdObj.scaleX;
@@ -101,6 +103,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		$("#proptable").append("<tr><td><input id='txtbox' type='text'>Progress %</input> </td></tr>");
 		var txtbox = document.getElementById('txtbox');
 		var wdth = objct.paths[0].width;
+		txtbox.value = (wdth / 2 + objct.paths[1].points[1].x) * (100 / wdth);
 		txtbox.onfocus = function (e) {
 			this.value = (wdth / 2 + objct.paths[1].points[1].x) * (100 / wdth);
 		};
@@ -133,8 +136,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				toolAction: function (args) {
 					var objects = [],
 						txt = args.paths ? args.paths[0].text : "label me";
-					args.width = args.paths ? args.paths[0].width : util.getStringWidth(txt) + 20;
-					args.height = args.paths ? args.paths[0].height : util.getStringHeight(txt) + 20;
+					args.width = args.paths ? args.paths[0].width : util.getStringWidth(txt) + 10;
+					args.height = args.paths ? args.paths[0].height : util.getStringHeight(txt) + 5;
 					var text = new fabric.Text(txt,	{
 						fontSize : 20,
 						fontFamily : "delicious_500",
@@ -156,6 +159,13 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					obj.paths[0].height = recvdObj.paths[0].height;
 					obj.paths[0].text = recvdObj.paths[0].text;
 				},
+
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+				},
+
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 					var obj = canvas.getActiveObject();
@@ -233,19 +243,20 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				toolAction: function (args) {
 					var objects = [],
 						txt = args.paths ? args.paths[1].text : "click me";
-					args.width = util.getStringWidth(txt) + 1;
-					args.height = util.getStringHeight(txt) + 4;				
-					var border = new fabric.Polygon([{x: -args.width / 2, y: args.height / 2 - 2},
-												{x: -args.width / 2 + 2, y: args.height / 2},
-												{x: args.width / 2 - 2, y: args.height / 2},
-												{x: args.width / 2, y: args.height / 2 - 2},
-												{x: args.width / 2, y: -args.height / 2 + 2},
-												{x: args.width / 2 - 2, y: -args.height / 2},
-												{x: -args.width / 2 + 2, y: -args.height / 2},
-												{x: -args.width / 2, y: -args.height / 2 + 2}], {
-							fill: '#ffffff',
-							stroke: '#000000'
-						});
+					args.width = args.width ? args.width: util.getStringWidth(txt) + 1;
+					args.height = args.height ? args.height : util.getStringHeight(txt) + 4;				
+					var border = new fabric.Rect({
+						width: args.width,
+						height: args.height,
+						left: args.left,
+						top: args.top,
+						rx: 5,
+						fill: '#fcfcfc',
+						stroke: '#dfdfdf',
+						angle: args.angle,
+						scaleX: 1,
+						scaleY: 1
+					});
 					var text = new fabric.Text(txt, {
 						fontSize : 15,
 						fontFamily : "delicious_500",
@@ -256,12 +267,12 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					});
 					border.setGradientFill(canvas.getContext(), {
 						x1: 0,
-						y1: args.height,
+						y1: 0,
 						x2: 0,
-						y2: 0,
+						y2: args.height,
 						colorStops: {
-							0: '#fff',
-							1: '#555'
+							0: '#888',
+							1: '#fff'
 						}
 					});
 					objects.push(border);
@@ -274,15 +285,15 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
 					obj.width = recvdObj.width;
-					obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
-					obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
-					obj.paths[0].points[2].x = recvdObj.paths[0].points[2].x;
-					obj.paths[0].points[3].x = recvdObj.paths[0].points[3].x;
-					obj.paths[0].points[4].x = recvdObj.paths[0].points[4].x;
-					obj.paths[0].points[5].x = recvdObj.paths[0].points[5].x;
-					obj.paths[0].points[6].x = recvdObj.paths[0].points[6].x;
-					obj.paths[0].points[7].x = recvdObj.paths[0].points[7].x;
+					obj.paths[0].width = recvdObj.paths[0].width;
+					obj.paths[0].height = recvdObj.paths[0].height;
 					obj.paths[1].text = recvdObj.paths[1].text;
+				},
+				
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
 				},
 
 				applyProperties: function (props) {
@@ -299,14 +310,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						height = util.getStringHeight(obj.paths[1].text) + 5;
 						(width - obj.width) > 0 ? obj.left += (width - obj.width) / 2 : obj.left = obj.left;
 						obj.width = width;
-						obj.paths[0].points[0].x = -width / 2;
-						obj.paths[0].points[1].x = -width / 2 + 5;
-						obj.paths[0].points[2].x = width / 2 - 5;
-						obj.paths[0].points[3].x = width / 2;
-						obj.paths[0].points[4].x = width / 2;
-						obj.paths[0].points[5].x = width / 2 - 5;
-						obj.paths[0].points[6].x = -width / 2 + 5;
-						obj.paths[0].points[7].x = -width / 2;
+						obj.paths[0].width = width;
 						matisse.comm.sendDrawMsg({
 							action: "modified",
 							args: [{
@@ -380,7 +384,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						fontSize : 18,
 						fontFamily : "delicious_500",
 						fontWeight : 20,
-						left : args.paths ? args.paths[1].left : -45,
+						left : args.paths ? args.paths[1].left : -50,
 						top : args.paths ? args.paths[1].top : 0,
 						stroke: '#000000'
 					});
@@ -397,8 +401,16 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					obj.height = recvdObj.height;
 					obj.paths[0].width = recvdObj.paths[0].width;
 					obj.paths[0].height = recvdObj.paths[0].height;
-					obj.paths[1].text = recvdObj.paths[1].text;							
+					obj.paths[1].text = recvdObj.paths[1].text;	
+					obj.paths[1].left = recvdObj.paths[1].left;
 				},
+
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					obj.paths[1].left = -resizedObj.width /2 + obj.paths[1].getWidth()/2 + 5;
+				}, 
 
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
@@ -420,7 +432,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						obj.height = height;
 						obj.paths[0].width = width;
 						obj.paths[0].height = height;
-						obj.paths[1].left = -width / 2 + obj.paths[1].getWidth() / 2 + 10;
+						obj.paths[1].left = -width / 2 + obj.paths[1].getWidth() / 2 + 5;
 						matisse.comm.sendDrawMsg({
 							action: "modified",
 							args: [{
@@ -483,11 +495,11 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					side = 14,
 					_stroke =  args.paths ? args.paths[2].stroke : "#000000",
 					_fill = "#000000";				
-					args.width = args.width ? args.width : util.getStringWidth(text) + side + (2 * margin) + space;
-					args.height = 30;					
-					var checkbox_left = -(args.width / 2) + margin;
+					args.width = args.width ? args.width : util.getStringWidth(text) + side + space;
+					args.height = args.height ? args.height : side;					
+					var checkbox_left = -(args.width / 2);
 					var checkbox = new fabric.Polygon(      
-						[{x: checkbox_left,y:side/2},{x:checkbox_left + side, y:side/2},{x:checkbox_left + side, y:-side/2},{x:checkbox_left, y:-side/2}],
+						[{x: checkbox_left, y: args.height/2},{x:checkbox_left + args.height, y: args.height/2},{x:checkbox_left + args.height, y: -args.height/2},{x:checkbox_left, y: -args.height/2}],
 						{
 							fill: '#eee', 
 							stroke:'#000000'						
@@ -504,8 +516,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						stroke: _stroke
 					});
 					var tick = new fabric.Polyline(
-						[{x: checkbox_left+3,y:1},{x:checkbox_left+6,y:5},{x:checkbox_left+11,y:-5}],
-						{fill: '#ffffff',stroke: _stroke});
+						[{x: checkbox_left + 3, y: 1},{x: checkbox_left + args.height/2 - 2, y: args.height/2 - 2},{x: checkbox_left + args.height - 3, y: -args.height/2 + 2}],
+						{fill: '#ffffff', stroke: _stroke});
 					objects.push(checkbox);
 					objects.push(text);
 					objects.push(tick);
@@ -515,19 +527,23 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;	
-					updateProperties(obj, recvdObj);				
-					obj.paths[0].points[0].x = recvdObj.paths[0].points[0].x;
-					obj.paths[0].points[1].x = recvdObj.paths[0].points[1].x;
-					obj.paths[0].points[2].x = recvdObj.paths[0].points[2].x;
-					obj.paths[0].points[3].x = recvdObj.paths[0].points[3].x;
+					updateProperties(obj, recvdObj);					
+					obj.paths[0].points = recvdObj.paths[0].points;
 					obj.paths[1].left = recvdObj.paths[1].left;
 					obj.paths[1].text = recvdObj.paths[1].text;
 					obj.paths[2].stroke = recvdObj.paths[2].stroke;
-					obj.paths[2].points[0].x = recvdObj.paths[2].points[0].x;
-					obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
-					obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
-					obj.width = recvdObj.width;						
+					obj.paths[2].points = recvdObj.paths[2].points;					
+					obj.width = recvdObj.width;
+					obj.height = recvdObj.height;
 				},
+
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					var checkbox_left = -(resizedObj.width / 2);					
+					obj.paths[0].points = [{x: checkbox_left, y: resizedObj.height/2},{x:checkbox_left + resizedObj.height, y: resizedObj.height/2},{x:checkbox_left + resizedObj.height, y: -resizedObj.height/2},{x: checkbox_left, y: -resizedObj.height/2}];							
+					obj.paths[2].points = [{x: checkbox_left + 3, y: 1},{x: checkbox_left+resizedObj.height/2 - 2,y:resizedObj.height/2 - 2},{x: checkbox_left + resizedObj.height - 3,y: -resizedObj.height/2 + 2}];
+					obj.paths[1].left = obj.paths[1].getWidth()/2 + checkbox_left + resizedObj.height + 15;
+				}, 
 
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
@@ -609,14 +625,18 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				activeIcon: "radiobutton_w.png",
 				inactiveIcon: "radiobutton_g.png",
 				toolAction: function (args) {
-					var fillColor = '#000000', _stroke = '#000000', _radius = 8, _opacity = 0.8,
+					var fillColor = '#000000', _stroke = '#000000', _radius = args.paths ? args.paths[0].radius : 8, _opacity = 0.8,
 						_fontfamily = 'delicious_500', _fontSize = 20
 					var objects = [],
 						text = args.paths ? args.paths[2].text : "radio",
 						width = 0;
+					var txt_width = util.getStringWidth(text);
+					width = txt_width + (2 * _radius) + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
+					args.width = args.width ? args.width : width;		
+					args.height = args.height ? args.height : 2 * _radius;
 					var outer_circle = new fabric.Circle({
 						radius: _radius,
-						left: -30,
+						left: -args.width/2 + _radius,
 						top: 0,  
 						fill: '#eee',
 						stroke: _stroke,
@@ -625,13 +645,12 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					});
 					var inner_circle = new fabric.Circle({
 						radius: _radius/2,
-						left: -30,
+						left: -args.width/2 + _radius,
 						top: 0,
 						fill: args.paths ? args.paths[1].fill : '#555555',                    
 						opacity: _opacity,
 						angle: args.angle
-					});
-					
+					});					
 					var txt = new fabric.Text(text,{
 						left: args.paths ? args.paths[2].left : 10,
 						top: 0,
@@ -645,30 +664,39 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					});				
 					objects.push(outer_circle);
 					objects.push(inner_circle);
-					objects.push(txt);
-					var txt_width = util.getStringWidth(text);
-					width = txt_width + (2 * _radius) + 30;// 10 for space between circle and radius and 30 (15 + 15) margins
-					outer_circle.left = - ((width/2) - 15);
-					inner_circle.left = outer_circle.left;
+					objects.push(txt);					
 					var text_left = outer_circle.left + (2 * _radius) + 5;
-					txt.left = -(-(txt_width)/2 - text_left);
-					args.width = width;		
-					args.height = 30;
+					txt.left = -(-(txt_width)/2 - text_left);					
 					loadWireframe(args, objects);
 				},
 
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;
+					var recvdObj = args.object;					
 					updateProperties(obj, recvdObj);
 					obj.paths[0].left = recvdObj.paths[0].left;
+					obj.paths[0].radius = recvdObj.paths[0].radius;
 					obj.paths[1].fill = recvdObj.paths[1].fill;
 					obj.paths[1].left = recvdObj.paths[1].left;
+					obj.paths[1].radius = recvdObj.paths[1].radius;
 					obj.paths[2].left = recvdObj.paths[2].left;
 					obj.paths[2].text = recvdObj.paths[2].text;
 					obj.width = recvdObj.width;
 				},
 
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid),					
+						new_radius = obj.height/2,
+						txt_width = util.getStringWidth(obj.paths[2].text);
+					if (new_radius > 0) {
+						obj.paths[0].radius = new_radius;
+						obj.paths[1].radius = new_radius / 2;
+						obj.paths[0].left = -resizedObj.width/2 + new_radius;
+						obj.paths[1].left = obj.paths[0].left;
+						obj.paths[2].left = -(-(txt_width)/2 - (obj.paths[0].left + (2 * new_radius) + 5));							
+					}
+				},
+				
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 					var obj = canvas.getActiveObject();
@@ -683,7 +711,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						wdth = obj.paths[2].getWidth() + (2 * obj.paths[1].radius) + 15 + 30;
 						(wdth - obj.width) > 0 ? obj.left += (wdth - obj.width) / 2 : obj.left = obj.left;
 						obj.width = wdth;
-						obj.paths[0].left = -((wdth / 2) - 15);
+						obj.paths[0].left = -wdth/2 + obj.paths[0].radius;
 						obj.paths[1].left = obj.paths[0].left;
 						var text_left = obj.paths[0].left + (2 * obj.paths[1].radius) + 15;
 						obj.paths[2].left = -(-obj.paths[2].getWidth() / 2 - text_left);
@@ -755,8 +783,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						margin = 15,				
 						space = 5,
 						side = 25;
-					args.width = args.width ? args.width : util.getStringWidth(text) + side + (2 * margin);
-					args.height = 20;
+					args.width = args.paths ? args.paths[0].width : util.getStringWidth(text) + side + (2 * margin);
+					args.height = args.paths ? args.paths[0].height : 20;
 					var outerRect = new fabric.Rect({
 						width: args.width,
 						height: args.height,
@@ -792,16 +820,18 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					updateProperties(obj, recvdObj);
 					obj.width = recvdObj.width;
 					obj.paths[0].width = recvdObj.paths[0].width;
-					obj.paths[1].points[0].x = recvdObj.paths[1].points[0].x;
-					obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
-					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
-					obj.paths[1].points[3].x = recvdObj.paths[1].points[3].x;
-					obj.paths[2].points[0].x = recvdObj.paths[2].points[0].x;
-					obj.paths[2].points[1].x = recvdObj.paths[2].points[1].x;
-					obj.paths[2].points[2].x = recvdObj.paths[2].points[2].x;
+					obj.paths[0].height = recvdObj.paths[0].height;					
+					obj.paths[1].points = recvdObj.paths[1].points;
+					obj.paths[2].points = recvdObj.paths[2].points;
 					obj.paths[3].text = recvdObj.paths[3].text;						
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);										
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;					
+					obj.paths[1].points = [{x: resizedObj.width/2 - 22, y: resizedObj.height/2 },{x: resizedObj.width/2 , y: resizedObj.height/2},{x: resizedObj.width/2 , y: -resizedObj.height/2},{x: resizedObj.width/2 - 22, y: -resizedObj.height/2}];					
+					obj.paths[2].points = [{x: resizedObj.width/2 - 15.5,y: -2.5},{x: resizedObj.width/2 - 6.5,y: -2.5},{x: resizedObj.width/2 - 10.5 ,y: 2.5}];
+				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 					var obj = canvas.getActiveObject();
@@ -881,8 +911,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				inactiveIcon: "slider_g.png",
 				toolAction: function (args) {
 					var objects = [];				
-					args.width = 200;
-					args.height = 5;
+					args.width = args.paths ? args.paths[0].width : 200;
+					args.height = args.paths ? args.paths[0].height : 5;
 					var outerRect = new fabric.Rect({
 						width: args.width,
 						height: args.height,
@@ -890,34 +920,34 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						stroke: '#8f8f8f'
 					});
 					var innerRect = new fabric.Rect({
-						width: 10,
-						height: 15,
+						width: args.width / 20,
+						height: args.height * 3,
 						fill: '#8f8f8f',
 						stroke: '#9f9f9f'
 					});
 					var leftLine1 = new fabric.Polygon(      
-						[{x: -60,y:2.5 },{x:-59.95 , y:2.5},{x:-59.95 , y:10},{x:-60, y:10}],
+						[{x: -args.width * 0.3, y: args.height/2 },{x: -args.width * 0.3 + 0.05, y: args.height/2},{x: -args.width * 0.3 + 0.05, y: args.height/2 + 7.5},{x: -args.width * 0.3, y: args.height/2 + 7.5}],
 						{
 							fill: '#AAAAAA', 
 							stroke:'#AAAAAA'						
 						}
 					);	
 					var leftLine2 = new fabric.Polygon(      
-						[{x: -40,y:2.5 },{x:-39.95 , y:2.5},{x:-39.95 , y:7},{x:-40, y:7}],
+						[{x: -args.width * 0.2, y: args.height/2 },{x: -args.width * 0.2 + 0.05, y: args.height/2},{x: -args.width * 0.2 + 0.05, y: args.height/2 + 4.5},{x: -args.width * 0.2, y: args.height/2 + 4.5}],
 						{
 							fill: '#AAAAAA', 
 							stroke:'#AAAAAA'						
 						}
 					);						
 					var rightLine1 = new fabric.Polygon(      
-						[{x: 60,y:2.5 },{x:59.95 , y:2.5},{x:59.95 , y:10},{x:60, y:10}],
+						[{x: args.width * 0.3, y: args.height/2 },{x: args.width * 0.3 - 0.05, y: args.height/2},{x: args.width * 0.3 - 0.05, y: args.height/2 + 7.5},{x: args.width * 0.3, y: args.height/2 + 7.5}],
 						{
 							fill: '#AAAAAA', 
 							stroke:'#AAAAAA'						
 						}
 					);
 					var rightLine2 = new fabric.Polygon(      
-						[{x: 40,y:2.5 },{x:39.95 , y:2.5},{x:39.95 , y:7},{x:40, y:7}],
+						[{x: args.width * 0.2, y: args.height/2 },{x: args.width * 0.2 - 0.05, y: args.height/2},{x: args.width * 0.2 - 0.05, y: args.height/2 + 4.5},{x: args.width * 0.2, y: args.height/2 + 4.5}],
 						{
 							fill: '#AAAAAA', 
 							stroke:'#AAAAAA	'						
@@ -936,8 +966,26 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;	
 					updateProperties(obj, recvdObj);
+					obj.paths[0].width = recvdObj.width;
+					obj.paths[0].height = recvdObj.height;					
+					obj.paths[1].width = recvdObj.width / 20;
+					obj.paths[1].height = recvdObj.height * 3;					
+					obj.paths[2].points = recvdObj.paths[2].points;
+					obj.paths[3].points = recvdObj.paths[3].points;
+					obj.paths[4].points = recvdObj.paths[4].points;
+					obj.paths[5].points = recvdObj.paths[5].points;
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);										
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;					
+					obj.paths[1].width = resizedObj.width / 20;
+					obj.paths[1].height = resizedObj.height * 3;
+					obj.paths[2].points = [{x: -resizedObj.width * 0.3, y: resizedObj.height/2 },{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2 + 7.5},{x: -resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
+					obj.paths[3].points = [{x: -resizedObj.width * 0.2, y: resizedObj.height/2 },{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2 + 4.5},{x: -resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
+					obj.paths[4].points = [{x: resizedObj.width * 0.3, y: resizedObj.height/2 },{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2 + 7.5},{x: resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
+					obj.paths[5].points = [{x: resizedObj.width * 0.2, y: resizedObj.height/2 },{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2 + 4.5},{x: resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
+				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 				},
@@ -986,8 +1034,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				inactiveIcon: "progressbar_g.png",
 				toolAction: function (args) {
 					var objects = [];				
-					args.width = args.width ? args.width : 150;
-					args.height = args.height ? args.height : 20;			
+					args.width = args.paths ? args.paths[0].width : 150;
+					args.height = args.paths ? args.paths[0].height : 20;			
 					var outerRect = new fabric.Rect({
 						width: args.width,
 						height: args.height,
@@ -1008,16 +1056,26 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;	
-					updateProperties(obj, recvdObj);				
+					updateProperties(obj, recvdObj);					
+					obj.paths[0].width = recvdObj.width;
+					obj.paths[0].height = recvdObj.height;
+					obj.paths[1].points = [{x: -recvdObj.width / 2,y: recvdObj.height / 2 },{x: -recvdObj.width / 4 , y: recvdObj.height / 2},{x: -recvdObj.width / 4 , y: -recvdObj.height / 2},{x: -recvdObj.width / 2, y: -recvdObj.height / 2}];					
 					obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
-					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;					
+					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					var txtbox = document.getElementById('txtbox');					
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;					
+					obj.paths[1].points = [{x: -resizedObj.width / 2,y: resizedObj.height / 2 },{x: -resizedObj.width / 4 , y: resizedObj.height / 2},{x: -resizedObj.width / 4 , y: -resizedObj.height / 2},{x: -resizedObj.width / 2, y: -resizedObj.height / 2}];					
+					obj.paths[1].points[1].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
+					obj.paths[1].points[2].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
+				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 					progressHandler(canvas.getActiveObject());
 				},
-
 				properties: [{
 					name: 'left',
 					type: 'number',
@@ -1060,11 +1118,11 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				displayName: "image",
 				activeIcon: "image_w.png",
 				inactiveIcon: "image_g.png",
-				toolAction: function (args){
+				toolAction: function (args){													
+					args.width = args.paths ? args.paths[0].width : 100;
+					args.height = args.paths ? args.paths[0].height : 75;
 					var objects = [],
-					text = "check";				
-					args.width = 100;
-					args.height = 75;			
+						text = args.width + " x " + args.height;	
 					var border = new fabric.Polygon(
 						[{x: -args.width/2,y:args.height/2},{x:args.width/2, y:args.height/2},{x:args.width/2, y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
 						{
@@ -1084,7 +1142,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						fill: '#fcfcfc',
 						stroke: '#fcfcfc'                  
 					});
-					var textobj = new fabric.Text('w x h', {
+					var textobj = new fabric.Text(text, {
 						left: 0,
 						top: 0,
 						fontFamily: 'delicious_500',
@@ -1104,8 +1162,27 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;	
 					updateProperties(obj, recvdObj);
+					obj.paths[0].width = recvdObj.width;
+					obj.paths[0].height = recvdObj.height;
+					obj.paths[0].points = [{x: -recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: -recvdObj.height/2},{x: -recvdObj.width/2, y: -recvdObj.height/2}];
+					obj.paths[1].points = [{x: -recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: -recvdObj.height/2}];
+					obj.paths[2].points = [{x: recvdObj.width/2, y: recvdObj.height/2},{x: -recvdObj.width/2, y: -recvdObj.height/2}];
+					obj.paths[4].text = recvdObj.width + " x " + recvdObj.height;
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.left = resizedObj.left;
+					obj.top = resizedObj.top;
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					obj.scaleX = resizedObj.scaleX;
+					obj.scaleY = resizedObj.scaleY;
+					obj.angle = resizedObj.angle;					
+					obj.paths[0].points = [{x: -resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: -resizedObj.height/2},{x: -resizedObj.width/2, y: -resizedObj.height/2}];
+					obj.paths[1].points = [{x: -resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: -resizedObj.height/2}];
+					obj.paths[2].points = [{x: resizedObj.width/2, y: resizedObj.height/2},{x: -resizedObj.width/2, y: -resizedObj.height/2}];
+					obj.paths[4].text = resizedObj.width + " x " + resizedObj.height;
+				},
 				applyProperties: function (props) {				
 					objproperties._applyProperties(props);
 				},
@@ -1187,7 +1264,16 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					obj.paths[0].height = recvdObj.paths[0].height;
 					obj.paths[1].text = recvdObj.paths[1].text;								
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.left = resizedObj.left;
+					obj.top = resizedObj.top;
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					obj.scaleX = resizedObj.scaleX;
+					obj.scaleY = resizedObj.scaleY;
+					obj.angle = resizedObj.angle;
+				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 					var obj = canvas.getActiveObject();
@@ -1261,6 +1347,129 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				}]	//End of properties for password
 			}, 	//End of shape password
 			
+			scrollbar: {	// scrollbar wireframe object
+				displayName: "scrollbar",
+				activeIcon: "scrollbar_w.png",
+				inactiveIcon: "scrollbar_g.png",
+				toolAction: function (args) {
+					var objects = [];
+					var outerRect = new fabric.Rect({
+						width: args.width,
+						height: args.height,
+						left: args.left,
+						top: args.top,
+						fill: '#fff',
+						stroke: '#ddd',
+						scaleX: args.scaleX,
+						scaleY: args.scaleY
+					});
+					var scroll = new fabric.Rect({
+						width: args.width,
+						height: args.height/5,
+						left: args.left,
+						top: args.top,
+						fill: '#ddd',
+						rx: 5,
+						stroke: args.stroke,
+						scaleX: args.scaleX,
+						scaleY: args.scaleY
+					});
+					var upperTriangle = new fabric.Polygon([{x: -args.width/2 + 3,y: -args.height/2 + 10},{x: 0,y: -args.height/2 + 5},{x: args.width/2 - 3 ,y: -args.height/2 + 10}],
+						{fill:'#888',stroke:'#ddd'});
+					var lowerTriangle = new fabric.Polygon([{x: -args.width/2 + 3,y: args.height/2 - 10},{x: 0,y: args.height/2 - 5},{x: args.width/2 - 3 ,y: args.height/2 - 10}],
+						{fill:'#888',stroke:'#ddd'});
+					objects.push(outerRect);
+					objects.push(scroll);
+					objects.push(upperTriangle);
+					objects.push(lowerTriangle);
+					loadWireframe(args, objects);              
+				},
+				modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;	
+					updateProperties(obj, recvdObj);
+					obj.paths[0].width = recvdObj.width;
+					obj.paths[0].height = recvdObj.height;
+					obj.paths[1].width = recvdObj.width;
+					obj.paths[1].height = recvdObj.height/5;										
+					obj.stroke = recvdObj.stroke;
+					obj.paths[2].points = recvdObj.paths[2].points;
+					obj.paths[3].points = recvdObj.paths[3].points;
+				},
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+				},
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);					
+					obj.left = resizedObj.left;
+					obj.top = resizedObj.top;
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					obj.paths[1].width = resizedObj.width;
+					obj.paths[1].height = resizedObj.height/5;
+					obj.paths[2].points = [{x: -resizedObj.width/2 + 3,y: -resizedObj.height/2 + 10},{x: 0,y: -resizedObj.height/2 + 5},{x: resizedObj.width/2 - 3 ,y: -resizedObj.height/2 + 10}];
+					obj.paths[3].points = [{x: -resizedObj.width/2 + 3,y: resizedObj.height/2 - 10},{x: 0,y: resizedObj.height/2 - 5},{x: resizedObj.width/2 - 3 ,y: resizedObj.height/2 - 10}];					
+					obj.stroke = resizedObj.stroke;
+				},
+				properties: [{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+					(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+					(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'width',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("width", args.property / args.obj.scaleX);
+					},
+					defaultvalue: 20
+				}, {
+					name: 'height',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("height", args.property / args.obj.scaleY);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'scaleX',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleX", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'scaleY',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("scaleY", args.property);
+					},
+					defaultvalue: 1
+				}, {
+					name: 'stroke',
+					type: 'string',
+					action: function (args) {
+						(args.obj).set("stroke", args.property);
+					},
+					defaultvalue: '#ccc'
+				}, {
+					name: 'angle',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("angle", args.property);
+					},
+					defaultvalue: 0
+				}]	//End of properties for ScrollBar
+			},	//End of shape Scrollbar
+			
 			div: {	// Div wireframe object
 				displayName: "div",
 				activeIcon: "rectangle_w.png",
@@ -1291,7 +1500,17 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
 				},
-
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);					
+					obj.left = resizedObj.left;
+					obj.top = resizedObj.top;
+					obj.width = resizedObj.width;
+					obj.height = resizedObj.height;
+					obj.scaleX = resizedObj.scaleX;
+					obj.scaleY = resizedObj.scaleY;
+					obj.angle = resizedObj.angle;
+					obj.stroke = resizedObj.stroke;
+				},
 				properties: [{
 					name: 'left',
 					type: 'number',
