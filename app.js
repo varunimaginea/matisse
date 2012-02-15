@@ -21,6 +21,8 @@ Nohm.setClient(redisClient);
 var usersById = {};
 var nextUserId = 0;
 var usersByTwitId = {};
+var usersByFBId = {};
+var usersByGoogleId = {};
 var userInfo = {};
 
 everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.consumerSecret).findOrCreateUser(function (sess, accessToken, accessSecret, twitUser) {
@@ -66,16 +68,13 @@ everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.co
 }).redirectPath('/');
 
 
-
 everyauth.facebook.appId(conf.fb.appId).appSecret(conf.fb.appSecret).scope('email,user_status').findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
-	var userDetails = usersByFbId[fbUserMetadata.id] || (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+	var userDetails = usersByFBId[fbUserMetadata.id] || (usersByFBId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
 	userInfo = userDetails;
 	console.log(userDetails);
-	/* 
-	* This saves the user into DB
-	*
+	
     var data = {
-        userID: "fb-" + userDetails.twitter.id
+        userID: "fb-" + userDetails.facebook.id
     };
 	
     var newUser = new UserModel();
@@ -83,22 +82,20 @@ everyauth.facebook.appId(conf.fb.appId).appSecret(conf.fb.appSecret).scope('emai
         if (!err) console.log("saved new user to DB");
         else console.log("Could not Save user, possibly exist in DB");
     });
-	*/
+	
 	return userDetails;
   })
   .redirectPath('/');
 
 
 
-everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret).findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
-	var userDetails = usersByFbId[fbUserMetadata.id] || (usersByFbId[fbUserMetadata.id] = addUser('google', fbUserMetadata));
+everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret).scope('https://www.google.com/m8/feeds').findOrCreateUser( function (session, accessToken, accessTokExtra, googleUserMetadata) {
+	var userDetails = usersByGoogleId[googleUserMetadata.id] || (usersByGoogleId[googleUserMetadata.id] = addUser('google', googleUserMetadata));
 	userInfo = userDetails;
 	console.log(userDetails);
-	/* 
-	* This saves the user into DB
-	*
+	
     var data = {
-        userID: "fb-" + userDetails.twitter.id
+        userID: "google-" + userDetails.google.id
     };
 	
     var newUser = new UserModel();
@@ -106,7 +103,7 @@ everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret)
         if (!err) console.log("saved new user to DB");
         else console.log("Could not Save user, possibly exist in DB");
     });
-	*/
+	
 	return userDetails;
   })
   .redirectPath('/');
