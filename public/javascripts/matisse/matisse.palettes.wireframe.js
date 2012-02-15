@@ -11,7 +11,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 	/**
 	 * To load wireframe objects. group the objects using pathgroup
 	 */
-	var loadWireframe = function (args, objects) {
+	var loadWireframe = function (args, objects) {		
 		var pathGroup = new fabric.PathGroup(objects, {width: args.width, height: args.height});
 		pathGroup.set({
 			left: args.left,
@@ -25,6 +25,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		pathGroup.uid = args.uid;
 		pathGroup.palette = args.palette;
 		canvas.add(pathGroup);
+		return pathGroup;
 	};
 	/**
 	 * To set the properties of the object with the received object when an object is modified.
@@ -123,6 +124,95 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		};
 	}
 
+	/** Function to add list items to the list container on the canvas.
+	 * @param obj: list object on canvas for which the items are to be added.
+	 * @param items: list items (string of list items' text separated by \n char), to be added to the list.
+	 */
+	var addItemsToList = function (obj, items) {
+		var listItems = items.split("\n");
+		var objects = [];
+		// store the list container object.
+		objects.push(obj.paths[0]);
+		// remove the original list object from the canvas
+		canvas.remove(obj);
+
+		// for all the list items, create a bullet and the text object
+		for (var i = 0; i < listItems.length; i++) {
+			var top = - objects[0].height/2;
+			// bullet for list item
+			var newObj = new fabric.Circle({
+				radius: 5,
+				left: -objects[0].width/2 + 20,
+				top: top + 20 * (objects.length + 1)/2,
+				fill: '#888',
+				stroke: '#dfdfdf'
+			});
+
+			// text for list item
+			var txtObj = new fabric.Text(listItems[i], {
+				fontSize : 20,
+				fontFamily : "delicious_500",
+				fontWeight : 20,
+				left: -(-(util.getStringWidth(listItems[i]))/2 - (newObj.left + (2 * newObj.radius) + 10)),
+				top : top + 20 * (objects.length + 1)/2,
+				stroke: '#000000'
+			});
+			
+			objects.push(newObj);
+			objects.push(txtObj);
+		}
+
+		// create a pathgroup for all the above created objects and then add it to the canvas having uid same as that of the original list object.
+		var pathGroup = new fabric.PathGroup(objects, {width: objects[0].width, height: objects[0].height});
+		pathGroup.set({
+			left: obj.left,
+			top: obj.top,
+			angle: 0,
+			scaleX: 1,
+			scaleY: 1
+        });
+		pathGroup.setCoords();
+		pathGroup.name = "list";
+		pathGroup.uid = obj.uid;
+		pathGroup.palette = "wireframe";
+		canvas.add(pathGroup);
+		// render all the items on the canvas after the modification.
+		canvas.renderAll();
+		return pathGroup;
+	}
+	
+	/** Function to provide text area for adding list items and a button to send the list of items to get added to the list container.
+	 * @param obj: list object on canvas for which the items are to be added.
+	 */
+	var listHandler = function (obj) {
+		$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'></textarea> </td></tr>");		
+		var txtbox = document.getElementById('txtarea');
+		txtbox.value = "";
+
+		// obtain the text of list items from the object, if any.
+		if (obj.paths && obj.paths.length >= 3) {
+			for (var i = 2; i < (obj.paths.length - 1); i+= 2) {
+				txtbox.value += (obj.paths[i].text + "\n");
+			}
+			txtbox.value += obj.paths[i].text;
+		}
+		// create a button to add the list items on canvas.
+		$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'></td><td><input id='btn' type= 'button' value='add to list' cols= '10' style='height:25px'></input> </td></tr>");
+
+		// when add button is clicked, add the list to the canvas and then send the modified information to the server.
+		$('#btn').click(function(e){
+			if (canvas.getActiveObject()) {
+				var pathGroup = addItemsToList(canvas.getActiveObject(), txtbox.value);			
+				matisse.comm.sendDrawMsg({
+					action: "modified",
+					args: [{
+						uid: pathGroup.uid,
+						object: pathGroup
+					}]
+				});
+			}
+		});
+	};
 	/**
 	 * To register wireframe palette
 	 */
@@ -789,13 +879,13 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						width: args.width,
 						height: args.height,
 						fill: '#fdfdfd',
-						stroke: '#ddd'
+						stroke: '#000'
 					});
 					var innerRect = new fabric.Polygon(      
 						[{x: args.width/2 - 22,y:args.height/2 },{x:args.width/2 , y:args.height/2},{x:args.width/2 , y:-args.height/2},{x:args.width/2 - 22, y:-args.height/2}],
 						{
 							fill: '#dfdfdf', 
-							stroke:'#dfdfdf'						
+							stroke:'#000'						
 						}
 					);	
 					var triangle = new fabric.Polygon([{x: args.width/2 - 15.5,y: -2.5},{x:args.width/2 - 6.5,y:-2.5},{x:args.width/2 - 10.5 ,y:2.5}],
@@ -904,6 +994,109 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					defaultvalue: 1
 				}]	// End of properties for combo
 			},	//End of shape combo
+
+			list: {	//Wireframe object list
+				displayName: "list",
+				activeIcon: "list_w.png",
+				inactiveIcon: "list_g.png",
+
+				// to create a list object
+				toolAction: function (args) {					
+					var objects = [],
+						textItems = "",
+						// create a list container initially for the list.. i.e., outer rectangle
+						border = new fabric.Rect({
+						width: args.paths ? args.paths[0].width : 150,
+						height: args.paths ? args.paths[0].height : 200,						
+						fill: '#fdfdfd',
+						stroke: '#000000'
+					});
+					args.width = border.width;
+					args.height = border.height;
+					args.scaleX = 1;
+					args.scaleY = 1;
+					objects.push(border);
+					var obj = loadWireframe(args, objects);
+					if (args.paths && args.paths.length >= 3) {
+						for (var i = 2; i < (args.paths.length - 1); i+= 2) {						
+							textItems += (args.paths[i].text + "\n");
+						}
+						textItems += args.paths[i].text;
+					}
+					// after creating the container, add list items to the container, if any.
+					addItemsToList(obj, textItems, args);
+				},
+
+				// when list object in one client is modified, modify the same in the other clients connected.
+				modifyAction: function (args) {
+					var obj = util.getObjectById(args.uid);
+					var recvdObj = args.object;
+					var textItems = "";
+					updateProperties(obj, recvdObj);
+
+					// update the properties of list container with that of the modified list container.
+					for (var prop in recvdObj.paths[0]) {						
+						obj.paths[0][prop] = recvdObj.paths[0][prop];
+					}
+
+					// obtain the text content of all the items in the list.
+					for (var i = 2; i < (recvdObj.paths.length - 1); i+= 2) {						
+						textItems += (recvdObj.paths[i].text + "\n");
+					}
+					textItems += recvdObj.paths[i].text;
+
+					// reconstruct the list with the obtained list items
+					addItemsToList(obj, textItems);
+				},
+
+				// when list object in one client is resized either width wise or height wise, resize the same in the other clients connected.
+				// change the width or height accordingly and also modify the left and top of the contents 
+				resizeAction: function (resizedObj) {
+					var obj = util.getObjectById(resizedObj.uid);
+					obj.paths[0].width = resizedObj.width;
+					obj.paths[0].height = resizedObj.height;
+					if (resizedObj.paths.length >= 3) {
+						for (var i = 1; i < resizedObj.paths.length; i+= 2) {
+							obj.paths[i].left = -obj.paths[0].width/2 + 20;
+							obj.paths[i].top = -obj.paths[0].height/2 + 20 * (i + 1)/2;
+							obj.paths[i+1].left = -(-(util.getStringWidth(obj.paths[i+1].text))/2 - (obj.paths[i].left + (2 * obj.paths[i].radius) + 10));
+							obj.paths[i+1].top = -obj.paths[0].height/2 + 20 * (i + 1)/2;
+						}
+					}
+				},
+
+				// apply the properties of the list object to the properties panel.
+				applyProperties: function (props) {
+					objproperties._applyProperties(props);
+					var activeObj = canvas.getActiveObject();
+					// handle the list object by providing text area to add list items
+					listHandler(activeObj);
+				},
+
+				// properties for list object which can be dynamically modified (left, top and angle).
+				properties: [{
+					name: 'left',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("left", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'top',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("top", args.property);
+					},
+					defaultvalue: 100
+				}, {
+					name: 'angle',
+					type: 'number',
+					action: function (args) {
+						(args.obj).set("angle", args.property);
+					},
+					defaultvalue: 0
+				}]	//End of properties for list
+			},
 
 			slider: {	//Slider wireframe object
 				displayName: "slider",
