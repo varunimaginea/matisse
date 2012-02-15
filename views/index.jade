@@ -7,10 +7,22 @@ div#introContainer
 				img(class="rightFloater",src="#{everyauth.twitter.user.profile_image_url}")
 			p
 				h2 Hi #{everyauth.twitter.user.name}!
+				
+		- if(everyauth.facebook)
 			p
-				a(href='/boards/') Create Board 
-				font(size="3") | 
-				a(href="/logout") Logout
+				img(class='rightFloater', src='images/profile_image_placeholder.gif')
+			p
+				h2 Hi #{everyauth.facebook.user.name}!
+				
+		- if(everyauth.google)
+			p
+				img(class='rightFloater', src='images/profile_image_placeholder.gif')
+			p
+				h2 Hi #{everyauth.google.user.name}!
+		p
+			a(href='/boards/') Create Board 
+			font(size="3") | 
+			a(href="/logout") Logout
 	- else
 		p.rightFloater
 			a(href='/auth/twitter', style='border: 0px')
