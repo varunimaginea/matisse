@@ -71,7 +71,7 @@ everyauth.twitter.consumerKey(conf.twit.consumerKey).consumerSecret(conf.twit.co
 everyauth.facebook.appId(conf.fb.appId).appSecret(conf.fb.appSecret).scope('email,user_status').findOrCreateUser( function (session, accessToken, accessTokExtra, fbUserMetadata) {
 	var userDetails = usersByFBId[fbUserMetadata.id] || (usersByFBId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
 	userInfo = userDetails;
-	console.log(userDetails);
+	//console.log(userDetails);
 	
     var data = {
         userID: "fb-" + userDetails.facebook.id
@@ -89,10 +89,9 @@ everyauth.facebook.appId(conf.fb.appId).appSecret(conf.fb.appSecret).scope('emai
 
 
 
-everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret).scope('https://www.google.com/m8/feeds').findOrCreateUser( function (session, accessToken, accessTokExtra, googleUserMetadata) {
+everyauth.google.appId(conf.google.clientId).appSecret(conf.google.clientSecret).scope('https://www.googleapis.com/auth/userinfo.profile').findOrCreateUser( function (session, accessToken, accessTokExtra, googleUserMetadata) {
 	var userDetails = usersByGoogleId[googleUserMetadata.id] || (usersByGoogleId[googleUserMetadata.id] = addUser('google', googleUserMetadata));
 	userInfo = userDetails;
-	console.log(userDetails);
 	
     var data = {
         userID: "google-" + userDetails.google.id
