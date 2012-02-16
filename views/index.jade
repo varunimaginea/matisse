@@ -4,19 +4,19 @@ div#introContainer
 	- if(everyauth.loggedIn)
 		- if(everyauth.twitter)
 			p
-				img(class="rightFloater",src="#{everyauth.twitter.user.profile_image_url}")
+				img(class="rightFloater profilePic",src="#{everyauth.twitter.user.profile_image_url}")
 			p
 				h2 Hi #{everyauth.twitter.user.name}!
 				
 		- if(everyauth.facebook)
 			p
-				img(class='rightFloater', src='images/profile_image_placeholder.gif')
+				img(class='rightFloater profilePic', src='images/profile_image_placeholder.gif')
 			p
 				h2 Hi #{everyauth.facebook.user.name}!
 				
 		- if(everyauth.google)
 			p
-				img(class='rightFloater', src='images/profile_image_placeholder.gif')
+				img(class='rightFloater profilePic', src='#{everyauth.google.user.picture}')
 			p
 				h2 Hi #{everyauth.google.user.name}!
 		p
