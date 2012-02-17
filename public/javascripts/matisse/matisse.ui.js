@@ -232,9 +232,9 @@ define(["matisse"], function (matisse) {
 				var scrollerContentHolderTop = $(this).siblings().find(".scrollerContentHolder").css('top');
 				var parentHeight = $(this).parent().css('height');
 				var shapeHeight = $(".scrollerContentHolder:visible>.shape-holder").height();
-				scrollerContentHolderHeight = scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px'));
-				parentHeight = parentHeight.substr(0, parentHeight.indexOf('px'));
-				scrollerContentHolderTop = scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px'));
+				scrollerContentHolderHeight = parseInt(scrollerContentHolderHeight.substr(0, scrollerContentHolderHeight.indexOf('px')));
+				parentHeight = parseInt(parentHeight.substr(0, parentHeight.indexOf('px')));
+				scrollerContentHolderTop = parseInt(scrollerContentHolderTop.substr(0, scrollerContentHolderTop.indexOf('px')));
 				var carouselArrowheight = 18;
 				var accordianHeight = $(".ui-accordion-content").height() - (carouselArrowheight * 2);
 				var sumOfShapesHeight = $(".scrollerContentHolder:visible").height();

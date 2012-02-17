@@ -4,14 +4,30 @@ div#introContainer
 	- if(everyauth.loggedIn)
 		- if(everyauth.twitter)
 			p
-				img(class="rightFloater",src="#{everyauth.twitter.user.profile_image_url}")
+				img(class="rightFloater profilePic",src="#{everyauth.twitter.user.profile_image_url}")
 			p
 				h2 Hi #{everyauth.twitter.user.name}!
+				
+		- if(everyauth.facebook)
 			p
-				a(href='/boards/') Create Board 
-				font(size="3") | 
-				a(href="/logout") Logout
+				img(class='rightFloater profilePic', src='images/profile_image_placeholder.gif')
+			p
+				h2 Hi #{everyauth.facebook.user.name}!
+				
+		- if(everyauth.google)
+			p
+				img(class='rightFloater profilePic', src='#{everyauth.google.user.picture}')
+			p
+				h2 Hi #{everyauth.google.user.name}!
+		p
+			a(href='/boards/') Create Board 
+			font(size="3") | 
+			a(href="/logout") Logout
 	- else
 		p.rightFloater
 			a(href='/auth/twitter', style='border: 0px')
-				img(style='border: 0px', src='images/sign-in-with-twitter-l.png')
+				img(class='loginIcon', src='images/login icons/twitter.png')
+			a(href='auth/facebook')
+				img(class='loginIcon', src='images/login icons/facebook.png')
+			a(href='auth/google')
+				img(class='loginIcon', src='images/login icons/google.png')

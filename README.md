@@ -34,13 +34,19 @@ See index.html in this directory for a vanilla html example.
 >   $npm install -d
 >
 
-3) Change the "localhost" to your local machine ip in public/javascripts/matisse/matisse.setup.js
+4) Add the following line to "hosts" file
+
+>
+> 127.0.0.1		thematisse.org
+>
+
+5) Change the "localhost" to your local machine ip in public/javascripts/matisse/matisse.setup.js
 
 >
 > var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
 >
 
-3) Then you can run 
+6) Then you can run 
 
 >
 > $ node app.js
@@ -48,5 +54,5 @@ See index.html in this directory for a vanilla html example.
 
 in the root folder.
 
-Now you can open the http://localhost:8000/ to open the matisse home page.
+Now you can open the http://thematisse.org:8000/ to open the matisse home page.
 
