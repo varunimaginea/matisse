@@ -128,7 +128,8 @@ position:relative;
 #containerDiv{
 	float:none;
 	overflow:auto;
-	background-color:#AAB0BB;
+	/*background-color:#AAB0BB;*/
+	background-image:url('../images/canvas_bg.gif');
 	position:absolute;
 	left:100px;
 	top:103px;
@@ -138,7 +139,7 @@ position:relative;
 #containerBody{
 	float:none;
 	overflow:auto;
-	background-color:#D3DAE5;
+	/*background-color:#D3DAE5;*/
 	position:relative;
 	
 }
