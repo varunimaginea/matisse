@@ -178,6 +178,7 @@ app.get('/boards', function (req, res, next) {
     var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
     var string_length = 8;
     var randomstring = '';
+	
     for (var i = 0; i < string_length; i++) {
         var rnum = Math.floor(Math.random() * chars.length);
         randomstring += chars.substring(rnum, rnum + 1);
@@ -185,6 +186,10 @@ app.get('/boards', function (req, res, next) {
     var data = {
         url: randomstring
     };
+	
+	
+	console.log("saved board as: "+randomstring);
+	
     var whiteBoard = new BoardModel();
     whiteBoard.store(data, function (err) {
         if (err === 'invalid') {
@@ -329,9 +334,11 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on("setContainer", function (location, data) {
+		console.log("location: "+location);
         var wb_url = location.replace("/", "");
+		console.log("wb_url: "+wb_url);
         var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
-
+		console.log("randomnString: "+randomnString);
         BoardModel.find({url:randomnString},function (err, ids) {
             if (err) {
                 console.log(err);
@@ -346,7 +353,11 @@ io.sockets.on('connection', function (socket) {
                                 props.container = data.containerName;
 
                                 board.store(props, function (err) {
-                                    console.log("***** Error in updating container for URL:"+url+" Err:"+err);
+									console.log("Added container to your board successfully!");
+									if(err)
+									{
+										console.log("***** Error in updating container for URL:"+wb_url+" Err:"+err);
+									}	
                                 });
                         }
                     });
