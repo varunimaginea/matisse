@@ -123,7 +123,6 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}
 		};
 	}
-
 	/** Function to add list items to the list container on the canvas.
 	 * @param obj: list object on canvas for which the items are to be added.
 	 * @param items: list items (string of list items' text separated by \n char), to be added to the list.
@@ -147,17 +146,27 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				fill: '#888',
 				stroke: '#dfdfdf'
 			});
-
+			var count = 0,
+				txt = listItems[i],
+				text = txt;
+			for (var j=0; j < txt.length; j++) {
+				if (txt.charAt(j) == ' ') {
+					count++
+				}
+			}
+			newObj.left += count * 10;
 			// text for list item
-			var txtObj = new fabric.Text(listItems[i], {
+			var txtObj = new fabric.Text(text, {
 				fontSize : 20,
 				fontFamily : "delicious_500",
 				fontWeight : 20,
-				left: -(-(util.getStringWidth(listItems[i]))/2 - (newObj.left + (2 * newObj.radius) + 10)),
+				left: -(-(util.getStringWidth(txt))/2 - (newObj.left + (2 * newObj.radius) + 10)),
 				top : top + 20 * (objects.length + 1)/2,
 				stroke: '#000000'
 			});
-			
+			if (count > 0) {
+				txtObj.left -= count * 5;
+			}
 			objects.push(newObj);
 			objects.push(txtObj);
 		}
@@ -196,11 +205,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}
 			txtbox.value += obj.paths[i].text;
 		}
-		// create a button to add the list items on canvas.
-		$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'></td><td><input id='btn' type= 'button' value='add to list' cols= '10' style='height:25px'></input> </td></tr>");
-
-		// when add button is clicked, add the list to the canvas and then send the modified information to the server.
-		$('#btn').click(function(e){
+		txtbox.onblur = function (e) {			
 			if (canvas.getActiveObject()) {
 				var pathGroup = addItemsToList(canvas.getActiveObject(), txtbox.value);			
 				matisse.comm.sendDrawMsg({
@@ -209,9 +214,10 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						uid: pathGroup.uid,
 						object: pathGroup
 					}]
-				});
+				});	
+				canvas.setActiveObject(pathGroup);
 			}
-		});
+		};		
 	};
 	/**
 	 * To register wireframe palette
@@ -1058,9 +1064,20 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					if (resizedObj.paths.length >= 3) {
 						for (var i = 1; i < resizedObj.paths.length; i+= 2) {
 							obj.paths[i].left = -obj.paths[0].width/2 + 20;
+							var count = 0,
+								txt = obj.paths[i+1].text;
+							for (var j=0; j < txt.length; j++) {
+								if (txt.charAt(j) == ' ') {
+									count++
+								}
+							}							
+							obj.paths[i].left += count * 10;
 							obj.paths[i].top = -obj.paths[0].height/2 + 20 * (i + 1)/2;
 							obj.paths[i+1].left = -(-(util.getStringWidth(obj.paths[i+1].text))/2 - (obj.paths[i].left + (2 * obj.paths[i].radius) + 10));
 							obj.paths[i+1].top = -obj.paths[0].height/2 + 20 * (i + 1)/2;
+							if (count > 0) {
+								obj.paths[i+1].left -= count * 5;
+							}
 						}
 					}
 				},
