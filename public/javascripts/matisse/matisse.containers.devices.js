@@ -66,6 +66,17 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				yOffset: 125,
 				canvasWidth: 327,
 				canvasHeight: 247
-			});		
-	
+			});	
+	containers.registercontainer( 'browser' , {		
+				displayName: "Browser",
+				src: "browser_container.png",
+				width: 1050,
+				height: 752,
+				innerWidth:1040,
+				innerHeight:670,
+				xOffset: 5,
+				yOffset: 80,
+				canvasWidth: 1040,
+				canvasHeight: 670
+			});				
 });
