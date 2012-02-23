@@ -15,8 +15,14 @@ var boardModel = module.exports = nohm.model('Board', {
 	    ]
 	},
 	container: {
-	    type: 'string'
-	}
+	    type: 'string'		
+	},
+	canvasWidth: {
+		type: 'number'
+	},
+	canvasHeight: {
+		type: 'number'
+	},
     },
     methods: {
 	// custom methods we define here to make handling this model easier.

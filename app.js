@@ -269,7 +269,7 @@ io.sockets.on('connection', function (socket) {
         message: 'welcome'
     });
     socket.emit('userInfo', userInfo);
-    socket.on("setUrl", function (location, data) {
+    socket.on("setUrl", function (location, data) {		
         var wb_url = location.replace("/", "");
         var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
         socket.join(wb_url);
@@ -284,12 +284,12 @@ io.sockets.on('connection', function (socket) {
                         if (err) {
                             return next(err);
                         } else {                         
-                                console.log("::: " + props.container);
-                                if (props.container == undefined || props.container == "") {
-                                    socket.emit('containerDraw', "empty");
-                                } else {
-                                    socket.emit('containerDraw', props.container);
-                                }
+							console.log(":::" + props.container);
+							if (props.container == undefined || props.container == "") {
+								socket.emit('containerDraw', "empty");
+							} else {
+								socket.emit('containerDraw', props);
+							}
                         }
                     });
                 });
@@ -351,7 +351,8 @@ io.sockets.on('connection', function (socket) {
                         } else {
                                 console.log("updating");
                                 props.container = data.containerName;
-
+								props.canvasWidth = data.canvasWidth;
+								props.canvasHeight = data.canvasHeight;
                                 board.store(props, function (err) {
 									console.log("Added container to your board successfully!");
 									if(err)

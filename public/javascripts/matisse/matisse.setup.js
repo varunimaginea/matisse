@@ -19,16 +19,18 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
          *
          */	
 		comm.onContainerDraw = function (data) {
-			/* get container and layout data from server if any and assing it */
-			matisse.containerName = data;
+			/* get container and layout data from server if any and assing it */			
+			data == 'empty' ? matisse.containerName = data : matisse.containerName = data.container;
 			/* if data is available then start application with this container and layout*/
 			if (matisse.containerName !== 'empty') {
 				containers.containerName = matisse.containerName;
-				containers.setContainer(matisse.containerName, 'old');
+				containers.canvasWidth = data.canvasWidth;
+				containers.canvasHeight = data.canvasHeight;
+				containers.setContainer(matisse.containerName, 'old', containers.canvasWidth, containers.canvasHeight);
 				return;
 			} 
 			/* if data is not available or user logs in for the first time, show him the list of container names and layouts to choose */
-			layouts.createLayoutsList();
+			//layouts.createLayoutsList();
 			containers.createContainerList();
 		}
 		/**
@@ -39,8 +41,12 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
          */	
 		comm.onUserInfo = function(data) {
 		/* check if userName is not available, then show welcome message*/
+			var userInfo = [];
+			for (var i in data) {
+				userInfo.push(data[i]);
+			}
 			if(matisse.userName == null) {
-				matisse.userName = data.twitter.name;
+				matisse.userName = userInfo[1].name;
 				$('#user').append('<span>Welcome '+matisse.userName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| </span>')
 			}
 		}
