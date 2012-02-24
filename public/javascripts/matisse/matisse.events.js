@@ -1,6 +1,6 @@
 /*matisse.events*/
 
-define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) {
+define(["matisse", "matisse.ui", "matisse.comm"], function (matisse, ui, comm) {
 	"use strict";
 	return {
 		/**
@@ -78,6 +78,9 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
          * @param e mouseevent
          */
         mouseDown: function (event) {
+			if (document.getElementById('delete_menuItem') && event.button == 0) { //if it is left click, remove the context menu item, if any
+				$('#delete_menuItem').remove();
+			}
             if (!canvas.isDrawingMode && matisse.drawShape) {
 				matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
                 matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset; //offset
@@ -103,13 +106,49 @@ define(["matisse", "matisse.ui", "matisse.comm" ], function (matisse, ui, comm) 
             }
         },
 
+		// Listen for right click of mouse and display context menu when any object on canvas is selected.
+		contextMenu: function (event) {
+			var obj = canvas.getActiveObject();
+			if (obj &&
+			(event.clientX -$('#canvasId').css('left').split('px')[0] - $('#leftdiv').css('width').split('px')[0]) >= (obj.left - obj.width/2) &&
+			(event.clientX - $('#canvasId').css('left').split('px')[0] - $('#leftdiv').css('width').split('px')[0]) <= (obj.left + obj.width/2) &&
+			(event.clientY - $('#canvasId').css('top').split('px')[0] - $('#header').css('height').split('px')[0]) >= (obj.top - obj.height/2) &&
+			(event.clientY - $('#canvasId').css('top').split('px')[0] - $('#header').css('height').split('px')[0]) <= (obj.top + obj.height/2)) {
+				//prevent the display of default context menu.
+				event.preventDefault();
+				if (document.getElementById('delete_menuItem')) {
+					$('#delete_menuItem').remove();
+				}
+				var a = document.createElement('div');
+				a.id = "delete_menuItem";				
+				a.innerHTML = "Delete";
+				$('#_body').append(a);
+				a.style.left = event.clientX + "px";
+				a.style.top = event.clientY + "px";
+				// when clicked on delete context menu item, delete the selected object from canvas.
+				$('#delete_menuItem').click(function(evt) {
+					matisse.main.deleteObjects();
+					$('#delete_menuItem').css('display','none');
+				});
+				$('#delete_menuItem').mouseenter(function(evt) {					
+					$('#delete_menuItem').css('background-color','#ddd');
+				});
+				$('#delete_menuItem').mouseleave(function(evt) {					
+					$('#delete_menuItem').css('background-color','#eee');
+				});
+			} else { // if right click happens outside of the selected object, remove the context menu item
+				if (document.getElementById('delete_menuItem')) {
+					$('#delete_menuItem').remove();
+				}
+			}
+		},
         /**
          * Listen for mouse move event and do necessary action
          * @method mouseMove 
          * @param e mouseevent
          */
-        mouseMove: function (event) {
-	    matisse.eventObj = event;
+        mouseMove: function (event) {			
+			matisse.eventObj = event;
             if (canvas.isDrawingMode) {
                 matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
                 matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);

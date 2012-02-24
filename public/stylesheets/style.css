@@ -331,3 +331,20 @@ input.file {
 .profilePic{
 	width:50px;
 }
+
+#delete_menuItem {
+	position: absolute;
+	width: 60px;
+	height: 20px;
+	font-size: 16px;
+	color: black;
+	border: 1px solid black;	
+	background: #eee url('../images/delete_object.png') no-repeat;
+	padding-left: 10px;
+	z-Index: 1050;
+	text-align: center;
+	cursor: default; 
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	-moz-box-shadow: 0 8px 6px -6px black;
+	box-shadow: 0 8px 6px -6px black;
+}

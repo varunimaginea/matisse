@@ -127,6 +127,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
         handleMouseEvents: function () {
 			$('#canvasId').bind('mousedown', events.mouseDown);
 			$('#canvasId').bind('mousemove', events.mouseMove);
+			$('#canvasId').bind('contextmenu', events.contextMenu);
 		},
 		/**
 		 * Grabs all the shape elements and creates a tool icon for each shape, to add in the toolbar
