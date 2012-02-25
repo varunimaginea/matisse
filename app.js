@@ -8,9 +8,9 @@ var express = require('express'),
     conf = require('./conf');
 
 var Nohm = require('nohm').Nohm;
-var BoardModel = require(__dirname + '/BoardModel.js');
-var ShapesModel = require(__dirname + '/ShapesModel.js');
-var UserModel = require(__dirname + '/UserModel.js');
+var BoardModel = require(__dirname + '/models/BoardModel.js');
+var ShapesModel = require(__dirname + '/models/ShapesModel.js');
+var UserModel = require(__dirname + '/models/UserModel.js');
 var redis = require("redis"),
     redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
 redisClient.select(4);
