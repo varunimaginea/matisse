@@ -1,4 +1,4 @@
-var nohm = require(__dirname+'/node_modules/nohm/lib/nohm.js').Nohm;
+var nohm = require(__dirname+'\\../node_modules/nohm/lib/nohm.js').Nohm;
 
 /**
  * Model definition of a User
