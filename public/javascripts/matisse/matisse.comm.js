@@ -7,22 +7,29 @@ define(function () {
    	"use strict";
 	/*constructor*/
 	function Comm(url) {
+		// create socket connection object
 		this.socket = io.connect(url);
+		// variable to hold reference of this object(Comm)
 		var objRef = this;
+		// Invoked when containerDraw method called on the server side
 		this.socket.on("containerDraw", function (data) {
 			objRef.drawContainerHandler(data);
 		});
+		// Invoked when userInfo method called on the server side
 		this.socket.on("userInfo", function (data) {
 			objRef.userInfoHandler(data);
 		});
+		// Invoked when eventDraw method called on the server side
 		this.socket.on("eventDraw", function (data) {
 			objRef.drawHandler(data);
 		});
+		// Invoked when eventConnect method called on the server side
 		this.socket.on('eventConnect', function (data) {
 			objRef.connectHandler(data);
 		});
 	}
 	(function () {
+		// Handler functions
 		this.connectHandler = function (data) {
 			this.onConnect(data);
 		};
