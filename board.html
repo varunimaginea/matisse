@@ -1,99 +1,106 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Matisse, by Imaginea</title>
-		<meta name="description" content="A shared whiteboard using HTML5 Canvas with server on socket.io and node.js" />
-		<!-- Third Party CSS files -->
-		<link type="text/css" href="/stylesheets/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet" />
-		<link rel="stylesheet" href="/stylesheets/farbtastic.css" type="text/css" />
-		<!-- Development CSS files -->
-		<link rel="stylesheet" href="/stylesheets/style.css" />
-		<!-- Third party JS libraries -->
-		<script src="/socket.io/socket.io.js"></script>
-		<script data-main="/javascripts/matisse/matisse.setup" src="/javascripts/thirdparty/require/require-jquery.js" type="text/javascript"></script>
-		<script src="/javascripts/thirdparty/jquery/jquery-1.7.min.js"></script>
-		<script src="/javascripts/thirdparty/fabric/fabric_all.js"></script>
-		<script src="/javascripts/thirdparty/fabric/Delicious_500.font.js"></script>
-		<script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
-		<!-- Color picker -->
-		<script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
-	</head>
-	<body id="_body" style="margin:0px; background-color:#fff; border-radius:2px 2px #fff; overflow:hidden">
-	<!-- for popup to show when user click's save button-->	
-	<div id="blanket" style="display:none;"> 
-		<div id='closediv'style="position:absolute;"> <a href="#" onclick="popup('popUpDiv', 'closediv' )"> Close </a></div> 
-	</div>
-	<div id="popUpDiv" style="display:none;overflow:auto ; width: 250px; height: 300px;">
-		<span id="result" ></span> 
-	</div>
-	<div id="helpDiv" style="display:none;overflow:scroll"></div>
-	<!----end for popup -->
-	<div id='blank'></div>
-	<div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-		<div id="logo-wrapper">
-			<div style="float:right;">
-				<div><img src="/images/matisse_blackbg.png" height="60px" /></div>
-				<a id="logo-tag-wrapper" target="new" href="http://www.imaginea.com">by imaginea</a>
-			</div>
-		</div>
-        <div id="icons-wrapper">
-			<div id="version">0.4 preview</div>
-			<div id="user"></div>
-            <div id="menuicons">
-				<!--<span for ='layout' class ="combo"> selectLayout: </span>
-				<select id='layout' class="combo">
-					<option value="default">default</option>
-					<option value="blank">blank</option>
-					<option value="column_header">column_header</option>
-					<option value="column_header_footer">column_header_footer</option>
-					<option value="two_column_header">two_column_header</option>
-					<option value="two_column_header_footer">two_column_header_footer</option>
-					<option value="three_column_header">three_column_header</option>
-					<option value="three_column_header_footer">three_column_header_footer</option>
-				</select>
-				<span for ='container' class ="combo"> selectDevice: </span>
-				<select id='container' class="combo">
-				  <option value="iphone_overlay">iPhone</option>
-				  <option value="ipad_overlay">iPad</option>
-				   <option value="blackberry_overlay">BlackBerry</option>
-				</select>-->
-				<input type = "file" id = "inputfile" class="file" accept="image/*" single/>
-				<img title="Open New Doc" class="topicons" id="newdocicon" src="/images/new_doc.png" alt="new canvas" />
-				<img title="Load Image" class="topicons" id="loadicon" src="/images/load.png" alt="Load Image" />
-				<img title="Chat" class="topicons" id="chaticon" src="/images/chat.png" alt="Chat" />
-				<img title="Properties" class="topicons" id="propicon" src="/images/prop.png" alt="Properties" />
-				<img title="Save as Image" class="topicons" id="saveicon" src="/images/save.png" alt="Save" />
-				<img title="Help" class = 'topicons' id='helpicon' src='/images/help.png' alt="help"/>
-				<img title="Logout" class="topicons" id="logouticon" src="/images/logout.png" alt="Logout" />
-            </div> <!-- end of menuicons div -->
-		</div> <!-- end of icon-wrapper div -->
-	</div> <!-- end of header div -->
-		<!-- start of outer div --> 
-		<div id="outer">
-			<div id="leftdiv">
-				<div id="accordion"></div>
-			</div>
-			<div id="containerDiv">
-				<div id="containerBody">
-					<div id="canvasId" bgcolor="#CCCCFF">
-						<canvas id="c" class="ui-corner-all"></canvas>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div id="right" class="ui-widget-content">
-			<div id="texteditdiv" title="Text Editor">
-				<textarea id="textarea" rows="2"></textarea>
-			</div>
-			<div id="chatdialog" title="Chat">
-				<textarea id="chattext" value="hello" rows="2"></textarea><br/>
-				<br />
-				<input type="text" id="chat" value="type some thing" /><br />
-				</input><button id="chatbutton">OK</button>
-			</div>
-			<div id="propdiv" title="Properties"></div>
-		</div>
-		
+    <head>
+        <meta charset="utf-8"/>
+        <title>Matisse, by Imaginea</title>
+        <meta name="description" content="A shared whiteboard using HTML5 Canvas with server on socket.io and node.js"/>
+        <!-- Third Party CSS files -->
+        <link type="text/css" href="/stylesheets/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/stylesheets/farbtastic.css" type="text/css"/>
+        <!-- Development CSS files -->
+        <link rel="stylesheet" href="/stylesheets/style.css"/>
+        <!-- Third party JS libraries -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script data-main="/javascripts/matisse/matisse.setup" src="/javascripts/thirdparty/require/require-jquery.js"
+                type="text/javascript"></script>
+        <script src="/javascripts/thirdparty/jquery/jquery-1.7.min.js"></script>
+        <script src="/javascripts/thirdparty/fabric/fabric_all.js"></script>
+        <script src="/javascripts/thirdparty/fabric/Delicious_500.font.js"></script>
+        <script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
+        <!-- Color picker -->
+        <script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
+    </head>
+    <body id="_body" style="margin:0px; background-color:#fff; border-radius:2px 2px #fff; overflow:hidden">
+        <!-- for popup to show when user click's save button-->
+        <div id="blanket" style="display:none;">
+            <div id='closediv' style="position:absolute;"><a href="#" onclick="popup('popUpDiv', 'closediv' )">
+                Close </a></div>
+        </div>
+        <div id="popUpDiv" style="display:none;overflow:auto ; width: 250px; height: 300px;">
+            <span id="result"></span>
+        </div>
+        <div id="helpDiv" style="display:none;overflow:scroll"></div>
+        <!----end for popup -->
+        <div id='blank'></div>
+        <div id="header" class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+            <div id="logo-wrapper">
+                <div style="float:right;">
+                    <div><img src="/images/matisse_blackbg.png" height="60px"/></div>
+                    <a id="logo-tag-wrapper" target="new" href="http://www.imaginea.com">by imaginea</a>
+                </div>
+            </div>
+            <div id="icons-wrapper">
+                <div id="version">0.4 preview</div>
+                <div id="user"></div>
+                <div id="menuicons">
+                    <!--<span for ='layout' class ="combo"> selectLayout: </span>
+                     <select id='layout' class="combo">
+                         <option value="default">default</option>
+                         <option value="blank">blank</option>
+                         <option value="column_header">column_header</option>
+                         <option value="column_header_footer">column_header_footer</option>
+                         <option value="two_column_header">two_column_header</option>
+                         <option value="two_column_header_footer">two_column_header_footer</option>
+                         <option value="three_column_header">three_column_header</option>
+                         <option value="three_column_header_footer">three_column_header_footer</option>
+                     </select>
+                     <span for ='container' class ="combo"> selectDevice: </span>
+                     <select id='container' class="combo">
+                     ï¿½ <option value="iphone_overlay">iPhone</option>
+                     ï¿½ <option value="ipad_overlay">iPad</option>
+                        <option value="blackberry_overlay">BlackBerry</option>
+                     </select>-->
+                    <input type="file" id="inputfile" class="file" accept="image/*" single/>
+                    <img title="Open New Doc" class="topicons" id="newdocicon" src="/images/new_doc.png"
+                         alt="new canvas"/>
+                    <img title="Load Image" class="topicons" id="loadicon" src="/images/load.png" alt="Load Image"/>
+                    <img title="Chat" class="topicons" id="chaticon" src="/images/chat.png" alt="Chat"/>
+                    <img title="Properties" class="topicons" id="propicon" src="/images/prop.png" alt="Properties"/>
+                    <img title="Save as Image" class="topicons" id="saveicon" src="/images/save.png" alt="Save"/>
+                    <img title="Help" class='topicons' id='helpicon' src='/images/help.png' alt="help"/>
+                    <img title="Logout" class="topicons" id="logouticon" src="/images/logout.png" alt="Logout"/>
+                </div>
+                <!-- end of menuicons div -->
+            </div>
+            <!-- end of icon-wrapper div -->
+        </div>
+        <!-- end of header div -->
+        <!-- start of outer div -->
+        <div id="outer">
+            <div id="leftdiv">
+                <div id="accordion"></div>
+            </div>
+            <div id="containerDiv">
+                <div id="containerBody">
+                    <div id="canvasId" bgcolor="#CCCCFF">
+                        <canvas id="c" class="ui-corner-all"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="right" class="ui-widget-content">
+            <div id="texteditdiv" title="Text Editor">
+                <textarea id="textarea" rows="2"></textarea>
+            </div>
+            <div id="chatdialog" title="Chat">
+                <textarea id="chattext" value="hello" rows="2"></textarea><br/>
+                <br/>
+                <input type="text" id="chat" value="type some thing"/><br/>
+                </input>
+                <button id="chatbutton">OK</button>
+            </div>
+            <div id="propdiv" title="Properties"></div>
+        </div>
+
     </body>
 </html>
