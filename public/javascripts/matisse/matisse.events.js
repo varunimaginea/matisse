@@ -1,4 +1,10 @@
-/*matisse.events*/
+/**
+ * User: Bhavani Shankar
+ * Date: 01/19/12
+ * Time: 11:16 AM
+ * About this : Event listener methods are declared here
+ *
+ */
 
 define(["matisse", "matisse.ui", "matisse.comm"], function (matisse, ui, comm) {
 	"use strict";

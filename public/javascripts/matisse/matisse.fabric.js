@@ -3,22 +3,24 @@
 define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", "matisse.events"], function (matisse, util, properties, ui, events) {
 	
 	'use strict';
-    /**
-     *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
-     *  @method  observe
-     *  @param eventName
-     */
+
 	return {
+		 /**
+		 *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
+		 *  @method  observe
+		 *  @param eventName - name of the event fired by fabricjs
+		 */
 		observe: function (eventName) {
 			canvas.observe(eventName, function (e) {
 				switch (eventName) {
 				case "object:modified":
-					if (canvas.getActiveGroup()) {
+					// Check if it is a group of objects and dont perform any action
+					if (canvas.getActiveGroup()) {  //TODO
 						events.notifyServerGroupMoved();
 						return;
 					}
-					var obj = e.memo.target;
-					matisse.comm.sendDrawMsg({
+					var obj = e.memo.target; // Get currently modified object
+					matisse.comm.sendDrawMsg({ // Notify about this to server
 						action: "modified",
 						name: obj.name,
 						palette: obj.palette,
@@ -28,25 +30,25 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 							object: obj
 						}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
 					});
-					matisse.hLine.set('top', -10);
-					matisse.vLine.set('left', -10);
-					properties.updatePropertyPanel(obj);
+					matisse.hLine.set('top', -10); // hide horizontal alignment guide line
+					matisse.vLine.set('left', -10); // hide vertical alignment guide line
+					properties.updatePropertyPanel(obj); // Update property values for this object in property panel
 					break;
 				case "selection:cleared":
 					//$('#prop').remove();
 					//$('#propdiv').dialog('close');
 					break;
-				case 'path:created':
+				case 'path:created': // When path creation is completed by user
 					canvas.isSelectMode = true;
-					canvas.isDrawingMode = false;
-					ui.resetIconSelection();
+					canvas.isDrawingMode = false; // Set drawing mode to false
+					ui.resetIconSelection(); // Reset drawing icon selection
 					matisse.drawShape = false;
 					document.getElementById("c").style.cursor = 'default';
-                    var pathObj = e.memo.path;
-                    pathObj.uid = util.uniqid();
+                    var pathObj = e.memo.path; // get path object and assign parameters
+                    pathObj.uid = util.uniqid(); // Assign a Unique ID for this object
                     pathObj.name = "drawingpath";
                     pathObj.palette = matisse.paletteName;
-					matisse.comm.sendDrawMsg({
+					matisse.comm.sendDrawMsg({ // Notify server about this drawing path to draw it on other users canvas
 						action: 'drawpath',
 						palette: matisse.paletteName,
 						args: [{
@@ -61,21 +63,26 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 							stroke: pathObj.stroke
 						}]
 					});
-					matisse.xPoints = [];
-					matisse.yPoints = [];
+					matisse.xPoints = []; // nullify x points array
+					matisse.yPoints = []; // nullify x points array
 					break;
 				case 'object:selected':
-                    var selectedObj = e.memo.target;
-                    if (canvas.getActiveGroup()) {
+                    var selectedObj = e.memo.target; // Get selected object reference
+					// Check if it is a group of objects and dont perform any action
+                    if (canvas.getActiveGroup()) { // TODO
                         return;
                     }
+					// Show property panel for this selected object
                     properties.createPropertiesPanel(selectedObj);
                     break;
                 case 'object:moving':
+					// Get moving object reference
                     var movingObj = e.memo.target;
+					// Check for Alignment of this object with all other objects on canvas
                     checkAlign(movingObj);
                     break;
 				case 'object:resizing':
+					// Get resizing object reference
 					var resizingObj = e.memo.target;
 					var props = [];					
 					props.push(resizingObj);
@@ -151,6 +158,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 				otherObjRight = Math.round(canvasObjects[i].left + (canvasObjects[i].width * canvasObjects[i].scaleX) / 2),
 				otherObjBottom = Math.round(canvasObjects[i].top + (canvasObjects[i].height * canvasObjects[i].scaleY) / 2);
 			if (canvasObjects[i] !== obj && canvasObjects[i].name !== 'vline' && canvasObjects[i].name !== 'hline') { /* this LEFT matches with Other LEFT */
+				/* this RIGHT matches with Other LEFT */
 				if (otherObjLeft - 1 === movingObjLeft || otherObjLeft + 1 === movingObjLeft) {
 					showAlginLine(obj, "left", "minus");
 				} /* this RIGHT matches with Other RIGHT */
@@ -179,10 +187,17 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 		}
 		return null;
 	}
-
+	
+	/**
+	 *  Show Align guild line when objects align   
+	 *  @method  showAlginLine
+	 *  @param obj, position, operator
+	 */
     function showAlginLine(obj, position, operator) {
         var vLine = matisse.vLine;
         var hLine = matisse.hLine;
+		// 'LEFT' + 'plus' means left of object is aligned with left of other object  
+		// 'LEFT' + 'minus' means left of object is aligned with right of other object  
         switch (position) {
         case "left":
             (operator === "plus") ? vLine.set('left', obj.left + (obj.width * obj.scaleX) / 2) : vLine.set('left', obj.left - (obj.width * obj.scaleX) / 2);
@@ -191,6 +206,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
             (operator === "plus") ? hLine.set('top', obj.top + (obj.height * obj.scaleY) / 2) : hLine.set('top', obj.top - (obj.height * obj.scaleY) / 2);
         break;
         }
+		// show align line on top of all other objects on canvas
 		canvas.bringForward(vLine);
 		canvas.bringForward(hLine);
 		vLine.setCoords();
