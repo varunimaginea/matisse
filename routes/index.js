@@ -18,38 +18,34 @@ exports.favicon = function (req, res, next) {
  * The function for boards
  */
 
-exports.boards = function (req, res, next) {
-    console.log("------------- Creating a board -----------------------")
-    var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
-    var string_length = 8;
-    var randomstring = '';
+exports.boards = {
+    index:function (req, res, next) {
+        var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
+        var string_length = 8;
+        var randomstring = '';
 
-    for (var i = 0; i < string_length; i++) {
-        var rnum = Math.floor(Math.random() * chars.length);
-        randomstring += chars.substring(rnum, rnum + 1);
-    }
-    var data = {
-        url:randomstring
-    };
-
-
-    console.log("saved board as: " + randomstring);
-
-    var whiteBoard = new BoardModel();
-    whiteBoard.store(data, function (err) {
-        if (err === 'invalid') {
-            next(whiteBoard.errors);
-        } else if (err) {
-            next(err);
-        } else {
-            res.writeHead(302, {
-                'Location':randomstring
-            });
-            res.end();
-            //res.json({result: 'success', data: whiteBoard.allProperties()});
-            //       		res.sendfile(__dirname + '/index.html');
+        for (var i = 0; i < string_length; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum, rnum + 1);
         }
-    });
+        var data = {
+            url:randomstring
+        };
+        console.log("saved board as: " + randomstring);
+        var whiteBoard = new BoardModel();
+        whiteBoard.store(data, function (err) {
+            if (err === 'invalid') {
+                next(whiteBoard.errors);
+            } else if (err) {
+                next(err);
+            } else {
+                res.writeHead(302, {
+                    'Location':randomstring
+                });
+                res.end();
+            }
+        });
+    }
 }
 
 /*
@@ -57,7 +53,6 @@ exports.boards = function (req, res, next) {
  */
 exports.api = {
     index:function (req, res, next) {
-
         ShapesModel.find(function (err, ids) {
             if (err) {
                 return next(err);
@@ -90,3 +85,4 @@ exports.api = {
         });
     }
 }
+

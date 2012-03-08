@@ -66,75 +66,6 @@ application = (function () {
         app.use(express.errorHandler());
     }
 
-    var getBoard = function (req, res, next) {
-        var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
-        var string_length = 8;
-        var randomstring = '';
-
-        for (var i = 0; i < string_length; i++) {
-            var rnum = Math.floor(Math.random() * chars.length);
-            randomstring += chars.substring(rnum, rnum + 1);
-        }
-        var data = {
-            url:randomstring
-        };
-        console.log("saved board as: " + randomstring);
-        var whiteBoard = new BoardModel();
-        whiteBoard.store(data, function (err) {
-            if (err === 'invalid') {
-                next(whiteBoard.errors);
-            } else if (err) {
-                next(err);
-            } else {
-                res.writeHead(302, {
-                    'Location':randomstring
-                });
-                res.end();
-                //res.json({result: 'success', data: whiteBoard.allProperties()});
-                //       		res.sendfile(__dirname + '/index.html');
-            }
-        });
-    }
-
-    var index = function (req, res, next) {
-        ShapesModel.find(function (err, ids) {
-            if (err) {
-                return next(err);
-            }
-            var shapes = [];
-            var len = ids.length;
-            var count = 0;
-            if (len === 0) {
-                return res.json(shapes);
-            }
-            //console.log(ids);
-            ids.forEach(function (id) {
-                var shape = new ShapesModel();
-                shape.load(id, function (err, props) {
-                    if (err) {
-                        return next(err);
-                    }
-                    shapes.push({
-                        id:this.id,
-                        palette:props.palette,
-                        action:props.action,
-                        args:props.args,
-                        board_url:props.board_url
-                    });
-                    if (++count === len) {
-                        res.json(shapes);
-                    }
-                });
-            });
-        });
-    }
-
-    var show = function (req, res, next) {
-        if (req.params.id != "favicon") {
-            res.sendfile(__dirname + '/board.html');
-        }
-    }
-
     var use = function (err, req, res, next) {
         if (err instanceof Error) {
             err = err.message;
@@ -151,16 +82,16 @@ application = (function () {
 
     // Routes
     app.get('/', routes.index);
-    app.get('/favicon', function (req, res, next) {
+    app.get('/favicon', exports.favicon);
+    app.get('/boards', routes.boards.index);
+    app.resource('api', routes.api);
 
-    });
-    app.get('/boards', getBoard);
-
-    app.resource('api', {
-        index:index
-    });
     app.resource('boards', {
-        show:show
+        show:function (req, res, next) {
+            if (req.params.id != "favicon") {
+                res.sendfile(__dirname + '/board.html');
+            }
+        }
     });
 
     app.use(use);
