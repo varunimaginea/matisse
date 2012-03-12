@@ -1,6 +1,6 @@
 collaboration = module.exports = {
-	boardModel: require(__dirname + '\\..\\models/BoardModel.js'),
-	shapesModel: require(__dirname + '\\..\\models/ShapesModel.js'),
+	boardModel: require(__dirname + '/../models/BoardModel.js'),
+	shapesModel: require(__dirname + '/../models/ShapesModel.js'),
 	events: {		
 		setUrl: function (location, data) {	
 			var socket = this;

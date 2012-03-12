@@ -1,0 +1,25 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.pallete {
+    background-color: #444444;
+    float: left;
+    height: 600px;
+    width: 100px;
+}
+
+.draw-area {
+    background-color: #AAAAAA;
+    float: left;
+    height: 600px;
+    width: 1155px;
+}
+
+.actions {
+    background-color: #222222;
+    float: right;
+    height: 600px;
+    width: 80px;
+}

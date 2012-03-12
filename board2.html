@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Matisse, by Imaginea</title>
+        <meta name="description" content="A shared whiteboard using HTML5 Canvas with server on socket.io and node.js"/>
+        <!-- Third Party CSS files -->
+        <link type="text/css" href="/stylesheets/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/stylesheets/farbtastic.css" type="text/css"/>
+        <!-- Development CSS files -->
+        <link rel="stylesheet" href="/stylesheets/newstyle.css"/>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="pallete">
+                <div id="leftdiv">
+                    <div id="accordion"></div>
+                </div>
+            </div>
+            <div class="draw-area">
+
+            </div>
+            <div class="actions">
+
+            </div>
+        </div>
+    </body>
+    <!-- Third party JS libraries -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script data-main="/javascripts/matisse/matisse.setup" src="/javascripts/thirdparty/require/require-jquery.js"
+            type="text/javascript"></script>
+    <script src="/javascripts/thirdparty/jquery/jquery-1.7.min.js"></script>
+    <script src="/javascripts/thirdparty/fabric/fabric_all.js"></script>
+    <script src="/javascripts/thirdparty/fabric/Delicious_500.font.js"></script>
+    <script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
+    <!-- Color picker -->
+    <script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
+</html>

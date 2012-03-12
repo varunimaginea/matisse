@@ -1,6 +1,6 @@
 module.exports = {
 	authenticate: function(setUserDetails) {
-		var UserModel = require(__dirname + '\\..\\models/UserModel.js');
+		var UserModel = require(__dirname + '/../models/UserModel.js');
 		var everyauth = require('everyauth');
 		var conf = require('./conf');
 
