@@ -15,10 +15,37 @@ a {
     text-decoration: none;
 }
 
+h1 {
+    font-style: Italic;
+    font-size: 14px;
+    color: #1886db;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 h2 span {
     font-weight: 400;
     font-size: 25px;
     color: #39F;
+}
+
+.leftContent h3 {
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: inherit;
+}
+.rightContent h3 {
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 70px;
+    color: #ffffff;
+    
+}
+
+h4 {
+    font-style: Italic;
+    font-size: 12px;
+    color: #d3dae5;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 pre {
@@ -34,6 +61,12 @@ p {
     font-family: Verdana, Georgia, Serif;
     font-size: 12px;
 }
+p.italic {
+    font-style:italic;
+    margin-left: 10px;
+}
+
+
 
 label {
     font-family: Verdana, Georgia, Serif;
@@ -94,6 +127,55 @@ label {
 
 * html #outer {
     height: 100%;
+}
+
+.leftContainer {
+    background-color: #ffffff;
+}
+.leftContainer .leftHeader {
+    padding: 30px 20px 20px 20px;
+    height: 100px;
+}
+ 
+.rightContainer {
+    background-color: #464d57;
+}
+
+.rightContainer .rightHeader {
+    height: 150px;
+}
+
+.text {
+    padding-top: 30px;
+}
+
+.headerDivider {
+    height: 20px;
+}
+.headerDividerLeft {
+    width: 100%;
+    background: url('../images/headerdivider_left.png') repeat-x;
+}
+
+.headerDividerRight {
+    width: 100%;
+    background: url('../images/headerdivider_right.png') repeat-x;
+}
+
+div.leftContent {
+    margin-left: 10px;
+}
+
+.loginIconBar {
+    display: inline;
+    margin: inherit;
+}
+
+.rightHeader p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: Italic;
+    font-size: 14px;
+    color: #1886db;
 }
 
 /* IE6 and under treat height as min-height anyway*/
@@ -346,7 +428,7 @@ input.file {
 .loginIcon {
     width: 32px;
     border: 0px;
-    margin: 0 10px 0 10px;
+    margin: 0 10px 0 0;
 }
 
 .profilePic {
@@ -369,3 +451,78 @@ input.file {
     -moz-box-shadow: 0 8px 6px -6px black;
     box-shadow: 0 8px 6px -6px black;
 }
+
+div.leftFooter {
+    background-color: #ffffff;
+    padding: 20px 5px 20px 20px;
+}
+
+#footer{
+	background-color: #464d57;
+	font-size: 13px;
+	height: 60px;
+	margin-left: 30px;
+	padding: 20px 20px;
+}
+	.footerInner{
+		margin: 0 auto;
+		padding: 12px 0;
+	}
+		.footerMenu{
+			float: left;
+		}
+			.footerMenu a{
+			        font-family: Arial, Helvetica, sans-serif;
+				color: #8a9ab1;
+				padding: 5px 5px;
+			}
+		.copyrights{
+		        color: #8a9ab1;
+			text-align: right;
+			float: right;
+		}
+
+.footerDivider {
+    height: 20px;
+}
+.footerDividerLeft {
+    width: 100%;
+    background: url('../images/footerdivider_left.png') repeat-x;
+}
+
+.footerDividerRight {
+    width: 100%;
+    background: url('../images/footerdivider_right.png') repeat-x;
+}
+.content { 
+    min-height: 648px;
+}
+
+.greyButton {
+    color:#4f5661;
+    border-radius: 3px;
+    border: 1px solid #414952;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    background-color: #464d57;
+    padding: 7px 15px;
+}
+
+.blueButton {
+    background-color:#036cd7;
+    border-radius: 3px;
+    border: 1px solid #0460bd;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 7px 15px;
+}
+ul.newFeatureList {
+    list-style-image: url('../images/bullet.png');
+    color: #d3dae5;
+    font-style: italic;
+    margin-left: 60px;
+}
+                  ul.newFeatureList li {
+                     margin-top: 1em;
+                  }
