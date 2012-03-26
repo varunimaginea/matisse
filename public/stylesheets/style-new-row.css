@@ -64,7 +64,7 @@ p {
 }
 p.italic {
     font-style:italic;
-    margin-left: 10px;
+   
 }
 
 
@@ -130,39 +130,32 @@ label {
     height: 100%;
 }
 
-.leftContainer {
+.leftHeader {
     background-color: #ffffff;
 }
-.leftContainer .leftHeader {
-    padding: 30px 20px 20px 20px;
-    height: 100px;
-}
  
-.rightContainer {
+.rightHeader {
     background-color: #464d57;
 }
 
-.rightContainer .rightHeader {
-    height: 150px;
-}
-
 .text {
-    color: #1886DB;
-    padding-top: 30px;
+
 }
 
-.headerDivider {
+#headerDivider {
+   margin-left: 0px;
+}
+#headerDividerLeft {
     height: 20px;
-}
-.headerDividerLeft {
-    width: 100%;
     background: url('../images/headerdivider_left.png') repeat-x;
+    margin-left: 0px;
+    width: 34.2%;
 }
 
-
-.headerDividerRight {
-    width: 100%;
+#headerDividerRight {
+    height: 20px;
     background: url('../images/headerdivider_right.png') repeat-x;
+    margin-left: 0px;
 }
 
 div.leftContent {
@@ -435,8 +428,7 @@ input.file {
 }
 
 .profilePic {
-    width: 30px;
-    height: 30px;
+    width: 50px;
 }
 
 #delete_menuItem {
@@ -513,8 +505,7 @@ div.leftFooter {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     background-color: #464d57;
-    padding: 0px 0px;
-    line-height: 10px;
+    padding: 7px 15px;
 }
 
 .blueButton {
@@ -541,11 +532,6 @@ ul.newFeatureList {
     border-top: 1px dotted #8a9ab1;
     border-bottom: 0;
     margin: 15px 0px 20px 65px;
-}
-.leftContentDivider {
-    border-top: 1px dotted #8a9ab1;
-    border-bottom: 0;
-    margin: 30px 0px 5px 60px;
 }
 .carouselTitle {
     padding-bottom: 30px;

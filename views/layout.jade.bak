@@ -1,0 +1,33 @@
+!!! 5
+html
+  head
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap/bootstrap-responsive.css')
+    script(type='text/javascript', src='/javascripts/thirdparty/jquery/jquery-1.7.min.js')
+    script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap.js')
+  body!= body
+    div(class='row-fluid')
+      div(class='span4 left-container')
+        div(class='row')
+          div(class='span4 left-header')
+            img(src='images/mattise_whitebg.png')
+        div(class='row headerdivider')
+          div(class='span4 headerdivider-left')
+        div.row-fluid
+          div.span4
+        div.row-fluid
+          div.span4
+      div(class='span8 right-container', style='margin-left: 0px;')
+        div(class='row')
+          div(class='span8 right-header')
+            div(class='span8 text')
+              img(src='images/q1.png', alt='"', align='top')
+              p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              img(src='/images/q2.png", alt='"', align='top')
+        div(class='row headerdivider')
+          div(class='span8 headerdivider-right')
+        div.row-fluid
+          div.span4
+        div.row-fluid
+          div.span4
