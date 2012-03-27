@@ -16,7 +16,31 @@ html
         div(class='span8 rightHeader')
           div(class='text', id='testimonial')
             - if(everyauth.loggedIn)
-              div.row
+                div(class='row', id='rightheaderContent')
+                  div.span4
+                    div(class='btn-toolbar', id='rightHeaderButton')
+                      div(class='btn-group', style='padding-left: 15px;padding-right: 10px;')
+                        button(class='numButton') 
+                          h3 2
+                          h6 Currently Active
+                      div(class='btn-group', style='padding-right: 10px;')
+                        button(class='numButton') 
+                          h3 #{createdNum}
+                          h6 Owned by Me
+                      div(class='btn-group')
+                        button(class='numButton')
+                          h3 2
+                          h6 Shared with Me
+                  div(class='span3 pull-left')
+                    div.row
+                      div.span4
+                        div(class='btn-group')
+                          button(class='launchButton') 
+                            h3 Launch New Whiteboard &raquo;
+                    div.row
+                      div.span4
+                        form(class='navbar-search pull-left', id='navBarSearch')
+                          input(type='text', class='search-query', placeholder='Search whiteboard...')
             - else       
                 div.span1
                   img(src='images/q1.png', alt='"', align='top', width='20', height='20', class='pull-left') 
@@ -141,7 +165,74 @@ html
                       a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
                       a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
           - else
+                div(class='row')
+                  div(class='span8 pull-left')
+                    h3.dashboardRightContentHeading Owned by me
+                div(class='row')
+                  div(class='span8 columns whiteboardList')
+                     ul(class='thumbnails')
+                       li(class='span2 dashboardLeftThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                       li(class='span2 dashboardRightThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                       li(class='span2 dashboardRightThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
                 div.row
+                  div(class='span8 offset7')
+                    a(class='showAllWhiteBoard pull-left', href='#') Show all &raquo;
+                div(class='row')
+                  hr(class='dashes')
+                div(class='row')
+                  div(class='span8 dashboardRightContent')
+                    h3.dashboardRightContentHeading Shared with me
+                div(class='row')
+                  div(class='span8 columns whiteboardList')
+                     ul(class='thumbnails')
+                       li(class='span2 dashboardLeftThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                       li(class='span2 dashboardRightThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                       li(class='span2 dashboardRightThumbnail')
+                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                           img(src='images/140x120.gif', alt='')
+                           div(class='thumbnailText')
+                             h4.thumbnailCaption Third Thumbnail label
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailDescription Cras justo odio.
+                div.row
+                  div(class='span8 offset7')
+                         a(class='showAllWhiteBoard pull-left', href='#') Show all &raquo;
 
       div(class='row', id='loginFooterDivider')
 

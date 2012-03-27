@@ -8,8 +8,8 @@ var UserModel = require(__dirname + '/../models/UserModel.js');
 
 exports.index = function (req, res) {
     var session_data = req.session.auth;
+    var createdNum;
     if (session_data) {
-	res.render('index', { title:'Matisse' })
 	if (session_data.twitter) {
 	    var userID = session_data.twitter.user.id;
 	}
@@ -41,13 +41,24 @@ exports.index = function (req, res) {
 			    console.log(boardIds);
 			}
 		    });
+		    createdNum = user.numLinks('Board', function (err, num) {
+			if (err) {
+			    console.log(err);
+			}
+			else {
+			    console.log(num);
+			    return num;
+			}
+		    });
+
 		});  
 	    }
 	});
-	
+	if (typeof(createdNum) == "undefined") createdNum = 0;
+	res.render('index', { title:'Matisse', createdNum: createdNum })	
     }
     else {
-	res.render('index', { title:'Matisse' })
+	res.render('index', { title:'Matisse'  })
     }
 };
 
