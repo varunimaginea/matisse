@@ -6,35 +6,56 @@ html
     script(type='text/javascript', src='/javascripts/thirdparty/jquery/jquery-1.7.min.js')
     script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap.js')
   body!= body
-    div(class='container-fluid')
-      div(class='span-one-third leftContainer')
-        div(class='row-fluid')
-          div(class='span leftHeader')
+    div(class='container')
+      div(class='row', id='loginHeader')
+
+        div(class='span4 leftHeader')
+          div#loginLogo
             img(src='images/mattise_whitebg.png')
-        div(class='row-fluid')
-          div(class='span headerDivider headerDividerLeft')
-        div(class='row-fluid content leftContent') 
+
+        div(class='span8 rightHeader')
+          div(class='text', id='testimonial')
+            - if(everyauth.loggedIn)
+              div.row
+            - else       
+                div.span1
+                  img(src='images/q1.png', alt='"', align='top', width='20', height='20', class='pull-left') 
+                div.span7
+                  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                div#rightQuote
+                  img(src='images/q2.png', alt='"', align='top', class='pull-right', width='20', height='20')
+
+      div(class='row', id='loginHeaderDivider')
+
+        div(class='span4', id='loginHeaderDividerLeft') 
+
+        div(class='span8', id='loginHeaderDividerRight')
+
+      div(class='row content', id='loginContent')
+
+        div(class='span4', id='loginLeftContent')
           - if(everyauth.loggedIn)
-              div.row-fluid
-                div.span3
+              div.row
+                div.span4
                   h3 Welcome,
-              div.row-fluid
-      
-      
-              - if(everyauth.twitter)
-                div.span1
-                  img(class="profilePic",src="#{everyauth.twitter.user.profile_image_url}")
-                div.span1
-                  h4 #{everyauth.twitter.user.name}!
-                div.span1
-                h6(class='loginSource', style='text-align:center;') via twitter
-              div(class='row-fluid')
+              div(class='row', id='userInfo')
+                - if(everyauth.twitter)
+                    div.span1
+                      img(class="profilePic",src="#{everyauth.twitter.user.profile_image_url}")
+                    div(class='span3')
+                      div.profileDetails
+                        div(class='pull-left') 
+                          a #{everyauth.twitter.user.name}!
+                        div(class='pull-right')  
+                          h6.pull-right via
+                          a(class='loginSource pull-right') Twitter
+              div(class='row')
                 hr(class='leftContentDivider')
-              div.row-fluid
-                div.span3
+              div.row
+                div.span4
                   h3 Recently
-              div.row-fluid
-                div.span3 
+              div.row
+                div.span4 
                  h3 Coming Soon...
           - else
               h3 Login with
@@ -45,106 +66,106 @@ html
                   img(class='loginIcon', src='images/login icons/facebook-new.png')
                 a(href='auth/google')
                   img(class='loginIcon', src='images/login icons/google-new.png')
-        div.row-fluid
-          div(class='span footerDivider footerDividerLeft')
-        div(class='row-fluid leftFooter')
-          div(class='span')
-            img(class='footerLogoIcon', src='images/imaginea.png', height='20')
-          div(class='span')
-            img(class='followUsIcon', src='images/followus.png', height='20')
-      div(class='span-two-third rightContainer')
-        div(class='row-fluid')
-          div(class='span rightHeader')
-          - if(everyauth.loggedIn)
-              div.row-fluid             
+
+        div(class='span8', id='loginRightContent')
+          - if(!everyauth.loggedIn)
+                div(class='row')
+                  div(class='span4')
+                    h3 Whats new ?
+                  div(class='span4')
+                    div(class='btn-toolbar', id='rightContentButton')
+                      div(class='btn-group')
+                        button(class='greyButton') Latest version: 1.0.1
+                      div(class='btn-group')
+                        button(class='greyButton') Last updated Mar 22,2012
+                div(class='row')
+                  div(class='span8')
+                    ul(class='newFeatureList')
+                      li.first The whole design of matisse is new
+                      li Manoj have started working on frontend
+                      li Paridhi and jagadesh has joined matisse team
+                      li jagadesh is working on new board style
+                      li.last Manoj has to finish dashboard also by wed :(
+                div(class='row')
+                  hr(class='dashes')
+                div(class='row')
+                  div(class='span6 rightContent carouselTitle')
+                    h3 Sample whiteboards
+                  div(class='span2 carousalPager')
+                div(class='row')
+                  div(class='span8 columns')
+                    div(id='myCarousel', class='carousel slide')
+                      div(class='carousel-inner')
+                        div(class='active item')
+                          ul(class='thumbnails')
+                            li(class='span3 leftThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                            li(class='span3 rightThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                        div(class='item')
+                          ul(class='thumbnails')
+                            li(class='span3 leftThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                            li(class='span3 rightThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                        div(class='item')
+                          ul(class='thumbnails')
+                            li(class='span3 leftThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                            li(class='span3 rightThumbnail')
+                                div(class='thumbnail sampleWb')
+                                  img(src='images/240x240.gif', alt='')
+                                div(class='thumbnailText')
+                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailDescription Cras justo odio.
+                      a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
+                      a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
           - else
-              div(class='span8 text')
-                img(src='images/q1.png', alt='"', align='top', width='20', height='20') 
-                p.italic Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                img(src='images/q2.png', alt='"', align='top', style='float:right;margin-right: 10px;', width='20', height='20')
-        div(class='headerDivider headerDividerRight')
-        div(class='row-fluid content')
-          div(class='span8')
-            div(class='row-fluid')
-              div(class='span4 rightContent')
-                h3 Whats new ?
-              div(class='span4 rightContent')
-                div(class='row-fluid')
-                  div(class='span2 pull-right')
-                    button(class='greyButton') Latest version: 1.0.1
-                  div.span2
-                    button(class='greyButton') Last updated Mar 22,2012
-            div(class='row-fluid')
-              div(class='span8')
-                ul(class='newFeatureList')
-                  li.first The whole design of matisse is new
-                  li Manoj have started working on frontend
-                  li Paridhi and jagadesh has joined matisse team
-                  li jagadesh is working on new board style
-                  li.last Manoj has to finish dashboard also by wed :(
-            div(class='row-fluid')
-            div(class='row-fluid')
-              hr(class='dashes')
-            div(class='row-fluid')
-              div(class='span6 rightContent carouselTitle')
-                h3 Sample whiteboards
-              div(class='span2 carousalPager')
-            div(class='row-fluid')
-              div(class='span8 columns')
-                div(id='myCarousel', class='carousel slide')
-                  div(class='carousel-inner')
-                    div(class='active item')
-                      ul(class='thumbnails')
-                        li(class='span3 leftThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                        li(class='span3 rightThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                    div(class='item')
-                      ul(class='thumbnails')
-                        li(class='span3 leftThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                        li(class='span3 rightThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                    div(class='item')
-                      ul(class='thumbnails')
-                        li(class='span3 leftThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                        li(class='span3 rightThumbnail')
-                            div(class='thumbnail sampleWb')
-                              img(src='images/240x240.gif', alt='')
-                            div(class='thumbnailText')
-                              h4.thumbnailCaption Third Thumbnail label
-                              p.thumbnailDescription Cras justo odio.
-                  a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
-                  a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
-        div(class='footerDivider footerDividerRight')
-        div.row-fluid
+                div.row
+
+      div(class='row', id='loginFooterDivider')
+
+        div(class='span4', id='loginFooterDividerLeft') 
+
+        div(class='span8', id='loginFooterDividerRight')
+   
+
+      div(class='row', id='loginFooter')
+
+        div(class='span4 leftFooter', id='loginLeftFooter')
+          div(class='row', id='leftFooterIcon')
+            div(class='span')
+              img(class='footerLogoIcon', src='images/imaginea.png', height='20')
+            div(class='span  pull-right')
+              img(class='followUsIcon', src='images/followus.png', height='20')
+
+        div(class='span8', id='loginRightFooter')
           div(id='footer')
-            div(class='footerInner')
-              div(class='footerMenu')
-                a(href='/about') About Us  
-                a(href='/wiki') Matisse Wiki  
-                a(href='/github') Github Repository   
-                a(href='/bugtrack') Bug Tracker
-              div(class='copyrights') copyright&copy;2012
+           div(class='footerInner')
+             div(class='footerMenu')
+               a(href='/about') About Us  
+               a(href='/wiki') Matisse Wiki  
+               a(href='/github') Github Repository   
+               a(href='/bugtrack') Bug Tracker
+             div(class='copyrights') copyright&copy;2012
 script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap-carousel.js')
