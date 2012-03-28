@@ -102,7 +102,7 @@ define(["matisse", "matisse.ui", "matisse.comm"], function (matisse, ui, comm) {
                 });
                 canvas.isSelectMode = true;
                 matisse.drawShape = false;
-                ui.resetIconSelection();
+                ui.resetShapeSelection();
             }
             if (canvas.isDrawingMode) {
                 matisse.xPoints = [];

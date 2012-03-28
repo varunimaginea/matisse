@@ -363,7 +363,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		collectionName: 'wireframe',
 		shapes: {
 			label: { // Label wireframe object
-				displayName: "label",
+				name: "label",
+				displayName:"Label",
 				activeIcon: "label_w.png",
 				inactiveIcon: "label_g.png",
 				toolAction: function (args) {
@@ -470,7 +471,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}, // end of shape label
 
 			txt_button: { // Button wireframe object
-				displayName: "txt_button",
+				name: "txt_button",
+				displayName:"Button",				
 				activeIcon: "button_w.png",
 				inactiveIcon: "button_g.png",
 				toolAction: function (args) {
@@ -594,7 +596,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape Button
 
 			textbox: {	// textbox wireframe object
-				displayName: "textbox",
+				name:"textbox",				
+				displayName: "Text Box",
 				activeIcon: "input_w.png",
 				inactiveIcon: "input_g.png",
 				toolAction: function (args) {
@@ -717,7 +720,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape textbox
 			
 			checkbox: {	//checkbox wireframe object
-				displayName: "checkbox",
+				name: "checkbox",
+				displayName: "Check Box",
 				activeIcon: "checkbox_w.png",
 				inactiveIcon: "checkbox_g.png",
 				toolAction: function (args) {
@@ -854,7 +858,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape checkbox
 		
 			radio: {	// radio wireframe object
-				displayName: "radio",
+				name: "radio",
+				displayName: "Radio Button",
 				activeIcon: "radiobutton_w.png",
 				inactiveIcon: "radiobutton_g.png",
 				toolAction: function (args) {
@@ -1007,7 +1012,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	// End of shape radio
 			
 			combo: {	// Combo wireframe object
-				displayName: "combo",
+				name: "combo",
+				displayName: "Selectbox",
 				activeIcon: "combobox_w.png",
 				inactiveIcon: "combobox_g.png",
 				toolAction: function (args) {
@@ -1139,7 +1145,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape combo
 
 			list: {	//Wireframe object list
-				displayName: "list",
+				name:"list",
+				displayName: "List",
 				activeIcon: "list_w.png",
 				inactiveIcon: "list_g.png",
 
@@ -1254,7 +1261,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 
 			// Wireframe object, Table has a border, header and columns separated by lines. Text in table cells can be edited in properties dialog.
 			table: {
-				displayName: "table",
+				name: "table",
+				displayName: "Table",
 				activeIcon: "table_w.png",
 				inactiveIcon: "table_g.png",
 				// to create a table object
@@ -1381,7 +1389,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 				}]	//End of properties for list
 			},
 			slider: {	//Slider wireframe object
-				displayName: "slider",
+				name: "slider",
+				displayName: "Slider",
 				activeIcon: "slider_w.png",
 				inactiveIcon: "slider_g.png",
 				toolAction: function (args) {
@@ -1504,7 +1513,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape slider
 			
 			progressbar: {	// progressbar wireframe object
-				displayName: "progressbar",
+				name: "progressbar",
+				displayName: "Progress Bar",
 				activeIcon: "progressbar_w.png",
 				inactiveIcon: "progressbar_g.png",
 				toolAction: function (args) {
@@ -1590,7 +1600,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape progressbar	
 		
 			image: {	//Image wireframe object
-				displayName: "image",
+				name: "image",
+				displayName: "Image",
 				activeIcon: "image_w.png",
 				inactiveIcon: "image_g.png",
 				toolAction: function (args){													
@@ -1701,7 +1712,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}, // end of image
 			
 			password: {	//password wireframe object
-				displayName: "password",
+				name: "password",
+				displayName: "Password",
 				activeIcon: "password_w.png",
 				inactiveIcon: "password_g.png",
 				toolAction: function (args) {
@@ -1823,7 +1835,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}, 	//End of shape password
 			
 			scrollbar: {	// scrollbar wireframe object
-				displayName: "scrollbar",
+				name: "scrollbar",
+				displayName: "Scroll Bar",
 				activeIcon: "scrollbar_w.png",
 				inactiveIcon: "scrollbar_g.png",
 				toolAction: function (args) {
@@ -1946,7 +1959,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			},	//End of shape Scrollbar
 			
 			div: {	// Div wireframe object
-				displayName: "div",
+				name: "div",
+				displayName: "Div",
 				activeIcon: "rectangle_w.png",
 				inactiveIcon: "rectangle_g.png",
 				toolAction: function (args) {

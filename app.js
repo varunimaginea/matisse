@@ -90,7 +90,7 @@ application = (function () {
     app.resource('boards', {
         show:function (req, res, next) {
             if (req.params.id != "favicon") {
-                res.sendfile(__dirname + '/board.html');
+                res.sendfile(__dirname + '/board2.html');
             }
         }
     });

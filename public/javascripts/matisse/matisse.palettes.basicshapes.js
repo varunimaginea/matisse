@@ -31,7 +31,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		collectionName: 'basic',
 		shapes: {
 			rectangle: {
-				displayName: "rectangle",
+				name: "rectangle",
+				displayName: "Rectangle",
 				activeIcon: "rectangle_w.png",
 				inactiveIcon: "rectangle_g.png",
 				toolAction: function (args) {
@@ -126,7 +127,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				}]
 			},
 			circle: {
-				displayName: "circle",
+				name: "circle",
+				displayName: "Circle",
 				activeIcon: "circle_w.png",
 				inactiveIcon: "circle_g.png",
 				toolAction: function addCircle(args) {
@@ -230,7 +232,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 
 			},
 			triangle: {
-				displayName: "triangle",
+				name: "triangle",
+				displayName: "Triangle",
 				activeIcon: "triangle_w.png",
 				inactiveIcon: "triangle_g.png",
 				toolAction: function addCircle(args) {
@@ -317,7 +320,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 			},
 			// end of triangle
 			text: {
-				displayName: "text",
+				name: "text",
+				displayName: "Text",
 				activeIcon: "text_w.png",
 				inactiveIcon: "text_g.png",
 				toolAction: function addText(args) {
@@ -425,7 +429,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				}]
 			},
 			line: {
-				displayName: "line",
+				name: "line",
+				displayName: "Line",
 				activeIcon: "line_w.png",
 				inactiveIcon: "line_g.png",
 				toolAction: function (args) {					
@@ -521,7 +526,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				}]
 			},
 			importimage: {
-				displayName: "importimage",
+				name: "importimage",
+				displayName: "Image",
 				activeIcon: "rectangle_w.png",
 				inactiveIcon: "rectangle_g.png",
 				toolAction: null,				
@@ -585,7 +591,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				}]
 			},
 			drawingpath: {
-				displayName: "path",
+				name: "path",
+				displayName: "Path",
 				activeIcon: "brush_w.png",
 				inactiveIcon: "brush_g.png",
 				toolAction: null,
