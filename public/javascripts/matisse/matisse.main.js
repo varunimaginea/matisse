@@ -6,7 +6,7 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.palettes.properties", "matisse.toolbuttons.handlers", "matisse.comm"], function (matisse, ui, util, mfabric, palettes, events,  properties, toolHandlers, comm) {
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.palettes.properties", "matisse.toolbuttons.handlers", "matisse.comm","../components/ui.imaginea.accordion"], function (matisse, ui, util, mfabric, palettes, events,  properties, toolHandlers, comm, CustomAccordion) {
 	"use strict";
     /**
      *	create canvas object
@@ -136,14 +136,21 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 		 */
 		addTools: function () {
 			palettes.createAllPallettes(matisse.palette);
+			new CustomAccordion({
+				"cntrId":"accordion",  
+				"headerClass":"p-header",
+				"sectionClass":"p-cntr",
+				"headerOpenClass":"open",
+				"headerCloseClass":"close"
+			});
+			$("#accordion").shortscroll();
+			
 			$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 			$('#deleteTool').click(function () {
 				main.deleteObjects();
 			});
 			$('#chatbutton').click(toolHandlers.chatButtonListener);
 			main.handleMouseEvents();
-			$('#accordion').accordion();
-			ui.setAccordinContentHeight();
 		},
 		/**
 		 * Regiser observers to observe any object changes like resize, rotate, move etc
