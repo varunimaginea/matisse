@@ -138,7 +138,7 @@ exports.boards = {
 		    }
 		});
 		res.writeHead(302, {
-		    'Location':'boards/'+randomstring
+		    'Location':randomstring
 		});
 		res.end();
 
