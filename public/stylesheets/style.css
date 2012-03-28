@@ -5,7 +5,7 @@ html, body {
 body {
     padding: 0;
     margin: 0;
-    background: #FFF;
+    background: #dde1e5 !important;
     color: #666;
     font-size: 12px;
 }
@@ -415,7 +415,15 @@ input.file {
 .leftHeader {
     background-color: #ffffff;
 }
-
+#loginHeader {
+    background: #fff;
+}
+#loginContent {
+    background: #fff;
+}
+#loginFooter {
+    background: #fff;
+}
 #loginHeaderDivider {
     background: url('../images/headerdivider_left.png') repeat-x;
 }
@@ -494,7 +502,7 @@ input.file {
 #loginRightContent h3 {
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
-    margin-left: 70px;
+    margin-left: 40px;
     color: #d3dae5;
     padding-left: 10px;
     
@@ -506,7 +514,7 @@ input.file {
 .greyButton {
     color:#ffff00;
     border-radius: 3px;
-    border: 2px solid #414952;
+    border: 1px solid #414952;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     background-color: #464d57;
@@ -517,7 +525,7 @@ ul.newFeatureList {
     list-style-image: url('../images/bullet.png');
     color: #d3dae5;
     font-style: italic;
-    margin-left: 60px;
+    margin-left: 30px;
 }
                   ul.newFeatureList li {
                      margin-top: 1em;
@@ -541,7 +549,7 @@ ul.newFeatureList {
   top: 35% !important;
   width: 0px !important;
   margin-top: 0px !important;
-  border: 0px solid #ffffff !important;
+  border: 0px solid #000000 !important;
   -webkit-border-radius: 0px !important;
   -moz-border-radius: 0px !important;
   border-radius: 0px !important;
@@ -555,6 +563,10 @@ ul.newFeatureList {
 }
 .thumbnail {
     height: 240px;
+    box-shadow: 0 0 0 0 #000 !important;
+}
+.thumbnails li {
+    margin-bottom: 0px !important;
 }
 .rightThumbnail {
     padding-left: 40px !important;
@@ -563,15 +575,31 @@ ul.newFeatureList {
     padding-left: 30px !important;
 }
 .sampleWb {
-    background: #ffffff;
     border-radius: 3px !important;
+    border: 1px none #000000 !important;
+    width: 240px;
+    height: 240px;
 }
+.sampleWb img {
+   border-radius: 7px;
+   border: 1px solid #464d57;
+   box-shadow: 1px 1px 3px 2px #000000;
+   -webkit-box-shadow: 1px 1px 3px 2px #000000;
+   -moz-box-shadow: 1px 1px 3px 2px #000000;
+ }
 .dashboardWhiteBoardItem {
-    background: #ffffff;
     border-radius: 3px !important;
+    border: 0px none #464d57 !important;
+}
+.dashboardWhiteBoardItem img {
+    border-radius: 7px;
+    border: 0px solid #464d57;
+    box-shadow: 1px 1px 3px #000000;
+    -webkit-box-shadow: 1px 1px 3px 2px #000000;
+    -moz-box-shadow: 1px 1px 3px 2px #000000;
 }
 .leftThumbnail {
-    padding-left: 20px;
+    padding-left: 0px;
 }
 dashboardLeftThumbnail {
 
@@ -579,6 +607,11 @@ dashboardLeftThumbnail {
 .thumbnailText {
     color: #d3dae5;
     padding-top: 15px;
+}
+.thumbnailText .italic {
+    font-style: italic;
+    font-size: 9px;
+    margin-bottom: 0px;
 }
 .thumbnailCaption {
     color: #1886DB;
@@ -646,18 +679,19 @@ dashboardLeftThumbnail {
     -webkit-box-shadow: 2px 2px 2px #000;
     box-shadow:         2px 2px 2px #000;
 }
-.launchButton {
-    background:#3dbe58;
+#launchButton .btn {
+    background:#1886DB;
     border-radius: 2px;
-    border: 1px solid #35a953;
+    border: 1px solid #08C;
     padding: 5px 15px 3px 15px;
-    box-shadow: 1px 1px 1px #888888;
-    -moz-box-shadow:    1px 1px 1px #888888;
-    -webkit-box-shadow: 1px 1px 1px #888888;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    color: #ffffff;
-    text-shadow:1px 0px #229f3c;
+    box-shadow: 1px 1px 1px #1886DB;
+    -moz-box-shadow:    1px 1px 1px #1886DB;
+    -webkit-box-shadow: 1px 1px 1px #1886DB;
+    font-family: Helvetica Neue, Helvetica, sans-serif !important;
+    font-size: 18px !important;
+    color: #ffffff !important;
+    text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
+    margin-right: 40px;
 }
 #rightHeaderContent {
     padding-top: 15px;
@@ -678,7 +712,7 @@ dashboardLeftThumbnail {
     background: #ffffff;
 }
 .numButton h3 {
-    color:#3dbe58;
+    color:#1886DB;
     font-size: 25px;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -692,10 +726,35 @@ dashboardLeftThumbnail {
     min-height: 648px;
 }
 #loginRightContent .whiteboardList {
-    min-height: 250px;
+    min-height: 200px;
 }
 
 #loginRightContent h3.dashboardRightContentHeading {
     margin-left: 20px;
     padding-right: 10px;
+}
+#showAllCreateWhiteBoard {
+
+}
+                    #showAllCreateWhiteBoard a {
+			font-family: Arial, Helvetica, sans-serif;
+			color: #8a9ab1;
+		    }
+                    #showAllCreateWhiteBoard a:hover {
+			color: #208fdb;
+			text-decoration:none;
+		    }
+#showAllSharedWhiteBoard {
+
+}
+                    #showAllSharedWhiteBoard a {
+			font-family: Arial, Helvetica, sans-serif;
+			color: #8a9ab1;
+		    }
+                    #showAllSharedWhiteBoard a:hover {
+			color: #208fdb;
+			text-decoration:none;
+		    }
+#whiteboardForm h4 {
+    font-style: Normal !important;
 }

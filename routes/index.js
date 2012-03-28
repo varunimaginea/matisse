@@ -20,12 +20,12 @@ exports.index = function (req, res) {
 	    var userID = session_data.google.user.id;
 	}
 	dbUserID = "google- "+userID;
-	UserModel.find({userID:dbUserID}, function(err,ids) {
+	var loggedInUser = new UserModel();
+	loggedInUser.find({userID:dbUserID}, function(err,ids) {
 	    if (err){
 	    }
 	    else{
-		var user = new UserModel;
-		user.load(ids[0], function (err, props) {
+		loggedInUser.load(ids[0], function (err, props) {
 		    if (err) {
 			console.log(":::" + err);
 			return err;
@@ -33,29 +33,30 @@ exports.index = function (req, res) {
 			
 			console.log(":::" + props);
 		    }
-		    user.getAll('Board', function (err, boardIds) {
+		    
+		    loggedInUser.numLinks('Board', function (err, num) {
 			if (err) {
 			    console.log(err);
 			}
 			else {
-			    console.log(boardIds);
-			}
-		    });
-		    createdNum = user.numLinks('Board', function (err, num) {
-			if (err) {
-			    console.log(err);
-			}
-			else {
+			    loggedInUser.createdNum = num;
 			    console.log(num);
-			    return num;
+			    console.log(loggedInUser.createdNum);
+			    if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
+			    loggedInUser.getAll('Board', function (err, boardIds) {
+				if (err) {
+				    console.log(err);
+				}
+				else {
+				    console.log(boardIds);
+				    res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum })
+				}
+			    });
 			}
 		    });
-
 		});  
 	    }
 	});
-	if (typeof(createdNum) == "undefined") createdNum = 0;
-	res.render('index', { title:'Matisse', createdNum: createdNum })	
     }
     else {
 	res.render('index', { title:'Matisse'  })
@@ -80,10 +81,18 @@ exports.boards = {
             var rnum = Math.floor(Math.random() * chars.length);
             randomstring += chars.substring(rnum, rnum + 1);
         }
+        console.log("s s s s  " + req.body);
         var data = {
-            url:randomstring
+            url:randomstring,
+	    container: req.body.container,
+	    canvasWidth: req.body.canvasWidth,
+	    canvasHeight: req.body.canvasHeight
+	
         };
         console.log("saved board as: " + randomstring);
+        console.log("s s s s  " + req.body.container);
+        console.log("s s s s  " + req.body.canvasWidth);
+        console.log("s s s s  " + req.body.canvasHeight);
         var whiteBoard = new BoardModel();
         whiteBoard.store(data, function (err) {
             if (err === 'invalid') {
@@ -91,11 +100,6 @@ exports.boards = {
 	    } else if (err) {
 		next(err);
 	    } else {
-		res.writeHead(302, {
-		    'Location':randomstring
-		});
-		res.end();
-		
 		var session_data = req.session.auth;
 		if (session_data.twitter) {
 		    var userID = session_data.twitter.user.id;
@@ -133,6 +137,11 @@ exports.boards = {
 			});  
 		    }
 		});
+		res.writeHead(302, {
+		    'Location':'boards/'+randomstring
+		});
+		res.end();
+
 	    }
 	});
     }

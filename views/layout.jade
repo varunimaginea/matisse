@@ -19,10 +19,6 @@ html
                 div(class='row', id='rightheaderContent')
                   div.span4
                     div(class='btn-toolbar', id='rightHeaderButton')
-                      div(class='btn-group', style='padding-left: 15px;padding-right: 10px;')
-                        button(class='numButton') 
-                          h3 2
-                          h6 Currently Active
                       div(class='btn-group', style='padding-right: 10px;')
                         button(class='numButton') 
                           h3 #{createdNum}
@@ -34,13 +30,9 @@ html
                   div(class='span3 pull-left')
                     div.row
                       div.span4
-                        div(class='btn-group')
-                          button(class='launchButton') 
-                            h3 Launch New Whiteboard &raquo;
-                    div.row
-                      div.span4
-                        form(class='navbar-search pull-left', id='navBarSearch')
-                          input(type='text', class='search-query', placeholder='Search whiteboard...')
+                        div(class='btn-group pull-right', id='launchButton')
+                          button(class='btn btn-action', data-toggle='modal', data-target="#whiteboardForm") 
+                            h3 New Whiteboard &raquo;
             - else       
                 div.span1
                   img(src='images/q1.png', alt='"', align='top', width='20', height='20', class='pull-left') 
@@ -71,7 +63,7 @@ html
                         div(class='pull-left') 
                           a #{everyauth.twitter.user.name}!
                         div(class='pull-right')  
-                          h6.pull-right via
+                          h6 via
                           a(class='loginSource pull-right') Twitter
               div(class='row')
                 hr(class='leftContentDivider')
@@ -97,7 +89,7 @@ html
                   div(class='span4')
                     h3 Whats new ?
                   div(class='span4')
-                    div(class='btn-toolbar', id='rightContentButton')
+                    div(class='btn-toolbar pull-left', id='rightContentButton')
                       div(class='btn-group')
                         button(class='greyButton') Latest version: 1.0.1
                       div(class='btn-group')
@@ -126,13 +118,13 @@ html
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                         div(class='item')
                           ul(class='thumbnails')
@@ -140,13 +132,13 @@ html
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                         div(class='item')
                           ul(class='thumbnails')
@@ -154,13 +146,13 @@ html
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/240x240.gif', alt='')
                                 div(class='thumbnailText')
-                                  h4.thumbnailCaption Third Thumbnail label
+                                  p.thumbnailCaption Third Thumbnail label
                                   p.thumbnailDescription Cras justo odio.
                       a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
                       a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
@@ -175,29 +167,29 @@ html
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                        li(class='span2 dashboardRightThumbnail')
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                        li(class='span2 dashboardRightThumbnail')
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                 div.row
-                  div(class='span8 offset7')
-                    a(class='showAllWhiteBoard pull-left', href='#') Show all &raquo;
+                  div(class='span8 offset6', id='showAllCreateWhiteBoard')
+                    a(class='pull-left', href='#') Show all &raquo;
                 div(class='row')
                   hr(class='dashes')
                 div(class='row')
@@ -210,29 +202,29 @@ html
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                        li(class='span2 dashboardRightThumbnail')
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                        li(class='span2 dashboardRightThumbnail')
                          div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
                            img(src='images/140x120.gif', alt='')
                            div(class='thumbnailText')
-                             h4.thumbnailCaption Third Thumbnail label
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
-                             p.thumbnailDescription Cras justo odio.
+                             p.thumbnailCaption Third Thumbnail label
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
+                             p.italic Cras justo odio.
                 div.row
-                  div(class='span8 offset7')
-                         a(class='showAllWhiteBoard pull-left', href='#') Show all &raquo;
+                  div(class='span8 offset6', id='showAllSharedWhiteBoard')
+                         a(class='pull-left', href='#') Show all &raquo;
 
       div(class='row', id='loginFooterDivider')
 
@@ -259,4 +251,42 @@ html
                a(href='/github') Github Repository   
                a(href='/bugtrack') Bug Tracker
              div(class='copyrights') copyright&copy;2012
+        div(class='modal hide fade', id='whiteboardForm', style='display: none;')
+          div(class='modal-header')
+            h4 New whiteboard
+              a(class='close', data-dismiss='modal') x
+          div(class='modal-body')
+            div(id="containerlist", style="padding:15px")
+              form(name='whiteboard', id='whiteboard', class='form-horizontal', method='post', action='/boards/')
+                label(style="font-size: 14px") Container type:
+                select(name='container', id="containers")
+                  option(value="desktop-1024x768", id="desktop-1024x768") Desktop-1024x768
+                  option(value="desktop-1280x1024", id="desktop-1280x1024") Desktop-1280x1024
+                  option(value="iPhone", id="iPhone") iPhone
+                  option(value="iPad", id="iPad") iPad
+                  option(value="BlackBerry", id="BlackBerry") BlackBerry
+                  option(value="browser", id="Browser") Browser
+                div(id="layoutList", style="padding:15px")
+                  label(style="font-size:14px") Template: 
+                  select(name='layout', id="layouts", style="width: 160px")
+                    optgroup(label="content")
+                      option(value="blank", id="blank") Blank
+                      option(value="column_header", id="column_header") Column_header
+                      option(value="column_header_footer", id="column_header_footer") Column_Header_Footer
+                      option(value="two_column_header", id="two_column_header") Two_Column_Header
+                      option(value="two_column_header_footer", id="two_column_header_footer") Two_Column_Header_Footer
+                      option(value="three_column_header", id="three_column_header") Three_Column_Header
+                      option(value="three_column_header_footer", id="three_column_header_footer") Three_Column_Header_Footer
+                div(style="padding:15px")
+                  label(style="font-size: 14px") Canvas Width:
+                  input(name='canvasWidth', id="canvasWidth", type="text", value="1024")
+                  b(style="font-size: 14px") px
+                div(style="padding:15px")
+                  label(style="font-size: 14px") Canvas Height:
+                  input(name='canvasHeight', id="canvasHeight", type="text", value="768")
+                  b(style="font-size: 14px") px
+          div(class='modal-footer')
+            a(href='#', class='btn btn-primary', data-dismiss='modal', id='createWhiteboard') Launch Now
+            a(href='#', class='btn', data-dismiss='modal') Cancel
 script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap-carousel.js')
+script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap-model.js')

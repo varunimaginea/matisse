@@ -85,6 +85,7 @@ application = (function () {
     app.get('/favicon', exports.favicon);
     app.get('/boards', routes.boards.index);
     app.resource('api', routes.api);
+    app.post('/boards', routes.boards.index);
 
     app.resource('boards', {
         show:function (req, res, next) {
