@@ -82,8 +82,8 @@ exports.boards = {
             url:randomstring,
 	    container: req.body.container,
 	    canvasWidth: req.body.canvasWidth,
-	    canvasHeight: req.body.canvasHeight
-	
+	    canvasHeight: req.body.canvasHeight,
+	    name: req.body.whiteboardName
         };
         var whiteBoard = new BoardModel();
         whiteBoard.store(data, function (err) {

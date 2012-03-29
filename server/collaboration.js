@@ -120,7 +120,6 @@ var findInBoardModelforSetContainer = function (randomnString, wb_url, data) {
 						props.container = data.containerName;
 						props.canvasWidth = data.canvasWidth;
 						props.canvasHeight = data.canvasHeight;
- 					        props.name = data.name;
 						board.store(props, function (err) {
 							console.log("Added container to your board successfully!");
 							if(err)

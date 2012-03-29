@@ -27,6 +27,7 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 				containers.canvasWidth = data.canvasWidth;
 				containers.canvasHeight = data.canvasHeight;
 				containers.setContainer(matisse.containerName, 'old', containers.canvasWidth, containers.canvasHeight);
+			    $('#boardName').text(data.name);
 				return;
 			} 
 			/* if data is not available or user logs in for the first time, show him the list of container names and layouts to choose */
@@ -47,7 +48,8 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			}
 			if(matisse.userName == null) {
 				matisse.userName = userInfo[1].name;
-				$('#user').append('<span>Welcome '+matisse.userName+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| </span>')
+			    	matisse.userProfilePic = userInfo[1].profile_image_url;
+				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" style="width:42px;height:53px;" >')
 			}
 		}
 		matisse.comm = comm;
