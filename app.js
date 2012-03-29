@@ -92,9 +92,18 @@ application = (function () {
 
     app.resource('boards', {
         show:function (req, res, next) {
-            if (req.params.id != "favicon") {
-                res.sendfile(__dirname + '/board2.html');
-            }
+	    if (req.loggedIn) {
+		if (req.params.id != "favicon") {
+                    res.sendfile(__dirname + '/board2.html');
+		}
+	    }
+	    else {
+		console.log(req.headers);
+		res.writeHead(302, {
+		    'Location': 'http://'+req.headers.host
+		});
+		res.end();
+	    }
         }
     });
 
