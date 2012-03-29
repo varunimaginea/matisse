@@ -740,7 +740,7 @@ dashboardLeftThumbnail {
 .shape-holder{border-bottom:1px groove #0E1215;cursor:pointer;}
 .show{display:block;}
 .hide{display:none;}
-.b-userpic{width:32px;height:32px;margin:5px 5px 0;}
+.b-userpic{width:32px;height:32px;margin:6px 5px 0;border-radius:2px;}
 /******** Overriding few classes of short scroll -Start ********/
 .scroll-up-btn{background:url('../images/scroll_up.png') no-repeat;width:15px;height:15px;display:block;}
 .scroll-down-btn{background:url('../images/scroll_down.png') no-repeat;width:15px;height:15px;display:block;margin-top:-1px;}
