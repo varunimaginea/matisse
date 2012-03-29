@@ -98,7 +98,6 @@ application = (function () {
 		}
 	    }
 	    else {
-		console.log(req.headers);
 		res.writeHead(302, {
 		    'Location': 'http://'+req.headers.host
 		});

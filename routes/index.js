@@ -40,15 +40,12 @@ exports.index = function (req, res) {
 			}
 			else {
 			    loggedInUser.createdNum = num;
-			    console.log(num);
-			    console.log(loggedInUser.createdNum);
 			    if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
 			    loggedInUser.getAll('Board', function (err, boardIds) {
 				if (err) {
 				    console.log(err);
 				}
 				else {
-				    console.log(boardIds);
 				    res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum })
 				}
 			    });
@@ -81,7 +78,6 @@ exports.boards = {
             var rnum = Math.floor(Math.random() * chars.length);
             randomstring += chars.substring(rnum, rnum + 1);
         }
-        console.log("s s s s  " + req.body);
         var data = {
             url:randomstring,
 	    container: req.body.container,
@@ -89,10 +85,6 @@ exports.boards = {
 	    canvasHeight: req.body.canvasHeight
 	
         };
-        console.log("saved board as: " + randomstring);
-        console.log("s s s s  " + req.body.container);
-        console.log("s s s s  " + req.body.canvasWidth);
-        console.log("s s s s  " + req.body.canvasHeight);
         var whiteBoard = new BoardModel();
         whiteBoard.store(data, function (err) {
             if (err === 'invalid') {
@@ -162,7 +154,6 @@ exports.api = {
             if (len === 0) {
                 return res.json(shapes);
             }
-            //console.log(ids);
             ids.forEach(function (id) {
                 var shape = new ShapesModel();
                 shape.load(id, function (err, props) {
@@ -184,4 +175,3 @@ exports.api = {
         });
     }
 }
-
