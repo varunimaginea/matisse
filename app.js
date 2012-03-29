@@ -86,6 +86,9 @@ application = (function () {
     app.get('/boards', routes.boards.index);
     app.resource('api', routes.api);
     app.post('/boards', routes.boards.index);
+    app.get('/about', function (req, res, next) {
+	res.sendfile(__dirname + '/about.html');
+    });
 
     app.resource('boards', {
         show:function (req, res, next) {

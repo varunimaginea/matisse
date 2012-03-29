@@ -47,10 +47,6 @@ p {
     font-size: 12px;
 }
 
-label {
-    font-family: Verdana, Georgia, Serif;
-}
-
 .hidden {
     visibility: hidden;
 }
@@ -66,18 +62,6 @@ label {
 
 textarea {
     resize: none;
-}
-
-label {
-    width: 60px;
-    line-height: 23px;
-    padding-left: 5px;
-    margin: 5px;
-    font-size: 14px;
-    /*  border: 1px solid #000;*/
-    float: left;
-    /*  background-color:#eef;*/
-    color: #003;
 }
 
 /*color {
