@@ -5,7 +5,7 @@ body {
     color: #666;
     font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
-    margin:0px; overflow:hidden;
+    margin:0px;
 }
 
 a {
@@ -738,7 +738,7 @@ dashboardLeftThumbnail {
 .p-header.open .p-icon{background:url('../images/expand.png') no-repeat;width:9px;height:5px;float:right;margin:-12px 5px 0 0;}
 .p-header.close .p-icon{background:url('../images/collapse.png') no-repeat;width:9px;height:5px;float:right;margin:-12px 5px 0 0;}
 .p-cntr{background-color:#464D57;display:none;}
-.shape-holder{border-bottom:2px groove #0E1215;cursor:pointer;}
+.shape-holder{border-bottom:1px groove #0E1215;cursor:pointer;}
 .show{display:block;}
 .hide{display:none;}
 /******** Overriding few classes of short scroll -Start ********/
@@ -785,8 +785,8 @@ dashboardLeftThumbnail {
 .rightdiv .bottom{position:absolute;bottom:0px;width:100%;display:block;max-height:65%;background:#464D57;}
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
 .board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: bottom left;-webkit-transform: rotate(-270deg);-webkit-transform-origin: bottom left;font-size: 22px;margin: -24px 1px 0 14px;color:#E3E6E9;letter-spacing:1px;width:200px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;}
-.menu-holder{border-top: 2px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
-.menu-holder:hover{background-color:#036bd5;border-top: 2px groove #000000;color:#FFFFFF;}
+.menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
+.menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
 .m-selected{background-color:#036bd5;}
 .m-icon{background:url('../images/white_menu_24.png') no-repeat;width:28px;height:28px;background-position:0 0;margin:3px auto 0;}
