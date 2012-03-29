@@ -4,9 +4,9 @@
  * Time: 11:16 AM
  * About matisse.ui : matisse.ui is the module to set lall ui related things like canvas, accordian, carousal etc.
  */
-define(["matisse"], function (matisse) {
+define(["matisse","matisse.action-bar"], function (matisse,mActionBar) {
 	"use strict";
-	var ui = {
+	var ui = { 
 		/** width and height of panels for resize */
 		bodyWidth: null,
 		bodyHeight: null,
@@ -158,7 +158,7 @@ define(["matisse"], function (matisse) {
 		 * @param palette_DisplayName
 		 */
 		updateAccordian: function (palette_DisplayName) {
-			$("#accordion").append('<div class="p-header close" data-accName="'+ palette_DisplayName +'"><div class="p-text">' + palette_DisplayName + '</div><div class="p-icon"></div></div><div  class="p-cntr" data-paletteName="'+palette_DisplayName+'" id="' + palette_DisplayName + '"></div>');
+			$("#accordion").append('<div class="p-header p-close" data-accName="'+ palette_DisplayName +'"><div class="p-text">' + palette_DisplayName + '</div><div class="p-icon"></div></div><div  class="p-cntr" data-paletteName="'+palette_DisplayName+'" id="' + palette_DisplayName + '"></div>');
 		},
 		
 		/**

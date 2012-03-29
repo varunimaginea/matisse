@@ -6,7 +6,7 @@
  * Uses 'Fabric.js' library for client side
  * Node.js and  Node Package Manager (NPM) for server side - JavaScript environment that uses an asynchronous event-driven model.
  */
-define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.palettes.properties", "matisse.toolbuttons.handlers", "matisse.comm","../components/ui.imaginea.accordion"], function (matisse, ui, util, mfabric, palettes, events,  properties, toolHandlers, comm, CustomAccordion) {
+define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.palettes", "matisse.events", "matisse.palettes.properties", "matisse.toolbuttons.handlers", "matisse.comm","../components/ui.imaginea.accordion","matisse.action-bar"], function (matisse, ui, util, mfabric, palettes, events,  properties, toolHandlers, comm, CustomAccordion,mActionBar) {
 	"use strict";
     /**
      *	create canvas object
@@ -42,10 +42,13 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
-
+		
+	    mActionBar.initalize();		    
+	
             toolHandlers.initChatWindow();
 
             this.addObservers();
+	    //TODO - Refactor
             toolHandlers.saveButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
@@ -140,8 +143,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				"cntrId":"accordion",  
 				"headerClass":"p-header",
 				"sectionClass":"p-cntr",
-				"headerOpenClass":"open",
-				"headerCloseClass":"close"
+				"headerOpenClass":"p-open",
+				"headerCloseClass":"p-close"
 			});
 			$("#accordion").shortscroll();
 			

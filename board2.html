@@ -5,10 +5,13 @@
         <title>Matisse</title>
         <meta name="description" content="A shared whiteboard using HTML5 Canvas with server on socket.io and node.js"/>
         <!-- Third Party CSS files -->
-        <link type="text/css" href="/stylesheets/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="/stylesheets/farbtastic.css" type="text/css"/>
+
+        <link type="text/css" href="/stylesheets/thirdparty/newmat/jquery-ui-1.8.16.newmat.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="/stylesheets/thirdparty/farbtastic/farbtastic.css" type="text/css"/>
         <!-- Short Scroll CSS files -->
         <link rel="stylesheet" href="/stylesheets/thirdparty/shortscroll/jquery.jb.shortscroll.css" type="text/css"/>
+        <!-- Bootstrap CSS files -->
+        <link type="text/css" href="/stylesheets/thirdparty/bootstrap/bootstrap.css" rel="stylesheet"/>
         <!-- Development CSS files -->
         <link rel="stylesheet" href="/stylesheets/style.css"/>
         <link rel="stylesheet" href="/stylesheets/board.css"/>
@@ -46,34 +49,39 @@
 			<div class="board-name">Whiteboard Name Name</div>
 		</div>
 		<div class="bottom">
-			<div class="menu-holder" data-action='save'>
+			<div class="menu-holder m-popover" data-action='save'>
 				<div class="m-icon m-save"></div>
 				<div class="m-label">Save</div>				
 			</div>				
-			<div class="menu-holder" data-action='edit'>
+			<div class="menu-holder m-popover" data-action='edit' data-content="Edit Comming Soon..." title="Edit">
 				<div class="m-icon m-edit"></div>
 				<div class="m-label">Edit</div>				
 			</div>	
-			<div class="menu-holder" data-action='view'>
+			<div class="menu-holder m-popover" data-action='view' data-content="View Comming Soon..." title="View">
 				<div class="m-icon m-view"></div>
 				<div class="m-label">View</div>				
 			</div>	
-			<div class="menu-holder" data-action='share'>
+			<div class="menu-holder m-popover" data-action='share' data-content="Share Comming Soon..." title="Share">
 				<div class="m-icon m-share"></div>
 				<div class="m-label">Share</div>				
 			</div>	
-			<div class="menu-holder"data-action='discuss'>
+			<div class="menu-holder" data-action='discuss' >
 				<div class="m-icon m-discuss"></div>
 				<div class="m-label">Discuss</div>				
 			</div>	
 			<div class="menu-holder" data-action='report'>
-				<div class="m-icon m-report"></div>
-				<div class="m-label">Report</div>				
+				<a href="http://github.com/Imaginea/matisse/issues" target="_blank">
+					<div class="m-icon m-report"></div>
+					<div class="m-label">Report</div>				
+				</a>
 			</div>	
 			<div class="menu-holder" data-action='help'>
-				<div class="m-icon m-help"></div>
-				<div class="m-label">Help</div>				
+				<a href="http://www.google.com" target="_blank">
+					<div class="m-icon m-help"></div>
+					<div class="m-label">Help</div>				
+				</a>
 			</div>	
+
 		</div>
 	    </div>
         </div>
@@ -98,7 +106,9 @@
         <script src="/javascripts/thirdparty/fabric/fabric_all.js"></script>
         <script src="/javascripts/thirdparty/fabric/Delicious_500.font.js"></script>
         <script type="text/javascript" src="/javascripts/thirdparty/jqueryui/jquery-ui.min.js"></script>
-        <!-- Color picker -->
+	<!-- Bootstrap picker -->
+	<script type="text/javascript" src="/javascripts/thirdparty/bootstrap/bootstrap.js"></script>
+	<!-- Color picker -->
         <script src="/javascripts/thirdparty/fabric/farbtastic.js" type="text/javascript"></script>
         <!-- Short Scroll JS files -->
         <script src="/javascripts/thirdparty/shortscroll/jquery.jb.shortscroll.js" type="text/javascript"></script>

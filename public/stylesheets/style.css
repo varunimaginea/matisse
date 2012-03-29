@@ -741,18 +741,18 @@ dashboardLeftThumbnail {
 }
 
 /***  New Layout CSS **/
-#containerDiv {overflow: auto;background-image: url('../images/canvas_bg.gif');}
-#containerBody {overflow: auto;position: relative;margin:10px auto;}
+#containerDiv {overflow: auto;background-image: url('../images/canvas_bg.gif');height:100%;}
+#containerBody {overflow: auto;position: relative;margin:10px auto;height:100%;}
 #leftdiv{float:left;width:105px;}
-#outer{width:100%;background-color:#464D57;}
+#outer{background-color:#464D57;height:100%;}
 
 
 .new-logo-cntr{background-color:#222629;padding:5px 5px 10px 5px;border-bottom:1px solid #0E1215; }
 .new-logo{background:url('../images/logo_white.png') no-repeat;width:95px;height:24px;}
 .p-header{background-color: #2A2F35;border-bottom:1px solid #0E1215;cursor:pointer;}
-.p-text{color: #BCCED0;font-size: 10px;padding: 5px 0 3px 5px;text-transform: uppercase;font-family: Trebuchet MS;width:75%;}
-.p-header.open .p-icon{background:url('../images/expand.png') no-repeat;width:9px;height:5px;float:right;margin:-12px 5px 0 0;}
-.p-header.close .p-icon{background:url('../images/collapse.png') no-repeat;width:9px;height:5px;float:right;margin:-12px 5px 0 0;}
+.p-text{color: #BCCED0;font-size: 10px;padding: 2px 0 2px 5px;text-transform: uppercase;font-family: Trebuchet MS;width:75%;}
+.p-header.p-open .p-icon{background:url('../images/expand.png') no-repeat;width:9px;height:5px;float:right;margin:-13px 5px 0 0;}
+.p-header.p-close .p-icon{background:url('../images/collapse.png') no-repeat;width:9px;height:5px;float:right;margin:-13px 5px 0 0;}
 .p-cntr{background-color:#464D57;display:none;}
 .shape-holder{border-bottom:1px groove #0E1215;cursor:pointer;}
 .show{display:block;}
@@ -796,9 +796,12 @@ dashboardLeftThumbnail {
 /************** Palette Shapes -- END -- ****************/
 
 /************** Right Hand Side Menu Actions -- START -- ****************/
-.rightdiv {width:52px;float:right;height:100%;background:#464D57;}
+.rightdiv {width:52px;float:right;height:100%;}
 .rightdiv .top{position:absolute;top:0px;max-height:35%;}
 .rightdiv .bottom{position:absolute;bottom:0px;width:100%;display:block;max-height:65%;background:#464D57;}
+.rightdiv .bottom a,.rightdiv .bottom a:link,.rightdiv .bottom a:visited,.rightdiv .bottom a:hover,.rightdiv .bottom a:active{
+	color:#B8C2CB;text-decoration:none;
+}
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
 .board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: bottom left;-webkit-transform: rotate(-270deg);-webkit-transform-origin: bottom left;font-size: 22px;margin: -24px 1px 0 14px;color:#E3E6E9;letter-spacing:1px;width:200px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;}
 .menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
