@@ -12,6 +12,7 @@ application = (function () {
     var Nohm = require('nohm').Nohm;
     var BoardModel = require(__dirname + '/models/BoardModel.js');
     var ShapesModel = require(__dirname + '/models/ShapesModel.js');
+    var UserModel = require(__dirname + '/models/UserModel.js');
     var redis = require("redis");
     var redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
     var userInfo = {};
@@ -94,7 +95,65 @@ application = (function () {
         show:function (req, res, next) {
 	    if (req.loggedIn) {
 		if (req.params.id != "favicon") {
-                    res.sendfile(__dirname + '/board2.html');
+		    var whiteBoard = new BoardModel();
+		    console.log(req.params.board);
+		    whiteBoard.find({url: req.params.board}, function (err, ids) {
+			if (err) {
+			    console.log(err);
+			}
+			else {
+			    var session_data = req.session.auth;
+			    if (session_data.twitter) {
+				var userID = session_data.twitter.user.id;
+			    }
+			    else if (session_data.facebook) {
+				var userID = session_data.facebook.user.id;
+			    }
+			    else if (session_data.google) {
+				var userID = session_data.google.user.id;
+			    }
+			    dbUserID = "google- "+userID;
+			    console.log(ids);
+			    whiteBoard.load(ids[0], function(id) {
+			    });
+			    UserModel.find({userID:dbUserID}, function(err,ids) {
+				if (err){
+				}
+				else{
+				    var user = new UserModel;
+				    user.load(ids[0], function (err, props) {
+					if (err) {
+					    return err;
+					} else {                         
+					    
+					    console.log(":::" + props);
+					}
+
+					console.log(whiteBoard);
+					console.log(user);
+					console.log(whiteBoard.belongsTo(user, 'ownedBoard'));
+					console.log(whiteBoard.belongsTo(user, 'sharedBoard'));
+					if (whiteBoard.belongsTo(user, 'ownedBoard') || whiteBoard.belongsTo(user, 'sharedBoard')) {
+					}
+					else {
+					    user.link(whiteBoard, 'sharedBoard');
+					    user.save(function(err) {
+						if (err) {
+						    console.log(err);
+						}
+						else {
+						    console.log("relation is saved");
+						}				    
+					    });
+					}
+				    });  
+				}
+			    });
+			    
+			}
+		    });
+		
+		    res.sendfile(__dirname + '/board2.html'); 
 		}
 	    }
 	    else {
@@ -105,7 +164,7 @@ application = (function () {
 	    }
         }
     });
-
+    
     app.use(use);
     app.listen(8000);
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
