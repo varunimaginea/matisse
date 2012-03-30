@@ -740,10 +740,11 @@ dashboardLeftThumbnail {
 .shape-holder{border-bottom:1px groove #0E1215;cursor:pointer;}
 .show{display:block;}
 .hide{display:none;}
+.b-userpic{width:32px;height:32px;margin:6px 5px 0;border-radius:2px;}
 /******** Overriding few classes of short scroll -Start ********/
 .scroll-up-btn{background:url('../images/scroll_up.png') no-repeat;width:15px;height:15px;display:block;}
 .scroll-down-btn{background:url('../images/scroll_down.png') no-repeat;width:15px;height:15px;display:block;margin-top:-1px;}
-.scroll-middle-btn{background:url('../images/scroll_mid.png') repeat-y;height:25px;width:15px;display:block;margin-left:1px;margin-top:-1px;}
+.scroll-middle-btn{background:url('../images/scroll_mid.png') repeat-y;height:50px;width:10px;display:block;margin-left:1px;margin-top:-1px;border-radius:5px;}
 .jb-shortscroll-marker{height:57px !important;}
 .jb-shortscroll-scrollbar{box-shadow: none !important;height:57px !important;border:1px solid transparent !important;}
 .jb-shortscroll-scrollbar-btn{border:1px solid transparent !important;}
@@ -781,12 +782,12 @@ dashboardLeftThumbnail {
 /************** Right Hand Side Menu Actions -- START -- ****************/
 .rightdiv {width:52px;float:right;height:100%;}
 .rightdiv .top{position:absolute;top:0px;max-height:35%;}
-.rightdiv .bottom{position:absolute;bottom:0px;width:100%;display:block;max-height:65%;background:#464D57;}
+.rightdiv .bottom{position:absolute;bottom:0px;width:52px;display:block;max-height:65%;background:#464D57;}
 .rightdiv .bottom a,.rightdiv .bottom a:link,.rightdiv .bottom a:visited,.rightdiv .bottom a:hover,.rightdiv .bottom a:active{
 	color:#B8C2CB;text-decoration:none;
 }
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
-.board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: bottom left;-webkit-transform: rotate(-270deg);-webkit-transform-origin: bottom left;font-size: 22px;margin: -24px 1px 0 14px;color:#E3E6E9;letter-spacing:1px;width:200px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;}
+.board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: bottom left;-webkit-transform: rotate(-270deg);-webkit-transform-origin: bottom left;font-size: 22px;margin: -20px 1px 0 16px;color:#E3E6E9;letter-spacing:1px;width:200px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;}
 .menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
 .menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
@@ -800,4 +801,12 @@ dashboardLeftThumbnail {
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
+
+/************** Overloading Dialog Styles  -- Start -- ****************/
+.ui-widget-header{background:#046Ad6;border-radius:5px 5px 0 0;}
+.ui-dialog{padding:0px !important;box-shadow:1px 1px 1px #000000}
+.ui-widget-content{border-width:0px !important;background:#F7F7F9;}
+.ui-dialog-content{border:1px solid #EEEEEE !important;}
+.ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
+/************** Overloading Dialog Styles  -- End -- ****************/
 

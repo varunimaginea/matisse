@@ -49,7 +49,7 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			if(matisse.userName == null) {
 				matisse.userName = userInfo[1].name;
 			    	matisse.userProfilePic = userInfo[1].profile_image_url;
-				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" style="width:42px;height:53px;" >')
+				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>')
 			}
 		}
 		matisse.comm = comm;

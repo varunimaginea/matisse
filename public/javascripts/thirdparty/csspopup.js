@@ -43,6 +43,10 @@ function window_pos(popUpDivVar, closeDivVar, popWidthVar, popHeightVar) {
 			window_width = document.body.parentNode.scrollWidth;
 		}
 	}
+
+	//Quick Fix -- TODO Fix it properly
+	window_width = document.body.parentNode.clientWidth;
+
 	var popUpDiv = document.getElementById(popUpDivVar);
 	window_width=window_width/2-popWidthVar/2;//150 is half popup's width
 	popUpDiv.style.left = window_width + 'px';
