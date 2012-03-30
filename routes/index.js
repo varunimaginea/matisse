@@ -10,51 +10,118 @@ exports.index = function (req, res) {
     var session_data = req.session.auth;
     var createdNum;
     if (session_data) {
-	if (session_data.twitter) {
-	    var userID = session_data.twitter.user.id;
+	if (typeof(session_data.twitter) != "undefined") {
+	    userID = session_data.twitter.user.id;
 	}
 	else if (session_data.facebook) {
-	    var userID = session_data.facebook.user.id;
+	    userID = session_data.facebook.user.id;
 	}
 	else if (session_data.google) {
-	    var userID = session_data.google.user.id;
+	    userID = session_data.google.user.id;
 	}
-	dbUserID = "google- "+userID;
-	var loggedInUser = new UserModel();
-	loggedInUser.find({userID:dbUserID}, function(err,ids) {
-	    if (err){
-	    }
-	    else{
-		loggedInUser.load(ids[0], function (err, props) {
-		    if (err) {
-			console.log(":::" + err);
-			return err;
-		    } else {                         
-			
-			console.log(":::" + props);
-		    }
-		    
-		    loggedInUser.numLinks('Board', function (err, num) {
+	if (typeof(userID) != "undefined") {
+	    dbUserID = "google- "+userID;
+	    var loggedInUser = new UserModel();
+	    loggedInUser.find({userID:dbUserID}, function(err,ids) {
+		if (err){
+		}
+		else{
+		    loggedInUser.load(ids[0], function (err, props) {
 			if (err) {
-			    console.log(err);
+			    console.log(":::" + err);
+
+			} else {                         
+			    
+			    console.log(":::" + props);
 			}
-			else {
-			    loggedInUser.createdNum = num;
-			    if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
-			    loggedInUser.getAll('Board', function (err, boardIds) {
-				if (err) {
-				    console.log(err);
-				}
-				else {
-				    res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum })
-				}
-			    });
-			}
+			
+			loggedInUser.numLinks('Board', 'ownedBoard', function (err, num) {
+			    if (err) {
+				console.log(err);
+			    }
+			    else {
+				loggedInUser.createdNum = num;
+				if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
+				loggedInUser.getAll('Board', 'ownedBoard', function (err, boardIds) {
+				    if (err) {
+					console.log(err);
+				    }
+				    else {
+					var boards = [];
+					var len = boardIds.length;
+					var count = 0;
+					if (len === 0) {} else {
+					    boardIds.forEach(function (id) {
+						var board = new BoardModel();
+						board.load(id, function (err, props) {
+						    if (err) {
+							console.log(err);
+						    }
+						    boards.push({
+							id: this.id,
+							url: props.url,
+							name: props.name,
+							container: props.container,
+							canvasWidth: props.canvasWidth,
+							canvasHeight: props.canvasHeight
+						    });
+						});
+					    });
+					}
+					loggedInUser.ownedBoards = boards;
+					loggedInUser.numLinks('Board', 'sharedBoard', function (err, num) {
+					    if (err) {
+						console.log(err);
+					    }
+					    else {
+						loggedInUser.sharedNum = num;
+						if (typeof(loggedInUser.sharedNum) == "undefined") loggedInUser.sharedNum = 0;
+						loggedInUser.getAll('Board', 'sharedBoard', function (err, boardIds) {
+						    if (err) {
+							console.log(err);
+						    }
+						    else {
+							var sharedboards = [];
+							var len = boardIds.length;
+							var count = 0;
+							if (len === 0) {} else {
+							    boardIds.forEach(function (id) {
+								var board = new BoardModel();
+								board.load(id, function (err, props) {
+								    if (err) {
+									console.log(err);
+								    }
+								    sharedboards.push({
+									id: this.id,
+									url: props.url,
+									name: props.name,
+									container: props.container,
+									canvasWidth: props.canvasWidth,
+									canvasHeight: props.canvasHeight
+								    });
+								    loggedInUser.sharedBoards = sharedboards;
+								});
+								console.log(loggedInUser);
+							    });
+							    console.log(loggedInUser.sharedboards);
+							    res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum, sharedNum: loggedInUser.sharedNum, ownedBoards:  loggedInUser.ownedBoards, sharedBoards: loggedInUser.sharedBoards})
+
+							}
+						    }
+						});
+					    }
+					});
+				    }
+				});
+			    }
+			});
 		    });
-		});  
-	    }
-	});
+		}
+	    });  
+	}
+	
     }
+    
     else {
 	res.render('index', { title:'Matisse'  })
     }
@@ -117,7 +184,7 @@ exports.boards = {
 			    }
 			    whiteBoard.load(whiteBoard.id, function(id) {
 			    });
-			    user.link(whiteBoard);
+			    user.link(whiteBoard, 'ownedBoard');
 			    user.save(function(err) {
 				if (err) {
 				    console.log(err);
