@@ -10,15 +10,18 @@ define( function () {
 				selfObj.handleAction.call(selfObj,e);
 			});				
 
-			//get all the elements which have popover functionality		
-			this.popoverElements = $(bottomEle).find(".m-popover");
-			
 			$(this.popoverElements).popover({"placement":"left"});
 			$(".user-image").popover({"placement":"bottom",
 				content:function(){
 					return "<h1> Hello User, User Data is comming soon! </h1>";			
 				},
 				"trigger":"manual"
+			});
+			
+			//Attaching the Events for small user pic
+			$("#userProfilePic").click(function(e){
+				selfObj.showUserInfoSection();
+				return false;
 			});
 		},
 		/*closeAllPopovers:function(){
@@ -64,7 +67,15 @@ define( function () {
 			var data = canvas.toDataURL('png', 0.1);
 			popup('popUpDiv', 'closediv', 600, 600);
 			$("#result").html('<img src=' + data + ' />');
-		}		
+		},
+		showUserInfoSection:function(){
+			$(".userInfoSec").fadeIn();
+		},		
+		hideUserInfoSection:function(){
+			if($(".userInfoSec:visible")){
+				$(".userInfoSec").fadeOut();
+			}
+		}
 	}
 	return actionBar;
 });	
