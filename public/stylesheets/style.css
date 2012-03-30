@@ -782,7 +782,7 @@ dashboardLeftThumbnail {
 /************** Right Hand Side Menu Actions -- START -- ****************/
 .rightdiv {width:52px;float:right;height:100%;}
 .rightdiv .top{position:absolute;top:0px;max-height:35%;}
-.rightdiv .bottom{position:absolute;bottom:0px;width:100%;display:block;max-height:65%;background:#464D57;}
+.rightdiv .bottom{position:absolute;bottom:0px;width:52px;display:block;max-height:65%;background:#464D57;}
 .rightdiv .bottom a,.rightdiv .bottom a:link,.rightdiv .bottom a:visited,.rightdiv .bottom a:hover,.rightdiv .bottom a:active{
 	color:#B8C2CB;text-decoration:none;
 }
