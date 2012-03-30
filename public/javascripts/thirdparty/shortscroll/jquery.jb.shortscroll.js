@@ -63,7 +63,7 @@
 				o = self.options,
 				el = self.element,
                 
-                wrapper = $('<div class="jb-shortscroll-wrapper"><div class="jb-shortscroll-track"><div class="jb-shortscroll-scrollbar"><div class="jb-shortscroll-scrollbar-btn-up jb-shortscroll-scrollbar-btn ui-corner-top" data-dir="up"><span class="scroll-up-btn"></span></div><div class="scroll-middle-btn"></div><div class="jb-shortscroll-scrollbar-btn-down jb-shortscroll-scrollbar-btn ui-corner-bottom" data-dir="down"><span class="scroll-down-btn"></span></div></div></div><div class="jb-shortscroll-marker ui-corner-all"></div><div class="jb-shortscroll-stopper ui-corner-all"></div></div>').insertAfter(el);
+                wrapper = $('<div class="jb-shortscroll-wrapper"><div class="jb-shortscroll-track"><div class="jb-shortscroll-scrollbar"><div class="jb-shortscroll-scrollbar-btn-up jb-shortscroll-scrollbar-btn ui-corner-top" data-dir="up"><!--span class="scroll-up-btn"></span--></div><div class="scroll-middle-btn"></div><div class="jb-shortscroll-scrollbar-btn-down jb-shortscroll-scrollbar-btn ui-corner-bottom" data-dir="down"><!--span class="scroll-down-btn"></span--></div></div></div><div class="jb-shortscroll-marker ui-corner-all"></div><div class="jb-shortscroll-stopper ui-corner-all"></div></div>').insertAfter(el);
                 
             self._viewPort = el.innerHeight();
             

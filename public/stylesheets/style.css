@@ -744,7 +744,7 @@ dashboardLeftThumbnail {
 /******** Overriding few classes of short scroll -Start ********/
 .scroll-up-btn{background:url('../images/scroll_up.png') no-repeat;width:15px;height:15px;display:block;}
 .scroll-down-btn{background:url('../images/scroll_down.png') no-repeat;width:15px;height:15px;display:block;margin-top:-1px;}
-.scroll-middle-btn{background:url('../images/scroll_mid.png') repeat-y;height:25px;width:15px;display:block;margin-left:1px;margin-top:-1px;}
+.scroll-middle-btn{background:url('../images/scroll_mid.png') repeat-y;height:50px;width:10px;display:block;margin-left:1px;margin-top:-1px;border-radius:5px;}
 .jb-shortscroll-marker{height:57px !important;}
 .jb-shortscroll-scrollbar{box-shadow: none !important;height:57px !important;border:1px solid transparent !important;}
 .jb-shortscroll-scrollbar-btn{border:1px solid transparent !important;}
@@ -801,4 +801,12 @@ dashboardLeftThumbnail {
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
+
+/************** Overloading Dialog Styles  -- Start -- ****************/
+.ui-widget-header{background:#046Ad6;border-radius:5px 5px 0 0;}
+.ui-dialog{padding:0px !important;box-shadow:1px 1px 1px #000000}
+.ui-widget-content{border-width:0px !important;background:#F7F7F9;}
+.ui-dialog-content{border:1px solid #EEEEEE !important;}
+.ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
+/************** Overloading Dialog Styles  -- End -- ****************/
 

@@ -32,30 +32,20 @@ define( function () {
 				switch(ele.data().action){
 					case "save" : this.saveHandler();
 						      break;
-					case "edit" : console.log("edit");
-							
-						      break;
+					case "edit" : break;
 					case "discuss" : this.discussHandler();
 							break;
-					case "report" : console.log("report"); 
-		
-							break;
-					case "help" : console.log("help"); 
-		
-						      break;
-					case "view" : console.log("view"); 
-
-						      break;
-					case "share" : console.log("share"); 
-
-						       break;
+					case "report" :break;
+					case "help" : break;
+					case "view" : break;
+					case "share" : break;
 				}				
 			}
 		},
 		discussHandler:function(){
 		    //TODO Refactor with Bootstrap Dialog		
          	    $('#chatdialog').dialog({
-			width: 200
+			width: 250
 		    });
 		    var dialog_width = $("#chatdialog").dialog("option", "width");
 		    var win_width = $(window).width();
@@ -69,7 +59,7 @@ define( function () {
 		    });
 		},
 		saveHandler:function(){
-			//TODO
+			//TODO Refactor with Bootstrap Dialog
 			canvas.deactivateAll();
 			var data = canvas.toDataURL('png', 0.1);
 			popup('popUpDiv', 'closediv', 600, 600);
