@@ -162,34 +162,17 @@ html
                     h3.dashboardRightContentHeading Owned by me
                 div(class='row')
                   div(class='span8 columns whiteboardList')
-                     ul(class='thumbnails')
-                       li(class='span2 dashboardLeftThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                       li(class='span2 dashboardRightThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                       li(class='span2 dashboardRightThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
+                    ul(class='thumbnails')
+                    for board in ownedBoards
+                      li(class='span2 dashboard#{ownedBoards.indexOf(board) == 0 || ownedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{ownedBoards.indexOf(board) > 2 ? "ownedBoardHide" : ""}')
+                        div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                          a(href='/boards/#{board.url}', target='_blank')
+                            img(src='images/140x120.gif', alt='')
+                          div(class='thumbnailText')
+                            p.thumbnailCaption #{board.name}
                 div.row
                   div(class='span8 offset6', id='showAllCreateWhiteBoard')
-                    a(class='pull-left', href='#') Show all &raquo;
+                    a(class='pull-left', href='#', id='showOwned') Show all
                 div(class='row')
                   hr(class='dashes')
                 div(class='row')
@@ -224,7 +207,7 @@ html
                              p.italic Cras justo odio.
                 div.row
                   div(class='span8 offset6', id='showAllSharedWhiteBoard')
-                         a(class='pull-left', href='#') Show all &raquo;
+                         a(class='pull-left', href='#') Show all
 
       div(class='row', id='loginFooterDivider')
 
@@ -299,3 +282,4 @@ html
             a(href='#', class='btn', data-dismiss='modal') Cancel
 script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap-carousel.js')
 script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap-modal-dialog.js')
+script(type='text/javascript', src='/javascripts/matisse/showAll.js')

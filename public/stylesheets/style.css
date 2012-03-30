@@ -722,6 +722,9 @@ dashboardLeftThumbnail {
 #whiteboardForm h4 {
     font-style: Normal !important;
 }
+.ownedBoardHide {
+    display : none;
+}
 
 /***  New Layout CSS **/
 #containerDiv {overflow: auto;background-image: url('../images/canvas_bg.gif');height:100%;}
