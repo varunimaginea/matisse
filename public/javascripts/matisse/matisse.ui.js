@@ -35,6 +35,13 @@ define(["matisse","matisse.action-bar"], function (matisse,mActionBar) {
 			//this.leftPanelHeight = this.bodyHeight - this.topPanelHeight;
 			//this.canvasWidth = 800;//this.bodyWidth - this.leftPanelWidth;
 			//this.canvasHeight = 600;//this.bodyHeight - this.topPanelHeight - 23;
+
+			$(window).click(function(e){
+				var userInfoSecObj = $(e.target).closest(".userInfoSec")[0]		 
+				if(!userInfoSecObj){
+					mActionBar.hideUserInfoSection();									
+				}				
+			});
 		},
 		/**
 		 * method to resize panels on resize of browser window
@@ -114,7 +121,7 @@ define(["matisse","matisse.action-bar"], function (matisse,mActionBar) {
 			    thisObj.resizeWindow();
 			    //thisObj.setCanvasSize();
 				thisObj.drawHVLines();
-			});
+			});			
 		},
 		/**
 		 *  Reset Current seltected tool Icon when object is drawn on canvas

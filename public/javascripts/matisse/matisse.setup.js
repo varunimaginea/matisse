@@ -49,7 +49,9 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			if(matisse.userName == null) {
 				matisse.userName = userInfo[1].name;
 			    	matisse.userProfilePic = userInfo[1].profile_image_url;
-				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>')
+				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>');
+				$('#userProfilePicBig').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic-big"></img>');
+				$('#userName').html(matisse.userName);
 			}
 		}
 		matisse.comm = comm;
