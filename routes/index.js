@@ -27,7 +27,7 @@ exports.index = function (req, res) {
 			if (err) {
 			    console.log("step2");
 			    console.log("::" + err);
-			    res.render('index', { title:'Matisse'  })
+			    res.render('index', { title:'Matisse', createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
 			    
 			} else {                         
 			    console.log("step2");
@@ -36,7 +36,7 @@ exports.index = function (req, res) {
 				if (err) {
 				    console.log("::::" + err);
 				    console.log("step3");
-				    res.render('index', { title:'Matisse'  })
+				    res.render('index', { title:'Matisse' , createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
 				}
 				else {
 				    console.log("step3");
@@ -46,7 +46,7 @@ exports.index = function (req, res) {
 					if (err) {
 					    console.log("step4");
 					    console.log("::::" + err);
-					    res.render('index', { title:'Matisse'  })
+					    res.render('index', { title:'Matisse'  , createdNum: loggedInUser.createdNum, sharedNum: 0, ownedBoards:  [], sharedBoards: [] })
 					}
 					else {
 					    console.log("step4");
@@ -59,7 +59,7 @@ exports.index = function (req, res) {
 						    board.load(id, function (err, props) {
 							if (err) {
 							    console.log("::::::" + err);
-							    res.render('index', { title:'Matisse'  })
+							    res.render('index', { title:'Matisse'  , createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: [] })
 							}
 							boards.push({
 							    id: this.id,
@@ -76,7 +76,7 @@ exports.index = function (req, res) {
 					    loggedInUser.numLinks('Board', 'sharedBoard', function (err, num) {
 						if (err) {
 						    console.log(":::||||" + err);
-						    res.render('index', { title:'Matisse'  })
+						    res.render('index', { title:'Matisse' , createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
 						}
 						else {
 						    console.log("step5");
@@ -89,7 +89,7 @@ exports.index = function (req, res) {
 						    loggedInUser.getAll('Board', 'sharedBoard', function (err, boardIds) {
 							if (err) {
 							    console.log(err);
-							    res.render('index', { title:'Matisse'  })
+							    res.render('index', { title:'Matisse' , createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
 							}
 							else {
 							    console.log("step6");
@@ -114,7 +114,7 @@ exports.index = function (req, res) {
 								    board.load(id, function (err, props) {
 									if (err) {
 									    console.log(err);
-									    res.render('index', { title:'Matisse'  })
+									    res.render('index', { title:'Matisse' , createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
 									}
 									else {
 									    sharedboards.push({

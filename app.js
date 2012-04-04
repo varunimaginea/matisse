@@ -128,32 +128,31 @@ application = (function () {
 					    
 					    console.log(":::" + props);
 					}
-
-					console.log(whiteBoard);
-					console.log(user);
-					console.log(whiteBoard.belongsTo(user, 'ownedBoard'));
-					console.log(whiteBoard.belongsTo(user, 'sharedBoard'));
-					if (whiteBoard.belongsTo(user, 'ownedBoard') || whiteBoard.belongsTo(user, 'sharedBoard')) {
-					}
-					else {
-					    user.link(whiteBoard, 'sharedBoard');
-					    user.save(function(err) {
-						if (err) {
-						    console.log(err);
-						}
-						else {
-						    console.log("relation is saved");
-						}				    
-					    });
-					}
-				    });  
+					user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
+					    console.log("------------------------");
+					    console.log(relExists);
+					    console.log("------------------------");
+					    if (relExists) {
+					    }
+					    else {
+						user.link(whiteBoard, 'sharedBoard');
+						user.save(function(err) {
+						    if (err) {
+							console.log(err);
+						    }
+						    else {
+							console.log("relation is saved");
+						    }				    
+						});
+					    }
+					});  
+				    });
 				}
 			    });
-			    
-			}
-		    });
 		
 		    res.sendfile(__dirname + '/board2.html'); 
+			}
+		    });
 		}
 	    }
 	    else {
