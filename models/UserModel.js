@@ -49,5 +49,44 @@ var userModel = module.exports = nohm.model('User', {
 		callback.apply(self, Array.prototype.slice.call(arguments, 0));
 	    });
 	},
+	getUserID: function(session_data) {
+	    if (typeof(session_data.twitter) != "undefined") {
+		userID = session_data.twitter.user.id;
+	    }
+	    else if (session_data.facebook) {
+		userID = session_data.facebook.user.id;
+	    }
+	    else if (session_data.google) {
+		userID = session_data.google.user.id;
+	    }
+	    return userID;
+	},
+	linkBoard: function(whiteBoard, dbUserID) {
+	    this.find({userID:dbUserID}, function(err,ids) {
+		if (err){
+		}
+		else{
+		    this.load(ids[0], function (err, props) {
+			if (err) {
+			    return err;
+			} else {                         
+			    
+			    console.log(":::" + props);
+			}
+			whiteBoard.load(whiteBoard.id, function(id) {
+			});
+			this.link(whiteBoard, 'ownedBoard');
+			this.save(function(err) {
+			    if (err) {
+				console.log(err);
+			    }
+			    else {
+				console.log("relation is saved");
+			    }				    
+			});
+		    });  
+		}
+	    });
+	}
     }
 });

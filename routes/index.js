@@ -10,15 +10,8 @@ exports.index = function (req, res) {
     var session_data = req.session.auth;
     var createdNum;
     if (session_data) {
-	if (typeof(session_data.twitter) != "undefined") {
-	    userID = session_data.twitter.user.id;
-	}
-	else if (session_data.facebook) {
-	    userID = session_data.facebook.user.id;
-	}
-	else if (session_data.google) {
-	    userID = session_data.google.user.id;
-	}
+	var userObj = new UserModel();
+	var userID = userObj.getUserID(session_data);
 	if (typeof(userID) != "undefined") {
 	    console.log("step1");
 	    dbUserID = "google- "+userID;
@@ -29,6 +22,7 @@ exports.index = function (req, res) {
 		    res.render('index', { title:'Matisse'  })
 		}
 		else{
+		    
 		    loggedInUser.load(ids[0], function (err, props) {
 			if (err) {
 			    console.log("step2");
@@ -202,42 +196,10 @@ exports.boards = {
 		next(err);
 	    } else {
 		var session_data = req.session.auth;
-		if (session_data.twitter) {
-		    var userID = session_data.twitter.user.id;
-		}
-		else if (session_data.facebook) {
-		    var userID = session_data.facebook.user.id;
-		}
-		else if (session_data.google) {
-		    var userID = session_data.google.user.id;
-		}
+		var userObj = new UserModel();
+		var userID = userObj.getUserID(session_data);
 		dbUserID = "google- "+userID;
-		UserModel.find({userID:dbUserID}, function(err,ids) {
-		    if (err){
-		    }
-		    else{
-			var user = new UserModel;
-			user.load(ids[0], function (err, props) {
-			    if (err) {
-				return err;
-			    } else {                         
-				
-				console.log(":::" + props);
-			    }
-			    whiteBoard.load(whiteBoard.id, function(id) {
-			    });
-			    user.link(whiteBoard, 'ownedBoard');
-			    user.save(function(err) {
-				if (err) {
-				    console.log(err);
-				}
-				else {
-				    console.log("relation is saved");
-				}				    
-			    });
-			});  
-		    }
-		});
+		userObj.linkBoard(whiteBoard, dbUserID);
 		res.writeHead(302, {
 		    'Location':randomstring
 		});
