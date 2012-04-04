@@ -20,11 +20,11 @@ html
                   div.span4
                     div(class='btn-toolbar', id='rightHeaderButton')
                       div(class='btn-group', style='padding-right: 10px;')
-                        button(class='numButton') 
+                        div.numButton
                           h3 #{createdNum}
                           h6 Owned by Me
                       div(class='btn-group')
-                        button(class='numButton')
+                        div.numButton
                           h3 #{sharedNum}
                           h6 Shared with Me
                   div(class='span3')
@@ -180,34 +180,18 @@ html
                     h3.dashboardRightContentHeading Shared with me
                 div(class='row')
                   div(class='span8 columns whiteboardList')
-                     ul(class='thumbnails')
-                       li(class='span2 dashboardLeftThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                       li(class='span2 dashboardRightThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                       li(class='span2 dashboardRightThumbnail')
-                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                           img(src='images/140x120.gif', alt='')
-                           div(class='thumbnailText')
-                             p.thumbnailCaption Third Thumbnail label
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
-                             p.italic Cras justo odio.
+                    ul(class='thumbnails')
+                    for board in sharedBoards
+                      li(class='span2 dashboard#{sharedBoards.indexOf(board) == 0 || sharedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{sharedBoards.indexOf(board) > 2 ? "sharedBoardHide" : ""}')
+                        div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                          a(href='/boards/#{board.url}', target='_blank')
+                            img(src='images/140x120.gif', alt='')
+                          div(class='thumbnailText')
+                            p.thumbnailCaption #{board.name}
                 div.row
-                  div(class='span8 offset6', id='showAllSharedWhiteBoard')
-                         a(class='pull-left', href='#') Show all
+                  div(class='span8 offset6', id='showAllCreateWhiteBoard')
+                    a(class='pull-left', href='#', id='showShared') Show all
+
 
       div(class='row', id='loginFooterDivider')
 

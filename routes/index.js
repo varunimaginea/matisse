@@ -20,101 +20,143 @@ exports.index = function (req, res) {
 	    userID = session_data.google.user.id;
 	}
 	if (typeof(userID) != "undefined") {
+	    console.log("step1");
 	    dbUserID = "google- "+userID;
 	    var loggedInUser = new UserModel();
 	    loggedInUser.find({userID:dbUserID}, function(err,ids) {
 		if (err){
+		    console.log(":" + err);
+		    res.render('index', { title:'Matisse'  })
 		}
 		else{
 		    loggedInUser.load(ids[0], function (err, props) {
 			if (err) {
-			    console.log(":::" + err);
-
-			} else {                         
+			    console.log("step2");
+			    console.log("::" + err);
+			    res.render('index', { title:'Matisse'  })
 			    
-			    console.log(":::" + props);
-			}
-			
-			loggedInUser.numLinks('Board', 'ownedBoard', function (err, num) {
-			    if (err) {
-				console.log(err);
-			    }
-			    else {
-				loggedInUser.createdNum = num;
-				if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
-				loggedInUser.getAll('Board', 'ownedBoard', function (err, boardIds) {
-				    if (err) {
-					console.log(err);
-				    }
-				    else {
-					var boards = [];
-					var len = boardIds.length;
-					var count = 0;
-					if (len === 0) {} else {
-					    boardIds.forEach(function (id) {
-						var board = new BoardModel();
-						board.load(id, function (err, props) {
-						    if (err) {
-							console.log(err);
-						    }
-						    boards.push({
-							id: this.id,
-							url: props.url,
-							name: props.name,
-							container: props.container,
-							canvasWidth: props.canvasWidth,
-							canvasHeight: props.canvasHeight
+			} else {                         
+			    console.log("step2");
+			    console.log(":::" + props);			
+			    loggedInUser.numLinks('Board', 'ownedBoard', function (err, num) {
+				if (err) {
+				    console.log("::::" + err);
+				    console.log("step3");
+				    res.render('index', { title:'Matisse'  })
+				}
+				else {
+				    console.log("step3");
+				    loggedInUser.createdNum = num;
+				    if (typeof(loggedInUser.createdNum) == "undefined") loggedInUser.createdNum = 0;
+				    loggedInUser.getAll('Board', 'ownedBoard', function (err, boardIds) {
+					if (err) {
+					    console.log("step4");
+					    console.log("::::" + err);
+					    res.render('index', { title:'Matisse'  })
+					}
+					else {
+					    console.log("step4");
+					    var boards = [];
+					    var len = boardIds.length;
+					    var count = 0;
+					    if (len === 0) {} else {
+						boardIds.forEach(function (id) {
+						    var board = new BoardModel();
+						    board.load(id, function (err, props) {
+							if (err) {
+							    console.log("::::::" + err);
+							    res.render('index', { title:'Matisse'  })
+							}
+							boards.push({
+							    id: this.id,
+							    url: props.url,
+							    name: props.name,
+							    container: props.container,
+							    canvasWidth: props.canvasWidth,
+							    canvasHeight: props.canvasHeight
+							});
 						    });
 						});
+					    }
+					    loggedInUser.ownedBoards = boards;
+					    loggedInUser.numLinks('Board', 'sharedBoard', function (err, num) {
+						if (err) {
+						    console.log(":::||||" + err);
+						    res.render('index', { title:'Matisse'  })
+						}
+						else {
+						    console.log("step5");
+						    loggedInUser.sharedNum = num;
+						    if (typeof(loggedInUser.sharedNum) == "undefined") loggedInUser.sharedNum = 0;
+
+						    
+						    
+
+						    loggedInUser.getAll('Board', 'sharedBoard', function (err, boardIds) {
+							if (err) {
+							    console.log(err);
+							    res.render('index', { title:'Matisse'  })
+							}
+							else {
+							    console.log("step6");
+							    var sb_len = boardIds.length;
+							    var sb_count = 0;
+							    if (sb_len === 0) {
+								console.log("========================");
+								if (typeof(sharedboards) == "undefined")  {
+								    sharedboards = []; 
+								} else {
+								    sharedboards = sharedboards;
+								}
+
+								res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum, sharedNum: loggedInUser.sharedNum, ownedBoards:  loggedInUser.ownedBoards, sharedBoards: sharedboards});
+								console.log("========================");
+							    } else {
+								var sharedboards = [];
+								boardIds.forEach(function (id) {
+								    console.log("step7");
+								    console.log(id);
+								    var board = new BoardModel();
+								    board.load(id, function (err, props) {
+									if (err) {
+									    console.log(err);
+									    res.render('index', { title:'Matisse'  })
+									}
+									else {
+									    sharedboards.push({
+										id: this.id,
+										url: props.url,
+										name: props.name,
+										container: props.container,
+										canvasWidth: props.canvasWidth,
+										canvasHeight: props.canvasHeight
+									    });
+									    console.log(sharedboards);
+									    loggedInUser.sharedBoards = sharedboards;
+									    console.log(loggedInUser.sharedBoards);
+									    if (sharedboards.length == boardIds.length) {
+										var sharedBoard;
+										if (typeof(sharedboards) == "undefined")  {
+										    sharedboards = []; 
+										} else {
+										    sharedboards = sharedboards;
+										}
+										res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum, sharedNum: loggedInUser.sharedNum, ownedBoards:  loggedInUser.ownedBoards, sharedBoards: sharedboards});
+									    }
+									}
+								    });
+								    
+								});
+							    }
+							}
+						    });
+						}		   
 					    });
 					}
-					loggedInUser.ownedBoards = boards;
-					loggedInUser.numLinks('Board', 'sharedBoard', function (err, num) {
-					    if (err) {
-						console.log(err);
-					    }
-					    else {
-						loggedInUser.sharedNum = num;
-						if (typeof(loggedInUser.sharedNum) == "undefined") loggedInUser.sharedNum = 0;
-						loggedInUser.getAll('Board', 'sharedBoard', function (err, boardIds) {
-						    if (err) {
-							console.log(err);
-						    }
-						    else {
-							var sharedboards = [];
-							var len = boardIds.length;
-							var count = 0;
-							if (len === 0) {} else {
-							    boardIds.forEach(function (id) {
-								var board = new BoardModel();
-								board.load(id, function (err, props) {
-								    if (err) {
-									console.log(err);
-								    }
-								    sharedboards.push({
-									id: this.id,
-									url: props.url,
-									name: props.name,
-									container: props.container,
-									canvasWidth: props.canvasWidth,
-									canvasHeight: props.canvasHeight
-								    });
-								    loggedInUser.sharedBoards = sharedboards;
-								});
-								console.log(loggedInUser);
-							    });
-							    console.log(loggedInUser.sharedboards);
-							    res.render('index', { title:'Matisse', createdNum: loggedInUser.createdNum, sharedNum: loggedInUser.sharedNum, ownedBoards:  loggedInUser.ownedBoards, sharedBoards: loggedInUser.sharedBoards})
-
-							}
-						    }
-						});
-					    }
-					});
-				    }
-				});
-			    }
-			});
+				    });
+				}
+			    });
+			}
 		    });
 		}
 	    });  
