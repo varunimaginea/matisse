@@ -61,10 +61,30 @@ html
                     div(class='span3')
                       div.profileDetails
                         div(class='pull-left') 
-                          a #{everyauth.twitter.user.name}!
+                          a #{everyauth.twitter.user.name}
                         div(class='pull-right')  
                           h6 via
                           a(class='loginSource pull-right') Twitter
+                else if(everyauth.facebook)
+                    div.span1
+                      img(class="profilePic",src="images/default.jpg")
+                    div(class='span3')
+                      div.profileDetails
+                        div(class='pull-left') 
+                          a #{everyauth.facebook.user.name}
+                        div(class='pull-right')  
+                          h6 via
+                          a(class='loginSource pull-right') Facebook
+                else if(everyauth.google)
+                    div.span1
+                      img(class="profilePic",src="#{everyauth.google.user.picture ? everyauth.google.user.picture : 'images/default.jpg'}")
+                    div(class='span3')
+                      div.profileDetails
+                        div(class='pull-left') 
+                          a #{everyauth.google.user.name}
+                        div(class='pull-right')  
+                          h6 via
+                          a(class='loginSource pull-right') Google
               div(class='row')
                 hr(class='leftContentDivider')
               div.row

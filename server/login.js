@@ -9,62 +9,71 @@ module.exports = {
 		var nextUserId = 0;
 
 		var users = {};
-		var service = {};
-		var serviceName = '',
-			serviceCode = '',
-			authKeyMethod = '',
-			authSecretMethod = '',
-			serviceKey = '',
-			serviceSecret = '';
-		
-		serviceDetails = [{
-			serviceCode: "twit",
-			serviceName: "twitter",
-			oauthKeyMethod: "consumerKey",
-			oauthSecretMethod: "consumerSecret"
-			}, {
-			serviceCode: "fb",
-			serviceName: "facebook",
-			oauthKeyMethod: "appId",
-			oauthSecretMethod: "appSecret",
-			scope: 'email,user_status'
-			}, {
-			serviceCode: "google",
-			serviceName: "google",
-			oauthKeyMethod: "appId",
-			oauthSecretMethod: "appSecret",
-			scope: 'https://www.googleapis.com/auth/userinfo.profile'
-			}
-		];
 
-		for (var i in serviceDetails) {
-			service = serviceDetails[i];
-			serviceName = service["serviceName"];
-			serviceCode = service["serviceCode"];
-			authKeyMethod = service["oauthKeyMethod"];
-			authSecretMethod = service["oauthSecretMethod"];
-			serviceKey = conf[serviceCode]["appId"];
-			serviceSecret = conf[serviceCode]["appSecret"];
-			if (everyauth[serviceName]['scope']) {
-				everyauth[serviceName]['scope'](service["scope"]);			
-			}
-			everyauth[serviceName][authKeyMethod](serviceKey)
-								  [authSecretMethod](serviceSecret)
-								  ["findOrCreateUser"](function (sess, accessToken, accessSecret, user) {
-									var userDetails = users[user.id] || (users[user.id] = addUser(serviceName, user));
-									var data = {
-										userID: serviceName +"- " + userDetails[serviceName].id
-									};
+      everyauth
+          .facebook
+          .appId(conf.fb.appId)
+          .appSecret(conf.fb.appSecret)
+          .findOrCreateUser( function (sess, accessToken, accessSecret, user) {
+							var userDetails = users[user.id] || (users[user.id] = addUser('facebook', user));
+							var data = {
+									userID: 'facebook' +"- " + userDetails['facebook'].id
+							};
+							var newUser = new UserModel();
+							newUser.store(data, function (err) {
+									if (!err) console.log("saved new user to DB");
+									else console.log("Could not Save user, possibly exist in DB");
+							});
+							setUserDetails.call(this, userDetails);
+							return userDetails;
+              
+              return usersByFbId[fbUserMetadata.id] ||
+                  (usersByFbId[fbUserMetadata.id] = addUser('facebook', fbUserMetadata));
+          })
+          .redirectPath('/');
+      
+      everyauth
+          .twitter
+          .consumerKey(conf.twit.appId)
+          .consumerSecret(conf.twit.appSecret)
+          .findOrCreateUser( function (sess, accessToken, accessSecret, user) {
+							var userDetails = users[user.id] || (users[user.id] = addUser('twitter', user));
+							var data = {
+									userID: 'twitter' +"- " + userDetails['twitter'].id
+							};
+							var newUser = new UserModel();
+							newUser.store(data, function (err) {
+									if (!err) console.log("saved new user to DB");
+									else console.log("Could not Save user, possibly exist in DB");
+							});
+							setUserDetails.call(this, userDetails);
+							return userDetails;
+              
+          })
+          .redirectPath('/');
+      
+      everyauth
+          .google
+          .appId(conf.google.appId)
+          .appSecret(conf.google.appSecret)
+          .scope('https://www.googleapis.com/auth/userinfo.profile')
+          .findOrCreateUser( function (sess, accessToken, accessSecret, user) {
+              user.refreshToken = accessSecret.refresh_token;
+              user.expiresIn = accessSecret.expires_in;
+							var userDetails = users[user.id] || (users[user.id] = addUser('google', user));
+							var data = {
+									userID: 'google' +"- " + userDetails['google'].id
+							};
 									var newUser = new UserModel();
-									newUser.store(data, function (err) {
-										if (!err) console.log("saved new user to DB");
-										else console.log("Could not Save user, possibly exist in DB");
-									});
-									setUserDetails.call(this, userDetails);
-									return userDetails;
-								}).redirectPath('/');								
-		}
-
+							newUser.store(data, function (err) {
+									if (!err) console.log("saved new user to DB");
+									else console.log("Could not Save user, possibly exist in DB");
+							});
+							setUserDetails.call(this, userDetails);
+							return userDetails;              
+          })
+          .redirectPath('/');
+    
 		function addUser(source, sourceUser) {
 			var user;
 			if (arguments.length === 1) { // password-based

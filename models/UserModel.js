@@ -51,13 +51,13 @@ var userModel = module.exports = nohm.model('User', {
 	},
 	getUserID: function(session_data) {
 	    if (typeof(session_data.twitter) != "undefined") {
-		userID = session_data.twitter.user.id;
+		userID = "twitter- " + session_data.twitter.user.id;
 	    }
 	    else if (session_data.facebook) {
-		userID = session_data.facebook.user.id;
+		userID = "facebook- " + session_data.facebook.user.id;
 	    }
 	    else if (session_data.google) {
-		userID = session_data.google.user.id;
+		userID = "google- " + session_data.google.user.id;
 	    }
 	    return userID;
 	},

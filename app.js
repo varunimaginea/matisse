@@ -96,25 +96,15 @@ application = (function () {
 	    if (req.loggedIn) {
 		if (req.params.id != "favicon") {
 		    var whiteBoard = new BoardModel();
-		    console.log(req.params.board);
 		    whiteBoard.find({url: req.params.board}, function (err, ids) {
 			if (err) {
 			    console.log(err);
 			}
 			else {
-			    var session_data = req.session.auth;
-			    if (session_data.twitter) {
-				var userID = session_data.twitter.user.id;
-			    }
-			    else if (session_data.facebook) {
-				var userID = session_data.facebook.user.id;
-			    }
-			    else if (session_data.google) {
-				var userID = session_data.google.user.id;
-			    }
-			    dbUserID = "google- "+userID;
-			    console.log(ids);
-			    whiteBoard.load(ids[0], function(id) {
+		      var session_data = req.session.auth;
+		      var userObj = new UserModel();
+		      var userID = userObj.getUserID(session_data);
+          whiteBoard.load(ids[0], function(id) {
 			    });
 			    UserModel.find({userID:dbUserID}, function(err,ids) {
 				if (err){
@@ -125,13 +115,8 @@ application = (function () {
 					if (err) {
 					    return err;
 					} else {                         
-					    
-					    console.log(":::" + props);
 					}
 					user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
-					    console.log("------------------------");
-					    console.log(relExists);
-					    console.log("------------------------");
 					    if (relExists) {
 					    }
 					    else {
