@@ -106,7 +106,7 @@ application = (function () {
 		      var userID = userObj.getUserID(session_data);
           whiteBoard.load(ids[0], function(id) {
 			    });
-			    UserModel.find({userID:dbUserID}, function(err,ids) {
+			    UserModel.find({userID:userID}, function(err,ids) {
 				if (err){
 				}
 				else{
