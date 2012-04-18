@@ -290,6 +290,16 @@ div.scroller {
     left: 0px;
     width: 100%;
 }
+#loading {
+    background-color: yellow;
+    position: absolute;
+    z-index: 9001;
+    top: 0px;
+    left: 50%;
+    width: 5%;
+    font-family: arial;
+    font-size: 14px;
+}
 
 #closediv  a {
     text-decoration: none;

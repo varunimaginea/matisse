@@ -77,6 +77,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			$('#closediv').css('display', 'block');
 		},
 		setContainer: function (containerName, type, width, height) {
+        $('#loading').show();
 			var contObj = matisse.containers[containerName];
 			ui.deviceHeight = contObj.height;
 			ui.deviceWidth = contObj.width;
@@ -111,6 +112,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 				}
 				layouts.setLayoutType(val);
 			}	
+        $('#loading').hide();
 		}
 		 
 	};
