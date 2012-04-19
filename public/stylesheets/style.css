@@ -440,6 +440,10 @@ input.file {
 #userInfo .loginSource {
     font-size: 11px;
 }
+#logoutLink  {
+    color: #8A9AB1;
+    padding-left:4px;
+}
 
 #loginLeftContent h3 {
     font-size: 13px;
