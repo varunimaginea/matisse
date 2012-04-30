@@ -99,8 +99,13 @@ application = (function () {
                 whiteBoard.find({url: req.params.board.replace(/[^a-zA-Z 0-9]+/g,'')}, function (err, ids) {
                 if (err) {
                     console.log(err);
+                    res.writeHead(302, {
+                      'Location': 'http://'+req.headers.host
+                    });
+                    res.end();
                 }
                 else {
+                  if (ids.length != 0) {
                   var session_data = req.session.auth;
                   var userObj = new UserModel();
                   var userID = userObj.getUserID(session_data);
@@ -134,8 +139,14 @@ application = (function () {
                         });
                     }
                   });
-
                   res.sendfile(__dirname + '/board2.html');
+                  }
+                  else {
+                    res.writeHead(302, {
+                      'Location': 'http://'+req.headers.host
+                    });
+                    res.end();
+                  }
                 }
                 });
             }

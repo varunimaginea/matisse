@@ -9,9 +9,6 @@ var UserModel = require(__dirname + '/../models/UserModel.js');
 exports.index = function (req, res) {
     var session_data = req.session.auth;
     var createdNum;
-    console.log("*************");
-    console.log(req.query.ref);
-    console.log("*************");
     if (session_data) {
         var userObj = new UserModel();
         var userID = userObj.getUserID(session_data);
@@ -136,9 +133,6 @@ exports.index = function (req, res) {
 	      }
     }
      else {
-        console.log("------------------");
-        console.log(req.query.ref);
-        console.log("-----------------");
           res.render('index', { title:'Matisse'})
       }
 };
