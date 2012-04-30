@@ -51,7 +51,7 @@ module.exports = {
               
           })
           .redirectPath('/');
-      
+
       everyauth
           .google
           .appId(conf.google.appId)
@@ -73,7 +73,25 @@ module.exports = {
 							return userDetails;              
           })
           .redirectPath('/');
-    
+
+      everyauth.facebook.sendResponse( function (res, data) {
+        var session = data.session;
+        res.redirect(session.redirectPath || // Re-direct to the path stored in the session by route middleware
+          this.redirectPath());              // Or redirect to the configured redirectPath
+      });
+
+      everyauth.twitter.sendResponse( function (res, data) {
+        var session = data.session;
+        res.redirect(session.redirectPath || // Re-direct to the path stored in the session by route middleware
+          this.redirectPath());              // Or redirect to the configured redirectPath
+      });
+
+      everyauth.google.sendResponse( function (res, data) {
+        var session = data.session;
+        res.redirect(session.redirectPath || // Re-direct to the path stored in the session by route middleware
+          this.redirectPath());              // Or redirect to the configured redirectPath
+      });
+
 		function addUser(source, sourceUser) {
 			var user;
 			if (arguments.length === 1) { // password-based

@@ -93,59 +93,60 @@ application = (function () {
 
     app.resource('boards', {
         show:function (req, res, next) {
-	    if (req.loggedIn) {
-		if (req.params.id != "favicon") {
-		    var whiteBoard = new BoardModel();
-		    whiteBoard.find({url: req.params.board}, function (err, ids) {
-			if (err) {
-			    console.log(err);
-			}
-			else {
-		      var session_data = req.session.auth;
-		      var userObj = new UserModel();
-		      var userID = userObj.getUserID(session_data);
-          whiteBoard.load(ids[0], function(id) {
-			    });
-			    UserModel.find({userID:userID}, function(err,ids) {
-				if (err){
-				}
-				else{
-				    var user = new UserModel;
-				    user.load(ids[0], function (err, props) {
-					if (err) {
-					    return err;
-					} else {                         
-					}
-					user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
-					    if (relExists) {
-					    }
-					    else {
-						user.link(whiteBoard, 'sharedBoard');
-						user.save(function(err) {
-						    if (err) {
-							console.log(err);
-						    }
-						    else {
-							console.log("relation is saved");
-						    }				    
-						});
-					    }
-					});  
-				    });
-				}
-			    });
-		
-		    res.sendfile(__dirname + '/board2.html'); 
-			}
-		    });
-		}
-	    }
-	    else {
-		res.writeHead(302, {
-		    'Location': 'http://'+req.headers.host
-		});
-		res.end();
-	    }
+          if (req.loggedIn) {
+            if (req.params.id != "favicon") {
+              var whiteBoard = new BoardModel();
+                whiteBoard.find({url: req.params.board.replace(/[^a-zA-Z 0-9]+/g,'')}, function (err, ids) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                  var session_data = req.session.auth;
+                  var userObj = new UserModel();
+                  var userID = userObj.getUserID(session_data);
+                  whiteBoard.load(ids[0], function(id) {
+                  });
+                  UserModel.find({userID:userID}, function(err,ids) {
+                    if (err){
+                    }
+                    else{
+                      var user = new UserModel;
+                        user.load(ids[0], function (err, props) {
+                        if (err) {
+                          return err;
+                        } else {
+                        }
+                        user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
+                          if (relExists) {
+                          }
+                          else {
+                            user.link(whiteBoard, 'sharedBoard');
+                            user.save(function(err) {
+                              if (err) {
+                                console.log(err);
+                              }
+                              else {
+                                console.log("relation is saved");
+                              }
+                            });
+                          }
+                        });
+                        });
+                    }
+                  });
+
+                  res.sendfile(__dirname + '/board2.html');
+                }
+                });
+            }
+          }
+          else {
+            res.writeHead(302, {
+                'Location': 'http://'+req.headers.host
+            });
+            req.session.redirectPath = req.url;
+            res.end();
+          }
         }
     });
     
