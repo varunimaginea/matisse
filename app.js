@@ -8,6 +8,8 @@ application = (function () {
     var everyauth = require('everyauth');
     var collaboration = require('./server/collaboration');
     var login = require('./server/login');
+    //compress the static content
+    var gzippo = require('gzippo');
 
     var Nohm = require('nohm').Nohm;
     var BoardModel = require(__dirname + '/models/BoardModel.js');
@@ -52,7 +54,8 @@ application = (function () {
         app.use(everyauth.middleware());
         app.use(express.methodOverride());
         app.use(app.router);
-        app.use(express.static(__dirname + '/public'));
+        //app.use(express.static(__dirname + '/public'));
+        app.use(gzippo.staticGzip(__dirname + '/public'));
         everyauth.helpExpress(app);
     };
 
