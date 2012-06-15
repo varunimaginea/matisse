@@ -111,6 +111,10 @@ textarea {
 #accordion {
     height: 94%; /* Change it dynamically according to the layout*/
     overflow:hidden;
+
+    position: fixed;
+    width: 105px;
+    background-color: #464D57;
 }
 
 #toolsdiv {
