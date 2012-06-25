@@ -54,7 +54,6 @@ application = (function () {
         app.use(everyauth.middleware());
         app.use(express.methodOverride());
         app.use(app.router);
-        //app.use(express.static(__dirname + '/public'));
         app.use(gzippo.staticGzip(__dirname + '/public'));
         everyauth.helpExpress(app);
     };
@@ -142,6 +141,8 @@ application = (function () {
                         });
                     }
                   });
+                  var session_user = userObj.getUserFromSession(session_data);
+                  setUserDetails(session_user);
                   res.sendfile(__dirname + '/board2.html');
                   }
                   else {

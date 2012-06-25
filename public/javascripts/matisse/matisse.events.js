@@ -32,7 +32,28 @@ define(["matisse", "matisse.ui", "matisse.comm"], function (matisse, ui, comm) {
                         canvas.sendBackwards(obj);
 						notifyZindexChange(obj, 'backward');
                     }
-                } else if (key == "27") { // when Escape key pressed
+                } else if (key == "90" && evt.ctrlKey) {
+                  var obj = matisse.undoStack.pop();
+                  if (typeof(obj) != "undefined") {
+                    if (obj.action == "modified") {
+
+                    }
+                    else if (obj.action == "zindexchange") {
+
+                    }
+                    else {
+                      canvas.getObjects().forEach(function(item, index) {
+                        if (item.uid == obj.args[0].uid)
+                          {
+                            matisse.redoStack.push(obj);
+                            canvas.setActiveObject(item);
+                            matisse.main.deleteObjects();
+                          }
+                      });
+                    }
+                  }
+                }
+                 else if (key == "27") { // when Escape key pressed
                     closePopup()
                 } else if (key == "37" && evt.shiftKey) {
                     var obj = canvas.getActiveObject();
@@ -103,6 +124,12 @@ define(["matisse", "matisse.ui", "matisse.comm"], function (matisse, ui, comm) {
                 canvas.isSelectMode = true;
                 matisse.drawShape = false;
                 ui.resetShapeSelection();
+                matisse.undoStack.push({
+                    name: matisse.action,
+                    palette: matisse.paletteName,
+                    action: matisse.action,
+                    args: matisse.shapeArgs
+                });
             }
             if (canvas.isDrawingMode) {
                 matisse.xPoints = [];

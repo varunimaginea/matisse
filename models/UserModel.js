@@ -50,6 +50,7 @@ var userModel = module.exports = nohm.model('User', {
 	    });
 	},
 	getUserID: function(session_data) {
+	  var userID;
 	    if (typeof(session_data.twitter) != "undefined") {
 		userID = "twitter- " + session_data.twitter.user.id;
 	    }
@@ -87,6 +88,25 @@ var userModel = module.exports = nohm.model('User', {
 		    });  
 		}
 	    });
-	}
+	},
+	getUserFromSession: function(session_data) {
+	  var user = {'id': null};
+    if (typeof(session_data.twitter) != "undefined") {
+      user.id  = session_data.twitter.user.id;
+      user.twitter = session_data.twitter.user;
+      user.loginService = "Twitter";
+    }
+    else if (session_data.facebook) {
+      user.id  = session_data.facebook.user.id;
+      user.facebook = session_data.facebook.user;
+      user.loginService = "Facebook";
+    }
+    else if (session_data.google) {
+      user.id  = session_data.google.user.id;
+      user.google = session_data.google.user;
+      user.loginService = "Google";
+    }
+    return user;
+  }
     }
 });
