@@ -39,6 +39,8 @@ define(function () {
 		imageTag: null,
 		containerName: null,
 		eventObj: {},
-		layoutURL: null
+		layoutURL: null,
+		undoStack: [],
+		redoStack: []
 	};
 });
