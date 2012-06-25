@@ -765,6 +765,7 @@ dashboardLeftThumbnail {
 #containerBody{overflow: auto;position: relative;margin:10px auto;height:100%;}
 #leftdiv{float:left;width:105px;}
 #outer{background-color:#464D57;height:100%;}
+#userLoginService{color:#00B7FF;}
 
 .rightFloater{float:right;}
 .new-logo-cntr{background-color:#222629;padding:5px 5px 10px 5px;border-bottom:1px solid #0E1215; }
@@ -784,11 +785,12 @@ dashboardLeftThumbnail {
 .userpic-big-sec{width:60px;float:left;display:block;}
 .user-info-data{padding-top:5px;}
 .u-wb-title{font-size:10px;font-weight:bold;}
-.b-uinfo-links{font-size:11px;padding:2px 0 0 0;}
+.b-uinfo-links{font-size:11px;padding:5px 0 0 0;clear:left;}
 .b-backarrow{font-size:11px;padding-right:2px;}
 .user-wbs{clear:both;margin-top:5px;}
 .u-wb-row{border-bottom:1px solid #eee;padding:2px 0;}
 .user-email{color:#00B7FF;}
+
 /******** Overriding few classes of short scroll -Start ********/
 .scroll-up-btn{background:url('../images/scroll_up.png') no-repeat;width:15px;height:15px;display:block;}
 .scroll-down-btn{background:url('../images/scroll_down.png') no-repeat;width:15px;height:15px;display:block;margin-top:-1px;}
@@ -835,7 +837,7 @@ dashboardLeftThumbnail {
 	color:#B8C2CB;text-decoration:none;
 }
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
-.board-name{-moz-transform:rotate(-270deg);-moz-transform-origin-x: left;-webkit-transform: rotate(-270deg);-webkit-transform-origin-x: left;font-size: 22px;margin: -31px 0 0 30px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 38px; padding-top: 22px;background-color: #464D57;}
+.board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: left;-webkit-transform: rotate(-270deg);-webkit-transform-origin-x: left;font-size: 22px;margin: -31px 0 0 30px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 38px; padding-top: 22px;background-color: #464D57;}
 .menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
 .menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
