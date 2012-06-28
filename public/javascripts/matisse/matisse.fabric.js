@@ -30,6 +30,26 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 							object: obj
 						}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
 					});
+					var originalState = {};
+          var j,k,l;
+          for (j in obj.originalState) {
+            originalState[j] = obj.originalState[j];
+          }
+          for (k in obj) {
+            if (!originalState[k])
+              originalState[k] = obj[k];
+          }
+          for (l in obj.prototype) {
+            if (!originalState.prototype[l])
+              originalState.prototype[l] = obj.prototype[l];
+          }
+          matisse.undoStack.push({
+            palette: obj.palette,
+            name: obj.name,
+            action: 'modified',
+            path: obj.path,
+            args: [{uid: obj.uid, object: originalState}]
+          });
 					matisse.hLine.set('top', -10); // hide horizontal alignment guide line
 					matisse.vLine.set('left', -10); // hide vertical alignment guide line
 					properties.updatePropertyPanel(obj); // Update property values for this object in property panel
