@@ -35,6 +35,9 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
         } else if (key == "90" && evt.ctrlKey) {
             actionBar.handleUndoAction();
         }
+          else if (key == "89" && evt.ctrlKey) {
+            actionBar.handleRedoAction();
+        }
          else if (key == "27") { // when Escape key pressed
             closePopup()
         } else if (key == "37" && evt.shiftKey) {

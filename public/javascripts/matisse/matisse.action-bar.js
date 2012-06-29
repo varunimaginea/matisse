@@ -78,15 +78,7 @@ define( ["matisse"], function (matisse) {
 		},
 		stateUpdated: function(obj, state) {
       if (state == "modified") {
-        var originalObj = {};
-        var j,k;
-        for (j in obj.originalState) {
-          originalObj[j] = obj.originalState[j];
-        }
-        for (k in obj) {
-          if (!originalObj[k])
-            originalObj[k] = obj[k];
-        }
+        var originalObj = actionBar.getOriginalObj(obj);
         matisse.undoStack.push({
           palette: obj.palette,
           name: obj.name,
@@ -110,13 +102,14 @@ define( ["matisse"], function (matisse) {
           canvas.getObjects().forEach(function(item, index) {
           if (item.uid == obj.args[0].uid)
             {
+              var currentObj = actionBar.getCurrentObj(item);
               matisse.redoStack.push({action: "modified",
                 name: obj.name,
                 palette: obj.palette,
                 path: obj.path,
                 args: [{
-                  uid: obj.uid,
-                  object: item
+                  uid: obj.args[0].uid,
+                  object: currentObj
                 }]
               });
               matisse.comm.sendDrawMsg({
@@ -145,6 +138,67 @@ define( ["matisse"], function (matisse) {
         });
       }
     }
+    },
+    handleRedoAction: function() {
+      var obj = matisse.redoStack.pop();
+      if (typeof(obj) != "undefined") {
+        if (obj.action == "modified") {
+          canvas.getObjects().forEach(function(item, index) {
+          if (item.uid == obj.args[0].uid)
+            {
+              var currentObj = actionBar.getCurrentObj(item);
+              matisse.undoStack.push({action: "modified",
+                name: obj.name,
+                palette: obj.palette,
+                path: obj.path,
+                args: [{
+                  uid: obj.uid,
+                  object: currentObj
+                }]
+              });
+              matisse.comm.sendDrawMsg({
+                action: obj.action,
+                name: obj.name,
+                palette: obj.palette,
+                path: obj.path,
+                args: obj.args
+              });
+                matisse.main.modifyObject(obj.args);
+             }
+          });
+        }
+      else if (obj.action == "zindexchange") {
+
+      }
+      else {
+        canvas.getObjects().forEach(function(item, index) {
+          if (item.uid == obj.args[0].uid)
+            {
+              matisse.redoStack.push(obj);
+              canvas.setActiveObject(item);
+              matisse.main.deleteObjects();
+            }
+        });
+      }
+    }
+    },
+    getOriginalObj: function(obj) {
+      var originalObj = {};
+      var j;
+      for (j=0;j<obj.stateProperties.length;j++) {
+        originalObj[obj.stateProperties[j]] = obj.originalState[obj.stateProperties[j]];
+      }
+      originalObj["paths"] = obj["paths"];
+      return originalObj;
+    },
+    getCurrentObj: function(obj) {
+      var currentObj = {};
+      var j;
+      for (j=0;j<obj.stateProperties.length;j++) {
+        currentObj[obj.stateProperties[j]] = obj[obj.stateProperties[j]];
+      }
+      currentObj["paths"] = obj["paths"];
+      return currentObj;
     }
 	}
 	return actionBar;
