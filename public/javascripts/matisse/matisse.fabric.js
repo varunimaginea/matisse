@@ -1,6 +1,6 @@
 /* fabric related methods */
 
-define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", "matisse.events"], function (matisse, util, properties, ui, events) {
+define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", "matisse.events", "matisse.action-bar"], function (matisse, util, properties, ui, events, actionBar) {
 	
 	'use strict';
 
@@ -30,26 +30,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 							object: obj
 						}] // When sent only 'object' for some reason object  'uid' is not available to the receiver method.
 					});
-					var originalState = {};
-          var j,k,l;
-          for (j in obj.originalState) {
-            originalState[j] = obj.originalState[j];
-          }
-          for (k in obj) {
-            if (!originalState[k])
-              originalState[k] = obj[k];
-          }
-          for (l in obj.prototype) {
-            if (!originalState.prototype[l])
-              originalState.prototype[l] = obj.prototype[l];
-          }
-          matisse.undoStack.push({
-            palette: obj.palette,
-            name: obj.name,
-            action: 'modified',
-            path: obj.path,
-            args: [{uid: obj.uid, object: originalState}]
-          });
+					//store original state information or undo/redo actions
+					actionBar.stateUpdated(obj, "modified");
 					matisse.hLine.set('top', -10); // hide horizontal alignment guide line
 					matisse.vLine.set('left', -10); // hide vertical alignment guide line
 					properties.updatePropertyPanel(obj); // Update property values for this object in property panel

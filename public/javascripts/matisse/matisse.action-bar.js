@@ -1,4 +1,4 @@
-define( function () {
+define( ["matisse"], function (matisse) {
 	"use strict";
 	var actionBar = {
 		initalize:function(){
@@ -75,7 +75,77 @@ define( function () {
 			if($(".userInfoSec:visible")){
 				$(".userInfoSec").fadeOut();
 			}
-		}
+		},
+		stateUpdated: function(obj, state) {
+      if (state == "modified") {
+        var originalObj = {};
+        var j,k;
+        for (j in obj.originalState) {
+          originalObj[j] = obj.originalState[j];
+        }
+        for (k in obj) {
+          if (!originalObj[k])
+            originalObj[k] = obj[k];
+        }
+        matisse.undoStack.push({
+          palette: obj.palette,
+          name: obj.name,
+          action: 'modified',
+          path: obj.path,
+          args: [{uid: obj.uid, object: originalObj}]
+        });
+      }
+      else if (state == "created"){
+        matisse.undoStack.push({
+          palette: matisse.paletteName,
+          action: matisse.action,
+          args: matisse.shapeArgs
+        });
+      }
+    },
+    handleUndoAction: function() {
+      var obj = matisse.undoStack.pop();
+      if (typeof(obj) != "undefined") {
+        if (obj.action == "modified") {
+          canvas.getObjects().forEach(function(item, index) {
+          if (item.uid == obj.args[0].uid)
+            {
+              matisse.redoStack.push({action: "modified",
+                name: obj.name,
+                palette: obj.palette,
+                path: obj.path,
+                args: [{
+                  uid: obj.uid,
+                  object: item
+                }]
+              });
+              matisse.comm.sendDrawMsg({
+                action: obj.action,
+                name: obj.name,
+                palette: obj.palette,
+                path: obj.path,
+                args: obj.args
+
+              });
+                matisse.main.modifyObject(obj.args);
+             }
+          });
+        }
+      else if (obj.action == "zindexchange") {
+
+      }
+      else {
+        canvas.getObjects().forEach(function(item, index) {
+          if (item.uid == obj.args[0].uid)
+            {
+              matisse.redoStack.push(obj);
+              canvas.setActiveObject(item);
+              matisse.main.deleteObjects();
+            }
+        });
+      }
+    }
+    }
 	}
 	return actionBar;
 });	

@@ -6,7 +6,7 @@
  *
  */
 
-define(["matisse", "matisse.ui", "matisse.comm", "matisse.palettes.properties"], function (matisse, ui, comm, properties) {
+define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function (matisse, ui, comm, actionBar) {
 	"use strict";
 	return {
 		/**
@@ -33,50 +33,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.palettes.properties"],
                 notifyZindexChange(obj, 'backward');
             }
         } else if (key == "90" && evt.ctrlKey) {
-            var obj = matisse.undoStack.pop();
-            if (typeof(obj) != "undefined") {
-              if (obj.action == "modified") {
-                canvas.getObjects().forEach(function(item, index) {
-                if (item.uid == obj.args[0].uid)
-                  {
-                    matisse.redoStack.push({action: "modified",
-                      name: obj.name,
-                      palette: obj.palette,
-                      path: obj.path,
-                      args: [{
-                        uid: obj.uid,
-                        object: item
-                      }]
-                    });
-                    matisse.comm.sendDrawMsg({
-                      action: obj.action,
-                      name: obj.name,
-                      palette: obj.palette,
-                      path: obj.path,
-                      args: obj.args
-
-                    });
-                      properties.updatePropertyPanel(obj.args[0].object);
-                      matisse.main.modifyObject(obj.args);
-                  //   canvas.setActiveObject(item);
-                  //   matisse.main.deleteObjects();
-                   }
-                });
-              }
-            else if (obj.action == "zindexchange") {
-
-            }
-            else {
-              canvas.getObjects().forEach(function(item, index) {
-                if (item.uid == obj.args[0].uid)
-                  {
-                    matisse.redoStack.push(obj);
-                    canvas.setActiveObject(item);
-                    matisse.main.deleteObjects();
-                  }
-              });
-            }
-          }
+            actionBar.handleUndoAction();
         }
          else if (key == "27") { // when Escape key pressed
             closePopup()
@@ -149,11 +106,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.palettes.properties"],
         canvas.isSelectMode = true;
         matisse.drawShape = false;
         ui.resetShapeSelection();
-        matisse.undoStack.push({
-            palette: matisse.paletteName,
-            action: matisse.action,
-            args: matisse.shapeArgs
-        });
+        actionBar.stateUpdated(null, "created");
       }
       if (canvas.isDrawingMode) {
           matisse.xPoints = [];
