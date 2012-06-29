@@ -152,7 +152,7 @@ define( ["matisse"], function (matisse) {
                 palette: obj.palette,
                 path: obj.path,
                 args: [{
-                  uid: obj.uid,
+                  uid: obj.args[0].uid,
                   object: currentObj
                 }]
               });
@@ -171,14 +171,30 @@ define( ["matisse"], function (matisse) {
 
       }
       else {
+        var created = true;
         canvas.getObjects().forEach(function(item, index) {
           if (item.uid == obj.args[0].uid)
             {
-              matisse.redoStack.push(obj);
+              created =  false;
+              matisse.undoStack.push(obj);
               canvas.setActiveObject(item);
               matisse.main.deleteObjects();
             }
         });
+        if (created) {
+          matisse.comm.sendDrawMsg({
+            palette: obj.palette,
+            action: obj.action,
+            path: obj.path,
+            args: obj.args
+          });
+          matisse.palette[obj.palette].shapes[obj.action].toolAction.apply(this, obj.args);
+          matisse.undoStack.push({
+            palette: obj.palette,
+            action: obj.action,
+            args: obj.args
+          });
+        }
       }
     }
     },
