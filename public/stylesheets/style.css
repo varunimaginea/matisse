@@ -721,7 +721,7 @@ dashboardLeftThumbnail {
     padding-right: 10px;
 }
 #showAllCreateWhiteBoard {
-
+    display: none;
 }
                     #showAllCreateWhiteBoard a {
 			font-family: Arial, Helvetica, sans-serif;

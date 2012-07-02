@@ -28,3 +28,8 @@ $('#showShared').on('click', function(e){
 	$(this).html("Show all");
     }
   });
+//display "show all" links only when there are more than three white boards
+$('div.whiteboardList').each(function() {
+	if($(this).find('li').length > 3) 
+		$(this).parents('div.row').next('div.row').find('div#showAllCreateWhiteBoard').show();
+});
