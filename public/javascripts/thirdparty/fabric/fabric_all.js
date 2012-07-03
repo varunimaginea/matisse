@@ -5479,12 +5479,16 @@ fabric.util.string = {
 	_resizeObject: function (x, y, direction) {
 		var target = this._currentTransform.target;
 		var delta = 0;
-		if (direction === 'r') {			
+		if (direction === 'r') {
+		  target.width = parseInt(target.width);
+      target.left = parseInt(target.left);
 			delta = x - (target.left + this._offset.left + target.width / 2);
 			target.width += delta;
 			target.left += delta/2;			
 		}
 		else if (direction === 'l') {
+		  target.width = parseInt(target.width);
+		  target.left = parseInt(target.left);
 			delta = x - (target.left + this._offset.left - target.width / 2);
 			target.width -= delta;
 			target.left += delta/2;
@@ -5500,6 +5504,8 @@ fabric.util.string = {
 			target.top += delta/2;
 		}
 		else if (direction === 'tl') {
+		  target.width = parseInt(target.width);
+      target.left = parseInt(target.left);
 			delta = y - (target.top + this._offset.top - target.height / 2);
 			target.height -= delta;
 			target.top += delta/2;
@@ -5508,6 +5514,8 @@ fabric.util.string = {
 			target.left += delta/2;
 		}
 		else if (direction === 'tr') {
+	  	target.width = parseInt(target.width);
+      target.left = parseInt(target.left);
 			delta = y - (target.top + this._offset.top - target.height / 2);
 			target.height -= delta;
 			target.top += delta/2;
@@ -5516,6 +5524,8 @@ fabric.util.string = {
 			target.left += delta/2;
 		}
 		else if (direction === 'bl') {
+	  	target.width = parseInt(target.width);
+      target.left = parseInt(target.left);
 			delta = y - (target.top + this._offset.top + target.height / 2);
 			target.height += delta;
 			target.top += delta/2;
@@ -5524,6 +5534,8 @@ fabric.util.string = {
 			target.left += delta/2;
 		}
 		else if (direction === 'br') {
+		  target.width = parseInt(target.width);
+      target.left = parseInt(target.left);
 			delta = y - (target.top + this._offset.top + target.height / 2);
 			target.height += delta;
 			target.top += delta/2;
