@@ -163,7 +163,7 @@ define( ["matisse"], function (matisse) {
             path: obj.path,
             args: [currentObj]
           });
-          matisse.palette[obj.palette].shapes[obj.action].toolAction.apply(this, obj.args);
+          matisse.palette[obj.palette].shapes[obj.action].toolAction.apply(null, obj.args);
           matisse.redoStack.push({
             palette: obj.palette,
             action: obj.action,
@@ -217,17 +217,27 @@ define( ["matisse"], function (matisse) {
             }
         });
         if (created) {
+        if (obj.args[0].stateProperties) {
+                  var currentObj = actionBar.getCurrentObj(obj.args[0]);
+                  currentObj.uid = obj.args[0].uid;
+                  currentObj.name = obj.action;
+                  currentObj.palette = obj.palette;
+                  currentObj.width = obj.args[0].width;
+                }
+                else {
+                  var currentObj = obj.args[0];
+                }
           matisse.comm.sendDrawMsg({
             palette: obj.palette,
             action: obj.action,
             path: obj.path,
-            args: obj.args
+            args: [currentObj]
           });
-          matisse.palette[obj.palette].shapes[obj.action].toolAction.apply(this, obj.args);
+          matisse.palette[obj.palette].shapes[obj.action].toolAction.apply(null, obj.args);
           matisse.undoStack.push({
             palette: obj.palette,
             action: obj.action,
-            args: obj.args
+            args: [currentObj]
           });
         }
       }
