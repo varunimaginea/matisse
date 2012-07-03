@@ -151,6 +151,8 @@ define( ["matisse"], function (matisse) {
         if (obj.args[0].stateProperties) {
           var currentObj = actionBar.getCurrentObj(obj.args[0]);
           currentObj.uid = obj.args[0].uid;
+          currentObj.name = obj.action;
+          currentObj.palette = obj.palette;
         }
         else {
           var currentObj = obj.args[0];
