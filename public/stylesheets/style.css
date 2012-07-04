@@ -855,6 +855,7 @@ dashboardLeftThumbnail {
 .menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
 .menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
 .menu-edit-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
+.menu-edit-list li.disabled {color: #bbb;}
 .menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
