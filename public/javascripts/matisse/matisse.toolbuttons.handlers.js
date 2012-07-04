@@ -83,8 +83,9 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
             }
             var dialog_width = $("#chatdialog").dialog("option", "width");
             var win_width = $(window).width();
+            var menu_width = $('div.bottom').width();
             $('#propdiv').dialog({
-                position: [win_width - dialog_width, 300]
+                position: [win_width - dialog_width - menu_width, 300]
             });
             $('#propdiv').dialog('open');
         },

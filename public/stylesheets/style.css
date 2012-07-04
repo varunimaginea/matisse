@@ -850,8 +850,8 @@ dashboardLeftThumbnail {
 .m-discuss{background-position:0 -218px;}
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
-.m-edit-list{ display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 120px; position: absolute; right: 58px; top: -10px; width: 148px;}
-.menu-arrow{background: url("../images/menu-arrow.png") no-repeat scroll 0 0 transparent; display: block; height: 22px; left: 148px; position: relative; top: 26px; width: 18px;}
+.m-edit-list{ display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
+.menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
 .menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
 .menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
 .menu-edit-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
