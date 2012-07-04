@@ -113,6 +113,12 @@ define( ["matisse"], function (matisse) {
     },
     handleUndoAction: function() {
       var obj = matisse.undoStack.pop();
+      if (matisse.undoStack.length > 0) {
+        $('#Undo').removeClass('disabled');
+      }
+      else {
+        $('#Undo').addClass('disabled');
+      }
       if (typeof(obj) != "undefined") {
         if (obj.action == "modified") {
           canvas.getObjects().forEach(function(item, index) {
@@ -179,17 +185,17 @@ define( ["matisse"], function (matisse) {
           });
         }
       }
-        if (matisse.undoStack.length > 0) {
-          $('#Undo').removeClass('disabled');
-        }
-        else {
-          $('#Undo').addClass('disabled');
-        }
         $('#Redo').removeClass('disabled');
       }
     },
     handleRedoAction: function() {
       var obj = matisse.redoStack.pop();
+      if (matisse.redoStack.length > 0) {
+        $('#Redo').removeClass('disabled');
+      }
+      else {
+        $('#Redo').addClass('disabled');
+      }
       if (typeof(obj) != "undefined") {
         if (obj.action == "modified") {
           canvas.getObjects().forEach(function(item, index) {
@@ -255,12 +261,7 @@ define( ["matisse"], function (matisse) {
           });
         }
       }
-      if (matisse.redoStack.length > 0) {
-        $('#Redo').removeClass('disabled');
-      }
-      else {
-        $('#Redo').addClass('disabled');
-      }
+
       $('#Undo').removeClass('disabled');
     }
     },
