@@ -42,6 +42,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
+            $('#editicon').click(toolHandlers.openSubmenuEdit);
+            $('li','ul.menu-edit-list').click(function () {var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();});
 		
 	    mActionBar.initalize();		    
 	
@@ -76,6 +78,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                     }]
                 });
                 $('#prop').remove();
+                $('#propdiv').dialog('close');
             } else if (activeGroup) {
                 var objectsInGroup = activeGroup.getObjects();
                 canvas.discardActiveGroup();
@@ -193,6 +196,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						var obj = util.getObjectById(data.args[0].uid);
 						canvas.remove(obj);
 						$('#prop').remove();
+            $('#propdiv').dialog('close');
 					} else if (data.action === "importimage") {
 						matisse.main.addImageToCanvasFromServer(data.args[0]);
 					} else if (data.action === "zindexchange") {

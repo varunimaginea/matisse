@@ -52,8 +52,9 @@ define( ["matisse"], function (matisse) {
 		    });
 		    var dialog_width = $("#chatdialog").dialog("option", "width");
 		    var win_width = $(window).width();
+        var menu_width = $('div.bottom').width();
 		    $('#chatdialog').dialog({
-			position: [win_width - dialog_width, 200]
+			position: [win_width -dialog_width - menu_width - 6, 200]
 		    });
 
 		    $('#chatdialog').dialog('open');
@@ -103,6 +104,12 @@ define( ["matisse"], function (matisse) {
         });
         matisse.main.deleteObjects();
       }
+       if (matisse.undoStack.length > 0) {
+         $('#Undo').removeClass('disabled');
+       }
+       else {
+         $('#Undo').addClass('disabled');
+       }
     },
     handleUndoAction: function() {
       var obj = matisse.undoStack.pop();
@@ -172,7 +179,14 @@ define( ["matisse"], function (matisse) {
           });
         }
       }
-    }
+        if (matisse.undoStack.length > 0) {
+          $('#Undo').removeClass('disabled');
+        }
+        else {
+          $('#Undo').addClass('disabled');
+        }
+        $('#Redo').removeClass('disabled');
+      }
     },
     handleRedoAction: function() {
       var obj = matisse.redoStack.pop();
@@ -241,6 +255,13 @@ define( ["matisse"], function (matisse) {
           });
         }
       }
+      if (matisse.redoStack.length > 0) {
+        $('#Redo').removeClass('disabled');
+      }
+      else {
+        $('#Redo').addClass('disabled');
+      }
+      $('#Undo').removeClass('disabled');
     }
     },
     getOriginalObj: function(obj) {

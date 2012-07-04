@@ -81,12 +81,26 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
             if (canvas.getActiveObject() === undefined) {
                 return;
             }
-            var dialog_width = $("#chatdialog").dialog("option", "width");
-            var win_width = $(window).width();
+            var win_width = $(window).width() - 300;
+            var menu_width = $('div.bottom').width();
             $('#propdiv').dialog({
-                position: [win_width - dialog_width, 300]
+                position: [win_width - menu_width, 300]
             });
             $('#propdiv').dialog('open');
+        },
+        
+        /**
+         * Opens whiteboard submenu for Edit
+         * @method openSubmenuEdit
+         * @param event
+         */
+        openSubmenuEdit: function (event) {
+        	event.stopPropagation();
+        	var $this = $(this).find('div.m-edit-list');
+        	if(!$this.is(":visible")) {
+        		$this.show();
+        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
+        	}
         },
 
         /**
