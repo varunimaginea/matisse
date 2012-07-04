@@ -42,6 +42,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
+            $('#editicon').click(toolHandlers.openSubmenuEdit);
+            $('li','ul.menu-edit-list').click(function () {var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();});
 		
 	    mActionBar.initalize();		    
 	

@@ -72,9 +72,18 @@
 				<div class="m-icon m-save"></div>
 				<div class="m-label">Save</div>
 			</div>
-			<div class="menu-holder m-popover" data-action='edit' data-content="Edit Comming Soon..." title="Edit">
+			<div class="menu-holder m-popover" id="editicon" data-action='edit' data-content="Edit Comming Soon..." title="Edit">
 				<div class="m-icon m-edit"></div>
 				<div class="m-label">Edit</div>
+				<div class="m-edit-list">
+        			<span class="menu-arrow"></span>
+        			<ul class="menu-edit-list">
+        				<li title="Undo" id="Undo">Undo<span class="menu-shortcut">Ctrl+z</span></li>
+        				<li title="Redo" id="Redo">Redo<span class="menu-shortcut">Ctrl+y</span></li>
+        				<li title="Layout" id="Layout">Layout<span class="menu-shortcut">Ctrl+L</span></li>
+        				<li title="Whiteboard" id="Whiteboard">Whiteboard<span class="menu-shortcut">Ctrl+w</span></li>
+        			</ul>
+       		   </div>
 			</div>
 			<div class="menu-holder m-popover" data-action='view' data-content="View Comming Soon..." title="View">
 				<div class="m-icon m-view"></div>
@@ -136,6 +145,6 @@
 		-->
 		<div class="b-uinfo-links"><a href="/"><span class='b-backarrow'><<</span>Back to Home</a> <div class='rightFloater'><a href="/logout">Signout</a></div></div-->		
 	</div>
-
+   
     </body>
 </html>

@@ -838,7 +838,7 @@ dashboardLeftThumbnail {
 }
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
 .board-name{-moz-transform:rotate(-270deg);-moz-transform-origin: left;-webkit-transform: rotate(-270deg);-webkit-transform-origin-x: left;font-size: 22px;margin: -31px 0 0 30px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 38px; padding-top: 22px;background-color: #464D57;}
-.menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;}
+.menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;position:relative;}
 .menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
 .m-selected{background-color:#036bd5;}
@@ -850,6 +850,12 @@ dashboardLeftThumbnail {
 .m-discuss{background-position:0 -218px;}
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
+.m-edit-list{ display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 120px; position: absolute; right: 58px; top: -10px; width: 148px;}
+.menu-arrow{background: url("../images/menu-arrow.png") no-repeat scroll 0 0 transparent; display: block; height: 22px; left: 148px; position: relative; top: 26px; width: 18px;}
+.menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
+.menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
+.menu-edit-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
+.menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
 /************** Overloading Dialog Styles  -- Start -- ****************/

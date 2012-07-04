@@ -88,6 +88,20 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
             });
             $('#propdiv').dialog('open');
         },
+        
+        /**
+         * Opens whiteboard submenu for Edit
+         * @method openSubmenuEdit
+         * @param event
+         */
+        openSubmenuEdit: function (event) {
+        	event.stopPropagation();
+        	var $this = $(this).find('div.m-edit-list');
+        	if(!$this.is(":visible")) {
+        		$this.show();
+        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
+        	}
+        },
 
         /**
          * Initializes the Chat Window, hide it initially
