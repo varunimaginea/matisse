@@ -12,6 +12,7 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 	$(function () {
 		var serverURL = 'http://www.thematisse.org',//change it to server ip or local ip for testing from other machines
 	  matisse.main = main;
+	  main.init();
 			comm = new Comm(serverURL);
 		/**
          * Initializes the application with the containers and layout set by user or asks your to choose them if not set yet
