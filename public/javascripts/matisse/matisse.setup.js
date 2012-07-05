@@ -10,8 +10,6 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
     "use strict";
 	//Dom Ready function
 	$(function () {
-	  matisse.main = main;
-	  main.init();
 		var serverURL = 'http://localhost',//change it to server ip or local ip for testing from other machines
 			comm = new Comm(serverURL);
 		/**
@@ -59,5 +57,6 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			}
 		}
 		matisse.comm = comm;
+    matisse.main = main;
 	});
 });
