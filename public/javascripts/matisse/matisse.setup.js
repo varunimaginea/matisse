@@ -11,6 +11,7 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 	//Dom Ready function
 	$(function () {
 	  matisse.main = main;
+	  main.init();
 		var serverURL = 'http://localhost',//change it to server ip or local ip for testing from other machines
 			comm = new Comm(serverURL);
 		/**
