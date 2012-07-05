@@ -112,7 +112,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 				layouts.setLayoutType(val);
 			}	
         $('#loading').hide();
-        $('#containerBody').show();
+        $('#containerBody').css('visibility', 'visible');
 		}
 		 
 	};
