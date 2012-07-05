@@ -265,6 +265,12 @@ define( ["matisse"], function (matisse) {
       $('#Undo').removeClass('disabled');
     }
     },
+    quickMenuHandler: function(selectedObj) {
+    	$('div.m-quick-edit').show();
+    	var xpos = selectedObj.get("left") + matisse.xOffset - (selectedObj.get("width")/2);
+        var ypos = selectedObj.get("top") + matisse.yOffset - (selectedObj.get("height")/2) - 50;
+        $('div.m-quick-edit').offset({ top: ypos, left: xpos });
+      },
     getOriginalObj: function(obj) {
       var originalObj = {};
       var j;
