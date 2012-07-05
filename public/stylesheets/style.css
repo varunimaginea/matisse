@@ -875,6 +875,12 @@ dashboardLeftThumbnail {
 .menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
+/************** Quick Action Menu -- Start -- ************************/
+.m-quick-edit{display:none;top:30px; left:380px; cursor:pointer; padding: 10px 2px 2px; box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; position: absolute; height: 25px; width: auto;}
+.m-quick-edit span:not(:last-child) {border-right: 1px solid #CCCCCC;}
+.m-quick-edit span {padding: 5px;}
+/************** Quick Action Menu -- End -- ************************/
+
 /************** Overloading Dialog Styles  -- Start -- ****************/
 .ui-widget-header{background:#046Ad6;border-radius:5px 5px 0 0;}
 .ui-dialog{padding:0px !important;box-shadow:1px 1px 1px #000000}
