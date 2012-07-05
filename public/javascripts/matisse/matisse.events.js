@@ -90,7 +90,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
      * @param e mouseevent
      */
     mouseDown: function (event) {
-      if (document.getElementById('delete_menuItem') && event.button == 0) { //if it is left click, remove the context menu item, if any
+       if (document.getElementById('delete_menuItem') && event.button == 0) { //if it is left click, remove the context menu item, if any
         $('#delete_menuItem').remove();
       }
       if (!canvas.isDrawingMode && matisse.drawShape) {
@@ -117,7 +117,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
           matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
           matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);
       }
-    },
+     },
 
 		// Listen for right click of mouse and display context menu when any object on canvas is selected.
 		contextMenu: function (event) {
