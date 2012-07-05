@@ -86,7 +86,6 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util", "matisse.layout
 			ui.deviceInnerWidth = contObj.innerWidth;
 			matisse.xOffset = contObj.xOffset;
 			matisse.yOffset = contObj.yOffset;
-			matisse.main.init();
 			if (contObj.src) {
 				var imagsrc = '/images/'+contObj.src;
 				$('#containerBody').css('background-image', 'url(' + imagsrc + ')');
