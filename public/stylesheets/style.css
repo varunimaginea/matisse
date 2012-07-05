@@ -295,14 +295,32 @@ div.scroller {
     width: 100%;
 }
 #loading {
-    background-color: yellow;
-    position: absolute;
-    z-index: 9001;
-    top: 0px;
+    width: 26em;
+    height: 11em;
+    padding: 1em 1em 2em;
+    text-align: center;
+    margin-left: -14.5em;
+    margin-top: -7em;
     left: 50%;
-    width: 5%;
-    font-family: arial;
-    font-size: 14px;
+    position: absolute;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    background: #464D57;
+    top: 0px;
+}
+
+#loading h4 {
+  color: white;
+  font-size: 3em;
+  margin: 0.5em 0;
+  font-weight: normal;
+  line-height: 1.3em;
+  font-style: normal;
+}
+
+img.spinner {
+  width: 42px;
 }
 
 #closediv  a {
