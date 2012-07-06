@@ -35,11 +35,11 @@ html
                             h3 New Whiteboard &raquo;
             - else       
                 div.span1
-                  img(src='images/q1.png', alt='"', align='top', width='20', height='20', class='pull-left') 
+                  img(src='images/blockquotes_start.png', alt='"', align='top', width='20', height='20', class='pull-left')
                 div.span7
-                  p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  p Balance between wait-times of emails and misunderstandings of a phone call, Matisse grounds the discussion and reveals interpretation gaps. A whiteboarding application with real-time canvas sharing and chat. Collaborate and sketch simultaneously, build wireframes, draw html elements or share screenshots.
                 div#rightQuote
-                  img(src='images/q2.png', alt='"', align='top', class='pull-right', width='20', height='20')
+                  img(src='images/blockquotes_end.png', alt='"', align='top', class='pull-right', width='20', height='20')
 
       div(class='row', id='loginHeaderDivider')
 
@@ -62,7 +62,7 @@ html
                       div.profileDetails
                         div(class='pull-left') 
                           a #{everyauth.twitter.user.name}
-                          a(href="/logout", id="logoutLink", class="logoutLink") (Not You?)
+                          a(href="/logout", id="logoutLink", class="logoutLink") (Logout)
                         div(class='pull-right')  
                           h6 via
                           a(class='loginSource pull-right') Twitter
@@ -110,21 +110,24 @@ html
           - if(!everyauth.loggedIn)
                 div(class='row')
                   div(class='span4')
-                    h3 Whats new ?
+                    h3 About Mattise ?
                   div(class='span4')
                     div(class='btn-toolbar pull-left', id='rightContentButton')
                       div(class='btn-group')
                         button(class='greyButton') Latest version: 1.0.1
                       div(class='btn-group')
-                        button(class='greyButton') Last updated Mar 22,2012
+                        button(class='greyButton') Last updated July 07,2012
                 div(class='row')
                   div(class='span8')
                     ul(class='newFeatureList')
-                      li.first The whole design of matisse is new
-                      li Manoj have started working on frontend
-                      li Paridhi and jagadesh has joined matisse team
-                      li jagadesh is working on new board style
-                      li.last Manoj has to finish dashboard also by wed :(
+                      li.first An HTML5 whiteboard application with real-time canvas sharing and chat
+                      li Ability to collaborate and sketch simultaneously, build wireframes, draw html elements or share screenshots
+                      li Login with Twitter, Facebook or Google+
+                      li Simple URL sharing to start collaborating
+                      li Server on socket.io and node.js
+                      li Uses Redis database
+                      li An express.js app with socket.io plugin
+                      li.last Allows early course correction and reveals interaction gaps
                 div(class='row')
                   hr(class='dashes')
                 div(class='row')
@@ -139,44 +142,30 @@ html
                           ul(class='thumbnails')
                             li(class='span3 leftThumbnail')
                                 div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
+                                  img(src='images/whiteboard1.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
+                                  p.thumbnailCaption Sample Whiteboard1
+                                  p.thumbnailDescription This is a sample whiteboard.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
+                                  img(src='images/whiteboard2.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
+                                  p.thumbnailCaption Sample Whiteboard2
+                                  p.thumbnailDescription This is a sample whiteboard.
                         div(class='item')
                           ul(class='thumbnails')
                             li(class='span3 leftThumbnail')
                                 div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
+                                  img(src='images/whiteboard1.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
+                                  p.thumbnailCaption Sample Whiteboard3
+                                  p.thumbnailDescription This is a sample whiteboard.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
+                                  img(src='images/whiteboard2.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
-                        div(class='item')
-                          ul(class='thumbnails')
-                            li(class='span3 leftThumbnail')
-                                div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
-                                div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
-                            li(class='span3 rightThumbnail')
-                                div(class='thumbnail sampleWb')
-                                  img(src='images/240x240.gif', alt='')
-                                div(class='thumbnailText')
-                                  p.thumbnailCaption Third Thumbnail label
-                                  p.thumbnailDescription Cras justo odio.
+                                  p.thumbnailCaption Sample Whiteboard4
+                                  p.thumbnailDescription This is a sample whiteboard.
                       a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
                       a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
           - else
