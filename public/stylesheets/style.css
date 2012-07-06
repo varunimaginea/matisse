@@ -389,7 +389,6 @@ input.file {
 }
 
 .rightHeader {
-    min-height: 142px;
     background-color: #464d57;
 }
 
@@ -435,7 +434,7 @@ input.file {
 }
 
 .content { 
-    min-height: 648px;
+    height: auto;
 }
 
 #loginLeftContent {
@@ -547,7 +546,7 @@ ul.newFeatureList {
     margin-right: 20px;
 }
 #myCarousel .carousel-control {
-  top: 35% !important;
+  top: 28% !important;
   width: 0px !important;
   margin-top: 0px !important;
   border: 0px solid #000000 !important;
@@ -563,7 +562,7 @@ ul.newFeatureList {
     width: 140px;
 }
 .thumbnail {
-    height: 240px;
+    height: 150px;
     box-shadow: 0 0 0 0 #000 !important;
 }
 .thumbnails li {
@@ -579,7 +578,7 @@ ul.newFeatureList {
     border-radius: 3px !important;
     border: 1px none #000000 !important;
     width: 240px;
-    height: 240px;
+    height: 150x;
 }
 .sampleWb img {
    border-radius: 7px;
@@ -622,7 +621,7 @@ dashboardLeftThumbnail {
     background-color: #ffffff;
 }
 #LeftFooterIcon {
-    padding: 30px 0px 0px 0px;
+    padding: 20px 0px 0px 0px;
 }
 #loginRightFooter {
     background-color: #464d57;
@@ -630,9 +629,9 @@ dashboardLeftThumbnail {
 
 #footer{
 	font-size: 13px;
-	min-height: 60px;
+	height: 9.5%;
 	margin-left: 30px;
-	padding: 20px 20px 20px 0px;
+	padding: 20px 20px 0px 0px;
 }
 	.footerInner{
 		margin: 0 auto;
@@ -654,6 +653,7 @@ dashboardLeftThumbnail {
 		        color: #8a9ab1;
 			text-align: right;
 			float: right;
+			font-size: 11px;
 		}
 
 #loginFooterDivider {
@@ -669,10 +669,10 @@ dashboardLeftThumbnail {
     background: url('../images/footerdivider_right.png') repeat-x;
 }
 .numButton {
-    color:#ffffff;
+    color:#3ec259;
     border: 1px solid #414952;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 9px;
+    font-size: 24px;
     background-color: #464d57;
     width: 85px;
     height: 80px;
@@ -685,17 +685,17 @@ dashboardLeftThumbnail {
 }
 
 #launchButton .btn {
-    background:#1886DB;
+    background:#10B832;
     border-radius: 2px;
-    border: 1px solid #08C;
+    border: 1px solid #78C975;
     padding: 5px 15px 3px 15px;
-    box-shadow: 1px 1px 1px #1886DB;
-    -moz-box-shadow:    1px 1px 1px #1886DB;
-    -webkit-box-shadow: 1px 1px 1px #1886DB;
+    box-shadow: 1px 1px 1px #093D0B;
+    -moz-box-shadow:    1px 1px 1px #093D0B;
+    -webkit-box-shadow: 1px 1px 1px #093D0B;
     font-family: Helvetica Neue, Helvetica, sans-serif !important;
     font-size: 18px !important;
-    color: #ffffff !important;
-    text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);
+    color: #ffffff; !important;
+    text-shadow:0 -1px 0 rgba(1, 19, 2, 0.4);
 }
 #rightHeaderContent {
     padding-top: 15px;
@@ -727,11 +727,9 @@ dashboardLeftThumbnail {
     font-family: Arial, Helvetica, sans-serif;
     padding-top: 10px;
 }
-#loginRightContent {
-    min-height: 648px;
-}
+
 #loginRightContent .whiteboardList {
-    min-height: 200px;
+    height: 30%;
 }
 
 #loginRightContent h3.dashboardRightContentHeading {
