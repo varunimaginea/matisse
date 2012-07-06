@@ -85,6 +85,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                 });
                 $('#prop').remove();
                 $('#propdiv').dialog('close');
+                $('div.m-quick-edit').hide();
             } else if (activeGroup) {
                 var objectsInGroup = activeGroup.getObjects();
                 canvas.discardActiveGroup();
