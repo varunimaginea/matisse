@@ -880,9 +880,9 @@ dashboardLeftThumbnail {
 .m-quick-edit span:not(:last-child) {border-right: 1px solid #CCCCCC;}
 .m-quick-edit span {padding: 5px; background: url('../images/quicklaunch_sprite.png') no-repeat; display: inline-block; height:16px;width:16px;}
 .m-quick-edit span.prop_icon {background-position:0 0;}
-.m-quick-edit span.prop_icon:hover {background-position:0 -24px;}
+.m-quick-edit span.prop_icon:hover , .m-quick-edit span.prop_icon.selected {background-position:0 -24px;}
 .m-quick-edit span.copy_icon {background-position:-24px 0;}
-.m-quick-edit span.copy_icon:hover {background-position:-24px -24px;}
+.m-quick-edit span.copy_icon:hover , .m-quick-edit span.copy_icon.selected {background-position:-24px -24px;}
 .m-quick-edit span.del_icon {background-position:-48px 0;}
 .m-quick-edit span.del_icon:hover {background-position:-48px -24px;}
 

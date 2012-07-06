@@ -44,6 +44,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon').click(toolHandlers.openSubmenuEdit);
             $('li','ul.menu-edit-list').click(function () {var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();});
+            $('div.m-quick-edit').on("click", "span", function(event) { 
+            	var item_checked = $(event.target); 
+            	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
+            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');}
+            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}            	
+            });
 		
 	    mActionBar.initalize();		    
 	
