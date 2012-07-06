@@ -56,7 +56,8 @@ exports.index = function (req, res) {
 							                        name: props.name,
    							                     container: props.container,
 	   						                     canvasWidth: props.canvasWidth,
-		   					                     canvasHeight: props.canvasHeight
+		   					                     canvasHeight: props.canvasHeight,
+		   					                     createdBy: props.createdBy
 			   				                   });
 				   		                   });
 					   	                 });
@@ -155,6 +156,7 @@ exports.boards = {
         var session_data = req.session.auth;
 		var userObj = new UserModel();
 		var userID = userObj.getUserID(session_data);
+		var userName = userObj.getUserName(session_data);
 		
         for (var i = 0; i < string_length; i++) {
             var rnum = Math.floor(Math.random() * chars.length);
@@ -166,10 +168,9 @@ exports.boards = {
 	    canvasWidth: req.body.canvasWidth,
 	    canvasHeight: req.body.canvasHeight,
 	    name: req.body.whiteboardName,
-	    createdBy: userID
+	    createdBy: userName
         };
         var whiteBoard = new BoardModel();
-        console.log("created by: " + data.createdBy);
         whiteBoard.store(data, function (err) {
             if (err === 'invalid') {
 		next(whiteBoard.errors);
