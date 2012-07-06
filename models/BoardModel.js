@@ -26,6 +26,9 @@ var boardModel = module.exports = nohm.model('Board', {
 	name: {
 	        type: 'string'	
 	},
+	createdBy : {
+			type: 'string'
+	},
     },
     methods: {
 	// custom methods we define here to make handling this model easier.

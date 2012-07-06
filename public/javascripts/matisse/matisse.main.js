@@ -37,7 +37,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			matisse.xOffset = util.getOffset(document.getElementById('canvasId')).left+matisse.xOffset;
             matisse.yOffset = util.getOffset(document.getElementById('canvasId')).top+ matisse.yOffset;
 					
-            this.addTools();
+           // this.addTools();
 
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);

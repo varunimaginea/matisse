@@ -58,5 +58,6 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 		}
 		matisse.comm = comm;
     matisse.main = main;
+    main.addTools();
 	});
 });
