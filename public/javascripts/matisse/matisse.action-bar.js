@@ -266,6 +266,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     }
     },
     handleCopyAction: function() {
+    	$('#propdiv').dialog("close");
     	canvas.isSelectMode = false;
     	var objectToCopy = canvas.getActiveObject(); 
     	matisse.drawShape = true;
@@ -274,6 +275,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
 		var obj = util.getPropertiesFromObject(matisse.palette[matisse.paletteName].shapes[matisse.action].properties,objectToCopy);
 		obj.uid = util.uniqid();
 		matisse.shapeArgs = [obj];
+		$('div.m-quick-edit').fadeOut('slow',function(){canvas.discardActiveObject();canvas.renderAll();});
     },
     quickMenuHandler: function(selectedObj) {
     	$('div.m-quick-edit').show();

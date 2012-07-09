@@ -110,6 +110,8 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
         matisse.drawShape = false;
         ui.resetShapeSelection();
         actionBar.stateUpdated(null, "created");
+        $('span.copy_icon','div.m-quick-edit').removeClass('selected');
+        canvas.setActiveObject(canvas.item(canvas.getObjects().length-1));
       }
       if (canvas.isDrawingMode) {
           matisse.xPoints = [];
@@ -117,7 +119,6 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
           matisse.xPoints.push(event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset);
           matisse.yPoints.push(event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset);
       }
-      $('span.copy_icon','div.m-quick-edit').removeClass('selected');
      },
 
 		// Listen for right click of mouse and display context menu when any object on canvas is selected.
