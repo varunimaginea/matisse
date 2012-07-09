@@ -184,7 +184,7 @@ application = (function () {
 				var shape = new ShapesModel();
 				shape.load(id, function (err, props) {
 					if (err) {
-						return next(err);
+						console.log(err);
 					}
           if (props.palette == "wireframe") {
             switch(props.action) {
@@ -215,7 +215,9 @@ application = (function () {
           }
           else {
             props.palette = "shapes";
-            props.args.palette = props.palette;
+            if(props.args) {
+              props.args.palette = props.palette;
+            }
           }
 
           shape.store(props, function (err) {
