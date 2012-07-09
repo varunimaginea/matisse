@@ -47,7 +47,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('div.m-quick-edit').on("click", "span", function(event) { 
             	var item_checked = $(event.target); 
             	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
-            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');}
+            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
             	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}            	
             });
 		
