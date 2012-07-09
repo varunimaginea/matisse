@@ -41,6 +41,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 				case "selection:cleared":
 					//$('#prop').remove();
 					//$('#propdiv').dialog('close');
+					$('#propdiv').dialog("close");
 					quickMenuDiv.hide();
 					break;
 				case 'path:created': // When path creation is completed by user
