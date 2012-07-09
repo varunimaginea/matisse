@@ -167,6 +167,9 @@ application = (function () {
     
     app.use(use);
     app.listen(8000);
+    io.configure('production', function(){
+      io.set('transports', ['xhr-polling']);
+    });
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
 
     collaboration.collaborate(io, getUserDetails);
