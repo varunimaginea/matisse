@@ -62,19 +62,6 @@ var userModel = module.exports = nohm.model('User', {
 	    }
 	    return userID;
 	},
-	getUserName: function(session_data) {
-		  var userName;
-		    if (typeof(session_data.twitter) != "undefined") {
-			userName = session_data.twitter.user.name;
-		    }
-		    else if (session_data.facebook) {
-			userName = session_data.facebook.user.name;
-		    }
-		    else if (session_data.google) {
-			userName = session_data.google.user.name;
-		    }
-		    return userName;
-		},
 	linkBoard: function(whiteBoard, dbUserID) {
 	    this.find({userID:dbUserID}, function(err,ids) {
 		if (err){
