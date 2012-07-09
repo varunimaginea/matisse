@@ -885,6 +885,7 @@ dashboardLeftThumbnail {
 .m-quick-edit span.copy_icon:hover , .m-quick-edit span.copy_icon.selected {background-position:-24px -24px;}
 .m-quick-edit span.del_icon {background-position:-48px 0;}
 .m-quick-edit span.del_icon:hover {background-position:-48px -24px;}
+div.copy-alert {display:none; left: 37%; position: absolute; top: 0;} 
 /************** Quick Action Menu -- End -- ************************/
 
 /************** Overloading Dialog Styles  -- Start -- ****************/

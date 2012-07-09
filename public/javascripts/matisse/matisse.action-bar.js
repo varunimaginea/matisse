@@ -275,7 +275,8 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
 		var obj = util.getPropertiesFromObject(matisse.palette[matisse.paletteName].shapes[matisse.action].properties,objectToCopy);
 		obj.uid = util.uniqid();
 		matisse.shapeArgs = [obj];
-		$('div.m-quick-edit').fadeOut('slow',function(){canvas.discardActiveObject();canvas.renderAll();});
+		$('div.m-quick-edit').fadeOut('fast',function(){canvas.discardActiveObject();canvas.renderAll();});
+		$('div.copy-alert').slideDown(400).delay(2000).fadeOut(1000);
     },
     quickMenuHandler: function(selectedObj) {
     	$('div.m-quick-edit').show();
