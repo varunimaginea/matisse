@@ -186,7 +186,7 @@ application = (function () {
 					if (err) {
 						console.log(err);
 					}
-          if (props.palette == "wireframe") {
+
             switch(props.action) {
             case "slider":
               props.palette = "components";
@@ -208,18 +208,54 @@ application = (function () {
               props.palette = "components";
               props.args.palette = props.palette;
               break;
+            case "rectangle":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "line":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "importimage":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "text":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "circle":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "triangle":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
+            case "path":
+              props.palette = "shapes";
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
+              break;
             default:
               props.palette = "controls";
-              props.args.palette = props.palette;
+              if(props.args) {
+                props.args.palette = props.palette;
+              }
             }
-          }
-          else {
-            props.palette = "shapes";
-            if(props.args) {
-              props.args.palette = props.palette;
-            }
-          }
-
           shape.store(props, function (err) {
 						//console.log("***** Error in URL:"+url+" Err:"+err);
 					});
