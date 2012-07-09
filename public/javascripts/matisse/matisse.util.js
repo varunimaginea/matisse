@@ -196,6 +196,7 @@ define(["matisse"], function (matisse) {
 			}
 			obj['height'] = fromObj['height'];
 			obj['width'] = fromObj['width'];
+			obj['paths'] = fromObj['paths'];
 			return obj;
 		}
 	};

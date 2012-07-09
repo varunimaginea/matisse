@@ -266,6 +266,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     }
     },
     handleCopyAction: function() {
+    	canvas.isSelectMode = false;
     	var objectToCopy = canvas.getActiveObject(); 
     	matisse.drawShape = true;
 		matisse.action = objectToCopy.name;
