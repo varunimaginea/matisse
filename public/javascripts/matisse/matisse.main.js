@@ -83,7 +83,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                         uid: activeObject.uid
                     }]
                 });
-                $('#prop').remove();
                 $('#propdiv').dialog('close');
                 $('div.m-quick-edit').hide();
             } else if (activeGroup) {
