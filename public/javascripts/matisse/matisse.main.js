@@ -83,7 +83,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                         uid: activeObject.uid
                     }]
                 });
-                $('#prop').remove();
                 $('#propdiv').dialog('close');
                 $('div.m-quick-edit').hide();
             } else if (activeGroup) {
@@ -201,9 +200,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						$("#chattext").append(txt);
 					} else if (data.action === "delete") {
 						var obj = util.getObjectById(data.args[0].uid);
+            var activeObj = canvas.getActiveObject();
 						canvas.remove(obj);
-						$('#prop').remove();
-            $('#propdiv').dialog('close');
+						if (activeObj == obj) {
+              $('#propdiv').dialog('close');
+                $('div.m-quick-edit').hide();
+            }
 					} else if (data.action === "importimage") {
 						matisse.main.addImageToCanvasFromServer(data.args[0]);
 					} else if (data.action === "zindexchange") {
