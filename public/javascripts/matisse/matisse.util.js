@@ -177,6 +177,27 @@ define(["matisse"], function (matisse) {
 				obj[arr[i].name] = arr[i].defaultvalue;
 			}
 			return obj;
+		},
+		/**
+		 *  Get properties from a given object and returns an object with the extracted property values.
+		 *  @method  getPropertiesFromObject
+		 *  @param arr - Array of properties
+		 *  @param fromObj - Object from which the properties are to be extracted
+		 *  @return obj - Object
+		 */
+		getPropertiesFromObject: function (arr, fromObj) {
+			if (arr === undefined) {
+				return null;
+			}
+			var obj = {};
+			var i = 0;
+			for (i = 0; i < arr.length; i++) {
+				obj[arr[i].name] = fromObj[arr[i].name];
+			}
+			obj['height'] = fromObj['height'];
+			obj['width'] = fromObj['width'];
+			obj['paths'] = fromObj['paths'];
+			return obj;
 		}
 	};
 

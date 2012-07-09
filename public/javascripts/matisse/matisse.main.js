@@ -47,8 +47,8 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('div.m-quick-edit').on("click", "span", function(event) { 
             	var item_checked = $(event.target); 
             	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
-            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');}
-            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}            	
+            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
+            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}
             });
 		
 	    mActionBar.initalize();		    
@@ -102,9 +102,9 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			var obj = util.getObjectById(args[0].uid);
 			if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
-                canvas.setActiveObject(obj);
-                properties.updatePropertyPanel(obj);
-				obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+            //    canvas.setActiveObject(obj);
+            //    properties.updatePropertyPanel(obj);
+				//obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
             }
             canvas.renderAll();
         },

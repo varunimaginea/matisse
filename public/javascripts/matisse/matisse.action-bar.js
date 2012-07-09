@@ -1,4 +1,4 @@
-define( ["matisse"], function (matisse) {
+define( ["matisse", "matisse.util"], function (matisse, util) {
 	"use strict";
 	var actionBar = {
 		initalize:function(){
@@ -264,6 +264,16 @@ define( ["matisse"], function (matisse) {
 
       $('#Undo').removeClass('disabled');
     }
+    },
+    handleCopyAction: function() {
+    	canvas.isSelectMode = false;
+    	var objectToCopy = canvas.getActiveObject(); 
+    	matisse.drawShape = true;
+		matisse.action = objectToCopy.name;
+		matisse.paletteName = objectToCopy.palette;   
+		var obj = util.getPropertiesFromObject(matisse.palette[matisse.paletteName].shapes[matisse.action].properties,objectToCopy);
+		obj.uid = util.uniqid();
+		matisse.shapeArgs = [obj];
     },
     quickMenuHandler: function(selectedObj) {
     	$('div.m-quick-edit').show();
