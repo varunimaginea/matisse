@@ -122,7 +122,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             p.name = "drawingpath";
             p.scaleX = 1;
             p.scaleY = 1;
-            p.palette = "basic";
+            p.palette = "shapes";
             p.set("left", args.left);
             p.set("top", args.top);
             p.set("width", args.width);

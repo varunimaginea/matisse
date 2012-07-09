@@ -30,13 +30,13 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
 						}],
 						args = [];
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
 					args.push(args1);
 					/**
 					 * arguments of each object are returned so that they can be sent to the server and its state is saved.
@@ -68,7 +68,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -84,14 +84,14 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
 						}],
 						args = [];
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
 					args.push(args1);
 					args.push(args2);
 					/**
@@ -121,7 +121,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -137,7 +137,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -153,15 +153,15 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
 						}],
 						args = [];
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args3);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args3);
 					
 					args.push(args1);
 					args.push(args2);
@@ -193,7 +193,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -209,7 +209,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -225,7 +225,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -234,9 +234,9 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					/**
 					 * To call basic shapes rectangle's tool action to create fabric rectangle on canvas
 					 */
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args3);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args3);
 
 					args.push(args1);
 					args.push(args2);
@@ -268,7 +268,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -284,7 +284,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -300,7 +300,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -317,7 +317,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -327,10 +327,10 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					/**
 					 * To call basic shapes rectangle's tool action to create fabric rectangle on canvas
 					 */
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args3);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args4);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args3);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args4);
 
 					args.push(args1);
 					args.push(args2);
@@ -363,7 +363,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -379,7 +379,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -395,7 +395,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -411,7 +411,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -421,10 +421,10 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					/**
 					 * To call basic shapes rectangle's tool action to create fabric rectangle on canvas
 					 */
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args3);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args4);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args3);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args4);
 					
 					args.push(args1);
 					args.push(args2);
@@ -458,7 +458,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -474,7 +474,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -490,7 +490,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -506,7 +506,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -522,7 +522,7 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 							fill: '#ffffff',
 							stroke: '#000000',
 							uid: util.uniqid(),
-							palette: "basic",
+							palette: "shapes",
 							angle: 0,
 							scaleX: 1,
 							scaleY: 1
@@ -531,11 +531,11 @@ require(["matisse", "matisse.main", "matisse.layouts", "matisse.palettes.propert
 					/**
 					 * To call basic shapes rectangle's tool action to create fabric rectangle on canvas
 					 */
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args1);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args2);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args3);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args4);
-					matisse.palette["basic"].shapes["rectangle"].toolAction.apply(this, args5);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args1);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args2);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args3);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args4);
+					matisse.palette["shapes"].shapes["rectangle"].toolAction.apply(this, args5);
 
 					args.push(args1);
 					args.push(args2);
