@@ -189,7 +189,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
 					args.angle = 0;
 					args.uid = util.uniqid();
 					args.name = 'importimage';
-					args.palette = 'basic';
+					args.palette = 'shapes';
 					args.self = true;
 					var img = new Image();
 					img.onload = function() {

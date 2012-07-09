@@ -173,4 +173,56 @@ application = (function () {
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
 
     collaboration.collaborate(io, getUserDetails);
+	ShapesModel.find(function (err, ids) {
+		if (err) {
+			console.log(err);
+		}
+		var len = ids.length;
+		var count = 0;
+		if (len === 0) {} else {
+			ids.forEach(function (id) {
+				var shape = new ShapesModel();
+				shape.load(id, function (err, props) {
+					if (err) {
+						return next(err);
+					}
+          if (props.palette == "wireframe") {
+            switch(props.action) {
+            case "slider":
+              props.palette = "components";
+              props.args.palette = props.palette;
+              break;
+            case "progressbar":
+              props.palette = "components";
+              props.args.palette = props.palette;
+              break;
+            case "table":
+              props.palette = "components";
+              props.args.palette = props.palette;
+              break;
+            case "div":
+              props.palette = "components";
+              props.args.palette = props.palette;
+              break;
+            case "image":
+              props.palette = "components";
+              props.args.palette = props.palette;
+              break;
+            default:
+              props.palette = "controls";
+              props.args.palette = props.palette;
+            }
+          }
+          else {
+            props.palette = "shapes";
+            props.args.palette = props.palette;
+          }
+
+          shape.store(props, function (err) {
+						//console.log("***** Error in URL:"+url+" Err:"+err);
+					});
+				});
+			});
+		}
+	});
 }).call(this);

@@ -40,7 +40,7 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 			if (args) {	
 				for (var i = 0; i < args.length; i++) {
 					matisse.comm.sendDrawMsg({
-						palette: "basic",
+						palette: "shapes",
 						action: "rectangle",
 						args: args[i]
 					});

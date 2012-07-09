@@ -27,8 +27,8 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 		if(recvdObj.path)
 		obj.path = recvdObj.path;
 	};
-	palettes.registerpalette("basic", {
-		collectionName: 'basic',
+	palettes.registerpalette("shapes", {
+		collectionName: 'shapes',
 		shapes: {
 			rectangle: {
 				name: "rectangle",
