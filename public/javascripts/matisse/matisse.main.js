@@ -48,7 +48,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             	var item_checked = $(event.target); 
             	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
             	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
-            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}            	
+            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}
             });
 		
 	    mActionBar.initalize();		    
@@ -85,6 +85,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                 });
                 $('#prop').remove();
                 $('#propdiv').dialog('close');
+                $('div.m-quick-edit').hide();
             } else if (activeGroup) {
                 var objectsInGroup = activeGroup.getObjects();
                 canvas.discardActiveGroup();
