@@ -178,7 +178,9 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
     notifyServerGroupMoved: function () {
       var activeGroup = canvas.getActiveGroup();
       var objectsInGroup = activeGroup.getObjects();
+      var quickMenuGroupDiv = $('div.m-quick-edit-group');
       canvas.discardActiveGroup();
+      quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
       objectsInGroup.forEach(function (obj) {
           notifyObjModify(obj);
       });

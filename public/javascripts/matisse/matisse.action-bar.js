@@ -97,11 +97,12 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
       }
       else if (state == "deleted"){
         var obj =  canvas.getActiveObject();
-        matisse.undoStack.push({
-          palette: obj.palette,
-          action: obj.name,
-          args: [obj]
-        });
+        if(obj) 
+          matisse.undoStack.push({
+            palette: obj.palette,
+            action: obj.name,
+            args: [obj]
+          });
         matisse.main.deleteObjects();
       }
        if (matisse.undoStack.length > 0) {
@@ -278,12 +279,78 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
 		$('div.m-quick-edit').fadeOut('fast',function(){canvas.discardActiveObject();canvas.renderAll();});
 		$('div.copy-alert').slideDown(400).delay(2000).fadeOut(1000);
     },
+    handlealignLeftAction: function(selected_group, selected_group_obj_array) {
+    	// Align Left
+		$.each(selected_group_obj_array,function(index,value) { 
+			var xpos = 0  - (selected_group.get("width")/2) + value.width/2;
+			value.set("left", xpos);
+		});
+    },
+    handlealignRightAction: function(selected_group, selected_group_obj_array) {
+    	// Align Right
+		$.each(selected_group_obj_array,function(index,value) { 
+			var xpos = 0  + (selected_group.get("width")/2) - value.width/2;
+			value.set("left", xpos);
+		})
+    },
+    handlealignTopAction: function(selected_group, selected_group_obj_array) {
+    	// Align Top
+		$.each(selected_group_obj_array,function(index,value) { 
+			var ypos = 0  - (selected_group.get("height")/2) + value.height/2;
+			value.set("top", ypos);
+		}) 
+    },
+    handlealignBottomAction: function(selected_group, selected_group_obj_array) {
+    	// Align Bottom
+		$.each(selected_group_obj_array,function(index,value) { 
+			var ypos = 0  + (selected_group.get("height")/2) - value.height/2;
+			value.set("top", ypos);
+		})
+    },
+    handlealignCenterAction: function(selected_group, selected_group_obj_array) {
+    	// Align Center
+		$.each(selected_group_obj_array,function(index,value) { 
+			value.set("top", 0);
+			value.set("left",0);
+		})
+    },
+    handledistributeHorizontallyAction: function(selected_group, selected_group_obj_array) {
+    	//Distribut Horizontally
+    	var spacing = selected_group.get("width")/selected_group_obj_array.length;
+    	var spacingToAdd = spacing;
+    	selected_group_obj_array[0].set("left" , 0  - (selected_group.get("width")/2) + selected_group_obj_array[0].width/2);
+    	$.each(selected_group_obj_array,function(index,value) { 
+    		if(index==0) return;
+    		var xpos = 0  - (selected_group.get("width")/2)  + spacingToAdd;
+			value.set("left", xpos);
+			spacingToAdd += spacing;
+    	});
+    },
+    handledistributeVerticallyAction: function(selected_group, selected_group_obj_array) {
+    	//Distribut Vertically
+    	var spacing = selected_group.get("height")/selected_group_obj_array.length;
+    	var spacingToAdd = spacing;
+    	selected_group_obj_array[0].set("top" , 0  - (selected_group.get("height")/2) + selected_group_obj_array[0].height/2);
+    	$.each(selected_group_obj_array,function(index,value) { 
+    		if(index==0) return;
+    		var ypos = 0  - (selected_group.get("height")/2)  + spacingToAdd;
+			value.set("top", ypos);
+			spacingToAdd += spacing;
+    	});
+    },
     quickMenuHandler: function(selectedObj) {
     	$('div.m-quick-edit').show();
     	var xpos = selectedObj.get("left") + matisse.xOffset - (selectedObj.get("width")/2);
         var ypos = selectedObj.get("top") + matisse.yOffset - (selectedObj.get("height")/2) - 50;
         $('div.m-quick-edit').offset({ top: ypos, left: xpos });
       },
+    quickMenuGroupHandler: function(selectedGroup) {
+      	var quickMenu = $('div.m-quick-edit-group');
+      	quickMenu.show();
+      	var xpos = selectedGroup.get("left") + matisse.xOffset - (selectedGroup.get("width")/2);
+          var ypos = selectedGroup.get("top") + matisse.yOffset - (selectedGroup.get("height")/2) - 50;
+          quickMenu.offset({ top: ypos, left: xpos });
+        },
     getOriginalObj: function(obj) {
       var originalObj = {};
       var j;
