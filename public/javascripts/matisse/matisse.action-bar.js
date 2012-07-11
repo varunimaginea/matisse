@@ -279,6 +279,13 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
 		$('div.m-quick-edit').fadeOut('fast',function(){canvas.discardActiveObject();canvas.renderAll();});
 		$('div.copy-alert').slideDown(400).delay(2000).fadeOut(1000);
     },
+    handleGroupCopyAction: function() {
+    	canvas.isSelectMode = false; 
+    	matisse.drawShape = true;
+    	matisse.groupCopyMode = true;
+		$('div.m-quick-edit-group').fadeOut('fast',function(){canvas.discardActiveObject();canvas.renderAll();});
+		$('div.copy-alert').slideDown(400).delay(2000).fadeOut(1000);
+    },
     handlealignLeftAction: function(selected_group, selected_group_obj_array) {
     	// Align Left
 		$.each(selected_group_obj_array,function(index,value) { 

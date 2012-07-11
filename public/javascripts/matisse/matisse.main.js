@@ -67,7 +67,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             		item_checked.toggleClass('selected');
             		item_checked.parents('div.m-quick-edit-group').find('div.m-align-list').toggle();
             	}
-            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
+            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleGroupCopyAction();}
             	else { //$.each(selected_group_obj_array,function(index,value) { mActionBar.stateUpdated(value, "deleted"); })
             		mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit-group').hide();
             		}

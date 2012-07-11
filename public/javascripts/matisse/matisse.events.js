@@ -6,7 +6,7 @@
  *
  */
 
-define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function (matisse, ui, comm, actionBar) {
+define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.util"], function (matisse, ui, comm, actionBar, util) {
 	"use strict";
 	return {
 		/**
@@ -94,24 +94,34 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
         $('#delete_menuItem').remove();
       }
       if (!canvas.isDrawingMode && matisse.drawShape) {
-        matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
+    	matisse.points.x = event.pageX + document.getElementById("canvasId").scrollLeft + document.getElementById("containerDiv").scrollLeft - matisse.xOffset; //offset
         matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset; //offset
-        matisse.shapeArgs[0].left = matisse.points.x;
-        matisse.shapeArgs[0].top = matisse.points.y;
-        matisse.shapeArgs[0].name = matisse.action;
-        matisse.shapeArgs[0].palette = matisse.paletteName;
-        matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
-        matisse.comm.sendDrawMsg({
-            palette: matisse.paletteName,
-            action: matisse.action,
-            args: matisse.shapeArgs
-        });
-        canvas.isSelectMode = true;
-        matisse.drawShape = false;
-        ui.resetShapeSelection();
-        actionBar.stateUpdated(null, "created");
-        $('span.copy_icon','div.m-quick-edit').removeClass('selected');
-        canvas.setActiveObject(canvas.item(canvas.getObjects().length-1));
+        if(matisse.groupCopyMode) {
+        	var selected_group_obj_array = canvas.getActiveGroup().getObjects();
+        	$.each(selected_group_obj_array,function(index,value) {
+        		matisse.action = value.name;
+        		matisse.paletteName = value.palette;   
+        		var obj = util.getPropertiesFromObject(matisse.palette[matisse.paletteName].shapes[matisse.action].properties,value);
+        		obj.uid = util.uniqid();
+        		matisse.shapeArgs = [obj];
+        		matisse.shapeArgs[0].left = matisse.points.x + obj.left;
+                matisse.shapeArgs[0].top = matisse.points.y + obj.top;
+        		drawObject(event);
+        	});
+        	matisse.groupCopyMode = false;
+        	$('span.copy_icon','div.m-quick-edit-group').removeClass('selected');
+        }
+        else {
+        	matisse.shapeArgs[0].left = matisse.points.x;
+            matisse.shapeArgs[0].top = matisse.points.y;
+        	drawObject(event);
+        	$('span.copy_icon','div.m-quick-edit').removeClass('selected');
+        	canvas.setActiveObject(canvas.item(canvas.getObjects().length-1));
+        }
+	    canvas.isSelectMode = true;
+	    matisse.drawShape = false;
+	    ui.resetShapeSelection();
+	    actionBar.stateUpdated(null, "created");
       }
       if (canvas.isDrawingMode) {
           matisse.xPoints = [];
@@ -121,7 +131,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
       }
      },
 
-		// Listen for right click of mouse and display context menu when any object on canvas is selected.
+     // Listen for right click of mouse and display context menu when any object on canvas is selected.
 		contextMenu: function (event) {
 			var obj = canvas.getActiveObject();
 			if (obj &&
@@ -188,6 +198,17 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar"], function
     };
     return eve;
 
+	function drawObject(event) {
+		matisse.shapeArgs[0].name = matisse.action;
+	    matisse.shapeArgs[0].palette = matisse.paletteName;
+	    matisse.palette[matisse.paletteName].shapes[matisse.action].toolAction.apply(this, matisse.shapeArgs);
+	    matisse.comm.sendDrawMsg({
+	        palette: matisse.paletteName,
+	        action: matisse.action,
+	        args: matisse.shapeArgs
+	    });
+	}
+    
     function closePopup() {
       var popEl = document.getElementById('popUpDiv');
       var closeEl = document.getElementById('closediv');
