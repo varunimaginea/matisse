@@ -197,20 +197,19 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		var txt = getTableText(obj);
 		txtbox.value = txt == "" ? txtbox.value : txt;
 		// on blur of txtbox, update the table on canvas with the text in txtbox.
-		txtbox.onblur = function (e) {			
+		txtbox.onblur = function (e) {
 			if (canvas.getActiveObject()) {
-                var pathGroup;
-                if (getTableText(canvas.getActiveObject()) != txtbox.value) {
-				    pathGroup = addItemsToTable(canvas.getActiveObject(), txtbox.value);			
-				    matisse.comm.sendDrawMsg({
-					    action: "modified",
-					    args: [{
-						    uid: pathGroup.uid,
-						    object: pathGroup
-					    }]
-				    });	
-				    canvas.setActiveObject(pathGroup);
-                }
+				var pathGroup = addItemsToTable(canvas.getActiveObject(), txtbox.value);
+				matisse.comm.sendDrawMsg({
+					action: "modified",
+					args: [{
+						uid: pathGroup.uid,
+						object: pathGroup
+					}]
+				});	
+				matisse.isUpdatingTable = true;
+				canvas.setActiveObject(pathGroup);
+				matisse.isUpdatingTable = false;
 			}
 		};		
 	};

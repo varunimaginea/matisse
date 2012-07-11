@@ -126,6 +126,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
                 width: 'auto',
                 height: 'auto',
                 resizable: false,
+                open: function(event, ui) { $('span.prop_icon','div.m-quick-edit').addClass('selected') },
                 close: function(event, ui) { $('span.prop_icon','div.m-quick-edit').removeClass('selected') }
             });
             $('#propdiv').dialog('close');
