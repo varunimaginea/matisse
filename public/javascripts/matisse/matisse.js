@@ -41,6 +41,7 @@ define(function () {
 		eventObj: {},
 		layoutURL: null,
 		undoStack: [],
-		redoStack: []
+		redoStack: [],
+		groupCopyMode: false
 	};
 });
