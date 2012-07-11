@@ -58,16 +58,22 @@ application = (function () {
         everyauth.helpExpress(app);
     };
 
-    var development = function () {
-        app.use(express.errorHandler({
-            dumpExceptions:true,
-            showStack:true
-        }));
+    var setEnvironmentSettings = function (env) {
+      var expressErrorHandlerOptions = {};
+      switch (env) {
+        case 'development':
+          expressErrorHandlerOptions =  {
+              dumpExceptions:true,
+              showStack:true
+          }
+          break;
+        case 'production' :
+          break;
+        default:
+          break;
+      }
+      app.use(express.errorHandler(expressErrorHandlerOptions));
     };
-
-    var production = function () {
-        app.use(express.errorHandler());
-    }
 
     var use = function (err, req, res, next) {
         if (err instanceof Error) {
@@ -80,8 +86,8 @@ application = (function () {
     }
     // Configuration
     app.configure(configure);
-    app.configure('development', development);
-    app.configure('production', production);
+    app.configure('development', function() {setEnvironmentSettings('development')});
+    app.configure('production', function() {setEnvironmentSettings('production')});
 
     // Routes
     app.get('/', routes.index);
@@ -90,8 +96,30 @@ application = (function () {
     app.resource('api', routes.api);
     app.post('/boards', routes.boards.index);
     app.get('/about', function (req, res, next) {
-	res.sendfile(__dirname + '/about.html');
+	    res.sendfile(__dirname + '/about.html');
     });
+
+    var logErrorOrExecute = function (err, param, callback) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        if (callback) {
+          console.log(param);
+          callback(param);
+        }
+      }
+    };
+
+    var redirectToHome = function(req, res) {
+      res.writeHead(302, {
+        'Location': 'http://'+req.headers.host
+      });
+      if(req.session) {
+        req.session.redirectPath = req.url;
+      }
+      res.end();
+    };
 
     app.resource('boards', {
         show:function (req, res, next) {
@@ -101,66 +129,35 @@ application = (function () {
                 whiteBoard.find({url: req.params.board.replace(/[^a-zA-Z 0-9]+/g,'')}, function (err, ids) {
                 if (err) {
                     console.log(err);
-                    res.writeHead(302, {
-                      'Location': 'http://'+req.headers.host
-                    });
-                    res.end();
+                    redirectToHome(req, res);
                 }
                 else {
-                  if (ids.length != 0) {
+                  if (ids && ids.length != 0) {
                   var session_data = req.session.auth;
-                  var userObj = new UserModel();
-                  var userID = userObj.getUserID(session_data);
-                  whiteBoard.load(ids[0], function(id) {
-                  });
-                  UserModel.find({userID:userID}, function(err,ids) {
-                    if (err){
-                    }
-                    else{
-                      var user = new UserModel;
-                        user.load(ids[0], function (err, props) {
-                        if (err) {
-                          return err;
-                        } else {
-                        }
-                        user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
-                          if (relExists) {
-                          }
-                          else {
-                            user.link(whiteBoard, 'sharedBoard');
-                            user.save(function(err) {
-                              if (err) {
-                                console.log(err);
-                              }
-                              else {
-                                console.log("relation is saved");
-                              }
-                            });
-                          }
-                        });
-                        });
-                    }
-                  });
-                  var session_user = userObj.getUserFromSession(session_data);
+                  var user = new UserModel();
+                  var userID = user.getUserID(session_data);
+                  whiteBoard.load(ids[0]);
+                  UserModel.find({userID:userID}, function(err, ids){logErrorOrExecute(err, function(ids){
+                    user.load(ids[0], function(err, props){logErrorOrExecute(err, function (props) {
+                      user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists){logErrorOrExecute(err, function(relExists) {
+                        user.link(whiteBoard, 'sharedBoard');
+                        user.save(function(err) {logErrorOrExecute(err)});
+                      })});
+                    })});
+                  })});
+                  var session_user = user.getUserFromSession(session_data);
                   setUserDetails(session_user);
                   res.sendfile(__dirname + '/board.html');
                   }
                   else {
-                    res.writeHead(302, {
-                      'Location': 'http://'+req.headers.host
-                    });
-                    res.end();
+                    redirectToHome(req, res);
                   }
                 }
                 });
             }
           }
           else {
-            res.writeHead(302, {
-                'Location': 'http://'+req.headers.host
-            });
-            req.session.redirectPath = req.url;
-            res.end();
+            redirectToHome(req, res);
           }
         }
     });
