@@ -212,148 +212,88 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}
 		};		
 	};
-	/**
-	 * To register components palette
-	 */
-	palettes.registerpalette("components", {
-		collectionName: 'components',
-		shapes: {
-			// components object, Table has a border, header and columns separated by lines. Text in table cells can be edited in properties dialog.
-			table: {
-				name: "table",
-				displayName: "Table",
-				activeIcon: "table_w.png",
-				inactiveIcon: "table_g.png",
-				// to create a table object
-				toolAction: function (args) {
-					var objects = [],
-						textItems = "",
-						count = 0,
-						// create a table container initially for the list.. i.e., outer rectangle
-						border = new fabric.Rect({
-							width: args.paths ? args.paths[0].width : 180,
-							height: args.paths ? args.paths[0].height : 200,
-							fill: '#fdfdfd',
-							stroke: '#000000'
-						}),
-						// add header to the table
-						header = new fabric.Polygon(
-							[{x: -border.width/2+1, y: -border.height/2+1 },{x: border.width/2 -1 , y: -border.height/2+1},{x: border.width/2 - 1 , y: -border.height/2 + 22},{x: -border.width/2+1, y: -border.height/2 + 22}],
-							{
-								fill: '#efefef',
-								stroke:'#dfdfdf'
-							}
-						);
-					args.width = border.width;
-					args.height = border.height;
-					args.scaleX = 1;
-					args.scaleY = 1;
-					objects.push(border);
-					objects.push(header);
-					var obj = loadComponent(args, objects);
-					// obtain the text of table items from the object, if any.
-					textItems = getTableText(args);
-					// after creating the container, add table items to the container, if any.
-					addItemsToTable(obj, textItems, args);
-				},
 
-				// when list object in one client is modified, modify the same in the other clients connected.
-				modifyAction: function (args) {
-					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;
-					var textItems = "",
-						count = 0;
-					updateProperties(obj, recvdObj);
+    function ComponentProperty(name, type, defaultValue, action) {
+        this.name = name;
+        this.type = (type)? type:'number';
+        this.defaultValue = (defaultValue == null || defaultValue == undefined)? 100:defaultValue;
+        this.action = (action)? action: function(args) {
+            (args.obj).set(name, args.property);
+        };
+    }
 
-					// update the properties of list container with that of the modified list container.
-					for (var prop in recvdObj.paths[0]) {
-						obj.paths[0][prop] = recvdObj.paths[0][prop];
-					}
-					obj.paths[1].points = [{x: -recvdObj.width/2+1, y: -recvdObj.height/2+1 },{x: recvdObj.width/2 -1 , y: -recvdObj.height/2+1},{x: recvdObj.width/2 - 1 , y: -recvdObj.height/2 + 22},{x: -recvdObj.width/2+1, y: -recvdObj.height/2 + 22}];
-					// obtain the text of table items from the object, if any.
-					textItems = getTableText(recvdObj);
-					// reconstruct the list with the obtained list items
-					addItemsToTable(obj, textItems);
-				},
+    (function(){
+        this.export = function() {
+            var exportedValue = {};
+            exportedValue["name"] = this.name;
+            exportedValue["type"] = this.type;
+            exportedValue["defaultvalue"] = this.defaultValue;
+            exportedValue['action'] = this.action;
+            return exportedValue;
+        }
+    }).call(ComponentProperty.prototype);
 
-				// when table object in one client is resized either width wise or height wise, resize the same in the other clients connected.
-				// change the width or height accordingly and also modify the left and top of the contents
-				resizeAction: function (resizedObj) {
-					var obj = util.getObjectById(resizedObj.uid), k=1, count=0, j = 0;
-					obj.paths[0].width = resizedObj.width;
-					obj.paths[0].height = resizedObj.height;
-					obj.paths[1].points = [{x: -resizedObj.width/2+1, y: -resizedObj.height/2+1 },{x: resizedObj.width/2 -1 , y: -resizedObj.height/2+1},{x: resizedObj.width/2 - 1 , y: -resizedObj.height/2 + 22},{x: -resizedObj.width/2+1, y: -resizedObj.height/2 + 22}];
+    function Component(name) {
+        this.name = name;
+        this.properties = [];
+        this.actions = {};
+        this.actionKeys = ["toolAction", "modifyAction", "applyProperties", "resizeAction"];
+    }
+   
+    (function() {
+        var addFlattenedMap = function (exportMap, actionMap, keys) {
+            var keyName = "", i = 0;
+            for (i = 0; i < keys.length; i++) {
+                keyName = keys[i];
+                exportMap[keyName] = actionMap[keyName];
+            }
+        };
+        var decorate = function(name) {
+            return name.charAt(0).toUpperCase() + name.slice(1);
+        };
 
-					// If the table has rows and cols
-					if (resizedObj.paths && resizedObj.paths.length >= 3) {
-						// get number of columns in the table
-						for (var i = 2; i < resizedObj.paths.length; i++) {
-							if (resizedObj.paths[i].points) {
-								count++;
-							}
-						}
-						// for the obtained columns, adjust the height accordingly when resized.
-						for (var i = 2; i < resizedObj.paths.length; i++) {
-							if (resizedObj.paths[i].points) {
-								obj.paths[i].points = [{x: -resizedObj.paths[0].width/2 + (k *(resizedObj.width / count)), y: -resizedObj.height/2}, {x: -resizedObj.paths[0].width/2 + (k *(resizedObj.width / count)) + 0.005, y: resizedObj.height/2}];
-								k++;
-							}
-						}
-						k = 0;
-						// for the text items, adjust the left and top accordingly when resized either width wise or height wise
-						for (var i = 2; i < resizedObj.paths.length; i++) {
-							if (resizedObj.paths[i].text) {
-								if (k == count) {
-									k = 0;
-									j++;
-								}
-								obj.paths[i].left = -resizedObj.width/2 + (resizedObj.width / count)/4 + (resizedObj.width / count)*k + 10;
-								obj.paths[i].top = -resizedObj.height/2 + (20 * j) + 10; // 20 is the height of each row
-								k++;
-							}
-						}
-					}
-				},
+        this.export = function() {
+            var exportedValue = {};
+            exportedValue["name"] = this.name;
+            exportedValue["displayName"] = decorate(this.name);
+            exportedValue["activeIcon"] = this.name + "_w.png";
+            exportedValue["inactiveIcon"] = this.name + "_g.png";
+            exportedValue["properties"] = this.properties;
+            addFlattenedMap(exportedValue, this.actions, this.actionKeys);
+            return exportedValue;
+        };
+        this.addProperty = function(name, defaultValue, type,  action) {
+            this.properties.push(new ComponentProperty(name, type, defaultValue, action).export());
+        };
+        this.addProperties = function(names) {
+            var i = 0;
+            for ( i = 0; i < names.length; i++) {
+                this.addProperty(names[i]);
+            }
+        };
+        this.addStringProperty = function(name, defaultValue) {
+            this.addProperty(name, defaultValue, 'string', null);
+        };
+        this.addActions = function( actionMap) {
+            this.actions = actionMap;
+        };
+        this.addDimensionAndScale = function() {
+            this.addProperties(["left", "top"]);
+            this.addProperty("angle", 0);
+            this.addProperty("scaleX", 1);
+            this.addProperty("scaleY", 1);
+        };
+    }).call(Component.prototype)
+    
 
-				// apply the properties of the list object to the properties panel.
-				applyProperties: function (props) {
-					objproperties._applyProperties(props);
-					var activeObj = canvas.getActiveObject();
-					// handle the table object by providing text area to add table items.
-					tableHandler(activeObj);
-				},
+    var divComponent = new Component("div");
+    divComponent.addDimensionAndScale();
+    divComponent.addProperties(['width', 'height']);
+    divComponent.addStringProperty('stroke',  '#ccc');
 
-				// properties for list object which can be dynamically modified (left, top and angle).
-				properties: [{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				}]	//End of properties for list
-			},
-
-			div: {	// Div components object
-				name: "div",
-				displayName: "Div",
-				activeIcon: "rectangle_w.png",
-				inactiveIcon: "rectangle_g.png",
-				toolAction: function (args) {
+    // action map
+	divComponent.addActions({
+        toolAction : function (args) {
 					var rect = new fabric.Rect({
 						width: args.width,
 						height: args.height,
@@ -389,71 +329,125 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					obj.scaleY = resizedObj.scaleY;
 					obj.angle = resizedObj.angle;
 					obj.stroke = resizedObj.stroke;
-				},
-				properties: [{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-					(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-					(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'width',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("width", args.property / args.obj.scaleX);
-					},
-					defaultvalue: 200
-				}, {
-					name: 'height',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("height", args.property / args.obj.scaleY);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleX", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleY", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'stroke',
-					type: 'string',
-					action: function (args) {
-						(args.obj).set("stroke", args.property);
-					},
-					defaultvalue: '#ccc'
-				}, {
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				}]	//End of properties for Div
-			},	//End of shape Div
+				}
+    });
 
-			image: {	//Image components object
-				name: "image",
-				displayName: "Image",
-				activeIcon: "image_w.png",
-				inactiveIcon: "image_g.png",
+    // override for some of the div value, temp, should rename resources
+    var divMap = divComponent.export();
+    divMap.activeIcon = "rectangle_w.png";
+    divMap.inactiveIcon = "rectangle_g.png";
+    
+
+    var tableComponent = new Component("table");
+    tableComponent.addProperties(["left", "top"]);
+    tableComponent.addProperty("angle", 0);
+
+    tableComponent.addActions( {
+        toolAction: function (args) {
+			var objects = [],
+			textItems = "",
+			count = 0,
+			// create a table container initially for the list.. i.e., outer rectangle
+			border = new fabric.Rect({
+				width: args.paths ? args.paths[0].width : 180,
+				height: args.paths ? args.paths[0].height : 200,
+				fill: '#fdfdfd',
+				stroke: '#000000'
+			}),
+			// add header to the table
+			header = new fabric.Polygon(
+				[{x: -border.width/2+1, y: -border.height/2+1 },{x: border.width/2 -1 , y: -border.height/2+1},{x: border.width/2 - 1 , y: -border.height/2 + 22},{x: -border.width/2+1, y: -border.height/2 + 22}],
+				{
+					fill: '#efefef',
+					stroke:'#dfdfdf'
+				}
+			);
+			args.width = border.width;
+			args.height = border.height;
+			args.scaleX = 1;
+			args.scaleY = 1;
+			objects.push(border);
+			objects.push(header);
+			var obj = loadComponent(args, objects);
+			// obtain the text of table items from the object, if any.
+			textItems = getTableText(args);
+			// after creating the container, add table items to the container, if any.
+			addItemsToTable(obj, textItems, args);
+		},
+
+		// when list object in one client is modified, modify the same in the other clients connected.
+		modifyAction: function (args) {
+			var obj = util.getObjectById(args.uid);
+			var recvdObj = args.object;
+			var textItems = "",
+			count = 0;
+			updateProperties(obj, recvdObj);
+
+			// update the properties of list container with that of the modified list container.
+			for (var prop in recvdObj.paths[0]) {
+				obj.paths[0][prop] = recvdObj.paths[0][prop];
+			}
+			obj.paths[1].points = [{x: -recvdObj.width/2+1, y: -recvdObj.height/2+1 },{x: recvdObj.width/2 -1 , y: -recvdObj.height/2+1},{x: recvdObj.width/2 - 1 , y: -recvdObj.height/2 + 22},{x: -recvdObj.width/2+1, y: -recvdObj.height/2 + 22}];
+			// obtain the text of table items from the object, if any.
+			textItems = getTableText(recvdObj);
+			// reconstruct the list with the obtained list items
+			addItemsToTable(obj, textItems);
+		},
+
+		// when table object in one client is resized either width wise or height wise, resize the same in the other clients connected.
+		// change the width or height accordingly and also modify the left and top of the contents
+		resizeAction: function (resizedObj) {
+			var obj = util.getObjectById(resizedObj.uid), k=1, count=0, j = 0;
+			obj.paths[0].width = resizedObj.width;
+			obj.paths[0].height = resizedObj.height;
+			obj.paths[1].points = [{x: -resizedObj.width/2+1, y: -resizedObj.height/2+1 },{x: resizedObj.width/2 -1 , y: -resizedObj.height/2+1},{x: resizedObj.width/2 - 1 , y: -resizedObj.height/2 + 22},{x: -resizedObj.width/2+1, y: -resizedObj.height/2 + 22}];
+
+			// If the table has rows and cols
+			if (resizedObj.paths && resizedObj.paths.length >= 3) {
+				// get number of columns in the table
+				for (var i = 2; i < resizedObj.paths.length; i++) {
+					if (resizedObj.paths[i].points) {
+						count++;
+					}
+				}
+				// for the obtained columns, adjust the height accordingly when resized.
+				for (var i = 2; i < resizedObj.paths.length; i++) {
+					if (resizedObj.paths[i].points) {
+						obj.paths[i].points = [{x: -resizedObj.paths[0].width/2 + (k *(resizedObj.width / count)), y: -resizedObj.height/2}, {x: -resizedObj.paths[0].width/2 + (k *(resizedObj.width / count)) + 0.005, y: resizedObj.height/2}];
+						k++;
+					}
+				}
+				k = 0;
+				// for the text items, adjust the left and top accordingly when resized either width wise or height wise
+				for (var i = 2; i < resizedObj.paths.length; i++) {
+					if (resizedObj.paths[i].text) {
+						if (k == count) {
+							k = 0;
+							j++;
+						}
+						obj.paths[i].left = -resizedObj.width/2 + (resizedObj.width / count)/4 + (resizedObj.width / count)*k + 10;
+						obj.paths[i].top = -resizedObj.height/2 + (20 * j) + 10; // 20 is the height of each row
+						k++;
+					}
+				}
+			}
+		},
+
+		// apply the properties of the list object to the properties panel.
+		applyProperties: function (props) {
+			objproperties._applyProperties(props);
+			var activeObj = canvas.getActiveObject();
+			// handle the table object by providing text area to add table items.
+			tableHandler(activeObj);
+		},
+    });
+
+
+
+    var imageComponent = new Component('image');
+    imageComponent.addDimensionAndScale();
+
+    imageComponent.addActions({
 				toolAction: function (args){
 					args.width = args.paths ? args.paths[0].width : 100;
 					args.height = args.paths ? args.paths[0].height : 75;
@@ -523,167 +517,109 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 					objproperties._applyProperties(props);
 				},
 
-				properties:[{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				}, {
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleX", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleY", args.property);
-					},
-					defaultvalue: 1
-				}]	//End of properties for image
-			}, // end of image
+    });
 
-			slider: {	//Slider components object
-				name: "slider",
-				displayName: "Slider",
-				activeIcon: "slider_w.png",
-				inactiveIcon: "slider_g.png",
-				toolAction: function (args) {
-					var objects = [];
-					args.width = args.paths ? args.paths[0].width : 200;
-					args.height = args.paths ? args.paths[0].height : 5;
-					var outerRect = new fabric.Rect({
-						width: args.width,
-						height: args.height,
-						fill: '#dfdfdf',
-						stroke: '#8f8f8f'
-					});
-					var innerRect = new fabric.Rect({
-						width: args.width / 20,
-						height: args.height * 3,
-						fill: '#8f8f8f',
-						stroke: '#9f9f9f'
-					});
-					var leftLine1 = new fabric.Polygon(
-						[{x: -args.width * 0.3, y: args.height/2 },{x: -args.width * 0.3 + 0.05, y: args.height/2},{x: -args.width * 0.3 + 0.05, y: args.height/2 + 7.5},{x: -args.width * 0.3, y: args.height/2 + 7.5}],
-						{
-							fill: '#AAAAAA',
-							stroke:'#AAAAAA'
-						}
-					);
-					var leftLine2 = new fabric.Polygon(
-						[{x: -args.width * 0.2, y: args.height/2 },{x: -args.width * 0.2 + 0.05, y: args.height/2},{x: -args.width * 0.2 + 0.05, y: args.height/2 + 4.5},{x: -args.width * 0.2, y: args.height/2 + 4.5}],
-						{
-							fill: '#AAAAAA',
-							stroke:'#AAAAAA'
-						}
-					);
-					var rightLine1 = new fabric.Polygon(
-						[{x: args.width * 0.3, y: args.height/2 },{x: args.width * 0.3 - 0.05, y: args.height/2},{x: args.width * 0.3 - 0.05, y: args.height/2 + 7.5},{x: args.width * 0.3, y: args.height/2 + 7.5}],
-						{
-							fill: '#AAAAAA',
-							stroke:'#AAAAAA'
-						}
-					);
-					var rightLine2 = new fabric.Polygon(
-						[{x: args.width * 0.2, y: args.height/2 },{x: args.width * 0.2 - 0.05, y: args.height/2},{x: args.width * 0.2 - 0.05, y: args.height/2 + 4.5},{x: args.width * 0.2, y: args.height/2 + 4.5}],
-						{
-							fill: '#AAAAAA',
-							stroke:'#AAAAAA	'
-						}
-					);
-					objects.push(outerRect);
-					objects.push(innerRect);
-					objects.push(leftLine1);
-					objects.push(rightLine1);
-					objects.push(leftLine2);
-					objects.push(rightLine2);
-					loadComponent(args, objects);
-				},
+    var sliderComponent =  new Component('slider');
+    sliderComponent.addDimensionAndScale();
 
-				modifyAction: function (args) {
-					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;
-					updateProperties(obj, recvdObj);
-					obj.paths[0].width = recvdObj.width;
-					obj.paths[0].height = recvdObj.height;
-					obj.paths[1].width = recvdObj.width / 20;
-					obj.paths[1].height = recvdObj.height * 3;
-					obj.paths[2].points = recvdObj.paths[2].points;
-					obj.paths[3].points = recvdObj.paths[3].points;
-					obj.paths[4].points = recvdObj.paths[4].points;
-					obj.paths[5].points = recvdObj.paths[5].points;
-				},
-				resizeAction: function (resizedObj) {
-					var obj = util.getObjectById(resizedObj.uid);
-					obj.paths[0].width = resizedObj.width;
-					obj.paths[0].height = resizedObj.height;
-					obj.paths[1].width = resizedObj.width / 20;
-					obj.paths[1].height = resizedObj.height * 3;
-					obj.paths[2].points = [{x: -resizedObj.width * 0.3, y: resizedObj.height/2 },{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2 + 7.5},{x: -resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
-					obj.paths[3].points = [{x: -resizedObj.width * 0.2, y: resizedObj.height/2 },{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2 + 4.5},{x: -resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
-					obj.paths[4].points = [{x: resizedObj.width * 0.3, y: resizedObj.height/2 },{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2 + 7.5},{x: resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
-					obj.paths[5].points = [{x: resizedObj.width * 0.2, y: resizedObj.height/2 },{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2 + 4.5},{x: resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
-				},
-				applyProperties: function (props) {
-					objproperties._applyProperties(props);
-				},
+    sliderComponent.addActions({
+		toolAction: function (args) {
+			var objects = [];
+			args.width = args.paths ? args.paths[0].width : 200;
+			args.height = args.paths ? args.paths[0].height : 5;
+			var outerRect = new fabric.Rect({
+				width: args.width,
+				height: args.height,
+				fill: '#dfdfdf',
+				stroke: '#8f8f8f'
+			});
+			var innerRect = new fabric.Rect({
+				width: args.width / 20,
+				height: args.height * 3,
+				fill: '#8f8f8f',
+				stroke: '#9f9f9f'
+			});
+			var leftLine1 = new fabric.Polygon(
+				[{x: -args.width * 0.3, y: args.height/2 },{x: -args.width * 0.3 + 0.05, y: args.height/2},{x: -args.width * 0.3 + 0.05, y: args.height/2 + 7.5},{x: -args.width * 0.3, y: args.height/2 + 7.5}],
+				{
+					fill: '#AAAAAA',
+					stroke:'#AAAAAA'
+				}
+			);
+			var leftLine2 = new fabric.Polygon(
+				[{x: -args.width * 0.2, y: args.height/2 },{x: -args.width * 0.2 + 0.05, y: args.height/2},{x: -args.width * 0.2 + 0.05, y: args.height/2 + 4.5},{x: -args.width * 0.2, y: args.height/2 + 4.5}],
+				{
+					fill: '#AAAAAA',
+					stroke:'#AAAAAA'
+				}
+			);
+			var rightLine1 = new fabric.Polygon(
+				[{x: args.width * 0.3, y: args.height/2 },{x: args.width * 0.3 - 0.05, y: args.height/2},{x: args.width * 0.3 - 0.05, y: args.height/2 + 7.5},{x: args.width * 0.3, y: args.height/2 + 7.5}],
+				{
+					fill: '#AAAAAA',
+					stroke:'#AAAAAA'
+				}
+			);
+			var rightLine2 = new fabric.Polygon(
+				[{x: args.width * 0.2, y: args.height/2 },{x: args.width * 0.2 - 0.05, y: args.height/2},{x: args.width * 0.2 - 0.05, y: args.height/2 + 4.5},{x: args.width * 0.2, y: args.height/2 + 4.5}],
+				{
+					fill: '#AAAAAA',
+					stroke:'#AAAAAA	'
+				}
+			);
+			objects.push(outerRect);
+			objects.push(innerRect);
+			objects.push(leftLine1);
+			objects.push(rightLine1);
+			objects.push(leftLine2);
+			objects.push(rightLine2);
+			loadComponent(args, objects);
+		},
 
-				properties: [{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				}, {
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleX", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleY", args.property);
-					},
-					defaultvalue: 1
-				}]	//End of properties for slider
-			},	//End of shape slider
+		modifyAction: function (args) {
+			var obj = util.getObjectById(args.uid);
+			var recvdObj = args.object;
+			updateProperties(obj, recvdObj);
+			obj.paths[0].width = recvdObj.width;
+			obj.paths[0].height = recvdObj.height;
+			obj.paths[1].width = recvdObj.width / 20;
+			obj.paths[1].height = recvdObj.height * 3;
+			obj.paths[2].points = recvdObj.paths[2].points;
+			obj.paths[3].points = recvdObj.paths[3].points;
+			obj.paths[4].points = recvdObj.paths[4].points;
+			obj.paths[5].points = recvdObj.paths[5].points;
+		},
+		resizeAction: function (resizedObj) {
+			var obj = util.getObjectById(resizedObj.uid);
+			obj.paths[0].width = resizedObj.width;
+			obj.paths[0].height = resizedObj.height;
+			obj.paths[1].width = resizedObj.width / 20;
+			obj.paths[1].height = resizedObj.height * 3;
+			obj.paths[2].points = [{x: -resizedObj.width * 0.3, y: resizedObj.height/2 },{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.3 + 0.05, y: resizedObj.height/2 + 7.5},{x: -resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
+			obj.paths[3].points = [{x: -resizedObj.width * 0.2, y: resizedObj.height/2 },{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2},{x: -resizedObj.width * 0.2 + 0.05, y: resizedObj.height/2 + 4.5},{x: -resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
+			obj.paths[4].points = [{x: resizedObj.width * 0.3, y: resizedObj.height/2 },{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.3 - 0.05, y: resizedObj.height/2 + 7.5},{x: resizedObj.width * 0.3, y: resizedObj.height/2 + 7.5}];
+			obj.paths[5].points = [{x: resizedObj.width * 0.2, y: resizedObj.height/2 },{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2},{x: resizedObj.width * 0.2 - 0.05, y: resizedObj.height/2 + 4.5},{x: resizedObj.width * 0.2, y: resizedObj.height/2 + 4.5}];
+		},
+		applyProperties: function (props) {
+			objproperties._applyProperties(props);
+		}
+    });
+
+    
+	/**
+	 * To register components palette
+	 */
+	palettes.registerpalette("components", {
+		collectionName: 'components',
+		shapes: {
+			// components object, Table has a border, header and columns separated by lines. Text in table cells can be edited in properties dialog.
+			table: tableComponent.export(),
+
+			div: divMap,	//End of shape Div
+
+			image: imageComponent.export(), // end of image
+
+			slider: sliderComponent.export(),	//End of shape slider
 
 			progressbar: {	// progressbar components object
 				name: "progressbar",
