@@ -327,6 +327,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     	var objLeftVal = fabric.util.array.min(selected_group_obj_array,"left");
     	var spacing = (objRightVal-objLeftVal)/(selected_group_obj_array.length - 1);
     	var spacingToAdd = spacing;
+    	selected_group_obj_array.sort(function(a,b){return a.left-b.left});
     	$.each(selected_group_obj_array,function(index,value) {
     		 if(value.left==objLeftVal || value.left==objRightVal) return;
     		 var xpos = objLeftVal  + spacingToAdd;
@@ -340,6 +341,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     	var objTopVal = fabric.util.array.min(selected_group_obj_array,"top");
     	var spacing = (objBottomVal-objTopVal)/(selected_group_obj_array.length - 1);
     	var spacingToAdd = spacing;
+    	selected_group_obj_array.sort(function(a,b){return a.top-b.top});
     	$.each(selected_group_obj_array,function(index,value) {
     		 if(value.top==objBottomVal || value.top==objTopVal) return;
     		 var ypos = objTopVal  + spacingToAdd;
