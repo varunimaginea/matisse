@@ -129,9 +129,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			var obj = util.getObjectById(args[0].uid);
 			if (obj) {
                 matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
-            //    canvas.setActiveObject(obj);
-            //    properties.updatePropertyPanel(obj);
-				//obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+                obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
             }
             canvas.renderAll();
         },
