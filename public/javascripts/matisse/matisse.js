@@ -42,6 +42,7 @@ define(function () {
 		layoutURL: null,
 		undoStack: [],
 		redoStack: [],
-		groupCopyMode: false
+		groupCopyMode: false,
+		isUpdatingTable: false
 	};
 });

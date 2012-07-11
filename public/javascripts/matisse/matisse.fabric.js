@@ -47,7 +47,8 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					//$('#prop').remove();
 					//$('#propdiv').dialog('close');
 					$('#propdiv').dialog("close");
-					quickMenuDiv.hide();
+					if(!matisse.isUpdatingTable)
+					 quickMenuDiv.hide();
 					quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
 					break;
 				case 'path:created': // When path creation is completed by user
@@ -79,6 +80,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					matisse.yPoints = []; // nullify x points array
 					break;
 				case 'object:selected':
+					if(matisse.isUpdatingTable) return;
                     var selectedObj = e.memo.target; // Get selected object reference
 					// Check if it is a group of objects and dont perform any action
                     if (canvas.getActiveGroup()) { // TODO
