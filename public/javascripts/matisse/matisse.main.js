@@ -43,12 +43,34 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon').click(toolHandlers.openSubmenuEdit);
-            $('li','ul.menu-edit-list').click(function () {var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();});
+            $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
+            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
+            });
+            $('ul.menu-edit-list','div.m-align-list').on("click", "li" , function () {
+            	var selected_group = canvas.getActiveGroup();
+            	var selected_group_obj_array = selected_group.getObjects();
+            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler](selected_group, selected_group_obj_array);
+        		$('span.prop_icon','div.m-quick-edit-group').trigger('click');
+        		canvas.fire('object:modified');
+        		canvas.renderAll();
+            });
             $('div.m-quick-edit').on("click", "span", function(event) { 
             	var item_checked = $(event.target); 
             	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
             	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
             	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}
+            });
+            
+            $('div.m-quick-edit-group').on("click", "span", function(event) { 
+            	var item_checked = $(event.target);
+            	if(item_checked.hasClass('prop_icon')) {
+            		item_checked.toggleClass('selected');
+            		item_checked.parents('div.m-quick-edit-group').find('div.m-align-list').toggle();
+            	}
+            	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
+            	else { //$.each(selected_group_obj_array,function(index,value) { mActionBar.stateUpdated(value, "deleted"); })
+            		mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit-group').hide();
+            		}
             });
 		
 	    mActionBar.initalize();		    
@@ -84,12 +106,17 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                     }]
                 });
                 $('#propdiv').dialog('close');
-                $('div.m-quick-edit').hide();
             } else if (activeGroup) {
                 var objectsInGroup = activeGroup.getObjects();
                 canvas.discardActiveGroup();
                 objectsInGroup.forEach(function (object) {
                     canvas.remove(object);
+                    matisse.comm.sendDrawMsg({
+                        action: "delete",
+                        args: [{
+                            uid: object.uid
+                        }]
+                    });
                 });
             }
         },
@@ -178,6 +205,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			mfabric.observe('object:moving');
 			mfabric.observe('object:scaling');
 			mfabric.observe('object:resizing');
+			mfabric.observe('selection:created');
 		},
 		/**
 		*  Called when other users add, modify or delete any object
