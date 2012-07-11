@@ -323,26 +323,28 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     },
     handledistributeHorizontallyAction: function(selected_group, selected_group_obj_array) {
     	//Distribut Horizontally
-    	var spacing = selected_group.get("width")/selected_group_obj_array.length;
+    	var objRightVal = fabric.util.array.max(selected_group_obj_array,"left");
+    	var objLeftVal = fabric.util.array.min(selected_group_obj_array,"left");
+    	var spacing = (objRightVal-objLeftVal)/(selected_group_obj_array.length - 1);
     	var spacingToAdd = spacing;
-    	selected_group_obj_array[0].set("left" , 0  - (selected_group.get("width")/2) + selected_group_obj_array[0].width/2);
-    	$.each(selected_group_obj_array,function(index,value) { 
-    		if(index==0) return;
-    		var xpos = 0  - (selected_group.get("width")/2)  + spacingToAdd;
+    	$.each(selected_group_obj_array,function(index,value) {
+    		 if(value.left==objLeftVal || value.left==objRightVal) return;
+    		 var xpos = objLeftVal  + spacingToAdd;
 			value.set("left", xpos);
-			spacingToAdd += spacing;
+			spacingToAdd += spacing; 
     	});
     },
     handledistributeVerticallyAction: function(selected_group, selected_group_obj_array) {
     	//Distribut Vertically
-    	var spacing = selected_group.get("height")/selected_group_obj_array.length;
+    	var objBottomVal = fabric.util.array.max(selected_group_obj_array,"top");
+    	var objTopVal = fabric.util.array.min(selected_group_obj_array,"top");
+    	var spacing = (objBottomVal-objTopVal)/(selected_group_obj_array.length - 1);
     	var spacingToAdd = spacing;
-    	selected_group_obj_array[0].set("top" , 0  - (selected_group.get("height")/2) + selected_group_obj_array[0].height/2);
-    	$.each(selected_group_obj_array,function(index,value) { 
-    		if(index==0) return;
-    		var ypos = 0  - (selected_group.get("height")/2)  + spacingToAdd;
+    	$.each(selected_group_obj_array,function(index,value) {
+    		 if(value.top==objBottomVal || value.top==objTopVal) return;
+    		 var ypos = objTopVal  + spacingToAdd;
 			value.set("top", ypos);
-			spacingToAdd += spacing;
+			spacingToAdd += spacing; 
     	});
     },
     quickMenuHandler: function(selectedObj) {
