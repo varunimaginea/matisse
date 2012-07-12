@@ -198,6 +198,45 @@ define(["matisse"], function (matisse) {
 			obj['width'] = fromObj['width'];
 			obj['paths'] = fromObj['paths'];
 			return obj;
+		},
+		/**
+		 *  Show Quick menu options for the selected object.
+		 *  @method  quickMenuHandler
+		 *  @param selectedObj - Currently selectd object
+		 */
+	    quickMenuHandler: function(selectedObj) {
+	    	$('div.m-quick-edit').show();
+	    	var xpos = parseInt(selectedObj.get("left")) + matisse.xOffset - (parseInt(selectedObj.get("width"))/2);
+	        var ypos = parseInt(selectedObj.get("top")) + matisse.yOffset - (parseInt(selectedObj.get("height"))/2) - 50;
+	        $('div.m-quick-edit').offset({ top: ypos, left: xpos });
+	      },
+	      /**
+			 *  Show Quick menu options for the selected Group.
+			 *  @method  quickMenuGroupHandler
+			 *  @param selectedGroup - Currently selectd Group
+			 */
+	    quickMenuGroupHandler: function(selectedGroup) {
+	      	var quickMenu = $('div.m-quick-edit-group');
+	      	quickMenu.show();
+	      	var xpos = selectedGroup.get("left") + matisse.xOffset - (selectedGroup.get("width")/2);
+	        var ypos = selectedGroup.get("top") + matisse.yOffset - (selectedGroup.get("height")/2) - 50;
+	        quickMenu.offset({ top: ypos, left: xpos });
+	        },
+	      /**
+		   *  Hide Quick menu options for the cleared object.
+		   *  @method  hideQuickMenuDiv
+		   */
+		hideQuickMenuDiv: function (){
+			var quickMenuDiv = $('div.m-quick-edit');
+			quickMenuDiv.hide();
+		},
+	    /**
+		   *  Hide Quick menu options for the cleared Group.
+		   *  @method  hideQuickMenuGroupDiv
+		   */
+		hideQuickMenuGroupDiv: function (){
+			var quickMenuGroupDiv = $('div.m-quick-edit-group');
+			quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
 		}
 	};
 

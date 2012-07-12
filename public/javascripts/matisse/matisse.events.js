@@ -16,10 +16,12 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
 		 */
 		keyDown: function (e) {
       var evt = (e) ? e : (window.event) ? window.event : null;
-      if (evt && canvas.getActiveObject() && ($("#propdiv:visible").length === 0)) {
+      if (evt && ($("#propdiv:visible").length === 0)) {
         var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
-        if (key == "46" && evt.altKey) { // ALT + DELETE
+        if (key == "46") { //  DELETE
           actionBar.stateUpdated(null, "deleted");
+          util.hideQuickMenuDiv();
+          util.hideQuickMenuGroupDiv();
         } else if (key == "38" && evt.ctrlKey) { // CONTROL + Up Arrow
             var obj = canvas.getActiveObject();
             if (obj) {
@@ -42,44 +44,60 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
             closePopup()
         } else if (key == "37" && evt.shiftKey) {
             var obj = canvas.getActiveObject();
-            var objleft = obj.left;
-            obj.set('left', objleft - (matisse.horIndent * matisse.indentMultiplier));
-            onObjectMoveByKey(obj);
+            if(obj) {
+            	var objleft = obj.left;
+            	obj.set('left', objleft - (matisse.horIndent * matisse.indentMultiplier));
+            	onObjectMoveByKey(obj);
+            }
         } else if (key == "37") {
             var obj = canvas.getActiveObject();
-            var objleft = obj.left;
-            obj.set('left', objleft - matisse.horIndent);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objleft = obj.left;
+            	obj.set('left', objleft - matisse.horIndent);
+            	onObjectMoveByKey(obj)
+            }
         } else if (key == "39" && evt.shiftKey) {
             var obj = canvas.getActiveObject();
             var objleft = obj.left;
-            obj.set('left', objleft + (matisse.horIndent * matisse.indentMultiplier));
-            onObjectMoveByKey(obj);
+            if(obj) {
+            	obj.set('left', objleft + (matisse.horIndent * matisse.indentMultiplier));
+            	onObjectMoveByKey(obj);
+            }
         } else if (key == "39") {
             var obj = canvas.getActiveObject();
-            var objleft = obj.left;
-            obj.set('left', objleft + matisse.horIndent);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objleft = obj.left;
+            	obj.set('left', objleft + matisse.horIndent);
+            	onObjectMoveByKey(obj)
+            }
         } else if (key == "38" && evt.shiftKey) {
             var obj = canvas.getActiveObject();
-            var objtop = obj.top;
-            obj.set('top', objtop - matisse.verIndent * matisse.indentMultiplier);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objtop = obj.top;
+            	obj.set('top', objtop - matisse.verIndent * matisse.indentMultiplier);
+            	onObjectMoveByKey(obj)
+            }
         } else if (key == "38") {
             var obj = canvas.getActiveObject();
-            var objtop = obj.top;
-            obj.set('top', objtop - matisse.verIndent);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objtop = obj.top;
+            	obj.set('top', objtop - matisse.verIndent);
+            	onObjectMoveByKey(obj)
+            }
         } else if (key == "40" && evt.shiftKey) {
             var obj = canvas.getActiveObject();
-            var objtop = obj.top;
-            obj.set('top', objtop + matisse.verIndent * matisse.indentMultiplier);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objtop = obj.top;
+            	obj.set('top', objtop + matisse.verIndent * matisse.indentMultiplier);
+            	onObjectMoveByKey(obj)
+            }
         } else if (key == "40") {
             var obj = canvas.getActiveObject();
-            var objtop = obj.top;
-            obj.set('top', objtop + matisse.verIndent);
-            onObjectMoveByKey(obj)
+            if(obj) {
+            	var objtop = obj.top;
+            	obj.set('top', objtop + matisse.verIndent);
+            	onObjectMoveByKey(obj)
+            }
         }
       }
     },
@@ -188,9 +206,8 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
     notifyServerGroupMoved: function () {
       var activeGroup = canvas.getActiveGroup();
       var objectsInGroup = activeGroup.getObjects();
-      var quickMenuGroupDiv = $('div.m-quick-edit-group');
       canvas.discardActiveGroup();
-      quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
+      util.hideQuickMenuGroupDiv;
       objectsInGroup.forEach(function (obj) {
           notifyObjModify(obj);
       });
@@ -224,6 +241,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
       canvas.fire('object:moving', {
           target: obj
       });
+      util.quickMenuHandler(obj);
       notifyObjModify(obj);
     }
     function notifyObjModify(obj) {
