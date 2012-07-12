@@ -847,13 +847,13 @@ dashboardLeftThumbnail {
 
 /************** Right Hand Side Menu Actions -- START -- ****************/
 .rightdiv {width:52px;float:right;height:100%;}
-.rightdiv .top{position:absolute;top:0px;max-height:35%;background-color: #464D57;}
+.rightdiv .top{position:absolute;top:0px;background-color: #464D57;padding-bottom: 90px;}
 .rightdiv .bottom{position:absolute;bottom:0px;width:52px;display:block;max-height:100%;background:#464D57;}
 .rightdiv .bottom a,.rightdiv .bottom a:link,.rightdiv .bottom a:visited,.rightdiv .bottom a:hover,.rightdiv .bottom a:active{
 	color:#B8C2CB;text-decoration:none;
 }
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
-.board-name{-moz-transform:rotate(90deg);-moz-transform-origin: right;-webkit-transform: rotate(90deg);-webkit-transform-origin-x: right;font-size: 22px;margin: 457px 0 0 -457px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 26px; padding: 17px 0 11px 3px;background-color: #464D57;}
+.board-name{-moz-transform:rotate(90deg);-moz-transform-origin: right;-webkit-transform: rotate(90deg);-webkit-transform-origin-x: right;font-size: 22px;margin: 457px 0 0 -457px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 26px; padding: 14px 0 11px 3px;background-color: #464D57;}
 .menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;position:relative;}
 .menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
