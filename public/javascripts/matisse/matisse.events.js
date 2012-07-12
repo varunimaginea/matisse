@@ -16,7 +16,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
 		 */
 		keyDown: function (e) {
       var evt = (e) ? e : (window.event) ? window.event : null;
-      if (evt) {
+      if (evt && canvas.getActiveObject() && ($("#propdiv:visible").length === 0)) {
         var key = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode : ((evt.which) ? evt.which : 0));
         if (key == "46" && evt.altKey) { // ALT + DELETE
           actionBar.stateUpdated(null, "deleted");
