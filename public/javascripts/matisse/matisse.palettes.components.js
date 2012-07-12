@@ -666,6 +666,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 	 * To register components palette
 	 */
 	palettes.registerpalette("components", {
+	  order: 3,
 		collectionName: 'components',
 		shapes: {
 			table: tableComponent.export(),

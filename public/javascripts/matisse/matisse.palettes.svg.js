@@ -47,6 +47,7 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 
     }
 palettes.registerpalette("svg", {
+    order: 4,
     collectionName: 'svg',
     shapes: {
         pathgroup1: {

@@ -17,12 +17,16 @@ define(["matisse", "matisse.main", "matisse.ui", "matisse.util"], function (mati
 		 * @param paletteObj
 		 */
 		createAllPallettes: function (paletteObj) {
-			//Rendering Palettes			
+			//Rendering Palettes
+      var paletteArray = [];
 			var paletteName;
 			for (paletteName in paletteObj) {
-				this.createPallette(paletteName);
+			  paletteArray.push({"name": paletteName, "order": paletteObj[paletteName]["order"]});
 			}
-			
+      paletteArray.sort(function(a,b){return a["order"]- b["order"]});
+      for(var i=0;i< paletteArray.length;i++) {
+				this.createPallette(paletteArray[i]["name"]);
+			}
 			//Event handler for the Shape Click
 			$(".p-cntr").click(this.handleShapeClick);
 		},

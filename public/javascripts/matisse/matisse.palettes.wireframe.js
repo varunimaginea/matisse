@@ -198,6 +198,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 	 * To register controls palette
 	 */
 	palettes.registerpalette("controls", {
+	  order: 2,
 		collectionName: 'controls',
 		shapes: {
 			label: { // Label controls object
