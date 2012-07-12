@@ -39,8 +39,6 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					actionBar.quickMenuHandler(obj);
 					break;
 				case "selection:cleared":
-					//$('#prop').remove();
-					//$('#propdiv').dialog('close');
 					$('#propdiv').dialog("close");
 					quickMenuDiv.hide();
 					break;

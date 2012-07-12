@@ -192,7 +192,6 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'></textarea> </td></tr>");		
 		var txtbox = document.getElementById('txtarea'),
 			count = 0;			
-		txtbox.value = "column1|column2\ncontent1|content2\n";
 
 		// obtain the text from the table, if any.
 		var txt = getTableText(obj);
@@ -200,15 +199,18 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		// on blur of txtbox, update the table on canvas with the text in txtbox.
 		txtbox.onblur = function (e) {			
 			if (canvas.getActiveObject()) {
-				var pathGroup = addItemsToTable(canvas.getActiveObject(), txtbox.value);			
-				matisse.comm.sendDrawMsg({
-					action: "modified",
-					args: [{
-						uid: pathGroup.uid,
-						object: pathGroup
-					}]
-				});	
-				canvas.setActiveObject(pathGroup);
+                var pathGroup;
+                if (getTableText(canvas.getActiveObject()) != txtbox.value) {
+				    pathGroup = addItemsToTable(canvas.getActiveObject(), txtbox.value);			
+				    matisse.comm.sendDrawMsg({
+					    action: "modified",
+					    args: [{
+						    uid: pathGroup.uid,
+						    object: pathGroup
+					    }]
+				    });	
+				    canvas.setActiveObject(pathGroup);
+                }
 			}
 		};		
 	};
@@ -371,6 +373,8 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			var obj = loadComponent(args, objects);
 			// obtain the text of table items from the object, if any.
 			textItems = getTableText(args);
+            // if this is the first call default it to what he will see in properties
+            textItems = args.paths ? textItems : "column1|column2\ncontent1|content2\n";
 			// after creating the container, add table items to the container, if any.
 			addItemsToTable(obj, textItems, args);
 		},
@@ -605,108 +609,71 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		}
     });
 
-    
+
+    var progressBarComponent = new Component('progressbar');
+    progressBarComponent.addActions({
+        toolAction: function (args) {
+			var objects = [];
+			args.width = args.paths ? args.paths[0].width : 150;
+			args.height = args.paths ? args.paths[0].height : 20;
+			var outerRect = new fabric.Rect({
+				width: args.width,
+				height: args.height,
+				fill: '#ffffff',
+				stroke: '#8f8f8f'
+			});
+			var innerRect = new fabric.Polygon(
+				args.paths ? args.paths[1].points : [{x: -args.width / 2,y: args.height / 2 },{x: -args.width / 4 , y: args.height / 2},{x: -args.width / 4 , y: -args.height / 2},{x: -args.width / 2, y: -args.height / 2}],
+				{
+					fill: '#9f9f9f',
+					stroke:'#8f8f8f'
+				}
+			);
+			objects.push(outerRect);
+			objects.push(innerRect);
+			loadComponent(args, objects);
+		},
+		modifyAction: function (args) {
+			var obj = util.getObjectById(args.uid);
+			var recvdObj = args.object;
+			updateProperties(obj, recvdObj);
+			obj.paths[0].width = recvdObj.width;
+			obj.paths[0].height = recvdObj.height;
+			obj.paths[1].points = [{x: -recvdObj.width / 2,y: recvdObj.height / 2 },{x: -recvdObj.width / 4 , y: recvdObj.height / 2},{x: -recvdObj.width / 4 , y: -recvdObj.height / 2},{x: -recvdObj.width / 2, y: -recvdObj.height / 2}];
+			obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
+			obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
+		},
+		resizeAction: function (resizedObj) {
+			var obj = util.getObjectById(resizedObj.uid);
+			var txtbox = document.getElementById('txtbox');
+			obj.paths[0].width = resizedObj.width;
+			obj.paths[0].height = resizedObj.height;
+			obj.paths[1].points = [{x: -resizedObj.width / 2,y: resizedObj.height / 2 },{x: -resizedObj.width / 4 , y: resizedObj.height / 2},{x: -resizedObj.width / 4 , y: -resizedObj.height / 2},{x: -resizedObj.width / 2, y: -resizedObj.height / 2}];
+			obj.paths[1].points[1].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
+			obj.paths[1].points[2].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
+		},
+		applyProperties: function (props) {
+			objproperties._applyProperties(props);
+			progressHandler(canvas.getActiveObject());
+		}
+    });
+
+    progressBarComponent.addDimensionAndScale();
+    var progressbarMap = progressBarComponent.export();
+    progressbarMap["displayName"] = "Progress Bar";
+
+
 	/**
 	 * To register components palette
 	 */
 	palettes.registerpalette("components", {
 		collectionName: 'components',
 		shapes: {
-			// components object, Table has a border, header and columns separated by lines. Text in table cells can be edited in properties dialog.
 			table: tableComponent.export(),
-
-			div: divMap,	//End of shape Div
-
-			image: imageComponent.export(), // end of image
-
-			slider: sliderComponent.export(),	//End of shape slider
-
-			progressbar: {	// progressbar components object
-				name: "progressbar",
-				displayName: "Progress Bar",
-				activeIcon: "progressbar_w.png",
-				inactiveIcon: "progressbar_g.png",
-				toolAction: function (args) {
-					var objects = [];
-					args.width = args.paths ? args.paths[0].width : 150;
-					args.height = args.paths ? args.paths[0].height : 20;
-					var outerRect = new fabric.Rect({
-						width: args.width,
-						height: args.height,
-						fill: '#ffffff',
-						stroke: '#8f8f8f'
-					});
-					var innerRect = new fabric.Polygon(
-						args.paths ? args.paths[1].points : [{x: -args.width / 2,y: args.height / 2 },{x: -args.width / 4 , y: args.height / 2},{x: -args.width / 4 , y: -args.height / 2},{x: -args.width / 2, y: -args.height / 2}],
-						{
-							fill: '#9f9f9f',
-							stroke:'#8f8f8f'
-						}
-					);
-					objects.push(outerRect);
-					objects.push(innerRect);
-					loadComponent(args, objects);
-				},
-				modifyAction: function (args) {
-					var obj = util.getObjectById(args.uid);
-					var recvdObj = args.object;
-					updateProperties(obj, recvdObj);
-					obj.paths[0].width = recvdObj.width;
-					obj.paths[0].height = recvdObj.height;
-					obj.paths[1].points = [{x: -recvdObj.width / 2,y: recvdObj.height / 2 },{x: -recvdObj.width / 4 , y: recvdObj.height / 2},{x: -recvdObj.width / 4 , y: -recvdObj.height / 2},{x: -recvdObj.width / 2, y: -recvdObj.height / 2}];
-					obj.paths[1].points[1].x = recvdObj.paths[1].points[1].x;
-					obj.paths[1].points[2].x = recvdObj.paths[1].points[2].x;
-				},
-				resizeAction: function (resizedObj) {
-					var obj = util.getObjectById(resizedObj.uid);
-					var txtbox = document.getElementById('txtbox');
-					obj.paths[0].width = resizedObj.width;
-					obj.paths[0].height = resizedObj.height;
-					obj.paths[1].points = [{x: -resizedObj.width / 2,y: resizedObj.height / 2 },{x: -resizedObj.width / 4 , y: resizedObj.height / 2},{x: -resizedObj.width / 4 , y: -resizedObj.height / 2},{x: -resizedObj.width / 2, y: -resizedObj.height / 2}];
-					obj.paths[1].points[1].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
-					obj.paths[1].points[2].x = (resizedObj.width * txtbox.value / 100) - (resizedObj.width / 2);
-				},
-				applyProperties: function (props) {
-					objproperties._applyProperties(props);
-					progressHandler(canvas.getActiveObject());
-				},
-				properties: [{
-					name: 'left',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("left", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'top',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("top", args.property);
-					},
-					defaultvalue: 100
-				}, {
-					name: 'angle',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("angle", args.property);
-					},
-					defaultvalue: 0
-				}, {
-					name: 'scaleX',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleX", args.property);
-					},
-					defaultvalue: 1
-				}, {
-					name: 'scaleY',
-					type: 'number',
-					action: function (args) {
-						(args.obj).set("scaleY", args.property);
-					},
-					defaultvalue: 1
-				}]	//End of properties for progressbar
-			}	//End of shape progressbar
-		} // end of shapes
-	});	//End of components
+			div: divMap,
+			image: imageComponent.export(),
+			slider: sliderComponent.export(),
+			progressbar: progressbarMap
+		} 
+	});
 });
