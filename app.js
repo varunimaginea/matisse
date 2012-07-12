@@ -143,7 +143,7 @@ application = (function () {
                   });
                   var session_user = userObj.getUserFromSession(session_data);
                   setUserDetails(session_user);
-                  res.sendfile(__dirname + '/board2.html');
+                  res.sendfile(__dirname + '/board.html');
                   }
                   else {
                     res.writeHead(302, {
