@@ -58,7 +58,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             	var item_checked = $(event.target); 
             	if(item_checked.hasClass('prop_icon')) {item_checked.addClass('selected');toolHandlers.openPropertiesPanel();}
             	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleCopyAction();}
-            	else {mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit').hide();}
+            	else {mActionBar.stateUpdated(null, "deleted");util.hideQuickMenuDiv();}
             });
             
             $('div.m-quick-edit-group').on("click", "span", function(event) { 
@@ -69,7 +69,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             	}
             	else if(item_checked.hasClass('copy_icon')) {item_checked.addClass('selected');mActionBar.handleGroupCopyAction();}
             	else { //$.each(selected_group_obj_array,function(index,value) { mActionBar.stateUpdated(value, "deleted"); })
-            		mActionBar.stateUpdated(null, "deleted");item_checked.parents('div.m-quick-edit-group').hide();
+            		mActionBar.stateUpdated(null, "deleted");util.hideQuickMenuGroupDiv();
             		}
             });
 		
@@ -230,7 +230,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						canvas.remove(obj);
 						if (activeObj == obj) {
               $('#propdiv').dialog('close');
-                $('div.m-quick-edit').hide();
+              util.hideQuickMenuDiv();
             }
 					} else if (data.action === "importimage") {
 						matisse.main.addImageToCanvasFromServer(data.args[0]);

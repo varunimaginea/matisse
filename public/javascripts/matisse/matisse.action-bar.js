@@ -349,19 +349,6 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
 			spacingToAdd += spacing; 
     	});
     },
-    quickMenuHandler: function(selectedObj) {
-    	$('div.m-quick-edit').show();
-    	var xpos = selectedObj.get("left") + matisse.xOffset - (selectedObj.get("width")/2);
-        var ypos = selectedObj.get("top") + matisse.yOffset - (selectedObj.get("height")/2) - 50;
-        $('div.m-quick-edit').offset({ top: ypos, left: xpos });
-      },
-    quickMenuGroupHandler: function(selectedGroup) {
-      	var quickMenu = $('div.m-quick-edit-group');
-      	quickMenu.show();
-      	var xpos = selectedGroup.get("left") + matisse.xOffset - (selectedGroup.get("width")/2);
-          var ypos = selectedGroup.get("top") + matisse.yOffset - (selectedGroup.get("height")/2) - 50;
-          quickMenu.offset({ top: ypos, left: xpos });
-        },
     getOriginalObj: function(obj) {
       var originalObj = {};
       var j;

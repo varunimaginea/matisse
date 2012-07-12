@@ -12,8 +12,6 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 		 */
 		observe: function (eventName) {
 			canvas.observe(eventName, function (e) {
-				var quickMenuDiv = $('div.m-quick-edit');
-				var quickMenuGroupDiv = $('div.m-quick-edit-group');
 				switch (eventName) {
 				case "object:modified":
 					// Check if it is a group of objects and dont perform any action
@@ -37,17 +35,16 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					matisse.hLine.set('top', -10); // hide horizontal alignment guide line
 					matisse.vLine.set('left', -10); // hide vertical alignment guide line
 					properties.updatePropertyPanel(obj); // Update property values for this object in property panel
-					actionBar.quickMenuHandler(obj);
-					//actionBar.quickMenuGroupHandler(obj);
+					util.quickMenuHandler(obj);
 					break;
 				case "selection:created": 
-					actionBar.quickMenuGroupHandler(canvas.getActiveGroup());
+					util.quickMenuGroupHandler(canvas.getActiveGroup());
 					break;
 				case "selection:cleared":
 					$('#propdiv').dialog("close");
 					if(!matisse.isUpdatingTable)
-					 quickMenuDiv.hide();
-					quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
+					 util.hideQuickMenuDiv();
+					util.hideQuickMenuGroupDiv();
 					break;
 				case 'path:created': // When path creation is completed by user
 					canvas.isSelectMode = true;
@@ -86,16 +83,15 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
                     }
 					// Show property panel for this selected object
                     properties.createPropertiesPanel(selectedObj);
-                    actionBar.quickMenuHandler(selectedObj);
+                    util.quickMenuHandler(selectedObj);
                     break;
                 case 'object:moving':
 					// Get moving object reference
                     var movingObj = e.memo.target;
                     // Check for Alignment of this object with all other objects on canvas
                     checkAlign(movingObj);
-                    quickMenuDiv.hide();
-                    quickMenuGroupDiv.hide();
-                    quickMenuGroupDiv.hide().find('div.m-align-list').hide().parents(quickMenuGroupDiv).find('span.prop_icon').removeClass('selected');
+                    util.hideQuickMenuDiv();
+                    util.hideQuickMenuGroupDiv();
                     break;
 				case 'object:resizing':
 					// Get resizing object reference

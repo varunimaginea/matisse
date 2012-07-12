@@ -84,6 +84,7 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 							object: actObj
 						}]
 					});
+					util.quickMenuHandler(actObj);
 				});
 			});
 			var colorPicker = $.farbtastic("#colorpicker");
