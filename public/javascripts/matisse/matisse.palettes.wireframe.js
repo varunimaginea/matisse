@@ -179,7 +179,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 			}
 			txtbox.value += obj.paths[i].text;
 		}
-		txtbox.onblur = function (e) {			
+		txtbox.onkeyup = function (e) {			
 			if (canvas.getActiveObject()) {
 				var pathGroup = addItemsToList(canvas.getActiveObject(), txtbox.value);			
 				matisse.comm.sendDrawMsg({
@@ -189,7 +189,9 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						object: pathGroup
 					}]
 				});	
+				matisse.isUpdatingProperties = true;
 				canvas.setActiveObject(pathGroup);
+				matisse.isUpdatingProperties = false;
 			}
 		};		
 	};

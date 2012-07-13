@@ -207,7 +207,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
       var activeGroup = canvas.getActiveGroup();
       var objectsInGroup = activeGroup.getObjects();
       canvas.discardActiveGroup();
-      util.hideQuickMenuGroupDiv;
+      util.hideQuickMenuGroupDiv();
       objectsInGroup.forEach(function (obj) {
           notifyObjModify(obj);
       });

@@ -43,6 +43,6 @@ define(function () {
 		undoStack: [],
 		redoStack: [],
 		groupCopyMode: false,
-		isUpdatingTable: false
+		isUpdatingProperties: false
 	};
 });

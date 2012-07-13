@@ -207,9 +207,9 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 						object: pathGroup
 					}]
 				});	
-				matisse.isUpdatingTable = true;
+				matisse.isUpdatingProperties = true;
 				canvas.setActiveObject(pathGroup);
-				matisse.isUpdatingTable = false;
+				matisse.isUpdatingProperties = false;
 			}
 		};		
 	};

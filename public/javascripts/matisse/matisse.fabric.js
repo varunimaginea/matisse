@@ -42,7 +42,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					break;
 				case "selection:cleared":
 					$('#propdiv').dialog("close");
-					if(!matisse.isUpdatingTable)
+					if(!matisse.isUpdatingProperties)
 					 util.hideQuickMenuDiv();
 					util.hideQuickMenuGroupDiv();
 					break;
@@ -75,7 +75,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					matisse.yPoints = []; // nullify x points array
 					break;
 				case 'object:selected':
-					if(matisse.isUpdatingTable) return;
+					if(matisse.isUpdatingProperties) return;
                     var selectedObj = e.memo.target; // Get selected object reference
 					// Check if it is a group of objects and dont perform any action
                     if (canvas.getActiveGroup()) { // TODO
