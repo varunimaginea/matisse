@@ -419,6 +419,8 @@ input.file {
 }
 #loginFooter {
     background: #fff;
+    position:fixed;
+    bottom: 0;
 }
 #loginHeaderDivider {
     background: url('../images/headerdivider_left.png') repeat-x;
@@ -497,6 +499,7 @@ input.file {
 
 #loginRightContent {
     background-color: #464d57;
+    min-height: 74%;
 }
 
 #loginRightContent h3 {
@@ -629,9 +632,8 @@ dashboardLeftThumbnail {
 
 #footer{
 	font-size: 13px;
-	height: 9.5%;
-	margin-left: 30px;
-	padding: 20px 20px 0px 0px;
+	height: 49px;
+	padding: 20px 20px 20px 20px;
 }
 	.footerInner{
 		margin: 0 auto;
@@ -658,6 +660,8 @@ dashboardLeftThumbnail {
 
 #loginFooterDivider {
     background: url('../images/footerdivider_left.png') repeat-x;
+    position: fixed;
+    bottom: 89px;
 }
 #loginFooterDividerLeft {
     height: 20px;
@@ -698,7 +702,7 @@ dashboardLeftThumbnail {
     text-shadow:0 -1px 0 rgba(1, 19, 2, 0.4);
 }
 #rightHeaderContent {
-    padding-top: 15px;
+    padding-top: 10px;
 }
 #rightHeaderButton {
     margin: 0;
