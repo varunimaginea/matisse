@@ -732,6 +732,10 @@ dashboardLeftThumbnail {
     min-height: 250px;
 }
 
+.whiteboardList li {
+  list-style: none;
+}
+
 #loginRightContent h3.dashboardRightContentHeading {
     margin-left: 20px;
     padding-right: 10px;
