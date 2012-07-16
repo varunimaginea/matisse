@@ -24,7 +24,7 @@ exports.index = function (req, res) {
                 if (err) {
                   console.log("::" + err);
                   res.render('index', { title:'Matisse', createdNum: 0, sharedNum: 0, ownedBoards:  [], sharedBoards: []  })
-                } else {                         
+                } else {
                   loggedInUser.numLinks('Board', 'ownedBoard', function (err, num) {
                     if (err) {
                       console.log("::::" + err);
@@ -36,7 +36,7 @@ exports.index = function (req, res) {
                           loggedInUser.getAll('Board', 'ownedBoard', function (err, boardIds) {
                             if (err) {
                               console.log("::::" + err);
-                              res.render('index', { title:'Matisse'  , createdNum: loggedInUser.createdNum, sharedNum: 0, ownedBoards:  [], sharedBoards: [] }) 
+                              res.render('index', { title:'Matisse'  , createdNum: loggedInUser.createdNum, sharedNum: 0, ownedBoards:  [], sharedBoards: [] })
                             }
                             else {
                               var boards = [];
@@ -80,7 +80,7 @@ exports.index = function (req, res) {
 			   				                         var sb_count = 0;
 				   			                         if (sb_len === 0) {
 					   			                         if (typeof(sharedboards) == "undefined")  {
-						   		                           sharedboards = []; 
+						   		                           sharedboards = [];
 							   	                         } else {
                                              sharedboards = sharedboards;
 								                            }
@@ -107,7 +107,7 @@ exports.index = function (req, res) {
 									                                if (sharedboards.length == boardIds.length) {
 										                                var sharedBoard;
 										                                  if (typeof(sharedboards) == "undefined")  {
-										                                    sharedboards = []; 
+										                                    sharedboards = [];
    										                               } else {
 	   									                                 sharedboards = sharedboards;
 		   								                               }
@@ -115,12 +115,12 @@ exports.index = function (req, res) {
 				   					                             }
    									                           }
 	   							                         });
-								                             
+
 		   						                         });
 			   				                           }
 				   			                       }
 						                          });
-						                      }		   
+						                      }
 					                     });
 					                  }
 				                  });
@@ -129,7 +129,7 @@ exports.index = function (req, res) {
 			          }
 		          });
 		        }
-	        });  
+	        });
 	      }
     }
      else {
@@ -138,7 +138,7 @@ exports.index = function (req, res) {
 };
 
 exports.favicon = function (req, res, next) {
-    
+
 }
 
 /*
@@ -180,7 +180,39 @@ exports.boards = {
 
 	    }
 	});
-    }
+    },
+  update: function(req, res, next) {
+    var whiteBoard = new BoardModel();
+    whiteBoard.load(req.body.id, function (err, props) {
+      if (err) {
+        console.log(err);
+        res.contentType('json');
+        res.send({
+          error: true
+        });
+      } else {
+        props.name = req.body.name;
+        whiteBoard.store(props, function (err) {
+          if (err === 'invalid') {
+            res.contentType('json');
+            res.send({
+              error: true
+            });
+          } else if (err) {
+            res.contentType('json');
+            res.send({
+              error: true
+            });
+          } else {
+            res.contentType('json');
+            res.send({
+              success: true
+            });
+          }
+        });
+      }
+    });
+}
 }
 
 /*

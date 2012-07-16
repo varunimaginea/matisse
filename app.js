@@ -95,6 +95,7 @@ application = (function () {
     app.get('/boards', routes.boards.index);
     app.resource('api', routes.api);
     app.post('/boards', routes.boards.index);
+    app.post('/boards/update', routes.boards.update);
     app.get('/about', function (req, res, next) {
 	    res.sendfile(__dirname + '/about.html');
     });
@@ -161,7 +162,7 @@ application = (function () {
           }
         }
     });
-    
+
     app.use(use);
     app.listen(8000);
     io.configure('production', function(){

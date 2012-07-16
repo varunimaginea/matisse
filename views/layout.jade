@@ -4,6 +4,8 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/thirdparty/bootstrap/bootstrap.css')
     script(type='text/javascript', src='/javascripts/thirdparty/jquery/jquery-1.7.min.js')
+    script(type='text/javascript', src='/javascripts/thirdparty/jquery/jquery.jeditable.mini.js')
+    script(type='text/javascript', src='/javascripts/matisse/inline-edit.js')
     script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap.js')
   body!= body
     div(class='container')
@@ -181,7 +183,7 @@ html
                           a(href='/boards/#{board.url}', target='_blank')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
-                            p.thumbnailCaption #{board.name}
+                            p(class='thumbnailCaption editable', id='board-#{board.id}') #{board.name}
                 div.row
                   div(class='span2 offset6', id='showAllCreateWhiteBoard')
                     a(class='pull-left', href='#', id='showOwned') Show all

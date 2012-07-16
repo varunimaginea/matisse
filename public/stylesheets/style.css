@@ -435,7 +435,7 @@ input.file {
     background: url('../images/headerdivider_right.png') repeat-x;
 }
 
-.content { 
+.content {
     height: auto;
 }
 
@@ -499,7 +499,7 @@ input.file {
 
 #loginRightContent {
     background-color: #464d57;
-    min-height: 74%;
+    min-height: 680px;
 }
 
 #loginRightContent h3 {
@@ -508,7 +508,7 @@ input.file {
     margin-left: 40px;
     color: #d3dae5;
     padding-left: 10px;
-    
+
 }
 
 #rightContentButton {
@@ -733,7 +733,7 @@ dashboardLeftThumbnail {
 }
 
 #loginRightContent .whiteboardList {
-    min-height: 30%;
+    min-height: 300px;
 }
 
 #loginRightContent h3.dashboardRightContentHeading {
@@ -858,6 +858,8 @@ dashboardLeftThumbnail {
 }
 .user-image{background:url('../images/userprofile_bg.png') no-repeat;width:42px; height:53px;margin:8px 5px;}
 .board-name{-moz-transform:rotate(90deg);-moz-transform-origin: right;-webkit-transform: rotate(90deg);-webkit-transform-origin-x: right;font-size: 22px;margin: 457px 0 0 -457px;color:#E3E6E9;letter-spacing:1px;width:480px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;height: 26px; padding: 14px 0 11px 3px;background-color: #464D57;}
+.thumbnailText .success{color:#10B832;}
+.thumbnailText .error{color:red;}
 .menu-holder{border-top: 1px groove #0E1215;width:52px;text-align:center;padding:3px 0;cursor:pointer;color:#B8C2CB;position:relative;}
 .menu-holder:hover{background-color:#036bd5;border-top: 1px groove #000000;color:#FFFFFF;}
 .m-label{font-size:11px;}
@@ -892,7 +894,7 @@ dashboardLeftThumbnail {
 .m-quick-edit span.del_icon ,.m-quick-edit-group span.del_icon{background-position:-48px 0;}
 .m-quick-edit span.del_icon:hover ,.m-quick-edit-group span.del_icon:hover{background-position:-48px -24px;}
 .m-quick-edit-group span.align_icon {}
-div.copy-alert {display:none; left: 37%; position: absolute; top: 0;} 
+div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
 /************** Quick Action Menu -- End -- ************************/
 
 /************** Overloading Dialog Styles  -- Start -- ****************/
