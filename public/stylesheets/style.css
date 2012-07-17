@@ -865,6 +865,7 @@ dashboardLeftThumbnail {
 .m-label{font-size:11px;}
 .m-selected{background-color:#036bd5;}
 .m-icon{background:url('../images/white_menu_24.png') no-repeat;width:28px;height:28px;background-position:0 0;margin:3px auto 0;}
+.m-file{background:url('../images/file.png')}
 .m-save{background-position:0 0;}
 .m-edit{background-position:0 -54px;}
 .m-view{background-position:0 -106px;}
@@ -872,7 +873,7 @@ dashboardLeftThumbnail {
 .m-discuss{background-position:0 -218px;}
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
-.m-edit-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
+.m-submenu-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
 .menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
 .menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
 .menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }

@@ -7,8 +7,8 @@ collaboration = module.exports = {
 			var wb_url = location.replace("/", "");
 			var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
 			socket.join(wb_url);
-			findInBoardModel(randomnString, socket);
-			findInShapesModel(wb_url, socket);
+			writeBoardModels(randomnString, socket);
+			writeShapeModels(wb_url, socket);
 		},
 		setContainer: function (location, data) {
 			console.log("location: "+location);
@@ -41,7 +41,7 @@ collaboration = module.exports = {
 	}
 }
 
-var findInBoardModel = function(randomStr, socket) {
+var writeBoardModels = function(randomStr, socket) {
 	var BoardModel = collaboration.boardModel;
 	BoardModel.find({url:randomStr},function (err, ids) {
 		if (err) {
@@ -66,38 +66,26 @@ var findInBoardModel = function(randomStr, socket) {
 	});
 };
 
-var findInShapesModel = function(boardUrl, socket) {
+var writeShapeModels  = function(boardUrl, socket) {
 	var ShapesModel = collaboration.shapesModel;
 	ShapesModel.find({board_url: boardUrl}, function (err, ids) {
 		if (err) {
 			console.log(err);
 		}
-		var boards = [];
 		var len = ids.length;
 		var count = 0;
 		if (len === 0) {} else {
 			ids.forEach(function (id) {
-				var board = new ShapesModel();
-				board.load(id, function (err, props) {
+				ShapesModel.load(id, function (err, props) {
 					if (err) {
 						return next(err);
-					}
-					boards.push({
-						id: this.id,
-						palette: props.palette,
-						action: props.action,
-						args: props.args
-					});
-
-					if (++count === len) {
-						//socket.emit('eventDraw',boards);
-					}
-					socket.emit('eventDraw', eval({
-						palette: props.palette,
-						action: props.action,
-						args: [props.args]
-					}));
-
+					} else {
+					    socket.emit('eventDraw', eval({
+						    palette: props.palette,
+						    action: props.action,
+						    args: [props.args]
+					    }));
+                    }
 				});
 			});
 		}
