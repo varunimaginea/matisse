@@ -865,7 +865,6 @@ dashboardLeftThumbnail {
 .m-label{font-size:11px;}
 .m-selected{background-color:#036bd5;}
 .m-icon{background:url('../images/white_menu_24.png') no-repeat;width:28px;height:28px;background-position:0 0;margin:3px auto 0;}
-.m-file{background:url('../images/file.png')}
 .m-save{background-position:0 0;}
 .m-edit{background-position:0 -54px;}
 .m-view{background-position:0 -106px;}

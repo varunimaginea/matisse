@@ -103,9 +103,9 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         	}
         },
 
-        openSubmenuFile: function (event) {
+        openSubmenuReport: function (event) {
         	event.stopPropagation();
-        	var $this = $(this).find('div.m-file-list');
+        	var $this = $(this).find('div.m-report-list');
         	if(!$this.is(":visible")) {
         		$this.show();
         		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});

@@ -43,12 +43,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon').click(toolHandlers.openSubmenuEdit);
-            $('#fileicon').click(toolHandlers.openSubmenuFile);
+            $('#reporticon').click(toolHandlers.openSubmenuReport);
             $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
             	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
             });
 
-            $('ul.menu-edit-list','div.m-file-list').on("click", "li" , function () {
+            $('ul.menu-edit-list','div.m-report-list').on("click", "li" , function () {
             	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
             });
 
