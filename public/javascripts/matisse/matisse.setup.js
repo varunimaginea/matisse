@@ -5,7 +5,7 @@
  * About this :Entry Point File, All Dom Ready functions need to be defined here
  */
 
-define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.palettes.components", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"], function (matisse, mfabric, Comm, main, containers, palettes, layouts) {
+define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "matisse.effects", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.palettes.components", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"], function (matisse, mfabric, Comm, main, containers, palettes, layouts, effects) {
     
     "use strict";
 	//Dom Ready function
@@ -34,30 +34,31 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 			//layouts.createLayoutsList();
 			containers.createContainerList();
 		}
-		/**
-         * Displays welcome message with user name
-         * @method comm.onUserInfo
-         * @param data - user details
-         *
-         */	
-		comm.onUserInfo = function(data) {
-		/* check if userName is not available, then show welcome message*/
-			var userInfo = [];
-			for (var i in data) {
-				userInfo.push(data[i]);
-			}
-			if(matisse.userName == null) {
-				matisse.userName = userInfo[1].name;
-        matisse.userProfilePic = userInfo[1].profile_image_url || userInfo[1].picture;
-        matisse.userLoginService = userInfo[2];
-				$('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>');
-				$('#userProfilePicBig').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic-big"></img>');
-				$('#userName').html(matisse.userName);
-				$('#userLoginService').html(matisse.userLoginService);
-			}
-		}
-		matisse.comm = comm;
-    matisse.main = main;
-    main.addTools();
-	});
+	      /**
+               * Displays welcome message with user name
+               * @method comm.onUserInfo
+               * @param data - user details
+               *
+               */
+	      comm.onUserInfo = function(data) {
+		  /* check if userName is not available, then show welcome message*/
+		  if(matisse.userName == null) {
+                      // key is login-service name like 'twitter', 'google' etc
+                      var userInfoKey = data.loginService.toLowerCase();
+                      var user = data[userInfoKey];
+		      matisse.userName = user.name;
+                      matisse.userProfilePic = user.profile_image_url || user.picture;
+                      matisse.userLoginService = data.loginService;
+		      $('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>');
+		      $('#userProfilePicBig').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic-big"></img>');
+		      $('#userName').html(matisse.userName);
+		      $('#userLoginService').html(matisse.userLoginService);
+		  }
+	      };
+	      matisse.comm = comm;
+              matisse.main = main;
+              main.addTools();
+
+              effects.showModifiedByUser(matisse);
+	  });
 });
