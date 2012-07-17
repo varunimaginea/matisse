@@ -142,7 +142,7 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
                         }
                     });
                 }
-                else if (obj.action == "zindexchange") {
+                else if (obj.action == "zindexchannge") {
 
                 }
                 else {
@@ -345,7 +345,8 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
     	    });
         },
         handleExportJsonAction: function() {
-            console.log("handle export called");
+            var exportedJSON = JSON.stringify(canvas);
+            console.log(exportedJSON);
         },
         handleImportJsonAction: function() {
             console.log("handle import called");
