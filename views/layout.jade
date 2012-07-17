@@ -10,12 +10,12 @@ html
     script(type='text/javascript')
       var resizeOrReadyHandler = function() {
         var rtContentObj = $('#loginRightContent');
-        var height = window.innerHeight - $('#loginHeader').height() - $('#loginFooter').height() - 40;
+        var height = $(window).height() - $('#loginHeader').height() - $('#loginFooter').height() - 40;
         rtContentObj.css('min-height', height );
         rtContentObj.show();
       };
-      $(document).ready(resizeOrReadyHandler);
       $(window).resize(resizeOrReadyHandler);
+      $(document).ready(function() {setTimeout(resizeOrReadyHandler, 100);});
   body!= body
     div(class='container')
       div(class='row', id='loginHeader')
