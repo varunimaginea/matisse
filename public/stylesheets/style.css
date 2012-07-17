@@ -497,7 +497,7 @@ input.file {
 
 #loginRightContent {
     background-color: #464d57;
-    min-height: 675px;
+    display:none;
 }
 
 #loginRightContent h3 {

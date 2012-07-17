@@ -7,6 +7,15 @@ html
     script(type='text/javascript', src='/javascripts/thirdparty/jquery/jquery.jeditable.mini.js')
     script(type='text/javascript', src='/javascripts/matisse/inline-edit.js')
     script(type='text/javascript', src='/javascripts/thirdparty/bootstrap/bootstrap.js')
+    script(type='text/javascript')
+      var resizeOrReadyHandler = function() {
+        var rtContentObj = $('#loginRightContent');
+        var height = window.innerHeight - $('#loginHeader').height() - $('#loginFooter').height() - 40;
+        rtContentObj.css('min-height', height );
+        rtContentObj.show();
+      };
+      $(document).ready(resizeOrReadyHandler);
+      $(window).resize(resizeOrReadyHandler);
   body!= body
     div(class='container')
       div(class='row', id='loginHeader')
@@ -33,9 +42,9 @@ html
                     div.row
                       div.span3
                         div(class='btn-group pull-right', id='launchButton')
-                          button(class='btn btn-action', data-toggle='modal', data-target="#whiteboardForm") 
+                          button(class='btn btn-action', data-toggle='modal', data-target="#whiteboardForm")
                             h3 New Whiteboard &raquo;
-            - else       
+            - else
                 div.span1
                   img(src='images/blockquotes_start.png', alt='"', align='top', width='20', height='20', class='pull-left')
                 div.span7
@@ -45,7 +54,7 @@ html
 
       div(class='row', id='loginHeaderDivider')
 
-        div(class='span4', id='loginHeaderDividerLeft') 
+        div(class='span4', id='loginHeaderDividerLeft')
 
         div(class='span8', id='loginHeaderDividerRight')
 
@@ -62,10 +71,10 @@ html
                       img(class="profilePic",src="#{everyauth.twitter.user.profile_image_url}")
                     div(class='span3')
                       div.profileDetails
-                        div(class='pull-left') 
+                        div(class='pull-left')
                           a #{everyauth.twitter.user.name}
                           a(href="/logout", id="logoutLink", class="logoutLink") (Logout)
-                        div(class='pull-right')  
+                        div(class='pull-right')
                           h6 via
                           a(class='loginSource pull-right') Twitter
                 else if(everyauth.facebook)
@@ -73,10 +82,10 @@ html
                       img(class="profilePic",src="images/default.jpg")
                     div(class='span3')
                       div.profileDetails
-                        div(class='pull-left') 
+                        div(class='pull-left')
                           a #{everyauth.facebook.user.name}
                           a(href="/logout", id="logoutLink", class="logoutLink") (Not You?)
-                        div(class='pull-right')  
+                        div(class='pull-right')
                           h6 via
                           a(class='loginSource pull-right') Facebook
                 else if(everyauth.google)
@@ -84,10 +93,10 @@ html
                       img(class="profilePic",src="#{everyauth.google.user.picture ? everyauth.google.user.picture : 'images/default.jpg'}")
                     div(class='span3')
                       div.profileDetails
-                        div(class='pull-left') 
+                        div(class='pull-left')
                           a #{everyauth.google.user.name}
                           a(href="/logout", id="logoutLink", class="logoutLink") (Not You?)
-                        div(class='pull-right')  
+                        div(class='pull-right')
                           h6 via
                           a(class='loginSource pull-right') Google
               div(class='row')
@@ -96,7 +105,7 @@ html
                 div.span4
                   h3 Recently
               div.row
-                div.span4 
+                div.span4
                  h3 Coming Soon...
           - else
               h3 Login with
@@ -112,7 +121,7 @@ html
           - if(!everyauth.loggedIn)
                 div(class='row')
                   div(class='span4')
-                    h3 About Mattise ?
+                    h3 &nbsp;
                   div(class='span4')
                     div(class='btn-toolbar pull-left', id='rightContentButton')
                       div(class='btn-group')
@@ -121,15 +130,6 @@ html
                         button(class='greyButton') Last updated July 07,2012
                 div(class='row')
                   div(class='span8')
-                    ul(class='newFeatureList')
-                      li.first An HTML5 whiteboard application with real-time canvas sharing and chat
-                      li Ability to collaborate and sketch simultaneously, build wireframes, draw html elements or share screenshots
-                      li Login with Twitter, Facebook or Google+
-                      li Simple URL sharing to start collaborating
-                      li Server on socket.io and node.js
-                      li Uses Redis database
-                      li An express.js app with socket.io plugin
-                      li.last Allows early course correction and reveals interaction gaps
                 div(class='row')
                   hr(class='dashes')
                 div(class='row')
@@ -146,28 +146,20 @@ html
                                 div(class='thumbnail sampleWb')
                                   img(src='images/whiteboard1.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Sample Whiteboard1
-                                  p.thumbnailDescription This is a sample whiteboard.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/whiteboard2.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Sample Whiteboard2
-                                  p.thumbnailDescription This is a sample whiteboard.
                         div(class='item')
                           ul(class='thumbnails')
                             li(class='span3 leftThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/whiteboard1.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Sample Whiteboard3
-                                  p.thumbnailDescription This is a sample whiteboard.
                             li(class='span3 rightThumbnail')
                                 div(class='thumbnail sampleWb')
                                   img(src='images/whiteboard2.png', alt='')
                                 div(class='thumbnailText')
-                                  p.thumbnailCaption Sample Whiteboard4
-                                  p.thumbnailDescription This is a sample whiteboard.
                       a(class='carousel-control homepage left', href='#myCarousel', data-slide='prev') &lsaquo;
                       a(class='carousel-control homepage right', href='#myCarousel', data-slide='next') &rsaquo;
           - else
@@ -209,10 +201,10 @@ html
 
       div(class='row', id='loginFooterDivider')
 
-        div(class='span4', id='loginFooterDividerLeft') 
+        div(class='span4', id='loginFooterDividerLeft')
 
         div(class='span8', id='loginFooterDividerRight')
-   
+
 
       div(class='row', id='loginFooter')
 
@@ -228,9 +220,9 @@ html
           div(id='footer')
            div(class='footerInner')
              div(class='footerMenu')
-               a(href='/about') About Us  
-               a(href='https://github.com/Imaginea/matisse/wiki') Matisse Wiki  
-               a(href='https://github.com/Imaginea/matisse') Github Repository   
+               a(href='/about') About Us
+               a(href='https://github.com/Imaginea/matisse/wiki') Matisse Wiki
+               a(href='https://github.com/Imaginea/matisse') Github Repository
                a(href='https://github.com/Imaginea/matisse/issues') Bug Tracker
              div(class='copyrights') copyright&copy;2012
         div(class='modal hide fade', id='whiteboardForm', style='display: none;')

@@ -135,18 +135,39 @@ application = (function () {
                 else {
                   if (ids && ids.length != 0) {
                   var session_data = req.session.auth;
-                  var user = new UserModel();
-                  var userID = user.getUserID(session_data);
-                  whiteBoard.load(ids[0]);
-                  UserModel.find({userID:userID}, function(err, ids){logErrorOrExecute(err, function(ids){
-                    user.load(ids[0], function(err, props){logErrorOrExecute(err, function (props) {
-                      user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists){logErrorOrExecute(err, function(relExists) {
-                        user.link(whiteBoard, 'sharedBoard');
-                        user.save(function(err) {logErrorOrExecute(err)});
-                      })});
-                    })});
-                  })});
-                  var session_user = user.getUserFromSession(session_data);
+                  var userObj = new UserModel();
+                  var userID = userObj.getUserID(session_data);
+                  whiteBoard.load(ids[0], function(id) {
+                  });
+                  UserModel.find({userID:userID}, function(err,ids) {
+                    if (err){
+                    }
+                    else{
+                      var user = new UserModel;
+                        user.load(ids[0], function (err, props) {
+                        if (err) {
+                          return err;
+                        } else {
+                        }
+                        user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
+                          if (relExists) {
+                          }
+                          else {
+                            user.link(whiteBoard, 'sharedBoard');
+                            user.save(function(err) {
+                              if (err) {
+                                console.log(err);
+                              }
+                              else {
+                                console.log("relation is saved");
+                              }
+                            });
+                          }
+                        });
+                        });
+                    }
+                  });
+                  var session_user = userObj.getUserFromSession(session_data);
                   setUserDetails(session_user);
                   res.sendfile(__dirname + '/board.html');
                   }
