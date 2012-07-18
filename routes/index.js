@@ -230,6 +230,7 @@ exports.boards = {
 				});
 			}
 		}); 
+		res.writeHead(200, {'Content-Type': 'text/plain' });
 		res.end("deleted");
 	},
   update: function(req, res, next) {

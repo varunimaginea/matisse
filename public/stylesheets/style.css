@@ -907,7 +907,7 @@ div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
 /************** Overloading Dialog Styles  -- End -- ****************/
 
 /************** Delete WhiteBoard Transition -- Start -- ************/
-.delete-board { display:none; background: #FFFFFF; border-radius: 4px 4px 4px 4px;  height: 25px; width: 95%; opacity: 0.5; position: absolute;box-shadow: 0 0 0 0 #000}
+.delete-board { background: #FFFFFF; border-radius: 4px 4px 4px 4px;  height: 25px; width: 95%; opacity: 0.5; position: absolute;box-shadow: 0 0 0 0 #000; cursor:pointer;}
 .delete-ico {background: #FFFFFF url('../images/deleteBoard.png') center no-repeat; height: 16px; padding-top: 7px; width: 16px;}
 .del-animation {  -webkit-animation-name: del-animation;  -webkit-animation-duration: 1s;  -webkit-animation-iteration-count: infinite;  -webkit-animation-direction: normal;  -moz-animation-name: del-animation;  -moz-animation-duration: 1s;  -moz-animation-iteration-count: infinite;  -moz-animation-direction: normal;  -o-animation-name: del-animation;  -o-animation-duration: 1s;  -o-animation-iteration-count: infinite;  -o-animation-direction: normal;  -ms-animation-name: del-animation;  -ms-animation-duration: 1s;  -ms-animation-iteration-count: infinite;  -ms-animation-direction: normal;}
 
