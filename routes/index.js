@@ -172,7 +172,7 @@ exports.boards = {
 		var session_data = req.session.auth;
 		var userObj = new UserModel();
 		var userID = userObj.getUserID(session_data);
-		userObj.linkBoard(whiteBoard, userID);
+		userObj.linkBoard(whiteBoard, userID, false);
 		res.writeHead(302, {
 		    'Location':randomstring
 		});
@@ -181,6 +181,57 @@ exports.boards = {
 	    }
 	});
     },
+	
+	remove:function (req, res, next) {
+		var boardUrl = req.body.boardUrl;
+		var session_data = req.session.auth;
+		var userObj = new UserModel();
+		var userID = userObj.getUserID(session_data);
+		// remove shapes from the board
+		ShapesModel.find({board_url: "boards/" + boardUrl}, function (err, ids) {
+			if (err) {
+				console.log(err);
+			}
+			var len = ids.length;
+			if (len === 0) {} else {
+				ids.forEach(function (id) {
+					var shape = new ShapesModel();
+					var data = {};
+					shape.load(id, function (err, props) {
+						if (err) {
+							console.log(err);
+						}
+						shape.delete(data, function (err) {
+							console.log("***** Error while deleting ID:" + id + " errr:" + err);
+						});
+					});
+				});
+			}
+		});
+		
+		// remove board 
+		BoardModel.find({url:boardUrl},function (err, ids) {
+			if (err) {
+				console.log(err);
+			} else {
+				ids.forEach(function (id) {
+					var board = new BoardModel();
+					var data = {};
+					board.load(id, function (err, props) {
+						if (err) {
+							return next(err);
+						} else {
+							userObj.linkBoard(board, userID, true, function () {
+                board.remove();
+								console.log("######### Deleting : ######"+board);
+ 						  });
+						}
+					});
+				});
+			}
+		}); 
+		res.end("deleted");
+	},
   update: function(req, res, next) {
     var whiteBoard = new BoardModel();
     whiteBoard.load(req.body.id, function (err, props) {

@@ -62,7 +62,7 @@ var userModel = module.exports = nohm.model('User', {
 	    }
 	    return userID;
 	},
-	linkBoard: function(whiteBoard, dbUserID) {
+	linkBoard: function(whiteBoard, dbUserID, unLink, callback) {
 	    this.find({userID:dbUserID}, function(err,ids) {
 		if (err){
 		}
@@ -70,18 +70,48 @@ var userModel = module.exports = nohm.model('User', {
 		    this.load(ids[0], function (err, props) {
 			if (err) {
 			    return err;
-			} else {                         
-			    
+			} else {
+
 			    console.log(":::" + props);
 			}
 			whiteBoard.load(whiteBoard.id, function(id) {
 			});
+			if(unLink)   {
+			  var self = this;
+			  self.unlink(whiteBoard, 'ownedBoard');
+			  whiteBoard.unlink(self, 'userOwned');
+			  whiteBoard.getAll('User', 'userShared', function (err, userIds) {
+			  console.log(userIds);
+          userIds.forEach(function (id) {
+            var user = new userModel();
+            user.load(id, function (err, props) {
+              console.log("first");
+              user.unlink(whiteBoard, 'sharedBoard', function(err) {
+                if(!err) {
+                  whiteBoard.unlink(user, 'userShared', function(err) {
+                    if (id == userIds[userIds.length -1])
+                      if (callback)
+                        callback();
+                  });
+                }
+                else {
+                  console.log("***Error in unlinking sharedBoard from other users***"+err);
+                }
+                });
+            });
+          });
+        });
+      }
+			else{
 			this.link(whiteBoard, 'ownedBoard');
+			  whiteBoard.link(this, 'userOwned');
+			  }
 			this.save(function(err) {
 			    if (err) {
 				console.log(err);
 			    }
 			    else {
+			    whiteBoard.save(function(err) {});
 				console.log("relation is saved");
 			    }				    
 			});

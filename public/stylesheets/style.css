@@ -565,6 +565,7 @@ ul.newFeatureList {
 .thumbnail {
     height: 150px;
     box-shadow: 0 0 0 0 #000 !important;
+    position:relative;
 }
 .thumbnails li {
     margin-bottom: 0px !important;
@@ -872,7 +873,7 @@ dashboardLeftThumbnail {
 .m-discuss{background-position:0 -218px;}
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
-.m-submenu-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
+.m-edit-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
 .menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
 .menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
 .menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
@@ -894,7 +895,7 @@ dashboardLeftThumbnail {
 .m-quick-edit span.del_icon ,.m-quick-edit-group span.del_icon{background-position:-48px 0;}
 .m-quick-edit span.del_icon:hover ,.m-quick-edit-group span.del_icon:hover{background-position:-48px -24px;}
 .m-quick-edit-group span.align_icon {}
-div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
+div.copy-alert {display:none; left: 37%; position: absolute; top: 0;} 
 /************** Quick Action Menu -- End -- ************************/
 
 /************** Overloading Dialog Styles  -- Start -- ****************/
