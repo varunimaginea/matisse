@@ -55,6 +55,13 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 		      $('#userLoginService').html(matisse.userLoginService);
 		  }
 	      };
+	    /* Redirecting the user to home page when an active board is deleted.*/
+	      comm.onDisableActiveBoard = function() {
+	        $('div.inactive-alert').slideDown(400).delay(2000).fadeOut(1000);
+	        setTimeout(function() {
+            window.location = '/';
+	        }, 3500);
+	      };
 	      matisse.comm = comm;
               matisse.main = main;
               main.addTools();
