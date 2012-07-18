@@ -55,7 +55,13 @@ var handlerOut = function() {
 	$(this).find('div.delete-board').slideUp('fast');
 };
 
-$('li','div#ownedBoardList').hover(handlerIn, handlerOut);
+$('div.delete-board').hover(
+	function() {
+		$(this).find('div.delete-ico').addClass('del-animation');
+	}, 
+	function() {
+		$(this).find('div.delete-ico').removeClass('del-animation');
+	});
 
 
 $('a.delete').on("click", function(event){
