@@ -33,6 +33,7 @@ $(document).ready(function () {
     indicator: 'Saving...',
     tooltip: 'Click to edit...',
     width: "140px",
-    maxlength: "20"
+    maxlength: "20",
+    height: "20px"
   });
 });

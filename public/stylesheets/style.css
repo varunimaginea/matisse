@@ -419,9 +419,7 @@ input.file {
 }
 #loginFooter {
     background: #fff;
-    position:fixed;
-    bottom: 0;
-}
+ }
 #loginHeaderDivider {
     background: url('../images/headerdivider_left.png') repeat-x;
 }
@@ -499,7 +497,7 @@ input.file {
 
 #loginRightContent {
     background-color: #464d57;
-    min-height: 680px;
+    display:none;
 }
 
 #loginRightContent h3 {
@@ -660,8 +658,6 @@ dashboardLeftThumbnail {
 
 #loginFooterDivider {
     background: url('../images/footerdivider_left.png') repeat-x;
-    position: fixed;
-    bottom: 89px;
 }
 #loginFooterDividerLeft {
     height: 20px;
@@ -733,7 +729,11 @@ dashboardLeftThumbnail {
 }
 
 #loginRightContent .whiteboardList {
-    min-height: 300px;
+    min-height: 250px;
+}
+
+.whiteboardList li {
+  list-style: none;
 }
 
 #loginRightContent h3.dashboardRightContentHeading {
