@@ -170,7 +170,7 @@ html
                           div(class='delete-board', boardUrl='#{board.url}', title='Delete Board')
                             center
                               div(class='delete-ico') 
-                          a(href='/boards/#{board.url}', target='_blank')
+                          a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
                             p(class='thumbnailCaption editable', id='board-name-#{board.id}') #{board.name}

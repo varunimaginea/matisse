@@ -101,6 +101,7 @@ application = (function () {
     app.resource('api', routes.api);
     app.post('/boards', routes.boards.index);
     app.post('/boards/update', routes.boards.update);
+    app.post('/remove', routes.boards.remove);
     app.get('/about', function (req, res, next) {
 	    res.sendfile(__dirname + '/about.html');
     });
