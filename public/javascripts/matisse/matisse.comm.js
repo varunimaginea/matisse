@@ -27,6 +27,10 @@ define(function () {
 		this.socket.on('eventConnect', function (data) {
 			objRef.connectHandler(data);
 		});
+		// Invoked when user try to modify board which is deleted
+		this.socket.on('eventBoardNotFound', function(){
+		  objRef.disableActiveBoardHandler();
+		});
 	}
 	(function () {
 		// Handler functions
@@ -57,6 +61,9 @@ define(function () {
 			var loc = document.location.pathname;
 			this.socket.emit("setUrl", loc, data);
 		};
+		this.disableActiveBoardHandler = function() {
+		  this.onDisableActiveBoard();
+		}
 	}).call(Comm.prototype);
 	return Comm;
 });
