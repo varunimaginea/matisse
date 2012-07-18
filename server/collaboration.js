@@ -135,7 +135,15 @@ var findInBoardModelforSetContainer = function (randomnString, wb_url, data) {
 }
 
 var drawOnBoard = function (url, data, socket) {
+	var BoardModel = collaboration.boardModel;
 	if (data.action != "clearText") {
+	  BoardModel.find({url:url.replace('boards/', '')}, function(err, bids) {
+	  if(bids.length == 0) {
+	    console.log("Error in finding board");
+	    socket.emit('eventBoardNotFound');
+	    socket.broadcast.to(url).emit('eventBoardNotFound');
+	  }
+	  else {
 		var ShapesModel = collaboration.shapesModel;
 		var newShape = new ShapesModel();
 		socket.broadcast.to(url).emit('eventDraw', data);
@@ -189,5 +197,7 @@ var drawOnBoard = function (url, data, socket) {
 			newShape.store(data, function (err) {});
 			socket.broadcast.to(url).emit('eventDraw', newShape);
 		}
+		}
+		});
 	}
 }
