@@ -563,7 +563,7 @@ ul.newFeatureList {
     width: 140px;
 }
 .thumbnail {
-    height: 150px;
+    height: auto;
     box-shadow: 0 0 0 0 #000 !important;
     position:relative;
 }

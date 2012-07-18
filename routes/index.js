@@ -101,7 +101,8 @@ exports.index = function (req, res) {
 										                              name: props.name,
 										                              container: props.container,
 										                              canvasWidth: props.canvasWidth,
-										                              canvasHeight: props.canvasHeight
+										                              canvasHeight: props.canvasHeight,
+										                              createdBy: props.createdBy
 									                              });
 									                              loggedInUser.sharedBoards = sharedboards;
 									                                if (sharedboards.length == boardIds.length) {
@@ -150,7 +151,11 @@ exports.boards = {
 	var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
         var string_length = 8;
         randomstring = '';
-
+		var session_data = req.session.auth;
+		var userObj = new UserModel();
+		var userID = userObj.getUserID(session_data);
+		var userName = userObj.getUserFromSession(session_data).name;
+		
         for (var i = 0; i < string_length; i++) {
             var rnum = Math.floor(Math.random() * chars.length);
             randomstring += chars.substring(rnum, rnum + 1);
@@ -160,7 +165,8 @@ exports.boards = {
 	    container: req.body.container,
 	    canvasWidth: req.body.canvasWidth,
 	    canvasHeight: req.body.canvasHeight,
-	    name: req.body.whiteboardName
+	    name: req.body.whiteboardName,
+	    createdBy: userName
         };
         var whiteBoard = new BoardModel();
         whiteBoard.store(data, function (err) {
@@ -169,9 +175,7 @@ exports.boards = {
 	    } else if (err) {
 		next(err);
 	    } else {
-		var session_data = req.session.auth;
-		var userObj = new UserModel();
-		var userID = userObj.getUserID(session_data);
+
 		userObj.linkBoard(whiteBoard, userID, false);
 		res.writeHead(302, {
 		    'Location':randomstring

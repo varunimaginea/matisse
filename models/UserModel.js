@@ -125,16 +125,19 @@ var userModel = module.exports = nohm.model('User', {
       user.id  = session_data.twitter.user.id;
       user.twitter = session_data.twitter.user;
       user.loginService = "Twitter";
+      user.name  = session_data.twitter.user.name;
     }
     else if (session_data.facebook) {
       user.id  = session_data.facebook.user.id;
       user.facebook = session_data.facebook.user;
       user.loginService = "Facebook";
+      user.name  = session_data.facebook.user.name;
     }
     else if (session_data.google) {
       user.id  = session_data.google.user.id;
       user.google = session_data.google.user;
       user.loginService = "Google";
+      user.name  = session_data.google.user.name;
     }
     return user;
   }
