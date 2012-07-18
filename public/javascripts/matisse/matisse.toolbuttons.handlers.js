@@ -4,11 +4,11 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
     return {
         /**
          * Handler for Save Button Click
-         * @method saveButtonClickHandler
+         * @method showImageButtonClickHandler
          * @param none
          */
-        saveButtonClickHandler: function () {
-            $('#saveicon').bind("click", function () {
+        showImageButtonClickHandler: function () {
+            $('#showImageIcon').bind("click", function () {
                 //Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
                 canvas.deactivateAll();
                 var data = canvas.toDataURL('png', 0.1)

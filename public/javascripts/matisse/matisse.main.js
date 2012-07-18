@@ -1,3 +1,4 @@
+
 /**
  * User: Bhavani Shankar
  * Date: 01/19/12
@@ -85,7 +86,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 
             this.addObservers();
 	    //TODO - Refactor
-            toolHandlers.saveButtonClickHandler();
+            toolHandlers.showImageButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();
