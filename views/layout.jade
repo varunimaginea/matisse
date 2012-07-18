@@ -102,11 +102,6 @@ html
               div(class='row')
                 hr(class='leftContentDivider')
               div.row
-                div.span4
-                  h3 Recently
-              div.row
-                div.span4
-                 h3 Coming Soon...
           - else
               h3 Login with
               div(class='loginIconBar')
@@ -175,7 +170,7 @@ html
                           div(class='delete-board', boardUrl='#{board.url}', title='Delete Board')
                             center
                               div(class='delete-ico') 
-                          a(href='/boards/#{board.url}', target='_blank')
+                          a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
                             p(class='thumbnailCaption editable', id='board-name-#{board.id}') #{board.name}
@@ -193,10 +188,10 @@ html
                     for board in sharedBoards
                       li(class='span2 dashboard#{sharedBoards.indexOf(board) == 0 || sharedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{sharedBoards.indexOf(board) > 2 ? "sharedBoardHide" : ""}')
                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                          a(href='/boards/#{board.url}', target='_blank')
+                          a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
-                            p.thumbnailCaption #{board.name}
+                            p(class='thumbnailCaption editable', id='board-#{board.id}') #{board.name}
                             p.thumbnailCaption #{board.createdBy}
                 div.row
                   div(class='span2 offset6', id='showAllCreateWhiteBoard')

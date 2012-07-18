@@ -52,7 +52,7 @@
             <div id='closediv' style="position:absolute;"><a href="#" onclick="popup('popUpDiv', 'closediv' )">
                 Close </a></div>
         </div>
-        <div id="popUpDiv" style="display:none;overflow:auto; width: 250px; height: 300px;">
+        <div id="popUpDiv" style="display:none;overflow:auto; width: 250px; height: 300px;padding:5px">
             <span id="result"></span>
         </div>
         <div id="helpDiv" style="display:none;overflow:scroll"></div>
@@ -85,7 +85,7 @@
 			<div class="menu-holder m-popover" id="editicon" data-action='edit' data-content="Edit..." title="Edit">
 				<div class="m-icon m-edit"></div>
 				<div class="m-label">Edit ...</div>
-				<div class="m-edit-list">
+				<div class="m-submenu-list  m-edit-list">
         			<span class="menu-arrow"></span>
         			<ul class="menu-edit-list">
         				<li title="Undo" id="Undo" class="disabled">Undo<span class="menu-shortcut">Ctrl+z</span></li>
@@ -97,11 +97,19 @@
 				<div class="m-icon m-discuss"></div>
 				<div class="m-label">Discuss</div>
 			</div>
-			<div class="menu-holder" data-action='report'>
-				<a href="http://github.com/Imaginea/matisse/issues" target="_blank">
-					<div class="m-icon m-report"></div>
-					<div class="m-label">Report</div>
-				</a>
+			<div class="menu-holder" data-action='report' id="reporticon">
+			  <div class="m-icon m-report"></div>
+			  <div class="m-label">Report ...</div>
+			  <div class="m-submenu-list m-report-list">
+        		<span class="menu-arrow"></span>
+        		<ul class="menu-edit-list">
+        		  <li title="LogIssue" id="LogIssue"><a href="http://github.com/Imaginea/matisse/issues" target="_blank" style="color:#666666">Log Issue</a></li>
+        		  <li title="ExportJson" id="ExportJson" >Export</li>
+<!--
+        		  <li title="ImportJson" id="ImportJson" >Import</li>
+-->
+        		</ul>
+       		  </div>
 			</div>
 			<div class="menu-holder" data-action='help'>
 				<a href="http://imaginea.github.com/matisse/latest/help.html" target="_blank">

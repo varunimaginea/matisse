@@ -18,6 +18,10 @@ application = (function () {
     var redis = require("redis");
     var redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
     var userInfo = {};
+    var logFile = null;
+    var fs = require('fs');
+    var LogToFile = require("./logToFile.js").LogToFile;
+
     redisClient.select(4);
     Nohm.setPrefix('matisse'); //setting up app prefix for redis
     Nohm.setClient(redisClient);
@@ -65,7 +69,8 @@ application = (function () {
           expressErrorHandlerOptions =  {
               dumpExceptions:true,
               showStack:true
-          }
+          };
+          LogToFile.start();
           break;
         case 'production' :
           break;
@@ -194,6 +199,8 @@ application = (function () {
     io.configure('production', function(){
       io.set('transports', ['xhr-polling']);
     });
+    io.set('log level', 2);
+
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
 
     UserModel.find(function(err,userIds) {
@@ -246,5 +253,8 @@ application = (function () {
         });
       }
     });
+    logFile = fs.createWriteStream('./app.log', {flags: 'a'});
+    app.use(express.logger({stream: logFile}));
+
     collaboration.collaborate(io, getUserDetails);
 }).call(this);

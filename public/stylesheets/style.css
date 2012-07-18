@@ -873,7 +873,7 @@ dashboardLeftThumbnail {
 .m-discuss{background-position:0 -218px;}
 .m-report{background-position:0 -268px;}
 .m-help{background-position:0 -324px;}
-.m-edit-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
+.m-submenu-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
 .menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
 .menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
 .menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
@@ -906,6 +906,7 @@ div.inactive-alert {display:none; left: 37%; position: absolute; top: 0;}
 .ui-dialog-content{border:1px solid #EEEEEE !important;}
 .ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
 /************** Overloading Dialog Styles  -- End -- ****************/
+.json-export {height:65%; width:90%}
 
 /************** Delete WhiteBoard Transition -- Start -- ************/
 .delete-board { background: #FFFFFF; border-radius: 4px 4px 4px 4px;  height: 25px; width: 95%; opacity: 0.5; position: absolute;box-shadow: 0 0 0 0 #000; cursor:pointer;}
@@ -918,3 +919,8 @@ div.inactive-alert {display:none; left: 37%; position: absolute; top: 0;}
 @-ms-keyframes del-animation{   0%{ -ms-transform: rotate(0deg);  }      40%{ -ms-transform: rotate(0deg);  }    45%{ -ms-transform: rotate(-10deg);  }    50%{ -ms-transform: rotate(0deg);  }    55%{ -ms-transform: rotate(10deg);  }     60%{ -ms-transform: rotate(0deg);  }    65%{  -ms-transform: rotate(-10deg);  }    70%{  -ms-transform: rotate(0deg);  }     75%{ -ms-transform: rotate(10deg);  }    80%{ -ms-transform: rotate(0deg);  }    100%{ -ms-transform: rotate(0deg);  } }
 /************** Delete WhiteBoard Transition -- End -- ************/
 
+.thumbnailCaption.editable {
+    background-image:url('../images/icon-pencil.png'); 
+    background-repeat:no-repeat; 
+    padding:0 0 0 15px;
+}
