@@ -172,7 +172,7 @@ html
                     for board in ownedBoards
                       li(class='span2 dashboard#{ownedBoards.indexOf(board) == 0 || ownedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{ownedBoards.indexOf(board) > 2 ? "ownedBoardHide" : ""}')
                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                          a(href='/boards/#{board.url}', target='_blank')
+                          a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
                             p(class='thumbnailCaption editable', id='board-#{board.id}') #{board.name}
@@ -190,7 +190,7 @@ html
                     for board in sharedBoards
                       li(class='span2 dashboard#{sharedBoards.indexOf(board) == 0 || sharedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{sharedBoards.indexOf(board) > 2 ? "sharedBoardHide" : ""}')
                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                          a(href='/boards/#{board.url}', target='_blank')
+                          a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
                             p.thumbnailCaption #{board.name}
