@@ -905,3 +905,12 @@ div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
 .ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
 /************** Overloading Dialog Styles  -- End -- ****************/
 .json-export {height:65%; width:90%}
+
+.thumbnailCaption.editable {
+    background-image:url('../images/bootstrap/glyphicons-halflings-white.png'); 
+    background-position:0px -72px; 
+    background-repeat:no-repeat; 
+    height: 18px;
+    width:12px;
+    padding:0 0 0 15px;
+}

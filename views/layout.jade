@@ -193,7 +193,7 @@ html
                           a(href='/boards/#{board.url}')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
-                            p.thumbnailCaption #{board.name}
+                            p(class='thumbnailCaption editable', id='board-#{board.id}') #{board.name}
                 div.row
                   div(class='span2 offset6', id='showAllCreateWhiteBoard')
                     a(class='pull-left', href='#', id='showShared') Show all
