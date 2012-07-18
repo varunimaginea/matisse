@@ -346,8 +346,8 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
         },
         handleExportJsonAction: function() {
             var exportedJSON = JSON.stringify(canvas);
-            popup('popUpDiv', 'closediv', 300, 100);
-            $("#result").html("Please provide this exported canvas json while reporting the issue<br/>" + exportedJSON);
+            popup('popUpDiv', 'closediv', 350, 150);
+            $("#result").html("Please provide this exported canvas json while reporting the issue<br/><textarea class='json-export'>" + exportedJSON+"</textarea>");
         },
         handleImportJsonAction: function() {
             console.log("handle import called");

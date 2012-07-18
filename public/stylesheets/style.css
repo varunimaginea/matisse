@@ -904,4 +904,4 @@ div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
 .ui-dialog-content{border:1px solid #EEEEEE !important;}
 .ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
 /************** Overloading Dialog Styles  -- End -- ****************/
-
+.json-export {height:65%; width:90%}
