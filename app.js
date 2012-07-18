@@ -138,6 +138,7 @@ application = (function () {
                   var session_data = req.session.auth;
                   var userObj = new UserModel();
                   var userID = userObj.getUserID(session_data);
+                  var userName = userObj.getUserFromSession(session_data).name;
                   whiteBoard.load(ids[0], function(id) {
                   });
                   UserModel.find({userID:userID}, function(err,ids) {
@@ -154,6 +155,7 @@ application = (function () {
                           if (relExists) {
                           }
                           else {
+                        	if(whiteBoard.property('createdBy')=="") whiteBoard.property('createdBy',userName);
                             user.link(whiteBoard, 'sharedBoard');
                             whiteBoard.link(user, 'userShared');
                             user.save(function(err) {
