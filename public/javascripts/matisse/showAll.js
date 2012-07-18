@@ -55,15 +55,6 @@ var handlerOut = function() {
 	$(this).find('div.delete-board').slideUp('fast');
 };
 
-$('div.delete-board').hover(
-	function() {
-		$(this).find('div.delete-ico').addClass('del-animation');
-	}, 
-	function() {
-		$(this).find('div.delete-ico').removeClass('del-animation');
-	});
-
-
 $('a.delete').on("click", function(event){
 	event.preventDefault();
 	var boardId = $(this).attr('boardUrl');
