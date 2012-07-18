@@ -14,7 +14,7 @@ $(document).ready(function () {
       type: "POST",
       url: "/boards/update",
       data: {
-        id: $(this)[0].id.replace('board-', ''),
+        id: $(this)[0].id.replace('board-name-', ''),
         name: value
       }
     }).done(function (msg) {

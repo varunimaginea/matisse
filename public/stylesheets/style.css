@@ -565,6 +565,7 @@ ul.newFeatureList {
 .thumbnail {
     height: 150px;
     box-shadow: 0 0 0 0 #000 !important;
+    position:relative;
 }
 .thumbnails li {
     margin-bottom: 0px !important;
@@ -894,7 +895,7 @@ dashboardLeftThumbnail {
 .m-quick-edit span.del_icon ,.m-quick-edit-group span.del_icon{background-position:-48px 0;}
 .m-quick-edit span.del_icon:hover ,.m-quick-edit-group span.del_icon:hover{background-position:-48px -24px;}
 .m-quick-edit-group span.align_icon {}
-div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
+div.copy-alert {display:none; left: 37%; position: absolute; top: 0;} 
 /************** Quick Action Menu -- End -- ************************/
 
 /************** Overloading Dialog Styles  -- Start -- ****************/
@@ -904,4 +905,15 @@ div.copy-alert {display:none; left: 37%; position: absolute; top: 0;}
 .ui-dialog-content{border:1px solid #EEEEEE !important;}
 .ui-dialog .ui-dialog-titlebar{padding: 0.1em 0.4em;}
 /************** Overloading Dialog Styles  -- End -- ****************/
+
+/************** Delete WhiteBoard Transition -- Start -- ************/
+.delete-board { display:none; background: #FFFFFF; border-radius: 4px 4px 4px 4px;  height: 25px; width: 95%; opacity: 0.5; position: absolute;box-shadow: 0 0 0 0 #000}
+.delete-ico {background: #FFFFFF url('../images/deleteBoard.png') center no-repeat; height: 16px; padding-top: 7px; width: 16px;}
+.del-animation {  -webkit-animation-name: del-animation;  -webkit-animation-duration: 1s;  -webkit-animation-iteration-count: infinite;  -webkit-animation-direction: normal;  -moz-animation-name: del-animation;  -moz-animation-duration: 1s;  -moz-animation-iteration-count: infinite;  -moz-animation-direction: normal;  -o-animation-name: del-animation;  -o-animation-duration: 1s;  -o-animation-iteration-count: infinite;  -o-animation-direction: normal;  -ms-animation-name: del-animation;  -ms-animation-duration: 1s;  -ms-animation-iteration-count: infinite;  -ms-animation-direction: normal;}
+
+@-webkit-keyframes del-animation{ 0%{ -webkit-transform: rotate(0deg);  }  40%{ -webkit-transform: rotate(0deg);  } 45%{ -webkit-transform: rotate(-10deg);  } 50%{ -webkit-transform: rotate(0deg);  }  55%{ -webkit-transform: rotate(10deg);  } 60%{ -webkit-transform: rotate(0deg); } 65%{ -webkit-transform: rotate(-10deg); } 70%{ -webkit-transform: rotate(0deg); }  75%{ -webkit-transform: rotate(10deg);  }  80%{ -webkit-transform: rotate(0deg);  }  100%{ -webkit-transform: rotate(0deg); } }
+@-moz-keyframes del-animation{ 0%{ -moz-transform: rotate(0deg);  }  40%{ -moz-transform: rotate(0deg);  }  45%{ -moz-transform: rotate(-10deg);  }  50%{ -moz-transform: rotate(0deg);  }  55%{ -moz-transform: rotate(10deg);  }  60%{ -moz-transform: rotate(0deg);  }  65%{  -moz-transform: rotate(-10deg);  }  70%{  -moz-transform: rotate(0deg);  }    75%{ -moz-transform: rotate(10deg);  }    80%{ -moz-transform: rotate(0deg);  }    100%{ -moz-transform: rotate(0deg);  }  }
+@-o-keyframes del-animation{    0%{ -o-transform: rotate(0deg);  }      40%{ -o-transform: rotate(0deg);  }    45%{ -o-transform: rotate(-10deg);  }    50%{ -o-transform: rotate(0deg);  }    55%{ -o-transform: rotate(10deg);  }     60%{ -o-transform: rotate(0deg);  }    65%{  -o-transform: rotate(-10deg);  }    70%{  -o-transform: rotate(0deg);  }     75%{ -o-transform: rotate(10deg);  }    80%{ -o-transform: rotate(0deg);  }    100%{ -o-transform: rotate(0deg);  } }
+@-ms-keyframes del-animation{   0%{ -ms-transform: rotate(0deg);  }      40%{ -ms-transform: rotate(0deg);  }    45%{ -ms-transform: rotate(-10deg);  }    50%{ -ms-transform: rotate(0deg);  }    55%{ -ms-transform: rotate(10deg);  }     60%{ -ms-transform: rotate(0deg);  }    65%{  -ms-transform: rotate(-10deg);  }    70%{  -ms-transform: rotate(0deg);  }     75%{ -ms-transform: rotate(10deg);  }    80%{ -ms-transform: rotate(0deg);  }    100%{ -ms-transform: rotate(0deg);  } }
+/************** Delete WhiteBoard Transition -- End -- ************/
 

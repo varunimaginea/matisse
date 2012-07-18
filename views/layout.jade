@@ -167,15 +167,18 @@ html
                   div(class='span8 pull-left')
                     h3.dashboardRightContentHeading Owned by me
                 div(class='row')
-                  div(class='span8 columns whiteboardList')
+                  div(class='span8 columns whiteboardList', id='ownedBoardList')
                     ul(class='thumbnails')
                     for board in ownedBoards
                       li(class='span2 dashboard#{ownedBoards.indexOf(board) == 0 || ownedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{ownedBoards.indexOf(board) > 2 ? "ownedBoardHide" : ""}')
                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
+                          div(class='delete-board', boardUrl='#{board.url}')
+                            center
+                              div(class='delete-ico del-animation') 
                           a(href='/boards/#{board.url}', target='_blank')
                             img(src='images/140x120.gif', alt='')
                           div(class='thumbnailText')
-                            p(class='thumbnailCaption editable', id='board-#{board.id}') #{board.name}
+                            p(class='thumbnailCaption editable', id='board-name-#{board.id}') #{board.name}
                 div.row
                   div(class='span2 offset6', id='showAllCreateWhiteBoard')
                     a(class='pull-left', href='#', id='showOwned') Show all

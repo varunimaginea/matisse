@@ -96,6 +96,7 @@ application = (function () {
     app.resource('api', routes.api);
     app.post('/boards', routes.boards.index);
     app.post('/boards/update', routes.boards.update);
+    app.post('/remove', routes.boards.remove);
     app.get('/about', function (req, res, next) {
 	    res.sendfile(__dirname + '/about.html');
     });
@@ -154,6 +155,7 @@ application = (function () {
                           }
                           else {
                             user.link(whiteBoard, 'sharedBoard');
+                            whiteBoard.link(user, 'userShared');
                             user.save(function(err) {
                               if (err) {
                                 console.log(err);
@@ -162,6 +164,7 @@ application = (function () {
                                 console.log("relation is saved");
                               }
                             });
+                            whiteBoard.save(function(err) {});
                           }
                         });
                         });
@@ -191,5 +194,55 @@ application = (function () {
     });
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
 
+    UserModel.find(function(err,userIds) {
+      if (err){
+        console.log("***Error in finding users***"+err);
+      }
+      else{
+        userIds.forEach(function (userid) {
+          var user = new UserModel();
+          user.load(userid, function (err, props) {
+            user.getAll('Board', 'sharedBoard', function(err, ids) {
+            console.log("shared");
+              console.log(ids);
+              if(!err) {
+              ids.forEach(function (id) {
+                var board = new BoardModel();
+                board.load(id, function (err, props) {
+                console.log(id);
+                console.log("---------");
+                board.link(user, 'userShared');
+                board.save(function(err){if (err) {console.log(err);}});
+                });
+                });
+              }
+              else {
+                console.log("***Error in unlinking sharedBoard from other users***"+err);
+              }
+            });
+
+            user.getAll('Board', 'ownedBoard', function(err, bids) {
+            console.log("owned");
+            console.log(bids);
+              if(!err) {
+              bids.forEach(function (bid) {
+                var sboard = new BoardModel();
+                sboard.load(bid, function (err, props) {
+                  console.log(bid);
+                  console.log("*********");
+                sboard.link(user, 'userOwned');
+                    sboard.save(function(err){if (err) {console.log(err);}});
+                });
+              });
+              }
+              else {
+                console.log("***Error in linking ownedBoard from other users***"+err);
+              }
+            });
+
+          });
+        });
+      }
+    });
     collaboration.collaborate(io, getUserDetails);
 }).call(this);
