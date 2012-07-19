@@ -1,4 +1,3 @@
-
 /**
  * User: Bhavani Shankar
  * Date: 01/19/12
@@ -46,7 +45,19 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#editicon').click(toolHandlers.openSubmenuEdit);
             $('#reporticon').click(toolHandlers.openSubmenuReport);
             $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
-            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
+            	var handler, command;
+            	switch($(this).attr('id')) {
+            	case 'Undo':
+            	  handler = 'handleUndoRedoAction';
+            	  command = 'undo';
+            	  break;
+            	case 'Redo':
+                handler = 'handleUndoRedoAction';
+                command = 'redo';
+                break;
+              default:
+              }
+              mActionBar[handler](command);
             });
 
             $('ul.menu-edit-list','div.m-report-list').on("click", "li" , function () {

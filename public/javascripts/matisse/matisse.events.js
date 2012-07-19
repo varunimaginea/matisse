@@ -35,10 +35,10 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
                 notifyZindexChange(obj, 'backward');
             }
         } else if (key == "90" && evt.ctrlKey) {
-            actionBar.handleUndoAction();
+            actionBar.handleUndoRedoAction("undo");
         }
           else if (key == "89" && evt.ctrlKey) {
-            actionBar.handleRedoAction();
+            actionBar.handleUndoRedoAction("redo");
         }
          else if (key == "27") { // when Escape key pressed
             closePopup()
