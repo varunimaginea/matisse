@@ -112,6 +112,15 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         	}
         },
 
+        openSubmenuShare: function (event) {
+        	event.stopPropagation();
+        	var $this = $(this).find('div.m-share-list');
+        	if(!$this.is(":visible")) {
+        		$this.show();
+        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
+        	}
+        },
+
         /**
          * Initializes the Chat Window, hide it initially
          * @method initChatWindow

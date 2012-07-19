@@ -44,6 +44,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon').click(toolHandlers.openSubmenuEdit);
             $('#reporticon').click(toolHandlers.openSubmenuReport);
+            $('#shareicon').click(toolHandlers.openSubmenuShare);
             $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
             	var handler, command;
             	switch($(this).attr('id')) {
