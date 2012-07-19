@@ -55,14 +55,6 @@ var handlerOut = function() {
 	$(this).find('div.delete-board').slideUp('fast');
 };
 
-$('a.delete').on("click", function(event){
-	event.preventDefault();
-	var boardId = $(this).attr('boardUrl');
-	$.post('/remove', {boardUrl:boardId} , function(data) {
-		  console.log(data);
-		});
-});
-
 //Delete whiteboard handler
 $('div.delete-board').on("click", function(event){
 	event.preventDefault();

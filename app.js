@@ -259,4 +259,5 @@ application = (function () {
     app.use(express.logger({stream: logFile}));
     
     collaboration.collaborate(io, getUserDetails);
+
 }).call(this);
