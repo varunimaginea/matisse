@@ -20,6 +20,7 @@ function blanket_size(popUpDivVar, closeDivVar, popWidthVar, popHeightVar) {
 	}
 	var blanket = document.getElementById('blanket');
 	blanket.style.height = blanket_height + 'px';
+	blanket_height = $('#containerDiv').height();
 	var popUpDiv = document.getElementById(popUpDivVar);
 	popUpDiv.style.width = popWidthVar + 'px';
 	popUpDiv.style.height = popHeightVar + 'px';

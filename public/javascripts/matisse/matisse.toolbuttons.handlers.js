@@ -2,20 +2,6 @@
 define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse, util, layoutsContent) {
     "use strict";
     return {
-        /**
-         * Handler for Save Button Click
-         * @method showImageButtonClickHandler
-         * @param none
-         */
-        showImageButtonClickHandler: function () {
-            $('#showImageIcon').bind("click", function () {
-                //Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
-                canvas.deactivateAll();
-                var data = canvas.toDataURL('png', 0.1)
-                popup('popUpDiv', 'closediv', 600, 600);
-                $("#result").html('<img src=' + data + ' />');
-            });
-        },
 
         /**
          * Handler for Import Image Button Click

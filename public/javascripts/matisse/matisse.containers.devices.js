@@ -41,7 +41,9 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				xOffset: 53, // left offset to start canvas from
 				yOffset: 134, // right offset to start canvas from
 				canvasWidth: 330, // canvas width -can be more than available device witdth
-				canvasHeight: 800 // canvas height -can be more than available device height
+				canvasHeight: 800, // canvas height -can be more than available device height
+				viewportX: 52,
+				viewportY:135
 			});
 	containers.registercontainer( 'ipad' , {		
 				displayName: "iPad",
@@ -53,11 +55,13 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				xOffset: 60,
 				yOffset: 70,
 				canvasWidth: 467,
-				canvasHeight: 606
+				canvasHeight: 606,
+				viewportX: 60,
+				viewportY:70
 			});
 	containers.registercontainer( 'blackberry' , {		
 				displayName: "BlackBerry",
-				src: "blackberry.png",
+				src: "BlackBerry.png",
 				width: 396,
 				height: 700,
 				innerWidth:327,
@@ -65,7 +69,9 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				xOffset: 32,
 				yOffset: 125,
 				canvasWidth: 327,
-				canvasHeight: 247
+				canvasHeight: 247,
+				viewportX: 32,
+				viewportY:125
 			});	
 	containers.registercontainer( 'browser' , {		
 				displayName: "Browser",
@@ -77,6 +83,8 @@ require(["matisse", "matisse.main", "matisse.containers", "matisse.palettes.prop
 				xOffset: 5,
 				yOffset: 80,
 				canvasWidth: 1040,
-				canvasHeight: 670
+				canvasHeight: 670,
+				viewportX: 8,
+				viewportY:81
 			});				
 });
