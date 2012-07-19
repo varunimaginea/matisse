@@ -60,6 +60,13 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
               }
                 mActionBar[handler] && mActionBar[handler](command);
             });
+            
+            if(matisse.containers[matisse.containerName].src=="") {
+            	$('#showImageIcon').click(mActionBar.handleRawAction);
+            } else {
+            	$('#showImageIcon').click(toolHandlers.openSubmenu);
+            }
+
             $('ul.menu-list','div.m-align-list').on("click", "li" , function () {
                 var selected_group = canvas.getActiveGroup();
                 var selected_group_obj_array = selected_group.getObjects();
@@ -91,7 +98,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 	    mActionBar.initalize();		    
             this.addObservers();
 	    //TODO - Refactor
-            toolHandlers.showImageButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();

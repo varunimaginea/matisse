@@ -925,3 +925,6 @@ div.inactive-alert {display:none; left: 37%; position: absolute; top: 0;}
 @-o-keyframes del-animation{    0%{ -o-transform: rotate(0deg);  }      40%{ -o-transform: rotate(0deg);  }    45%{ -o-transform: rotate(-10deg);  }    50%{ -o-transform: rotate(0deg);  }    55%{ -o-transform: rotate(10deg);  }     60%{ -o-transform: rotate(0deg);  }    65%{  -o-transform: rotate(-10deg);  }    70%{  -o-transform: rotate(0deg);  }     75%{ -o-transform: rotate(10deg);  }    80%{ -o-transform: rotate(0deg);  }    100%{ -o-transform: rotate(0deg);  } }
 @-ms-keyframes del-animation{   0%{ -ms-transform: rotate(0deg);  }      40%{ -ms-transform: rotate(0deg);  }    45%{ -ms-transform: rotate(-10deg);  }    50%{ -ms-transform: rotate(0deg);  }    55%{ -ms-transform: rotate(10deg);  }     60%{ -ms-transform: rotate(0deg);  }    65%{  -ms-transform: rotate(-10deg);  }    70%{  -ms-transform: rotate(0deg);  }     75%{ -ms-transform: rotate(10deg);  }    80%{ -ms-transform: rotate(0deg);  }    100%{ -ms-transform: rotate(0deg);  } }
 /************** Delete WhiteBoard Transition -- End -- ************/
+
+#device-container{ position:absolute; display:none;}
+#done{position:absolute; display:none;}

@@ -436,8 +436,76 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         handleImportJsonAction: function () {
             console.log("handle import called");
         },
-
-        getOriginalObj: function (obj) {
+        handleRawAction: function(){
+        	//Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
+            canvas.deactivateAll();
+            var data = canvas.toDataURL('png', 0.1)
+            popup('popUpDiv', 'closediv', 600, 600);
+            $("#result").html('<img src=' + data + ' />');
+           
+        },
+        handleClipAction: function(){
+           var setClipCanvas = function(clipCanvas,xToAdd,yToAdd) {
+            	$.each(clipCanvas.getObjects(),function(index,value) {
+            		var left = value.get('left')+xToAdd;
+            		var top = value.get('top')+yToAdd;
+            		value.set("top", top);
+    			    value.set("left", left);
+    		    });
+            };
+           var clipImage = function(clipCanvas,xToAdd,yToAdd,containerDi) {
+    		    var xmin = containerDiv.position().left +xToAdd;
+        		var xmax = containerDiv.width() + containerDiv.offset().left;
+        		var ymin = containerDiv.position().top +yToAdd;
+        		var ymax = containerDiv.height() + containerDiv.offset().top;
+        		clipCanvas.dispose();
+        		clipCanvas.setHeight(containerHeight);
+            	clipCanvas.setWidth(containerWidth);
+            	$.each(canvas.getObjects(),function(index,value) {
+            		if(value.get('left')>xmin && value.get('left')<xmax && value.get('top')>ymin && value.get('top')<ymax) {
+            			var obj = value.clone();
+                		obj.set('left', obj.get('left')-containerDiv.position().left);
+                		obj.set('top', obj.get('top')-containerDiv.position().top);
+            			clipCanvas.add(obj);
+            		}
+    		    });
+            	setClipCanvas(clipCanvas,xToAdd,yToAdd);
+            	clipCanvas.setBackgroundImage("../images/" + matisse.containers[matisse.containerName].src, function() {
+            		data = clipCanvas.toDataURL('png', 0.1);
+            		$("#popUpDiv").slideUp("fast", function() {
+            			$("#result").html('<img src=' + data + ' />');
+            			$(this).slideDown("fast");
+            		});
+            		
+            	});
+        	};
+        	var clipCanvas = new fabric.Canvas('clip');
+        	var containerHeight = matisse.containers[matisse.containerName].height;
+        	var containerWidth = matisse.containers[matisse.containerName].width;
+        	var containerImgSrc = "url(../images/" + matisse.containers[matisse.containerName].src + ")";
+        	var xToAdd = matisse.containers[matisse.containerName].viewportX;
+        	var yToAdd = matisse.containers[matisse.containerName].viewportY;
+        	clipCanvas.setHeight(canvas.height);
+        	clipCanvas.setWidth(canvas.width);
+        	$.each(canvas.getObjects(),function(index,value) { 
+			    clipCanvas.add(value.clone());
+		    });
+        	setClipCanvas(clipCanvas,xToAdd,yToAdd);
+        	canvas.deactivateAll();
+            var data = clipCanvas.toDataURL('png', 0.1);
+            popup('popUpDiv', 'closediv', 1024, 768);
+            $("#result").html('<img src=' + data + ' />');
+                    	
+            var containerDiv = $('#device-container');
+        	containerDiv.css({"height":containerHeight, "width":containerWidth, "background-image":containerImgSrc, "top":0, "left":0});
+        	containerDiv.draggable({ containment: "parent"}).show().next('#done').show();
+        	$('#done').one('click',function(){
+        		clipImage(clipCanvas,xToAdd,yToAdd,containerDiv);
+        		containerDiv.hide().next('#done').hide();
+        	})
+        	
+        },
+        getOriginalObj: function(obj) {
             var originalObj = {};
             var j;
             for (j = 0; j < obj.stateProperties.length; j++) {
