@@ -21,7 +21,7 @@ application = (function () {
     var userInfo = {};
     var logFile = null;
     var fs = require('fs');
-    var LogToFile = require("./server/logToFile.js").LogToFile;
+    var LogToFile = require("./server/logToFile");
 
     redisClient.select(4);
     Nohm.setPrefix('matisse'); //setting up app prefix for redis
