@@ -167,7 +167,7 @@ html
                     for board in ownedBoards
                       li(class='span2 dashboard#{ownedBoards.indexOf(board) == 0 || ownedBoards.indexOf(board)%3 == 0 ? "Left" : "Right"}Thumbnail #{ownedBoards.indexOf(board) > 2 ? "ownedBoardHide" : ""}')
                         div(class='thumbnail dashboardThumbnail dashboardWhiteBoardItem')
-                          div(class='delete-board', boardUrl='#{board.url}', title='Delete Board')
+                          div(class='delete-board', boardUrl='#{board.url}', name='#{board.name}', title='Delete Board')
                             center
                               div(class='delete-ico') 
                           a(href='/boards/#{board.url}')

@@ -55,34 +55,40 @@ var handlerOut = function() {
 	$(this).find('div.delete-board').slideUp('fast');
 };
 
-$('a.delete').on("click", function(event){
-	event.preventDefault();
-	var boardId = $(this).attr('boardUrl');
-	$.post('/remove', {boardUrl:boardId} , function(data) {
-		  console.log(data);
-		});
-});
 //Delete whiteboard handler
 $('div.delete-board').on("click", function(event){
 	event.preventDefault();
-	var self = $(this);
-  var boardId = self.attr('boardUrl');
-	$.post('/remove', {boardUrl:boardId} , function(data) {
-	  if (data == "deleted") {
-  	self.hide();
-  	var boardImg = self.parents('div.thumbnail').find('img');
-  	var boardList = self.parents('li');
-  	boardImg.fadeOut('slow', function() {
-  		boardList.remove();
-  		handleShowAllLink();
-  		var ownedNumber = $('div.numButton').find('h3').first();
-  		var ownedModified = "<h3 style='display:none'>" + (ownedNumber.text() - 1) + "</h3>";
-  		ownedNumber.after(ownedModified);
-  		ownedNumber.slideUp('slow').next('h3').slideDown('slow',function() {$(this).prev('h3').remove();});
-  	});
-  	}
-  	else {
-      console.log(data);
-    }
-  });
+	return confirmDelete($(this));;
+
 });
+
+function confirmDelete(jqObject) {
+  var answer = confirm("Delete board with title as '"+jqObject.attr('name')+"' ?");
+      if (answer){
+          deleteBoard(jqObject);
+      }
+  return false;
+}
+
+function deleteBoard(jqObject) {
+  var self = jqObject;
+  var boardId = self.attr('boardUrl');
+  	$.post('/remove', {boardUrl:boardId} , function(data) {
+  	  if (data == "deleted") {
+    	self.hide();
+    	var boardImg = self.parents('div.thumbnail').find('img');
+    	var boardList = self.parents('li');
+    	boardImg.fadeOut('slow', function() {
+    		boardList.remove();
+    		handleShowAllLink();
+    		var ownedNumber = $('div.numButton').find('h3').first();
+    		var ownedModified = "<h3 style='display:none'>" + (ownedNumber.text() - 1) + "</h3>";
+    		ownedNumber.after(ownedModified);
+    		ownedNumber.slideUp('slow').next('h3').slideDown('slow',function() {$(this).prev('h3').remove();});
+    	});
+    	}
+    	else {
+        console.log(data);
+      }
+  });
+}
