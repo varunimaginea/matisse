@@ -35,9 +35,11 @@ application = (function () {
     login.authenticate(setUserDetails);
     //logging
     Nohm.logError = function (err) {
-        console.log("===============");
-        console.log(err);
-        console.log("===============");
+        if (err) {
+            console.log("===============Nohm Error=======================");
+            console.log(err);
+            console.log("======================================");
+        }
     };
 
     redisClient.on("error", function (err) {
@@ -255,6 +257,6 @@ application = (function () {
     });
     logFile = fs.createWriteStream('./app.log', {flags: 'a'});
     app.use(express.logger({stream: logFile}));
-
+    
     collaboration.collaborate(io, getUserDetails);
 }).call(this);
