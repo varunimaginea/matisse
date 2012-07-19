@@ -1,6 +1,5 @@
 /**
- * To provide extra effects like to show the user who modified a shape
- * in matisse.
+ * To show the user who modified a shape in matisse.
  */
 
 define(["matisse", "matisse.comm"],
@@ -53,7 +52,6 @@ define(["matisse", "matisse.comm"],
            }
 
            return {
-               showModifiedByUser: showModifiedByUser
+               init: showModifiedByUser
            };
        });
-

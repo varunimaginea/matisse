@@ -90,34 +90,16 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         },
         
         /**
-         * Opens whiteboard submenu for Edit
-         * @method openSubmenuEdit
+         * Opens whiteboard actions submenu
+         * @method openSubmenu
          * @param event
          */
-        openSubmenuEdit: function (event) {
+        openSubmenu: function (event) {
         	event.stopPropagation();
-        	var $this = $(this).find('div.m-edit-list');
+        	var $this = $(this).find('div.m-submenu-list').first();
         	if(!$this.is(":visible")) {
         		$this.show();
-        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
-        	}
-        },
-
-        openSubmenuReport: function (event) {
-        	event.stopPropagation();
-        	var $this = $(this).find('div.m-report-list');
-        	if(!$this.is(":visible")) {
-        		$this.show();
-        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
-        	}
-        },
-
-        openSubmenuShare: function (event) {
-        	event.stopPropagation();
-        	var $this = $(this).find('div.m-share-list');
-        	if(!$this.is(":visible")) {
-        		$this.show();
-        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
+        		$('body').one("click", {list : $this}, function (event) {event.data.list.hide();});
         	}
         },
 

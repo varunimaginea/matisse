@@ -7,6 +7,9 @@ collaboration = module.exports = {
 			var wb_url = location.replace("/", "");
 			var randomnString = wb_url.substr(wb_url.indexOf('/') + 1);
 			socket.join(wb_url);
+                        socket.set('board', wb_url);
+                        socket.emit('joined');
+
 			writeBoardModels(randomnString, socket);
 			writeShapeModels(wb_url, socket);
 		},
@@ -21,8 +24,23 @@ collaboration = module.exports = {
 		eventDraw: function (location, data) {
 			var socket = this;
 			var url = location.replace("/", "");
-			drawOnBoard(url, data, socket);			
-		}
+			drawOnBoard(url, data, socket);
+		},
+                hello: function (name) { // user joins say hello to all
+                    var s = this;
+                    s.set('name', name);
+                    s.get('board', function(board) {
+		              s.broadcast.to(board).emit('hello',name);
+                          });
+                },
+                bye: function () { // user left say bye to all
+                    var s = this;
+                    s.get('name', function(err, name) {
+                              s.get('board', function(board) {
+                                        s.broadcast.to(board).emit('bye',name);
+                                    });
+                          });
+                }
 	},
 	collaborate: function (io, getUserInfo) {
 		var thisObj = this;
@@ -37,6 +55,8 @@ collaboration = module.exports = {
 			socket.on("setUrl", thisObj.events["setUrl"]);
 			socket.on("setContainer", thisObj.events["setContainer"]);
 			socket.on('eventDraw', thisObj.events["eventDraw"]);
+                        socket.on('hello', thisObj.events['hello']);
+                        socket.on('disconnect', thisObj.events['bye']);
 		});
 	}
 }

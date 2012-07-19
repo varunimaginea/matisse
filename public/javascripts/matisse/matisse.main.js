@@ -43,24 +43,20 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             document.onkeydown = events.keyDown;
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
-            $('#editicon').click(toolHandlers.openSubmenuEdit);
-            $('#reporticon').click(toolHandlers.openSubmenuReport);
-            $('#shareicon').click(toolHandlers.openSubmenuShare);
-            $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
-            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
+            $('#editicon, #friendsicon, #reporticon, #shareicon')
+                .click(toolHandlers.openSubmenu);
+            $('ul.menu-list', 'div.m-submenu-list').on("click", "li" , function () {
+            	var handler = 'handle'+$(this).attr('id')+'Action'; 
+                mActionBar[handler] && mActionBar[handler]();
             });
-
-            $('ul.menu-edit-list','div.m-report-list').on("click", "li" , function () {
-            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
-            });
-
-            $('ul.menu-edit-list','div.m-align-list').on("click", "li" , function () {
-            	var selected_group = canvas.getActiveGroup();
-            	var selected_group_obj_array = selected_group.getObjects();
-            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler](selected_group, selected_group_obj_array);
-        		$('span.prop_icon','div.m-quick-edit-group').trigger('click');
-        		canvas.fire('object:modified');
-        		canvas.renderAll();
+            $('ul.menu-list','div.m-align-list').on("click", "li" , function () {
+                var selected_group = canvas.getActiveGroup();
+                var selected_group_obj_array = selected_group.getObjects();
+                var handler = 'handle'+$(this).attr('id')+'Action';
+                mActionBar[handler](selected_group, selected_group_obj_array);
+                $('span.prop_icon','div.m-quick-edit-group').trigger('click');
+                canvas.fire('object:modified');
+                canvas.renderAll();
             });
             $('div.m-quick-edit').on("click", "span", function(event) { 
             	var item_checked = $(event.target); 
