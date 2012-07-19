@@ -875,10 +875,10 @@ dashboardLeftThumbnail {
 .m-help{background-position:0 -324px;}
 .m-submenu-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: 65px; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
 .menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
-.menu-edit-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
-.menu-edit-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
-.menu-edit-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
-.menu-edit-list li.disabled {color: #bbb;}
+.menu-edit-list,.menu-show-list{list-style: none; margin-top: -13px; color: #666666; text-align:left;}
+.menu-edit-list li,.menu-show-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
+.menu-edit-list li:not(:last-child),.menu-show-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
+.menu-edit-list li.disabled,.menu-show-list li.disabled {color: #bbb;}
 .menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
@@ -924,3 +924,5 @@ div.inactive-alert {display:none; left: 37%; position: absolute; top: 0;}
 @-o-keyframes del-animation{    0%{ -o-transform: rotate(0deg);  }      40%{ -o-transform: rotate(0deg);  }    45%{ -o-transform: rotate(-10deg);  }    50%{ -o-transform: rotate(0deg);  }    55%{ -o-transform: rotate(10deg);  }     60%{ -o-transform: rotate(0deg);  }    65%{  -o-transform: rotate(-10deg);  }    70%{  -o-transform: rotate(0deg);  }     75%{ -o-transform: rotate(10deg);  }    80%{ -o-transform: rotate(0deg);  }    100%{ -o-transform: rotate(0deg);  } }
 @-ms-keyframes del-animation{   0%{ -ms-transform: rotate(0deg);  }      40%{ -ms-transform: rotate(0deg);  }    45%{ -ms-transform: rotate(-10deg);  }    50%{ -ms-transform: rotate(0deg);  }    55%{ -ms-transform: rotate(10deg);  }     60%{ -ms-transform: rotate(0deg);  }    65%{  -ms-transform: rotate(-10deg);  }    70%{  -ms-transform: rotate(0deg);  }     75%{ -ms-transform: rotate(10deg);  }    80%{ -ms-transform: rotate(0deg);  }    100%{ -ms-transform: rotate(0deg);  } }
 /************** Delete WhiteBoard Transition -- End -- ************/
+
+#device-container{ position: relative; display:none;}

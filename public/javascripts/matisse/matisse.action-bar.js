@@ -352,6 +352,67 @@ define( ["matisse", "matisse.util"], function (matisse, util) {
         handleImportJsonAction: function() {
             console.log("handle import called");
         },
+        handleRawAction: function(){
+        	//Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
+            canvas.deactivateAll();
+            var data = canvas.toDataURL('png', 0.1)
+            popup('popUpDiv', 'closediv', 600, 600);
+            $("#result").html('<img src=' + data + ' />');
+           
+        },
+        handleClipAction: function(){
+        	/* var clipCanvas = new fabric.Canvas('clip');
+        	var containerHeight = matisse.containers[matisse.containerName].height;
+        	var containerWidth = matisse.containers[matisse.containerName].width;
+        	var containerImgSrc = "../images/" + matisse.containers[matisse.containerName].src;
+        	var xToAdd = matisse.containers[matisse.containerName].viewportX;
+        	var yToAdd = matisse.containers[matisse.containerName].viewportY;        	
+        	clipCanvas.setHeight(containerHeight);
+        	clipCanvas.setWidth(containerWidth);
+        	$.each(canvas.getObjects(),function(index,value) { 
+			    clipCanvas.add(value.clone());
+		    });
+        	$.each(clipCanvas.getObjects(),function(index,value) {
+        		var left = value.get('left')+xToAdd;
+        		var top = value.get('top')+yToAdd;
+        		value.set("top", top);
+			    value.set("left", left);
+		    });
+        	canvas.deactivateAll();
+        	//clipCanvas.renderAll();
+        	clipCanvas.setBackgroundImage(containerImgSrc, function() {
+        		var data = clipCanvas.toDataURL('png', 0.1)
+                popup('popUpDiv', 'closediv', containerWidth, containerHeight);
+                $("#result").html('<img src=' + data + ' />');
+        		});   */
+        	var clipCanvas = new fabric.Canvas('clip');
+        	var containerHeight = matisse.containers[matisse.containerName].height;
+        	var containerWidth = matisse.containers[matisse.containerName].width;
+        	var containerImgSrc = "url(../images/" + matisse.containers[matisse.containerName].src + ")";
+        	var xToAdd = matisse.containers[matisse.containerName].viewportX;
+        	var yToAdd = matisse.containers[matisse.containerName].viewportY;
+        	clipCanvas.setHeight(containerHeight);
+        	clipCanvas.setWidth(containerWidth);
+        	$.each(canvas.getObjects(),function(index,value) { 
+			    clipCanvas.add(value.clone());
+		    });
+        	$.each(clipCanvas.getObjects(),function(index,value) {
+        		var left = value.get('left')+xToAdd;
+        		var top = value.get('top')+yToAdd;
+        		value.set("top", top);
+			    value.set("left", left);
+		    });
+        	canvas.deactivateAll();
+            var data = clipCanvas.toDataURL('png', 0.1)
+            popup('popUpDiv', 'closediv', 1024, 768);
+            //$('#popUpDiv').css({"left":"10%","top":"10%"});
+            $("#result").html('<img src=' + data + ' />');
+            
+        	
+            var containerDiv = $('#device-container');
+        	containerDiv.css({"height":containerHeight, "width":containerWidth, "background-image":containerImgSrc});
+        	containerDiv.draggable({ containment: "parent" }).show();
+        },
         
         getOriginalObj: function(obj) {
             var originalObj = {};

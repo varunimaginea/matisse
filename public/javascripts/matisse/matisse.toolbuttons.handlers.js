@@ -8,13 +8,11 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
          * @param none
          */
         showImageButtonClickHandler: function () {
-            $('#showImageIcon').bind("click", function () {
                 //Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
                 canvas.deactivateAll();
                 var data = canvas.toDataURL('png', 0.1)
                 popup('popUpDiv', 'closediv', 600, 600);
                 $("#result").html('<img src=' + data + ' />');
-            });
         },
 
         /**
@@ -97,6 +95,15 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         openSubmenuEdit: function (event) {
         	event.stopPropagation();
         	var $this = $(this).find('div.m-edit-list');
+        	if(!$this.is(":visible")) {
+        		$this.show();
+        		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});
+        	}
+        },
+        
+        openSubmenuShow: function (event) {
+        	event.stopPropagation();
+        	var $this = $(this).find('div.m-show-list');
         	if(!$this.is(":visible")) {
         		$this.show();
         		$('body').one("click" , {divEdit : $this} ,function (event) {event.data.divEdit.hide();});

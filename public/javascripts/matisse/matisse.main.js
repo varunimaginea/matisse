@@ -44,8 +44,12 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon').click(toolHandlers.openSubmenuEdit);
+            $('#showImageIcon').click(toolHandlers.openSubmenuShow);
             $('#reporticon').click(toolHandlers.openSubmenuReport);
             $('ul.menu-edit-list','div.m-edit-list').on("click", "li" , function () {
+            	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
+            });
+            $('ul.menu-show-list','div.m-show-list').on("click", "li" , function () {
             	var handler = 'handle'+$(this).attr('id')+'Action'; mActionBar[handler]();
             });
 
@@ -86,7 +90,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 
             this.addObservers();
 	    //TODO - Refactor
-            toolHandlers.showImageButtonClickHandler();
+            //toolHandlers.showImageButtonClickHandler();
             toolHandlers.newButtonClickHanlder();
 			toolHandlers.helpButtonListener();
 			toolHandlers.importImageButtonListener();

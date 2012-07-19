@@ -54,6 +54,7 @@
         </div>
         <div id="popUpDiv" style="display:none;overflow:auto; width: 250px; height: 300px;padding:5px">
             <span id="result"></span>
+            <div id="device-container"> </div>
         </div>
         <div id="helpDiv" style="display:none;overflow:scroll"></div>
         <!----end for popup -->
@@ -81,6 +82,13 @@
 			<div class="menu-holder m-popover" data-action='showImage' id="showImageIcon">
 				<div class="m-icon m-save"></div>
 				<div class="m-label">Show Image</div>
+				<div class="m-submenu-list  m-show-list">
+        			<span class="menu-arrow"></span>
+        			<ul class="menu-show-list">
+        				<li title="Show Raw Image" id="Raw" >Raw</li>
+        				<li title="Clip to Conatiner" id="Clip" >Clip</li>
+        			</ul>
+       		   </div>
 			</div>
 			<div class="menu-holder m-popover" id="editicon" data-action='edit' data-content="Edit..." title="Edit">
 				<div class="m-icon m-edit"></div>
@@ -184,5 +192,6 @@
       <a class="close" data-dismiss="alert">×</a>
       <strong>Board Cannot be Found.</strong> You will now be redirected to the dashboard page!
     </div>
+    <canvas id="clip" style="display:none;"></canvas>
     </body>
 </html>
