@@ -1,3 +1,4 @@
+var noop = function() {}
 /**
  * Module dependencies.
  */
@@ -20,7 +21,7 @@ application = (function () {
     var userInfo = {};
     var logFile = null;
     var fs = require('fs');
-    var LogToFile = require("./logToFile.js").LogToFile;
+    var LogToFile = require("./server/logToFile.js").LogToFile;
 
     redisClient.select(4);
     Nohm.setPrefix('matisse'); //setting up app prefix for redis
@@ -47,7 +48,7 @@ application = (function () {
     });
 
     var app = module.exports = express.createServer(),
-        io = require('socket.io').listen(app);
+    io = require('socket.io').listen(app);
 
     var configure = function () {
         app.set('views', __dirname + '/views');
@@ -65,21 +66,21 @@ application = (function () {
     };
 
     var setEnvironmentSettings = function (env) {
-      var expressErrorHandlerOptions = {};
-      switch (env) {
+        var expressErrorHandlerOptions = {};
+        switch (env) {
         case 'development':
-          expressErrorHandlerOptions =  {
-              dumpExceptions:true,
-              showStack:true
-          };
-          LogToFile.start();
-          break;
+            expressErrorHandlerOptions =  {
+                dumpExceptions:true,
+                showStack:true
+            };
+            LogToFile.start();
+            break;
         case 'production' :
-          break;
+            break;
         default:
-          break;
-      }
-      app.use(express.errorHandler(expressErrorHandlerOptions));
+            break;
+        }
+        app.use(express.errorHandler(expressErrorHandlerOptions));
     };
 
     var use = function (err, req, res, next) {
@@ -109,151 +110,138 @@ application = (function () {
     });
 
     var logErrorOrExecute = function (err, param, callback) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        if (callback) {
-          console.log(param);
-          callback(param);
+        if (err) {
+            console.log(err);
         }
-      }
+        else {
+            if (callback) {
+                console.log(param);
+                callback(param);
+            }
+        }
     };
 
     var redirectToHome = function(req, res) {
-      res.writeHead(302, {
-        'Location': 'http://'+req.headers.host
-      });
-      if(req.session) {
-        req.session.redirectPath = req.url;
-      }
-      res.end();
+        res.writeHead(302, {
+            'Location': 'http://'+req.headers.host
+        });
+        if(req.session) {
+            req.session.redirectPath = req.url;
+        }
+        res.end();
     };
 
     app.resource('boards', {
         show:function (req, res, next) {
-          if (req.loggedIn) {
-            if (req.params.id != "favicon") {
-              var whiteBoard = new BoardModel();
-                whiteBoard.find({url: req.params.board.replace(/[^a-zA-Z 0-9]+/g,'')}, function (err, ids) {
-                if (err) {
-                    console.log(err);
-                    redirectToHome(req, res);
-                }
-                else {
-                  if (ids && ids.length != 0) {
-                  var session_data = req.session.auth;
-                  var userObj = new UserModel();
-                  var userID = userObj.getUserID(session_data);
-                  var userName = userObj.getUserFromSession(session_data).name;
-                  whiteBoard.load(ids[0], function(id) {
-                  });
-                  UserModel.find({userID:userID}, function(err,ids) {
-                    if (err){
-                    }
-                    else{
-                      var user = new UserModel;
-                        user.load(ids[0], function (err, props) {
+            if (req.loggedIn) {
+                if (req.params.id != "favicon") {
+                    var whiteBoard = new BoardModel();
+                    whiteBoard.find({url: req.params.board.replace(/[^a-zA-Z 0-9]+/g,'')}, function (err, ids) {
                         if (err) {
-                          return err;
-                        } else {
+                            redirectToHome(req, res);
                         }
-                        user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
-                          if (relExists) {
-                          }
-                          else {
-                        	if(whiteBoard.property('createdBy')=="") whiteBoard.property('createdBy',userName);
-                            user.link(whiteBoard, 'sharedBoard');
-                            whiteBoard.link(user, 'userShared');
-                            user.save(function(err) {
-                              if (err) {
-                                console.log(err);
-                              }
-                              else {
-                                console.log("relation is saved");
-                              }
-                            });
-                            whiteBoard.save(function(err) {});
-                          }
-                        });
-                        });
-                    }
-                  });
-                  var session_user = userObj.getUserFromSession(session_data);
-                  setUserDetails(session_user);
-                  res.sendfile(__dirname + '/board.html');
-                  }
-                  else {
-                    redirectToHome(req, res);
-                  }
+                        else {
+                            if (ids && ids.length != 0) {
+                                var session_data = req.session.auth;
+                                var userObj = new UserModel();
+                                var userID = userObj.getUserID(session_data);
+                                var userName = userObj.getUserFromSession(session_data).name;
+                                whiteBoard.load(ids[0], function(id) {
+                                });
+                                UserModel.find({userID:userID}, function(err,ids) {
+                                    if (err){
+                                    }
+                                    else{
+                                        var user = new UserModel;
+                                        user.load(ids[0], function (err, props) {
+                                            if (err) {
+                                                return err;
+                                            }
+                                            user.belongsTo(whiteBoard, 'ownedBoard', function(err, relExists) {
+                                                if (relExists) {
+                                                } else {
+                        	                        if(whiteBoard.property('createdBy')=="") whiteBoard.property('createdBy',userName);
+                                                    user.link(whiteBoard, 'sharedBoard');
+                                                    whiteBoard.link(user, 'userShared');
+                                                    user.save(noop);
+                                                    whiteBoard.save(noop);
+                                                }
+                                            });
+                                        });
+                                    }
+                                });
+                                var session_user = userObj.getUserFromSession(session_data);
+                                setUserDetails(session_user);
+                                res.sendfile(__dirname + '/board.html');
+                            }
+                            else {
+                                redirectToHome(req, res);
+                            }
+                        }
+                    });
                 }
-                });
             }
-          }
-          else {
-            redirectToHome(req, res);
-          }
+            else {
+                redirectToHome(req, res);
+            }
         }
     });
 
     app.use(use);
     app.listen(8000);
     io.configure('production', function(){
-      io.set('transports', ['xhr-polling']);
+        io.set('transports', ['xhr-polling']);
     });
     io.set('log level', 2);
 
     console.log("Matisse server listening on port %d in %s mode", app.address().port, app.settings.env);
 
     UserModel.find(function(err,userIds) {
-      if (err){
-        console.log("***Error in finding users***"+err);
-      }
-      else{
-        userIds.forEach(function (userid) {
-          var user = new UserModel();
-          user.load(userid, function (err, props) {
-            user.getAll('Board', 'sharedBoard', function(err, ids) {
-            console.log("shared");
-              console.log(ids);
-              if(!err) {
-              ids.forEach(function (id) {
-                var board = new BoardModel();
-                board.load(id, function (err, props) {
-                console.log(id);
-                console.log("---------");
-                board.link(user, 'userShared');
-                board.save(function(err){if (err) {console.log(err);}});
-                });
-                });
-              }
-              else {
-                console.log("***Error in unlinking sharedBoard from other users***"+err);
-              }
-            });
+        if (err){
+            console.log("***Error in finding users***"+err);
+        }
+        else{
+            userIds.forEach(function (userid) {
+                var user = new UserModel();
+                user.load(userid, function (err, props) {
+                    user.getAll('Board', 'sharedBoard', function(err, ids) {
+                        console.log("shared");
+                        console.log(ids);
+                        if(!err) {
+                            ids.forEach(function (id) {
+                                var board = new BoardModel();
+                                board.load(id, function (err, props) {
+                                    console.log(id);
+                                    console.log("---------");
+                                    board.link(user, 'userShared');
+                                    board.save(noop);
+                                });
+                            });
+                        }
+                        else {
+                            console.log("***Error in unlinking sharedBoard from other users***"+err);
+                        }
+                    });
 
-            user.getAll('Board', 'ownedBoard', function(err, bids) {
-            console.log("owned");
-            console.log(bids);
-              if(!err) {
-              bids.forEach(function (bid) {
-                var sboard = new BoardModel();
-                sboard.load(bid, function (err, props) {
-                  console.log(bid);
-                  console.log("*********");
-                sboard.link(user, 'userOwned');
-                    sboard.save(function(err){if (err) {console.log(err);}});
-                });
-              });
-              }
-              else {
-                console.log("***Error in linking ownedBoard from other users***"+err);
-              }
-            });
+                    user.getAll('Board', 'ownedBoard', function(err, bids) {
+                        console.log("owned");
+                        console.log(bids);
+                        if(!err) {
+                            bids.forEach(function (bid) {
+                                var sboard = new BoardModel();
+                                sboard.load(bid, function (err, props) {
+                                    sboard.link(user, 'userOwned');
+                                    sboard.save(noop);
+                                });
+                            });
+                        } else {
+                            console.log("***Error in linking ownedBoard from other users***"+err);
+                        }
+                    });
 
-          });
-        });
-      }
+                });
+            });
+        }
     });
     logFile = fs.createWriteStream('./app.log', {flags: 'a'});
     app.use(express.logger({stream: logFile}));
