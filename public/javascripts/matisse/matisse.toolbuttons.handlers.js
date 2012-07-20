@@ -51,28 +51,6 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         },
 
         /**
-         * Open Chat Window when user clicks on chat icon
-         * @method openChatWindow
-         * @param none
-         *
-         */
-        openChatWindow: function () {
-            $('#chatdialog').dialog({
-                width: 200
-            });
-            var dialog_width = $("#chatdialog").dialog("option", "width");
-            var win_width = $(window).width();
-            $('#chatdialog').dialog({
-                position: [win_width - dialog_width, 100]
-            });
-
-            $('#chatdialog').dialog('open');
-            $('#chatdialog').dialog({
-                resizable: false
-            });
-        },
-
-        /**
          * Open a Properties panel for currently selected object
          * @method openPropertiesPanel
          * @param none
@@ -104,17 +82,6 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
         },
 
         /**
-         * Initializes the Chat Window, hide it initially
-         * @method initChatWindow
-         * @param none
-         *
-         */
-        initChatWindow: function () {
-            $('#chatdialog').dialog();
-            $('#chatdialog').dialog('close');
-        },
-
-        /**
          * Initializes the Properties Window, hide it initially
          * @method initPropWindow
          * @param none
@@ -132,24 +99,7 @@ define(["matisse", "matisse.util", "matisse.layouts.content"], function (matisse
             $('#propdiv').dialog('close');
         },
 
-        /**
-         *  Sends the message typed by user to chat window and also notify it to Server
-         *  @method  chatButtonListener
-         *  @param e - event object
-         */
-        chatButtonListener: function (e) {
-            var msg = $("#chat").val();
-            msg = matisse.userName+': ' + msg + "\n";
-            var txt = document.createTextNode(msg);
-            $("#chattext").append(txt);
-            matisse.comm.sendDrawMsg({
-                action: "chat",
-                args: [{
-                    text: msg
-                }]
-            });
-        },
-		/**
+	/**
          * Handler for Logout Button Click
          * @method logoutButtonClickHandler
          * @param none
