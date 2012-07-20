@@ -40,7 +40,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
            // this.addTools();
 
             document.onkeydown = events.keyDown;
-            $('#chaticon').click(toolHandlers.openChatWindow);
             $('#propicon').click(toolHandlers.openPropertiesPanel);
             $('#editicon, #friendsicon, #reporticon, #shareicon')
                 .click(toolHandlers.openSubmenu);
@@ -90,9 +89,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
             });
 		
 	    mActionBar.initalize();		    
-	
-            toolHandlers.initChatWindow();
-
             this.addObservers();
 	    //TODO - Refactor
             toolHandlers.showImageButtonClickHandler();
@@ -202,7 +198,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 			$('#deleteTool').click(function () {
 				main.deleteObjects();
 			});
-			$('#chatbutton').click(toolHandlers.chatButtonListener);
 			main.handleMouseEvents();
 		},
 		/**
@@ -237,9 +232,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 						matisse.main.modifyObject(data.args);
 					} else if (data.action === "drawpath") {
 						matisse.main.drawPath(data.args[0]);
-					} else if (data.action === "chat") {
-						var txt = document.createTextNode(data.args[0].text);
-						$("#chattext").append(txt);
 					} else if (data.action === "delete") {
 						var obj = util.getObjectById(data.args[0].uid);
             var activeObj = canvas.getActiveObject();

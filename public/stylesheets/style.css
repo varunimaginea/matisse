@@ -880,6 +880,7 @@ dashboardLeftThumbnail {
 .menu-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
 .menu-list li.disabled {color: #bbb;}
 .menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}
+#chatdialog ul { list-style: none; margin-left: 0px; height:10em; overflow: auto; border: 1px solid lightblue; padding: 5px; }
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
 /************** Quick Action Menu -- Start -- ************************/

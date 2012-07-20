@@ -5,7 +5,7 @@
  * About this :Entry Point File, All Dom Ready functions need to be defined here
  */
 
-define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "features/modified-by-user", "features/shared-users", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.palettes.components", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"], function (matisse, mfabric, Comm, main, containers, palettes, layouts, modifiedByUser, sharedUsers) {
+define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.containers", "matisse.containers.devices", "matisse.layouts", "features/modified-by-user", "features/shared-users", "features/chat", "matisse.layouts.content", "matisse.palettes", "matisse.palettes.basicshapes", "matisse.palettes.wireframe", "matisse.palettes.components", "matisse.events", "../javascripts/thirdparty/csspopup.js", "matisse.help"], function (matisse, mfabric, Comm, main, containers, palettes, layouts, modifiedByUser, sharedUsers, chat) {
     
     "use strict";
 	//Dom Ready function
@@ -68,5 +68,6 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 
               modifiedByUser.init();
               sharedUsers.init();
+              chat.init();
 	  });
 });
