@@ -129,7 +129,7 @@ var MatisseServer = new function() {
 
 	return server;
 }
-	 
+
 
 exports.index = function (req, res) {
     Object.create(MatisseServer).render(req, res);
@@ -145,7 +145,7 @@ exports.favicon = function (req, res, next) {
 
 exports.boards = {
     index:function (req, res, next) {
-	var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
+	    var chars = "0123456789abcdefghiklmnopqrstuvwxyz";
         var string_length = 8;
         randomstring = '';
 		var session_data = req.session.auth;
@@ -159,28 +159,28 @@ exports.boards = {
         }
         var data = {
             url:randomstring,
-	    container: req.body.container,
-	    canvasWidth: req.body.canvasWidth,
-	    canvasHeight: req.body.canvasHeight,
-	    name: req.body.whiteboardName,
-	    createdBy: userName
+	        container: req.body.container,
+	        canvasWidth: req.body.canvasWidth,
+	        canvasHeight: req.body.canvasHeight,
+	        name: req.body.whiteboardName,
+	        createdBy: userName
         };
         var whiteBoard = new BoardModel();
         whiteBoard.store(data, function (err) {
             if (err === 'invalid') {
-		next(whiteBoard.errors);
-	    } else if (err) {
-		next(err);
-	    } else {
+		        next(whiteBoard.errors);
+	        } else if (err) {
+		        next(err);
+	        } else {
 
-		userObj.linkBoard(whiteBoard, userID, false);
-		res.writeHead(302, {
-		    'Location':randomstring
-		});
-		res.end();
+		        userObj.linkBoard(whiteBoard, userID, false);
+		        res.writeHead(302, {
+		            'Location':randomstring
+		        });
+		        res.end();
 
-	    }
-	});
+	        }
+	    });
     },
 	
 	remove:function (req, res, next) {
@@ -223,9 +223,9 @@ exports.boards = {
 							return next(err);
 						} else {
 							userObj.linkBoard(board, userID, true, function () {
-                board.remove();
+                                board.remove();
 								console.log("######### Deleting : ######"+board);
- 						  });
+ 						    });
 						}
 					});
 				});
@@ -234,38 +234,38 @@ exports.boards = {
 		res.writeHead(200, {'Content-Type': 'text/plain' });
 		res.end("deleted");
 	},
-  update: function(req, res, next) {
-    var whiteBoard = new BoardModel();
-    whiteBoard.load(req.body.id, function (err, props) {
-      if (err) {
-        console.log(err);
-        res.contentType('json');
-        res.send({
-          error: true
+    update: function(req, res, next) {
+        var whiteBoard = new BoardModel();
+        whiteBoard.load(req.body.id, function (err, props) {
+            if (err) {
+                console.log(err);
+                res.contentType('json');
+                res.send({
+                    error: true
+                });
+            } else {
+                props.name = req.body.name;
+                whiteBoard.store(props, function (err) {
+                    if (err === 'invalid') {
+                        res.contentType('json');
+                        res.send({
+                            error: true
+                        });
+                    } else if (err) {
+                        res.contentType('json');
+                        res.send({
+                            error: true
+                        });
+                    } else {
+                        res.contentType('json');
+                        res.send({
+                            success: true
+                        });
+                    }
+                });
+            }
         });
-      } else {
-        props.name = req.body.name;
-        whiteBoard.store(props, function (err) {
-          if (err === 'invalid') {
-            res.contentType('json');
-            res.send({
-              error: true
-            });
-          } else if (err) {
-            res.contentType('json');
-            res.send({
-              error: true
-            });
-          } else {
-            res.contentType('json');
-            res.send({
-              success: true
-            });
-          }
-        });
-      }
-    });
-}
+    }
 }
 
 /*
