@@ -116,6 +116,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
         matisse.points.y = event.pageY + document.getElementById("canvasId").scrollTop + document.getElementById("containerDiv").scrollTop - matisse.yOffset; //offset
         if(matisse.groupCopyMode) {
         	var selected_group_obj_array = canvas.getActiveGroup().getObjects();
+        	var createdObjArray = [];
         	$.each(selected_group_obj_array,function(index,value) {
         		matisse.action = value.name;
         		matisse.paletteName = value.palette;   
@@ -124,10 +125,16 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
         		matisse.shapeArgs = [obj];
         		matisse.shapeArgs[0].left = matisse.points.x + obj.left;
                 matisse.shapeArgs[0].top = matisse.points.y + obj.top;
+                createdObjArray.push({
+                    palette: matisse.paletteName,
+                    action: matisse.action,
+                    args: matisse.shapeArgs
+                });
         		drawObject(event);
         	});
         	matisse.groupCopyMode = false;
         	$('span.copy_icon','div.m-quick-edit-group').removeClass('selected');
+        	actionBar.stateUpdated(createdObjArray, "created");
         }
         else {
         	matisse.shapeArgs[0].left = matisse.points.x;
@@ -135,11 +142,11 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
         	drawObject(event);
         	$('span.copy_icon','div.m-quick-edit').removeClass('selected');
         	canvas.setActiveObject(canvas.item(canvas.getObjects().length-1));
+            actionBar.stateUpdated(null, "created");
         }
 	    canvas.isSelectMode = true;
 	    matisse.drawShape = false;
 	    ui.resetShapeSelection();
-	    actionBar.stateUpdated(null, "created");
       }
       if (canvas.isDrawingMode) {
           matisse.xPoints = [];
@@ -208,6 +215,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
       var objectsInGroup = activeGroup.getObjects();
       canvas.discardActiveGroup();
       util.hideQuickMenuGroupDiv();
+      actionBar.stateUpdated(objectsInGroup, "modified");
       objectsInGroup.forEach(function (obj) {
           notifyObjModify(obj);
       });

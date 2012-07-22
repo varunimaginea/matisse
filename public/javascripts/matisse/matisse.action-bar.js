@@ -84,6 +84,25 @@ define(["matisse", "matisse.util"], function (matisse, util) {
     },
     stateUpdated: function (obj, state) {
       if (state == "modified") {
+        if (obj.length) {
+          var objGroup = [];
+          var originalObj;
+          for (var i=0;i<obj.length;i++) {
+            originalObj = actionBar.getOriginalObj(obj[i]);
+            objGroup.push({
+             palette: obj[i].palette,
+             name: obj[i].name,
+             action: 'modified',
+             path: obj[i].path,
+             args: [{
+               uid: obj[i].uid,
+               object: originalObj
+             }]
+            });
+          }
+         matisse.undoStack.push(objGroup);
+        }
+        else {
         var originalObj = actionBar.getOriginalObj(obj);
         matisse.undoStack.push({
           palette: obj.palette,
@@ -95,13 +114,36 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             object: originalObj
           }]
         });
+        }
       } else if (state == "created") {
-        matisse.undoStack.push({
-          palette: matisse.paletteName,
-          action: matisse.action,
-          args: matisse.shapeArgs
-        });
+        if(obj) {
+          matisse.undoStack.push(obj);
+        }
+        else {
+          matisse.undoStack.push({
+            palette: matisse.paletteName,
+            action: matisse.action,
+            args: matisse.shapeArgs
+          });
+        }
       } else if (state == "deleted") {
+        var activeGroup = canvas.getActiveGroup();
+        if (activeGroup) {
+          var objectsInGroup = activeGroup.getObjects();
+          var objGroup = [];
+          var originalObj;
+          for (var i=0;i<objectsInGroup.length;i++ ) {
+            originalObj = actionBar.getOriginalObj(objectsInGroup[i]);
+            objGroup.push({
+             palette: objectsInGroup[i].palette,
+             action: objectsInGroup[i].name,
+             args: [objectsInGroup[i]]
+            });
+          }
+         matisse.undoStack.push(objGroup);
+         matisse.main.deleteObjects();
+        }
+        else {
         var obj = canvas.getActiveObject();
         if (obj) matisse.undoStack.push({
           palette: obj.palette,
@@ -109,6 +151,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
           args: [obj]
         });
         matisse.main.deleteObjects();
+        }
       }
       if (matisse.undoStack.length > 0) {
         $('#Undo').removeClass('disabled');
@@ -130,8 +173,44 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         restoreCommandObj = $('#Undo');
       }
       var obj = executeCommandStack.pop();
-      if (typeof (obj) != "undefined") {
-        if (obj.action == "modified") {
+      if (obj) {
+        var actionPerformed = obj.action || obj[0].action;
+        if (actionPerformed == "modified") {
+          if (obj.length) {
+            var objGroup = [];
+            var uidList = [];
+            for (var i=0;i<obj.length;i++) {
+              uidList.push(obj[i].args[0].uid);
+            }
+            canvas.getObjects().forEach(function (item, index) {
+              var uidIndex = uidList.indexOf(item.uid);
+              if (uidIndex >= 0) {
+                var currentObj = actionBar.getCurrentObj(item);
+                var objInGroup = obj[uidIndex];
+                objGroup.push({
+                  action: "modified",
+                  name: objInGroup.name,
+                  palette: objInGroup.palette,
+                  path: objInGroup.path,
+                  args: [{
+                    uid: objInGroup.args[0].uid,
+                    object: currentObj
+                  }]
+                });
+                matisse.comm.sendDrawMsg({
+                  action: objInGroup.action,
+                  name: objInGroup.name,
+                  palette: objInGroup.palette,
+                  path: objInGroup.path,
+                  args: objInGroup.args
+                });
+                matisse.main.modifyObject(objInGroup.args);
+              }
+            });
+            restoreCommandStack.push(objGroup);
+          }
+
+          else {
           canvas.getObjects().forEach(function (item, index) {
             if (item.uid == obj.args[0].uid) {
               var currentObj = actionBar.getCurrentObj(item);
@@ -155,11 +234,64 @@ define(["matisse", "matisse.util"], function (matisse, util) {
               matisse.main.modifyObject(obj.args);
             }
           });
-        } else if (obj.action == "zindexchannge") {
+          }
+        } else if (actionPerformed == "zindexchannge") {
 
         } else {
         /* handle deletion and creation of shapes */
           var created = true;
+          if (obj.length) {
+            var objGroup = [];
+            var uidList = [];
+            var itemGroup = [];
+            for (var i=0;i<obj.length;i++) {
+              uidList.push(obj[i].args[0].uid);
+            }
+            canvas.getObjects().forEach(function (item, index) {
+            var uidIndex = uidList.indexOf(item.uid);
+              if (uidIndex >= 0) {
+                created = false;
+                itemGroup.push(item);
+
+              }
+            });
+
+            if (!created) {
+              restoreCommandStack.push(obj);
+            for (var i=0;i<itemGroup.length;i++) {
+              canvas.setActiveObject(itemGroup[i]);
+              matisse.main.deleteObjects();
+            }
+            }
+            else {
+              for(var i=0;i<obj.length;i++) {
+                if (obj[i].args[0].stateProperties) {
+                  var currentObj = actionBar.getCurrentObj(obj[i].args[0]);
+                  currentObj.uid = obj[i].args[0].uid;
+                  currentObj.name = obj[i].action;
+                  currentObj.palette = obj[i].palette;
+                  currentObj.width = obj[i].args[0].width;
+                } else {
+                  var currentObj = obj[i].args[0];
+                }
+                matisse.comm.sendDrawMsg({
+                  palette: obj[i].palette,
+                  action: obj[i].action,
+                  path: obj[i].path,
+                  args: [currentObj]
+                });
+                matisse.palette[obj[i].palette].shapes[obj[i].action].toolAction.apply(null, obj[i].args);
+                objGroup.push({
+                  palette: obj[i].palette,
+                  action: obj[i].action,
+                  path: obj[i].path,
+                  args: [currentObj]
+                });
+              }
+              restoreCommandStack.push(objGroup);
+            }
+          }
+          else {
           canvas.getObjects().forEach(function (item, index) {
             if (item.uid == obj.args[0].uid) {
               created = false;
@@ -191,6 +323,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
               path: obj.path,
               args: [currentObj]
             });
+          }
           }
         }
       restoreCommandObj.removeClass('disabled');
@@ -234,34 +367,39 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         var xpos = 0 - (selected_group.get("width") / 2) + value.width / 2;
         value.set("left", xpos);
       });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handlealignRightAction: function (selected_group, selected_group_obj_array) {
       // Align Right
       $.each(selected_group_obj_array, function (index, value) {
         var xpos = 0 + (selected_group.get("width") / 2) - value.width / 2;
         value.set("left", xpos);
-      })
+      });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handlealignTopAction: function (selected_group, selected_group_obj_array) {
       // Align Top
       $.each(selected_group_obj_array, function (index, value) {
         var ypos = 0 - (selected_group.get("height") / 2) + value.height / 2;
         value.set("top", ypos);
-      })
+      });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handlealignBottomAction: function (selected_group, selected_group_obj_array) {
       // Align Bottom
       $.each(selected_group_obj_array, function (index, value) {
         var ypos = 0 + (selected_group.get("height") / 2) - value.height / 2;
         value.set("top", ypos);
-      })
+      });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handlealignCenterAction: function (selected_group, selected_group_obj_array) {
       // Align Center
       $.each(selected_group_obj_array, function (index, value) {
         value.set("top", 0);
         value.set("left", 0);
-      })
+      });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handledistributeHorizontallyAction: function (selected_group, selected_group_obj_array) {
       //Distribut Horizontally
@@ -278,6 +416,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         value.set("left", xpos);
         spacingToAdd += spacing;
       });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handledistributeVerticallyAction: function (selected_group, selected_group_obj_array) {
       //Distribut Vertically
@@ -294,6 +433,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         value.set("top", ypos);
         spacingToAdd += spacing;
       });
+      actionBar.stateUpdated(selected_group_obj_array, "modified");
     },
     handleExportJsonAction: function () {
       var exportedJSON = JSON.stringify(canvas);
