@@ -140,72 +140,58 @@ var findInBoardModelforSetContainer = function (randomnString, wb_url, data) {
 			});
 		}
 	});
-}
+};
 
 var drawOnBoard = function (url, data, socket) {
-	var BoardModel = collaboration.boardModel;
-	if (data.action != "clearText") {
-	  BoardModel.find({url:url.replace('boards/', '')}, function(err, bids) {
-	  if(bids.length == 0) {
-	    console.log("Error in finding board");
-	    socket.emit('eventBoardNotFound');
-	    socket.broadcast.to(url).emit('eventBoardNotFound');
-	  }
-	  else {
-		var ShapesModel = collaboration.shapesModel;
-		var newShape = new ShapesModel();
+    if (data.action === "clearText") {
+        return;
+    }
+    collaboration.boardModel.find(
+        {url:url.replace('boards/', '')},
+        function(err, bids) {
+	    if(bids.length == 0) {
+	        console.log("Error in finding board");
+	        socket.emit('eventBoardNotFound');
+	        socket.broadcast.to(url).emit('eventBoardNotFound');
+	    } else {
 		socket.broadcast.to(url).emit('eventDraw', data);
-		data.args = data.args[0];
-		data.shapeId = data.args.uid;
-		data.board_url = url;
 
-		if (data.action == "modified" || data.action == "zindexchange") {
-			data.args = data.args.object;
-			ShapesModel.find({
-				shapeId: data.shapeId
-			}, function (err, id) {
-				if (err) {
-					console.log(err);
-				}
-				var shape = new ShapesModel();
-				shape.load(id, function (err, props) {
-					if (err) {
-						//return next(err);
-					}
-					data.args.name = props.args.name;
-					data.args.uid = props.shapeId;
-					data.args.palette = props.palette;
-					data.palette = props.palette;
-					data.action = props.action;
-					shape.store(data, function (err) {
-						//console.log("***** Error in URL:"+url+" Err:"+err);
-					});
-					socket.broadcast.to(url).emit('eventDraw', shape);
-				});
-			});
-		} else if (data.action == "delete") {
-			ShapesModel.find({
-				shapeId: data.shapeId
-			}, function (err, id) {
-				if (err) {
-					console.log(err);
-				}
-				var shape = new ShapesModel();
-				shape.load(id, function (err, props) {
-					if (err) {
-						//return next(err);
-					}
-					shape.delete(data, function (err) {
-						console.log("***** Error while deleting ID:" + id + " errr:" + err);
-					});
+	        data.args = data.args[0];
+	        data.shapeId = data.args.uid;
+	        data.board_url = url;
 
-				});
-			});
-		} else {
-			newShape.store(data, function (err) {});
-			socket.broadcast.to(url).emit('eventDraw', newShape);
-		}
-		}
-		});
-	}
-}
+		var shape = new collaboration.shapesModel();
+
+	        if (data.action == "modified" || data.action == "zindexchange") {
+		    data.args = data.args.object;
+                    shape.loadByShapeId(
+                        data.shapeId,
+                        function(err, props) {
+                           if(!err) {
+                               data.args.name = props.args.name;
+			       data.args.uid = props.shapeId;
+			       data.args.palette = props.palette;
+			       data.palette = props.palette;
+			       data.action = props.action;
+			       shape.store(data, function(){});
+			       socket.broadcast
+                                   .to(url)
+                                   .emit('eventDraw', shape);
+                           }
+                        });
+	        } else if (data.action == "delete") {
+                    shape.loadByShapeId(
+                        data.shapeId,
+                        function(err, props) {
+                            if(!err) {
+                                shape.delete(data, function(){});
+                            }
+                        }
+                    );
+	        } else {
+		    shape.store(data, function(){});
+		    socket.broadcast.to(url).emit('eventDraw', shape);
+	        }
+	    }
+	});
+};

@@ -83,5 +83,19 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 			this.fill(data);
 			this.remove();	
 		},
+
+            loadByShapeId: function(shapeId, fn) {
+                this.find(
+                    { shapeId: shapeId},
+                    function (err, ids) {
+                        if(ids.length != 0) {
+                            var err = 'Found < or > 1 shapes for (shapeId):' + shapeId;
+                            nohm.logError(err);
+                            fn(err);
+                        } else {
+                            this.load(ids[0], fn);
+                        }
+                    });
+            }
     }
 });
