@@ -877,7 +877,7 @@ dashboardLeftThumbnail {
 .m-submenu-list { display: none;box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; height: auto; position: absolute; right: 58px; top: -3px; width: 148px; z-index: 1035;}
 .menu-arrow{display: block; left: 148px; position: relative; top: 21px; width: 18px; border-bottom: 10px solid transparent; border-top: 10px solid transparent; border-left: 10px solid #ffffff;}
 .menu-list {list-style: none; margin-top: -13px; color: #666666; text-align:left;}
-.menu-list li{height:20px; padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
+.menu-list li{padding:3px; margin: 0 15px 0 -10px; font-weight: bold; position:relative }
 .menu-list li:not(:last-child) {border-bottom: 1px solid #CCCCCC;}
 .menu-list li.disabled {color: #bbb;}
 .menu-shortcut{position:absolute; right:2px;color: #CCCCCC; font-weight: normal;}

@@ -12,6 +12,7 @@ define(["matisse", "matisse.comm"],
                             if(data
                                && data.args 
                                && data.action == 'chat') {
+                                view.showAlert(data.args[0].text);
                                 view.showMessage(data.args[0].text);
                             } else {
                                 originalOnDraw.call(matisse.comm, data);
@@ -25,6 +26,15 @@ define(["matisse", "matisse.comm"],
 
                function showMessage(msg) {
                    $("#chattext").append('<li>' + msg + '</li>');
+               }
+
+               function showAlert(msg) {
+                   if(! $('#chattext').is(':visible')) { // chat is not visible
+                       $('#discussicon .notify ul')
+                           .empty()
+                           .append('<li>' + msg + '</li>');
+                       $('#discussicon .notify').show().fadeOut(4000);
+                   }
                }
 
                function sendMessage() {
@@ -42,7 +52,8 @@ define(["matisse", "matisse.comm"],
 	       $('#chatbutton').click(sendMessage);
 
                return {
-                   showMessage: showMessage
+                   showMessage: showMessage,
+                   showAlert: showAlert
                };
            }
 
