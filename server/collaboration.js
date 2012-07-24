@@ -149,37 +149,37 @@ var drawOnBoard = function (url, data, socket) {
     collaboration.boardModel.find(
         {url:url.replace('boards/', '')},
         function(err, bids) {
-	    if(bids.length == 0) {
-	        console.log("Error in finding board");
-	        socket.emit('eventBoardNotFound');
-	        socket.broadcast.to(url).emit('eventBoardNotFound');
-	    } else {
-		socket.broadcast.to(url).emit('eventDraw', data);
+            if(bids.length == 0) {
+                console.log("Error in finding board");
+                socket.emit('eventBoardNotFound');
+                socket.broadcast.to(url).emit('eventBoardNotFound');
+            } else {
+                socket.broadcast.to(url).emit('eventDraw', data);
 
-	        data.args = data.args[0];
-	        data.shapeId = data.args.uid;
-	        data.board_url = url;
+                data.args = data.args[0];
+                data.shapeId = data.args.uid;
+                data.board_url = url;
 
-		var shape = new collaboration.shapesModel();
+                var shape = new collaboration.shapesModel();
 
-	        if (data.action == "modified" || data.action == "zindexchange") {
-		    data.args = data.args.object;
+                if (data.action == "modified" || data.action == "zindexchange") {
+                    data.args = data.args.object;
                     shape.loadByShapeId(
                         data.shapeId,
                         function(err, props) {
                            if(!err) {
                                data.args.name = props.args.name;
-			       data.args.uid = props.shapeId;
-			       data.args.palette = props.palette;
-			       data.palette = props.palette;
-			       data.action = props.action;
-			       shape.store(data, function(){});
-			       socket.broadcast
+                               data.args.uid = props.shapeId;
+                               data.args.palette = props.palette;
+                               data.palette = props.palette;
+                               data.action = props.action;
+                               shape.store(data, function(){});
+                               socket.broadcast
                                    .to(url)
                                    .emit('eventDraw', shape);
                            }
                         });
-	        } else if (data.action == "delete") {
+                } else if (data.action == "delete") {
                     shape.loadByShapeId(
                         data.shapeId,
                         function(err, props) {
@@ -188,10 +188,10 @@ var drawOnBoard = function (url, data, socket) {
                             }
                         }
                     );
-	        } else {
-		    shape.store(data, function(){});
-		    socket.broadcast.to(url).emit('eventDraw', shape);
-	        }
-	    }
-	});
+                } else {
+                    shape.store(data, function(){});
+                    socket.broadcast.to(url).emit('eventDraw', shape);
+                }
+            }
+        });
 };
