@@ -198,7 +198,7 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
 				"headerOpenClass":"p-open",
 				"headerCloseClass":"p-close"
 			});
-			$("#accordion").shortscroll();
+			
 			
 			$('#toolsdiv').append("<div id='deleteTool' class='tools deleteTool'></div>");
 			$('#deleteTool').click(function () {

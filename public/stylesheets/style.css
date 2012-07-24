@@ -113,7 +113,7 @@ textarea {
     overflow:hidden;
 
     position: fixed;
-    width: 105px;
+    width: 121px;
     background-color: #464D57;
 }
 
@@ -784,7 +784,7 @@ dashboardLeftThumbnail {
 /***  New Layout CSS **/
 #containerDiv{overflow: auto;background-image: url('../images/canvas_bg.gif');height:100%;}
 #containerBody{overflow: auto;position: relative;margin:10px auto;height:100%;}
-#leftdiv{float:left;width:105px;}
+#leftdiv{float:left;width:121px;}
 #outer{background-color:#464D57;height:100%;}
 #userLoginService{color:#00B7FF;}
 

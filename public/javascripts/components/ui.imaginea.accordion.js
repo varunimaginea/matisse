@@ -58,6 +58,7 @@ define(["matisse.ui"],function (ui) {
 				}
 	
 			});
+			selfObj.cntrObj.mCustomScrollbar({scrollInertia:0});
 		},
 		/*
 		* Show the first Section
@@ -76,7 +77,8 @@ define(["matisse.ui"],function (ui) {
 			$(headerEle).removeClass(this.props.headerCloseClass).addClass(this.props.headerOpenClass);				
 
 			//openSection
-			$(headerEle).next().show();					
+			$(headerEle).next().show();		
+			$("#accordion").mCustomScrollbar("update");
 		},
 		/*
 		* Closes the section, changes the header class to change the icon
@@ -87,7 +89,8 @@ define(["matisse.ui"],function (ui) {
 			$(headerEle).addClass(this.props.headerCloseClass).removeClass(this.props.headerOpenClass);		
 
 			//closeSection
-			$(headerEle).next().hide();							
+			$(headerEle).next().hide();	
+			$("#accordion").mCustomScrollbar("update");
 		}
 	}	
 	return CustomAccordion;
