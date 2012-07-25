@@ -20,11 +20,14 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 			$('#propdiv').append('<div id="prop"><table id="proptable"><tr><td bgcolor="#FFFFFF" border="1px" class= "cp" id="colorpicker"></td></tr></table></div>');
 			/* loop through all properties of the drawing element */
 			jQuery.each(properties, function (i, val) {
+				var activeObject = canvas.getActiveObject();
 				/* if property is of type angle get the angle value of that drawing element */
 				if (i === 'angle') {
-					val = canvas.getActiveObject().getAngle(); // because angle property does not return any value
+					val = activeObject.getAngle(); // because angle property does not return any value
+				} else if(i === 'source'){
+					val = activeObject[i] == null || activeObject[i] == undefined ? "http://" : activeObject[i];
 				} else {
-					val = canvas.getActiveObject()[i];
+					val = activeObject[i];
 				}
 				/* if property is of type fill or stroke attach keypressed_letterNumber method to keypress event*/
 				if (i === "fill" || i === "stroke") {

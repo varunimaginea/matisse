@@ -449,6 +449,7 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 
     var imageComponent = new Component('image');
     imageComponent.addDimensionAndScale();
+    imageComponent.addStringProperty('source','http://');
 
     imageComponent.addActions({
 				toolAction: function (args){
