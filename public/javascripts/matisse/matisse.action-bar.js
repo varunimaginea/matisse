@@ -508,7 +508,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         	containerDiv.draggable({ containment: "parent"}).show();
         	setTimeout( function() {
         		$('div.clip-alert').slideDown(400).delay(2000).fadeOut(1000);
-        	}, 1000);
+        	}, 500);
         	$('#done').one('click',function(){
         		clipImage(clipCanvas,xToAdd,yToAdd,containerDiv);
         		containerDiv.hide().next('#done').hide();

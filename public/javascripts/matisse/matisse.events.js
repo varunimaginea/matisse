@@ -239,6 +239,7 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
       if (popEl.style.display != 'none') popEl.style.display = 'none';
       if (blanketEl.style.display != 'none') blanketEl.style.display = 'none'
       $(popEl).removeClass('scale-container');
+      $('div.m-submenu-list').hide();
     }
 
     function onObjectMoveByKey(obj) {
