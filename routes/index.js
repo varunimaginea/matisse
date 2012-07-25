@@ -60,7 +60,7 @@ var MatisseServer = new function() {
     server.on('valid session', function(req, res, session_data) {
         var userObj = new UserModel();
         var userID = userObj.getUserID(session_data);
-        if (typeof(userID) != "undefined") {
+        if (typeof(userID) != "undefined" && userID != null) {
             server.emit('valid user', req, res, userID);
         } else {
             renderLogin(res);

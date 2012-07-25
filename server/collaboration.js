@@ -161,6 +161,7 @@ var drawOnBoard = function (url, data, socket) {
                 data.board_url = url;
 
                 var shape = new collaboration.shapesModel();
+                var ShapesModel = collaboration.shapesModel;
 
                 if (data.action == "modified" || data.action == "zindexchange") {
                     data.args = data.args.object;
@@ -180,14 +181,26 @@ var drawOnBoard = function (url, data, socket) {
                            }
                         });
                 } else if (data.action == "delete") {
-                    shape.loadByShapeId(
-                        data.shapeId,
-                        function(err, props) {
-                            if(!err) {
-                                shape.delete(data, function(){});
-                            }
+                    debugger;
+	                ShapesModel.find({
+                        shapeId: data.shapeId
+                    }, function (err, id) {
+                        if (err) {
+                            console.log(err);
                         }
-                    );
+                        debugger
+                        var shape = new ShapesModel();
+                        shape.load(id, function (err, props) {
+                            if (err) {
+                                //return next(err);
+                            }
+                            debugger
+                            shape.delete(data, function (err) {
+                                console.log("***** Error while deleting ID:" + id + " errr:" + err);
+                            });
+
+                        });
+                    });
                 } else {
                     shape.store(data, function(){});
                     socket.broadcast.to(url).emit('eventDraw', shape);
