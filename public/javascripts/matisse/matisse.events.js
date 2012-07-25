@@ -36,12 +36,11 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
             }
         } else if (key == "90" && evt.ctrlKey) {
             actionBar.handleUndoRedoAction("undo");
-        }
-          else if (key == "89" && evt.ctrlKey) {
+        } else if (key == "89" && evt.ctrlKey) {
             actionBar.handleUndoRedoAction("redo");
-        }
-         else if (key == "27") { // when Escape key pressed
-            closePopup()
+        } else if (key == "27") { // when Escape key pressed
+        	 evt.preventDefault();
+            closePopup();
         } else if (key == "37" && evt.shiftKey) {
             var obj = canvas.getActiveObject();
             if(obj) {
@@ -236,11 +235,10 @@ define(["matisse", "matisse.ui", "matisse.comm", "matisse.action-bar", "matisse.
     
     function closePopup() {
       var popEl = document.getElementById('popUpDiv');
-      var closeEl = document.getElementById('closediv');
       var blanketEl = document.getElementById('blanket');
       if (popEl.style.display != 'none') popEl.style.display = 'none';
-      if (closeEl.style.display != 'none') closeEl.style.display = 'none';
       if (blanketEl.style.display != 'none') blanketEl.style.display = 'none'
+      $(popEl).removeClass('scale-container');
     }
 
     function onObjectMoveByKey(obj) {

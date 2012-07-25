@@ -30,8 +30,9 @@
         </div>
         <div id="popUpDiv" style="display:none;overflow:auto; width: 250px; height: 300px;padding:5px">
             <span id="result"></span>
-            <div id="device-container"> </div>
-            <button id="done">Done Clipping</button>
+            <div id="device-container">
+                <button id="done">Done Clipping</button> 
+            </div>
         </div>
         <div id="helpDiv" style="display:none;overflow:scroll"></div>
         <!-- end for popup -->
@@ -193,7 +194,11 @@
       <a class="close" data-dismiss="alert">×</a>
       <strong>Board Cannot be Found.</strong> You will now be redirected to the dashboard page!
     </div>
-
+    <div class="alert alert-info clip-alert inactive-alert">  
+      <a class="close" data-dismiss="alert">×</a>  
+      <strong>Click and drag the conatiner to clip content!</strong>
+    </div>
+                
       <!-- Start Including Script Files-->
       <script src="/socket.io/socket.io.js"></script>
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>

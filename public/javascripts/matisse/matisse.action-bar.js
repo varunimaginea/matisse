@@ -441,6 +441,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             canvas.deactivateAll();
             var data = canvas.toDataURL('png', 0.1)
             popup('popUpDiv', 'closediv', 600, 600);
+            $('#device-container').hide();
             $("#result").html('<img src=' + data + ' />');
            
         },
@@ -453,15 +454,17 @@ define(["matisse", "matisse.util"], function (matisse, util) {
     			    value.set("left", left);
     		    });
             };
-           var clipImage = function(clipCanvas,xToAdd,yToAdd,containerDi) {
-    		    var xmin = containerDiv.position().left +xToAdd;
-        		var xmax = containerDiv.width() + containerDiv.offset().left;
-        		var ymin = containerDiv.position().top +yToAdd;
-        		var ymax = containerDiv.height() + containerDiv.offset().top;
+           var clipImage = function() {
+        	    var innerHeight = matisseContainer.innerHeight;
+        	    var innerWidth = matisseContainer.innerWidth;
+    		    var xmin = containerDiv.position().left;
+        		var xmax = innerWidth + containerDiv.offset().left;
+        		var ymin = containerDiv.position().top;
+        		var ymax = innerHeight + containerDiv.offset().top;
         		clipCanvas.dispose();
         		clipCanvas.setHeight(containerHeight);
             	clipCanvas.setWidth(containerWidth);
-            	$.each(canvas.getObjects(),function(index,value) {
+              	$.each(canvas.getObjects(),function(index,value) {
             		if(value.get('left')>xmin && value.get('left')<xmax && value.get('top')>ymin && value.get('top')<ymax) {
             			var obj = value.clone();
                 		obj.set('left', obj.get('left')-containerDiv.position().left);
@@ -470,7 +473,9 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             		}
     		    });
             	setClipCanvas(clipCanvas,xToAdd,yToAdd);
-            	clipCanvas.setBackgroundImage("../images/" + matisse.containers[matisse.containerName].src, function() {
+            	clipCanvas.setBackgroundImage("../images/" + matisseContainer.src, function() {
+                	clipCanvas.sendToBack(matisse.vLine);
+                	clipCanvas.sendToBack(matisse.hLine);
             		data = clipCanvas.toDataURL('png', 0.1);
             		$("#popUpDiv").slideUp("fast", function() {
             			$("#result").html('<img src=' + data + ' />');
@@ -480,11 +485,12 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             	});
         	};
         	var clipCanvas = new fabric.Canvas('clip');
-        	var containerHeight = matisse.containers[matisse.containerName].height;
-        	var containerWidth = matisse.containers[matisse.containerName].width;
-        	var containerImgSrc = "url(../images/" + matisse.containers[matisse.containerName].src + ")";
-        	var xToAdd = matisse.containers[matisse.containerName].viewportX;
-        	var yToAdd = matisse.containers[matisse.containerName].viewportY;
+        	var matisseContainer = matisse.containers[matisse.containerName];
+        	var containerHeight = matisseContainer.height;
+        	var containerWidth = matisseContainer.width;
+        	var containerImgSrc = "url(../images/" + matisseContainer.src + ")";
+        	var xToAdd = matisseContainer.viewportX;
+        	var yToAdd = matisseContainer.viewportY;
         	clipCanvas.setHeight(canvas.height);
         	clipCanvas.setWidth(canvas.width);
         	$.each(canvas.getObjects(),function(index,value) { 
@@ -494,11 +500,15 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         	canvas.deactivateAll();
             var data = clipCanvas.toDataURL('png', 0.1);
             popup('popUpDiv', 'closediv', 1024, 768);
+            if(matisse.containerName=='browser') $('#popUpDiv').addClass('scale-container');
             $("#result").html('<img src=' + data + ' />');
                     	
             var containerDiv = $('#device-container');
         	containerDiv.css({"height":containerHeight, "width":containerWidth, "background-image":containerImgSrc, "top":0, "left":0});
-        	containerDiv.draggable({ containment: "parent"}).show().next('#done').show();
+        	containerDiv.draggable({ containment: "parent"}).show();
+        	setTimeout( function() {
+        		$('div.clip-alert').slideDown(400).delay(2000).fadeOut(1000);
+        	}, 1000);
         	$('#done').one('click',function(){
         		clipImage(clipCanvas,xToAdd,yToAdd,containerDiv);
         		containerDiv.hide().next('#done').hide();

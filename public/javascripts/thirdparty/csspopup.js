@@ -1,7 +1,7 @@
 function toggle(div_id) {
 	var el = document.getElementById(div_id);
 	if ( el.style.display == 'none' ) {	el.style.display = 'block';}
-	else {el.style.display = 'none';}
+	else {el.style.display = 'none'; $(el).removeClass('scale-container');}
 }
 function blanket_size(popUpDivVar, closeDivVar, popWidthVar, popHeightVar) {
 	if (typeof window.innerWidth != 'undefined') {
@@ -59,8 +59,7 @@ function popup(windowname, close, pw, ph) {
 	blanket_size(windowname, close, pw, ph);
 	window_pos(windowname, close, pw, ph);
 	toggle('blanket');
-	toggle(windowname);	
-	
+	toggle(windowname);
 }
 function closePopup(windowname) {
 	toggle(windowname);	
