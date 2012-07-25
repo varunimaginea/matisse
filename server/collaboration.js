@@ -181,26 +181,14 @@ var drawOnBoard = function (url, data, socket) {
                            }
                         });
                 } else if (data.action == "delete") {
-                    debugger;
-	                ShapesModel.find({
-                        shapeId: data.shapeId
-                    }, function (err, id) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        debugger
-                        var shape = new ShapesModel();
-                        shape.load(id, function (err, props) {
-                            if (err) {
-                                //return next(err);
+                    shape.loadByShapeId(
+                        data.shapeId,
+                        function(err, props) {
+                            if(!err) {
+                                shape.delete(data, function(){});
                             }
-                            debugger
-                            shape.delete(data, function (err) {
-                                console.log("***** Error while deleting ID:" + id + " errr:" + err);
-                            });
-
-                        });
-                    });
+                        }
+                    );
                 } else {
                     shape.store(data, function(){});
                     socket.broadcast.to(url).emit('eventDraw', shape);

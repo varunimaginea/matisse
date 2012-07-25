@@ -50,16 +50,16 @@ var userModel = module.exports = nohm.model('User', {
 	    });
 	},
 	getUserID: function(session_data) {
-	  var userID;
+	    var userID = null, loginProvider, prefix;
+
 	    if (typeof(session_data.twitter) != "undefined") {
-		userID = "twitter- " + session_data.twitter.user.id;
+		    userID = (session_data.twitter.user)?  "twitter- " + session_data.twitter.user.id :null;
+	    }  else if (session_data.facebook) {
+		    userID = (session_data.facebook.user)? "facebook- " + session_data.facebook.user.id:null;
+	    } else if (session_data.google) {
+		    userID = (session_data.google.user)? "google- " + session_data.google.user.id:null;
 	    }
-	    else if (session_data.facebook) {
-		userID = "facebook- " + session_data.facebook.user.id;
-	    }
-	    else if (session_data.google) {
-		userID = "google- " + session_data.google.user.id;
-	    }
+
 	    return userID;
 	},
 	linkBoard: function(whiteBoard, dbUserID, unLink, callback) {
