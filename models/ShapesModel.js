@@ -43,7 +43,7 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 	},
 	methods: {
 		// custom methods we define here to make handling this model easier.
-		  
+		
 		/**
 		 * You can specify a data array that might come from the user and an array containing the fields that should be used from used from the data.
 		 * Optionally you can specify a function that gets called on every field/data pair to do a dynamic check if the data should be included.
@@ -51,7 +51,7 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 		 */
 		fill: function (data, fields) {
 			var props = {},
-				self = this;
+			self = this;
 			fields = Array.isArray(fields) ? fields : Object.keys(data);
 			fields.forEach(function (i) {
 				props[i] = data[i];
@@ -69,7 +69,7 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 				if ( ! err) {
 					this.errors; // the errors in validation
 				} else {
-				// it's in the db :)
+				    // it's in the db :)
 					console.log(":::COuld not save to DB:::: " + err);
 				}
 			});	
@@ -84,18 +84,18 @@ var shapesModel = module.exports = nohm.model('Shapes', {
 			this.remove();	
 		},
 
-            loadByShapeId: function(shapeId, fn) {
-                this.find(
-                    { shapeId: shapeId},
-                    function (err, ids) {
-                        if(ids.length != 0) {
-                            var err = 'Found < or > 1 shapes for (shapeId):' + shapeId;
-                            nohm.logError(err);
-                            fn(err);
-                        } else {
-                            this.load(ids[0], fn);
-                        }
-                    });
-            }
+        loadByShapeId: function(shapeId, fn) {
+            this.find(
+                { shapeId: shapeId},
+                function (err, ids) {
+                    if(ids.length != 1) {
+                        var err = 'Expected 1, found ' + ids.length + 'shapes for (shapeId):' + shapeId ;
+                        nohm.logError(err);
+                        fn(err);
+                    } else {
+                        this.load(ids[0], fn);
+                    }
+                });
+        }
     }
 });
