@@ -5,7 +5,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 	'use strict';
 
 	return {
-		 /**
+		/**
 		 *  Check for the event fired by fabric when any of the canvas objects modified and apply update properites panel accordingly
 		 *  @method  observe
 		 *  @param eventName - name of the event fired by fabricjs
@@ -43,7 +43,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 				case "selection:cleared":
 					$('#propdiv').dialog("close");
 					if(!matisse.isUpdatingProperties)
-					 util.hideQuickMenuDiv();
+					    util.hideQuickMenuDiv();
 					util.hideQuickMenuGroupDiv();
 					break;
 				case 'path:created': // When path creation is completed by user
@@ -104,15 +104,15 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 					break;
 				case 'object:scaling':                   
 					var scalingObj = e.memo.target,
-						cursorStyle = canvas.upperCanvasEl.style.cursor,				
-						curLeft = scalingObj.originalState.left,	//left of the object before scaling
-						curTop = scalingObj.originalState.top,	//top of the object before scaling
-						scalingWidth = scalingObj.width,	//object width
-						curWidth = scalingObj.currentWidth,	//object width after scaling
-						scalingHeight = scalingObj.height,	//object height
-						curHeight = scalingObj.currentHeight,	//object height after scaling
-						scaleWidth = 0,
-						scaleHeight = 0;						
+					cursorStyle = canvas.upperCanvasEl.style.cursor,				
+					curLeft = scalingObj.originalState.left,	//left of the object before scaling
+					curTop = scalingObj.originalState.top,	//top of the object before scaling
+					scalingWidth = scalingObj.width,	//object width
+					curWidth = scalingObj.currentWidth,	//object width after scaling
+					scalingHeight = scalingObj.height,	//object height
+					curHeight = scalingObj.currentHeight,	//object height after scaling
+					scaleWidth = 0,
+					scaleHeight = 0;						
 					if (cursorStyle == 'e-resize') {	//when an object is scaled in east direction			
 						scaleWidth = scalingWidth * scalingObj.scaleX;	//object width while scaling
 						scalingObj.left = curLeft + (scaleWidth - curWidth)/2;	//object left after scaling (move towards right)						
@@ -147,7 +147,7 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 						scalingObj.left = curLeft - (scaleWidth - curWidth)/2;
 					}	
                     break;		
-					}
+				}
 			});
 		}
 	};
@@ -155,20 +155,20 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
 	 */
 	function checkAlign(obj) {
         var hLine = matisse.hLine,
-			vLine = matisse.vLine;
+		vLine = matisse.vLine;
         hLine.set('top', -10);
         vLine.set('left', -10);
         var movingObjLeft = Math.round(obj.left - (obj.width * obj.scaleX) / 2),
-			movingObjTop = Math.round(obj.top - (obj.height * obj.scaleY) / 2),
-			movingObjRight = Math.round(obj.left + (obj.width * obj.scaleX) / 2),
-			movingObjBottom = Math.round(obj.top + (obj.height * obj.scaleY) / 2),
-			canvasObjects = canvas.getObjects(),
-			i = 0;
+		movingObjTop = Math.round(obj.top - (obj.height * obj.scaleY) / 2),
+		movingObjRight = Math.round(obj.left + (obj.width * obj.scaleX) / 2),
+		movingObjBottom = Math.round(obj.top + (obj.height * obj.scaleY) / 2),
+		canvasObjects = canvas.getObjects(),
+		i = 0;
         for (i; i < canvasObjects.length; i++) {
             var otherObjLeft = Math.round(canvasObjects[i].left - (canvasObjects[i].width * canvasObjects[i].scaleX) / 2),
-				otherObjTop = Math.round(canvasObjects[i].top - (canvasObjects[i].height * canvasObjects[i].scaleY) / 2),
-				otherObjRight = Math.round(canvasObjects[i].left + (canvasObjects[i].width * canvasObjects[i].scaleX) / 2),
-				otherObjBottom = Math.round(canvasObjects[i].top + (canvasObjects[i].height * canvasObjects[i].scaleY) / 2);
+			otherObjTop = Math.round(canvasObjects[i].top - (canvasObjects[i].height * canvasObjects[i].scaleY) / 2),
+			otherObjRight = Math.round(canvasObjects[i].left + (canvasObjects[i].width * canvasObjects[i].scaleX) / 2),
+			otherObjBottom = Math.round(canvasObjects[i].top + (canvasObjects[i].height * canvasObjects[i].scaleY) / 2);
 			if (canvasObjects[i] !== obj && canvasObjects[i].name !== 'vline' && canvasObjects[i].name !== 'hline') { /* this LEFT matches with Other LEFT */
 				/* this RIGHT matches with Other LEFT */
 				if (otherObjLeft - 1 === movingObjLeft || otherObjLeft + 1 === movingObjLeft) {
@@ -213,16 +213,21 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
         switch (position) {
         case "left":
             (operator === "plus") ? vLine.set('left', obj.left + (obj.width * obj.scaleX) / 2) : vLine.set('left', obj.left - (obj.width * obj.scaleX) / 2);
-		break;
+		    break;
         case "top":
             (operator === "plus") ? hLine.set('top', obj.top + (obj.height * obj.scaleY) / 2) : hLine.set('top', obj.top - (obj.height * obj.scaleY) / 2);
-        break;
+            break;
         }
 		// show align line on top of all other objects on canvas
-		canvas.bringForward(vLine);
-		canvas.bringForward(hLine);
-		vLine.setCoords();
+        canvas.bringForward(vLine);
+        canvas.bringForward(hLine);
+        vLine.setCoords();
         hLine.setCoords();
-		canvas.renderAll();
+        canvas.renderAll();
+        setTimeout(function() {
+            if (hLine.top !== -10 || vLine.left !== -10) {
+                hLine.top = -10; vLine.left = -10; canvas.renderAll();
+            }
+        }, 200);
     }
 });
