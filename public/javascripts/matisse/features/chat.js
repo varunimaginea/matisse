@@ -38,18 +38,28 @@ define(["matisse", "matisse.comm"],
                }
 
                function sendMessage() {
-                   var msg = matisse.userName +': ' + $("#chat").val();
-                   showMessage(msg);
-                   matisse.comm.sendDrawMsg(
-                       {
-                           action: "chat",
-                           args: [{text: msg}]
-                       });                   
+                   if($("#chat").val()) { // has non-empty text
+                       var msg = matisse.userName +': ' + $("#chat").val();
+                       showMessage(msg);
+                       matisse.comm.sendDrawMsg(
+                           {
+                               action: "chat",
+                               args: [{text: msg}]
+                           });
+                   }
+                   $("#chat").val('').focus();
                }
 
                $('#chatdialog').dialog();
                $('#chatdialog').dialog('close');
 	       $('#chatbutton').click(sendMessage);
+
+               // pressing 'enter' in text should also send msg (click on send)
+               $('#chat').keyup(function(e) {
+                                    if(e.keyCode == 13) {  // enter key
+                                        $('#chatbutton').click();
+                                    }
+                                });
 
                return {
                    showMessage: showMessage,
