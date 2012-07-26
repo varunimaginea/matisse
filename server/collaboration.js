@@ -29,14 +29,14 @@ collaboration = module.exports = {
                 hello: function (name) { // user joins say hello to all
                     var s = this;
                     s.set('name', name);
-                    s.get('board', function(board) {
+                    s.get('board', function(err, board) {
 		              s.broadcast.to(board).emit('hello',name);
                           });
                 },
                 bye: function () { // user left say bye to all
                     var s = this;
                     s.get('name', function(err, name) {
-                              s.get('board', function(board) {
+                              s.get('board', function(err, board) {
                                         s.broadcast.to(board).emit('bye',name);
                                     });
                           });
