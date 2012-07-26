@@ -48,34 +48,34 @@ iShell = {};
         this.initialize = function() {
             knownCommands['getShapes'] =  getShapes;
             knownCommands['getBoard'] =  getBoard;
+            knownCommands['getUsers'] =  getUsers;
             knownCommands['eval'] = evalArgs;
             knownCommands['help'] = getHelp;
             getHelp();
         };
 
+        function showAll(model, criteria) {
+            model.find(criteria, 
+                       function(err, ids) {                           
+                           console.log('Found: ' + ids.length);
+                           ids.forEach(function(id) {
+                                           model.load(id, function(err, props) {
+                                                          console.log(props);
+                                                      });
+                                       });
+                       });
+        }
+
         function getShapes(boardUrl) {
-            console.log("Searching shapes for "+boardUrl);
-	        ShapesModel.find({board_url: "boards/" + boardUrl}, function (err, ids) {
-			        ids.forEach(function (id) {
-				        ShapesModel.load(id, function (err, props) {
-                            console.log("** Shaped with id **"+ id);
-                            console.log(props);
-                        });
-			        });
-		    });
+            showAll(ShapesModel, {board_url: "boards/" + boardUrl});
         }
 
         function getBoard(boardUrl) {
-            console.log("Searching board for "+boardUrl);
-            debugger;
-	        BoardModel.find({url:boardUrl},function (err, ids) {
-                if (err) {console.log(err);}
-                ids.forEach(function (id) {
-                    BoardModel.load(id, function(err, props) {
-                        console.log(props);
-                    });
-                })
-            });
+            showAll(BoardModel, {url: boardUrl});
+        }
+
+        function getUsers() {
+            showAll(UserModel);
         }
 
         function getHelp() {
