@@ -10807,7 +10807,7 @@ fabric.util.object.extend(fabric.Canvas.prototype, {
      */
     setBorderVisibility: function(visible) {
       this._resetWidthHeight();
-      this._adjustWidthHeightToBorders(showBorder);
+      this._adjustWidthHeightToBorders(visible);
       this.setCoords();
     },
     

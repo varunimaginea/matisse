@@ -437,7 +437,11 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             console.log("handle import called");
         },
         handleRawAction: function(){
-            //Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
+        	if(util.checkForImage()){
+        		alert("Show Image works only for whiteboards with no images!");
+        		return;
+        	}
+        	//Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
             canvas.deactivateAll();
             var data = canvas.toDataURL('png', 0.1)
             popup('popUpDiv', 'closediv', 600, 600);
@@ -446,13 +450,17 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             
         },
         handleClipAction: function(){
-            var setClipCanvas = function(clipCanvas,xToAdd,yToAdd) {
-                $.each(clipCanvas.getObjects(),function(index,value) {
-                    var left = value.get('left')+xToAdd;
-                    var top = value.get('top')+yToAdd;
-                    value.set("top", top);
-                    value.set("left", left);
-                });
+            if(util.checkForImage()){
+        		alert("Show Image works only for whiteboards with no images!");
+        		return;
+        	}
+           var setClipCanvas = function(clipCanvas,xToAdd,yToAdd) {
+            	$.each(clipCanvas.getObjects(),function(index,value) {
+            		var left = value.get('left')+xToAdd;
+            		var top = value.get('top')+yToAdd;
+            		value.set("top", top);
+    			    value.set("left", left);
+    		    });
             };
             var clipImage = function() {
                 var innerHeight = matisseContainer.innerHeight;

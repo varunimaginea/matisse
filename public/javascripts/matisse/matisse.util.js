@@ -162,6 +162,19 @@ define(["matisse"], function (matisse) {
 			return obj;
 		},
 		/**
+		 * Searches canvas to check if an Image is present
+		 */
+		checkForImage:function () {
+			var objs = canvas.getObjects();
+			var imageFound = false;
+			objs.forEach(function (object) {
+				if (object.type === 'image') {
+					imageFound = true;
+				}
+			});
+			return imageFound;
+		},
+		/**
 		 *  Creates an proeperties object from a  given array and returns that object
 		 *  @method  getDefaultDataFromArray
 		 *  @param arr - Array of properties

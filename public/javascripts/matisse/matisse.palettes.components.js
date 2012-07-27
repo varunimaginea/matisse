@@ -47,6 +47,21 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 		if (obj.text) {
 			obj.text = recvdObj.text;
 		}
+		if (obj.source && obj.source!=recvdObj.src) {
+			obj.source = recvdObj.src;
+			fabric.Image.fromURL(obj.source, function(img) {
+				  img.set({'left':recvdObj.left, 'top': recvdObj.top, 'scaleX':recvdObj.scaleX, 'scaleY':recvdObj.scaleY, 'source':recvdObj.src});
+				  img.setAngle(recvdObj.angle);
+				  img.setCoords();
+				  img.name = "image";
+				  img.uid = obj.uid;
+				  img.palette = "components";
+				  canvas.remove(obj);
+				  canvas.add(img);
+				  canvas.renderAll();
+				});
+		}
+		if (canvas.getActiveObject() === obj) util.quickMenuHandler(obj);
 	};
 
 	/**
@@ -449,73 +464,33 @@ define(["matisse", "matisse.palettes", "matisse.util", "matisse.palettes.propert
 
     var imageComponent = new Component('image');
     imageComponent.addDimensionAndScale();
-    imageComponent.addStringProperty('source','http://');
+    imageComponent.addStringProperty('source','http://www.thematisse.org/images/mattise_whitebg.png');
 
     imageComponent.addActions({
 				toolAction: function (args){
-					args.width = args.paths ? args.paths[0].width : 100;
-					args.height = args.paths ? args.paths[0].height : 75;
-					var objects = [],
-						text = args.width + " x " + args.height;
-					var border = new fabric.Polygon(
-						[{x: -args.width/2,y:args.height/2},{x:args.width/2, y:args.height/2},{x:args.width/2, y:-args.height/2},{x:-args.width/2, y:-args.height/2}],
-						{
-							fill: '#fcfcfc',
-							stroke:'#6f6f6f'
-						}
-					);
-					var diagonal1 = new fabric.Polyline([{x: -args.width/2,y:args.height/2},{x:args.width/2,y:-args.height/2}],
-						{fill:'#ffffff',stroke:'#6f6f6f'});
-					var diagonal2 = new fabric.Polyline([{x: args.width/2,y:args.height/2},{x:-args.width/2,y:-args.height/2}],
-						{fill:'#ffffff',stroke:'#6f6f6f'});
-					var rect = new fabric.Rect({
-						width: 20,
-						height: 20,
-						left: 0,
-						top: 0,
-						fill: '#fcfcfc',
-						stroke: '#fcfcfc'
+					args.src = args.src ? args.src : 'http://www.thematisse.org/images/mattise_whitebg.png';
+					var img = fabric.Image.fromURL(args.src, function(img) {
+					    img.set({
+					      left: args.left,
+						  top: args.top,
+						  scaleX: args.scaleX,
+						  scaleY: args.scaleY,
+						  source: args.src
+					    });
+					    img.setAngle(args.angle);
+						img.name = args.name;
+						img.uid = args.uid;
+						img.palette = args.palette;
+					    canvas.add(img);
+					    canvas.setActiveObject(canvas.item(canvas.getObjects().length-1));
 					});
-					var textobj = new fabric.Text(text, {
-						left: 0,
-						top: 0,
-						fontFamily: 'delicious_500',
-						angle: 0,
-						fill: '#000000',
-						stroke: '#000000',
-						fontSize: 9
-					});
-					objects.push(border);
-					objects.push(diagonal1);
-					objects.push(diagonal2);
-					objects.push(rect);
-					objects.push(textobj);
-					loadComponent(args, objects);
 				},
 				modifyAction: function (args) {
 					var obj = util.getObjectById(args.uid);
 					var recvdObj = args.object;
 					updateProperties(obj, recvdObj);
-					obj.paths[0].width = recvdObj.width;
-					obj.paths[0].height = recvdObj.height;
-					obj.paths[0].points = [{x: -recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: -recvdObj.height/2},{x: -recvdObj.width/2, y: -recvdObj.height/2}];
-					obj.paths[1].points = [{x: -recvdObj.width/2, y: recvdObj.height/2},{x: recvdObj.width/2, y: -recvdObj.height/2}];
-					obj.paths[2].points = [{x: recvdObj.width/2, y: recvdObj.height/2},{x: -recvdObj.width/2, y: -recvdObj.height/2}];
-					obj.paths[4].text = recvdObj.width + " x " + recvdObj.height;
 				},
 				resizeAction: function (resizedObj) {
-					var obj = util.getObjectById(resizedObj.uid);
-					obj.left = resizedObj.left;
-					obj.top = resizedObj.top;
-					obj.paths[0].width = resizedObj.width;
-					obj.paths[0].height = resizedObj.height;
-					obj.scaleX = resizedObj.scaleX;
-					obj.scaleY = resizedObj.scaleY;
-					obj.angle = resizedObj.angle;
-					obj.paths[0].points = [{x: -resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: -resizedObj.height/2},{x: -resizedObj.width/2, y: -resizedObj.height/2}];
-					obj.paths[1].points = [{x: -resizedObj.width/2, y: resizedObj.height/2},{x: resizedObj.width/2, y: -resizedObj.height/2}];
-					obj.paths[2].points = [{x: resizedObj.width/2, y: resizedObj.height/2},{x: -resizedObj.width/2, y: -resizedObj.height/2}];
-					obj.paths[4].text = resizedObj.width + " x " + resizedObj.height;
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);

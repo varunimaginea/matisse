@@ -4,7 +4,7 @@
  * Time: 04:19 PM
  * About this : Utility to apply specified properties to the palette 
  */
-define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"], function (matisse, util, ui, toolHandlers) {
+define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers", "matisse.action-bar"], function (matisse, util, ui, toolHandlers, actionBar) {
 	return {
 		_applyProperties: function (properties) {
 			/*Allow only string of characters, no numbers */
@@ -76,6 +76,31 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers"]
 					actObj.set(i, val);
 					if (i === 'angle') {
 						actObj.setAngle(val);
+					} else if(i === 'source' && val.search(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)!=-1) {
+						fabric.Image.fromURL(val, function(img) {
+						  img.set({'left':actObj.left, 'top': actObj.top, 'scaleX':actObj.scaleX, 'scaleY':actObj.scaleY, 'source':val});
+						  img.setAngle(actObj.getAngle());
+						  img.setCoords();
+						  img.name = "image";
+						  img.uid = actObj.uid;
+						  img.palette = "components";
+						  canvas.remove(actObj);
+						  canvas.add(img);
+						  console.log(img);
+						  canvas.renderAll();
+						  matisse.comm.sendDrawMsg({
+								action: "modified",
+								args: [{
+									uid: img.uid,
+									object: img
+								}]
+							});
+						  matisse.isUpdatingProperties = true;
+						  canvas.setActiveObject(img);
+						  matisse.isUpdatingProperties = false;
+							util.quickMenuHandler(img);
+						});
+						return;
 					}
 					canvas.renderAll();
 					canvas.getActiveObject().setCoords();
