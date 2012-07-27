@@ -146,11 +146,21 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
          */
         modifyObject: function (args) {
             var obj = util.getObjectById(args[0].uid);
-            if (obj) {
-                matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
-                obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+            try{
+                if (obj) {
+                    if (canvas.getActiveGroup()) {
+                        canvas.deactivateAllWithDispatch();
+                        canvas.renderAll();
+                    }
+                    matisse.palette[obj.palette].shapes[obj.name].modifyAction ? matisse.palette[obj.palette].shapes[obj.name].modifyAction.apply(this, args) : null;
+                    obj.setCoords(); // without this object selection pointers remain at orginal postion(beofore modified)
+                }
+                canvas.renderAll();
+            }catch(e) {
+                if (console && console.error) {
+                    console.error("Problems with modifyObject");
+                }
             }
-            canvas.renderAll();
         },
         /**
          * Draw free-hand drawing path when notification received from server
@@ -206,22 +216,6 @@ define(["matisse", "matisse.ui", "matisse.util", "matisse.fabric", "matisse.pale
                 main.deleteObjects();
             });
             main.handleMouseEvents();
-        },
-        /**
-         * Regiser observers to observe any object changes like resize, rotate, move etc
-         * @method addObservers
-         * @param none
-         *
-         */
-        addObservers: function () {
-            mfabric.observe('object:modified');
-            mfabric.observe('path:created');
-            mfabric.observe('selection:cleared');
-            mfabric.observe('object:selected');
-            mfabric.observe('object:moving');
-            mfabric.observe('object:scaling');
-            mfabric.observe('object:resizing');
-            mfabric.observe('selection:created');
         },
         /**
          *  Called when other users add, modify or delete any object
