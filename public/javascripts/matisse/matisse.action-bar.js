@@ -1,10 +1,10 @@
 define(["matisse", "matisse.util"], function (matisse, util) {
     "use strict";
     var actionBar = {
-        initalize: function () {
+        initialize: function () {
             var selfObj = this;
 
-            //Attach events for the Actions			
+            //Attach events for the Actions         
             var bottomEle = $(".bottom");
             bottomEle.click(function (e) {
                 selfObj.handleAction.call(selfObj, e);
@@ -51,7 +51,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             }
         },
         discussHandler: function () {
-            //TODO Refactor with Bootstrap Dialog		
+            //TODO Refactor with Bootstrap Dialog       
             $('#chatdialog').dialog({
                 width: 250
             });
@@ -437,83 +437,83 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             console.log("handle import called");
         },
         handleRawAction: function(){
-        	//Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
+            //Canvas2Image.saveAsPNG(canvas, false); /* alernative method */
             canvas.deactivateAll();
             var data = canvas.toDataURL('png', 0.1)
             popup('popUpDiv', 'closediv', 600, 600);
             $('#device-container').hide();
             $("#result").html('<img src=' + data + ' />');
-           
+            
         },
         handleClipAction: function(){
-           var setClipCanvas = function(clipCanvas,xToAdd,yToAdd) {
-            	$.each(clipCanvas.getObjects(),function(index,value) {
-            		var left = value.get('left')+xToAdd;
-            		var top = value.get('top')+yToAdd;
-            		value.set("top", top);
-    			    value.set("left", left);
-    		    });
+            var setClipCanvas = function(clipCanvas,xToAdd,yToAdd) {
+                $.each(clipCanvas.getObjects(),function(index,value) {
+                    var left = value.get('left')+xToAdd;
+                    var top = value.get('top')+yToAdd;
+                    value.set("top", top);
+                    value.set("left", left);
+                });
             };
-           var clipImage = function() {
-        	    var innerHeight = matisseContainer.innerHeight;
-        	    var innerWidth = matisseContainer.innerWidth;
-    		    var xmin = containerDiv.position().left;
-        		var xmax = innerWidth + containerDiv.offset().left;
-        		var ymin = containerDiv.position().top;
-        		var ymax = innerHeight + containerDiv.offset().top;
-        		clipCanvas.dispose();
-        		clipCanvas.setHeight(containerHeight);
-            	clipCanvas.setWidth(containerWidth);
-              	$.each(canvas.getObjects(),function(index,value) {
-            		if(value.get('left')>xmin && value.get('left')<xmax && value.get('top')>ymin && value.get('top')<ymax) {
-            			var obj = value.clone();
-                		obj.set('left', obj.get('left')-containerDiv.position().left);
-                		obj.set('top', obj.get('top')-containerDiv.position().top);
-            			clipCanvas.add(obj);
-            		}
-    		    });
-            	setClipCanvas(clipCanvas,xToAdd,yToAdd);
-            	clipCanvas.setBackgroundImage("../images/" + matisseContainer.src, function() {
-                	clipCanvas.sendToBack(matisse.vLine);
-                	clipCanvas.sendToBack(matisse.hLine);
-            		data = clipCanvas.toDataURL('png', 0.1);
-            		$("#popUpDiv").slideUp("fast", function() {
-            			$("#result").html('<img src=' + data + ' />');
-            			$(this).slideDown("fast");
-            		});
-            		
-            	});
-        	};
-        	var clipCanvas = new fabric.Canvas('clip');
-        	var matisseContainer = matisse.containers[matisse.containerName];
-        	var containerHeight = matisseContainer.height;
-        	var containerWidth = matisseContainer.width;
-        	var containerImgSrc = "url(../images/" + matisseContainer.src + ")";
-        	var xToAdd = matisseContainer.viewportX;
-        	var yToAdd = matisseContainer.viewportY;
-        	clipCanvas.setHeight(canvas.height);
-        	clipCanvas.setWidth(canvas.width);
-        	$.each(canvas.getObjects(),function(index,value) { 
-			    clipCanvas.add(value.clone());
-		    });
-        	setClipCanvas(clipCanvas,xToAdd,yToAdd);
-        	canvas.deactivateAll();
+            var clipImage = function() {
+                var innerHeight = matisseContainer.innerHeight;
+                var innerWidth = matisseContainer.innerWidth;
+                var xmin = containerDiv.position().left;
+                var xmax = innerWidth + containerDiv.offset().left;
+                var ymin = containerDiv.position().top;
+                var ymax = innerHeight + containerDiv.offset().top;
+                clipCanvas.dispose();
+                clipCanvas.setHeight(containerHeight);
+                clipCanvas.setWidth(containerWidth);
+                $.each(canvas.getObjects(),function(index,value) {
+                    if(value.get('left')>xmin && value.get('left')<xmax && value.get('top')>ymin && value.get('top')<ymax) {
+                        var obj = value.clone();
+                        obj.set('left', obj.get('left')-containerDiv.position().left);
+                        obj.set('top', obj.get('top')-containerDiv.position().top);
+                        clipCanvas.add(obj);
+                    }
+                });
+                setClipCanvas(clipCanvas,xToAdd,yToAdd);
+                clipCanvas.setBackgroundImage("../images/" + matisseContainer.src, function() {
+                    clipCanvas.sendToBack(matisse.vLine);
+                    clipCanvas.sendToBack(matisse.hLine);
+                    data = clipCanvas.toDataURL('png', 0.1);
+                    $("#popUpDiv").slideUp("fast", function() {
+                        $("#result").html('<img src=' + data + ' />');
+                        $(this).slideDown("fast");
+                    });
+                    
+                });
+            };
+            var clipCanvas = new fabric.Canvas('clip');
+            var matisseContainer = matisse.containers[matisse.containerName];
+            var containerHeight = matisseContainer.height;
+            var containerWidth = matisseContainer.width;
+            var containerImgSrc = "url(../images/" + matisseContainer.src + ")";
+            var xToAdd = matisseContainer.viewportX;
+            var yToAdd = matisseContainer.viewportY;
+            clipCanvas.setHeight(canvas.height);
+            clipCanvas.setWidth(canvas.width);
+            $.each(canvas.getObjects(),function(index,value) { 
+                clipCanvas.add(value.clone());
+            });
+            setClipCanvas(clipCanvas,xToAdd,yToAdd);
+            canvas.deactivateAll();
             var data = clipCanvas.toDataURL('png', 0.1);
             popup('popUpDiv', 'closediv', 1024, 768);
             if(matisse.containerName=='browser') $('#popUpDiv').addClass('scale-container');
             $("#result").html('<img src=' + data + ' />');
-                    	
+            
             var containerDiv = $('#device-container');
-        	containerDiv.css({"height":containerHeight, "width":containerWidth, "background-image":containerImgSrc, "top":0, "left":0});
-        	containerDiv.draggable({ containment: "parent"}).show();
-        	setTimeout( function() {
-        		$('div.clip-alert').slideDown(400).delay(2000).fadeOut(1000);
-        	}, 500);
-        	$('#done').one('click',function(){
-        		clipImage(clipCanvas,xToAdd,yToAdd,containerDiv);
-        		containerDiv.hide().next('#done').hide();
-        	})
-        	
+            containerDiv.css({"height":containerHeight, "width":containerWidth, "background-image":containerImgSrc, "top":0, "left":0});
+            containerDiv.draggable({ containment: "parent"}).show();
+            setTimeout( function() {
+                $('div.clip-alert').slideDown(400).delay(2000).fadeOut(1000);
+            }, 500);
+            $('#done').one('click',function(){
+                clipImage(clipCanvas,xToAdd,yToAdd,containerDiv);
+                containerDiv.hide().next('#done').hide();
+            })
+            
         },
         getOriginalObj: function(obj) {
             var originalObj = {};
