@@ -1,5 +1,5 @@
 module.exports = {
-	authenticate: function(setUserDetails) {
+	authenticate: function() {
 		var UserModel = require(__dirname + '/../models/UserModel.js');
 		var everyauth = require('everyauth');
 		var conf = require('./conf');
@@ -24,7 +24,6 @@ module.exports = {
 									if (!err) console.log("saved new user to DB");
 									else console.log("Could not Save user, possibly exist in DB");
 							});
-							setUserDetails.call(this, userDetails);
 							return userDetails;
               
               return usersByFbId[fbUserMetadata.id] ||
@@ -46,7 +45,6 @@ module.exports = {
 									if (!err) console.log("saved new user to DB");
 									else console.log("Could not Save user, possibly exist in DB");
 							});
-							setUserDetails.call(this, userDetails);
 							return userDetails;
               
           })
@@ -69,7 +67,6 @@ module.exports = {
 									if (!err) console.log("saved new user to DB");
 									else console.log("Could not Save user, possibly exist in DB");
 							});
-							setUserDetails.call(this, userDetails);
 							return userDetails;              
           })
           .redirectPath('/');

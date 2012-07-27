@@ -18,7 +18,6 @@ application = (function () {
     var UserModel = require(__dirname + '/models/UserModel.js');
     var redis = require("redis");
     var redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
-    var userInfo = {};
     var logFile = null;
     var fs = require('fs');
     var LogToFile = require("./server/logToFile");
@@ -27,13 +26,7 @@ application = (function () {
     Nohm.setPrefix('matisse'); //setting up app prefix for redis
     Nohm.setClient(redisClient);
 
-    var setUserDetails = function (details) {    // set the user details once the user logs in
-        userInfo = details;
-    };
-    var getUserDetails = function () {  // get the user details
-        return userInfo;
-    };
-    login.authenticate(setUserDetails);
+    login.authenticate();
     //logging
     Nohm.logError = function (err) {
         if (err) {
@@ -108,6 +101,7 @@ application = (function () {
     app.get('/about', function (req, res, next) {
 	    res.sendfile(__dirname + '/about.html');
     });
+    app.get('/userinfo', routes.userinfo);
 
     var logErrorOrExecute = function (err, param, callback) {
         if (err) {
@@ -170,8 +164,6 @@ application = (function () {
                                         });
                                     }
                                 });
-                                var session_user = userObj.getUserFromSession(session_data);
-                                setUserDetails(session_user);
                                 res.sendfile(__dirname + '/board.html');
                             }
                             else {
@@ -246,6 +238,6 @@ application = (function () {
     logFile = fs.createWriteStream('./app.log', {flags: 'a'});
     app.use(express.logger({stream: logFile}));
     
-    collaboration.collaborate(io, getUserDetails);
+    collaboration.collaborate(io);
 
 }).call(this);

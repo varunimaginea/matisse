@@ -42,15 +42,13 @@ collaboration = module.exports = {
                           });
                 }
 	},
-	collaborate: function (io, getUserInfo) {
+	collaborate: function (io) {
 		var thisObj = this;
 		io.sockets.on('connection', function (socket) {
-			var userInfo = getUserInfo.call(this);
 			//var setUrl = thisObj.events["setUrl"];
 			socket.emit('eventConnect', {
 				message: 'welcome'
 			});
-			socket.emit('userInfo', userInfo);
 
 			socket.on("setUrl", thisObj.events["setUrl"]);
 			socket.on("setContainer", thisObj.events["setContainer"]);

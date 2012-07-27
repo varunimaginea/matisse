@@ -37,25 +37,25 @@ define(["matisse", "matisse.fabric", "matisse.comm", "matisse.main", "matisse.co
 		}
 	      /**
                * Displays welcome message with user name
-               * @method comm.onUserInfo
                * @param data - user details
-               *
                */
-	      comm.onUserInfo = function(data) {
-		  /* check if userName is not available, then show welcome message*/
-		  if(matisse.userName == null) {
-                      // key is login-service name like 'twitter', 'google' etc
-                      var userInfoKey = data.loginService.toLowerCase();
-                      var user = data[userInfoKey];
-		      matisse.userName = user.name;
-                      matisse.userProfilePic = user.profile_image_url || user.picture;
-                      matisse.userLoginService = data.loginService;
-		      $('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>');
-		      $('#userProfilePicBig').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic-big"></img>');
-		      $('#userName').html(matisse.userName);
-		      $('#userLoginService').html(matisse.userLoginService);
-		  }
-	      };
+              $.get('/userinfo', 
+                    function(info) {
+		        /* check if userName is missing, show welcome message*/
+		        if(matisse.userName == null) {
+                            // key is login-service name like 'twitter', 'google'
+                            var userInfoKey = info.loginService.toLowerCase();
+                            var user = info[userInfoKey];
+		            matisse.userName = user.name;
+                            matisse.userProfilePic = user.profile_image_url || user.picture;
+                            matisse.userLoginService = info.loginService;
+		            $('#userProfilePic').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic"></img>');
+		            $('#userProfilePicBig').append('<img src="'+matisse.userProfilePic+'" alt="pic" class="b-userpic-big"></img>');
+		            $('#userName').html(matisse.userName);
+		            $('#userLoginService').html(matisse.userLoginService);
+		        }
+                    }, 'json');
+
 	    /* Redirecting the user to home page when an active board is deleted.*/
 	      comm.onDisableActiveBoard = function() {
 	        $('div.inactive-alert').slideDown(400).delay(2000).fadeOut(1000);

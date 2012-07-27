@@ -111,7 +111,7 @@ var MatisseServer = new function() {
     });
 
     server.on('invalid login' , function(res) {
-        res.render('index', { title:'Matisse'});
+        renderLogin(res);
     });
 
     server.on('invalid dashboard' , function(res) {
@@ -303,4 +303,15 @@ exports.api = {
             });
         });
     }
-}
+};
+
+exports.userinfo = function (req, res) {
+    var status = req.session.auth ? 200 : 403;
+    var userinfo = req.session.auth
+        ? JSON.stringify(new UserModel().getUserFromSession(req.session.auth))
+        : "{}";
+
+    res.writeHead(status, {"Content-Type": "application/json"});
+    res.write(userinfo);
+    res.end();
+};

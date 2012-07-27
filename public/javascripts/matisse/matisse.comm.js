@@ -15,10 +15,6 @@ define(function () {
 		this.socket.on("containerDraw", function (data) {
 			objRef.drawContainerHandler(data);
 		});
-		// Invoked when userInfo method called on the server side
-		this.socket.on("userInfo", function (data) {
-			objRef.userInfoHandler(data);
-		});
 		// Invoked when eventDraw method called on the server side
 		this.socket.on("eventDraw", function (data) {
 			objRef.drawHandler(data);
@@ -36,9 +32,6 @@ define(function () {
 		// Handler functions
 		this.connectHandler = function (data) {
 			this.onConnect(data);
-		};
-		this.userInfoHandler = function (data) {
-			this.onUserInfo(data);
 		};
 		this.drawHandler = function (data) {
 			this.onDraw(data);
