@@ -16,11 +16,13 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
             observe('selection:created');
             //bar shift click #171 
             stopShiftClick();
+            //bar negative resize #158
+            stopNegativeDimension();
         }
     };
 
     function stopShiftClick() {
-        var original = canvas.__onMouseDown, helpMsg;
+        var original = canvas.__onMouseDown;
         canvas.__onMouseDown = function(e) {
             if (e.shiftKey) {
                 $('div.shift-click-alert').slideDown(400).delay(2000).fadeOut(1000);
@@ -31,6 +33,18 @@ define(["matisse", "matisse.util", "matisse.palettes.properties", "matisse.ui", 
         }
     }
 
+    function stopNegativeDimension() {
+        var original = canvas._resizeObject;
+        canvas._resizeObject = function(x, y, direction) {
+            var target = canvas._currentTransform.target, memo = {}, memoFields = ['top', 'left', 'width', 'height'];
+            memoFields.forEach(function(memoField) { memo[memoField] = target[memoField]; });
+            original.call(this, x, y, direction);
+            //restore if the move spoilt the width or height
+            if (target.width < 1 ||  target.height < 1) {
+                memoFields.forEach(function(memoField) { target[memoField] = memo[memoField]; });
+            }
+        }
+    }
 
 
     /**
