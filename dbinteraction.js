@@ -54,6 +54,17 @@ iShell = {};
             knownCommands['writeShapes'] =  writeShapes;
             knownCommands['eval'] = evalArgs;
             knownCommands['help'] = getHelp;
+
+            knownCommands['gods'] = function() { // show gods
+                redisClient.smembers('matisse:gods', redis.print);
+            };
+            knownCommands['god'] = function(name) { // add god
+                redisClient.sadd('matisse:gods', name, knownCommands['gods']);
+            };
+            knownCommands['ungod'] = function(name) { // remove god
+                redisClient.srem('matisse:gods', name, knownCommands['gods']);
+            };
+
             getHelp();
         };
 
