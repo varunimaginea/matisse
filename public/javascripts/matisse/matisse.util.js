@@ -221,7 +221,7 @@ define(["matisse"], function (matisse) {
 	    	$('div.m-quick-edit').show();
 	    	var xpos = parseInt(selectedObj.get("left")) + matisse.xOffset - (parseInt(selectedObj.get("width"))/2);
 	        var ypos = parseInt(selectedObj.get("top")) + matisse.yOffset - (parseInt(selectedObj.get("height"))/2) - 50;
-	        $('div.m-quick-edit').offset({ top: ypos, left: xpos });
+	        $('div.m-quick-edit').offset({ top: Math.abs(ypos), left: Math.abs(xpos) });
 	      },
 	      /**
 			 *  Show Quick menu options for the selected Group.
@@ -233,7 +233,7 @@ define(["matisse"], function (matisse) {
 	      	quickMenu.show();
 	      	var xpos = selectedGroup.get("left") + matisse.xOffset - (selectedGroup.get("width")/2);
 	        var ypos = selectedGroup.get("top") + matisse.yOffset - (selectedGroup.get("height")/2) - 50;
-	        quickMenu.offset({ top: ypos, left: xpos });
+	        quickMenu.offset({ top: Math.abs(ypos), left: Math.abs(xpos) });
 	        },
 	      /**
 		   *  Hide Quick menu options for the cleared object.
