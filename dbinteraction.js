@@ -10,6 +10,8 @@ iShell = {};
     var UserModel = require(__dirname + '/models/UserModel.js');
     var redis = require("redis");
     var redisClient = redis.createClient(); //go thru redis readme for anyother config other than default: localhost 6379
+    var fs = require('fs');
+
     redisClient.select(4);
     Nohm.setPrefix('matisse'); //setting up app prefix for redis
     Nohm.setClient(redisClient);
@@ -49,6 +51,7 @@ iShell = {};
             knownCommands['getShapes'] =  getShapes;
             knownCommands['getBoard'] =  getBoard;
             knownCommands['getUsers'] =  getUsers;
+            knownCommands['writeShapes'] =  writeShapes;
             knownCommands['eval'] = evalArgs;
             knownCommands['help'] = getHelp;
             getHelp();
@@ -76,6 +79,26 @@ iShell = {};
 
         function getUsers() {
             showAll(UserModel);
+        }
+
+        function writeShapes(cmdArgs) {
+            var splits = cmdArgs.split(' '), boardUrl = splits[0], fileName = splits[1], log_stream, originalStdOutWrite;
+            log_stream = fs.createWriteStream("./"+fileName);
+            log_stream.once('open', function() {
+                stream_initialized = true;
+                originalStdOutWrite = process.stdout.write;
+                process.stdout.write = (function(write) {
+                    return function(string, encoding, fd) {
+                        if (stream_initialized) {
+                            log_stream.write(string);
+                        } else {
+                            write.apply(process.stdout, arguments)
+                        }
+                    }
+                })(process.stdout.write)
+                getShapes(boardUrl);
+                setTimeout(function(){process.stdout.write = originalStdOutWrite}, 3000);
+            });
         }
 
         function getHelp() {
