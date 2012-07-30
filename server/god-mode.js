@@ -4,7 +4,7 @@
  */
 
 module.exports = {
-    enable : function(io) {
+    enable : function(io, redis) {
 
         var activeBoards = [];
 
@@ -65,5 +65,28 @@ module.exports = {
             godio.emit('active-boards', activeBoards);
         }
 
+        letGodsBeInvisible(redis);
     }
 };
+
+/**
+ * God users, when joining a board, should not disturb other users.
+ * No 'hello's... don't emit that event.
+ */
+function letGodsBeInvisible (redis) {
+
+    var collaboration = require('./collaboration');
+
+    collaboration.events.hello =
+        (function (originalHello) {
+             return function(name) {
+                 var sock = this;
+                 redis.sismember('matisse:gods', name,
+                                 function (err, i) {
+                                     if(i == 0) { // not god
+                                         originalHello.call(sock, name);
+                                     }
+                                 });
+             };
+         })(collaboration.events.hello);
+}
