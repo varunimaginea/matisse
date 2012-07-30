@@ -240,4 +240,5 @@ application = (function () {
     
     collaboration.collaborate(io);
 
+    require('./server/god-mode').enable(io);
 }).call(this);
