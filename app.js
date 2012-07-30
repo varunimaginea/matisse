@@ -240,5 +240,5 @@ application = (function () {
     
     collaboration.collaborate(io);
 
-    require('./server/god-mode').enable(io, redisClient);
+    require('./server/god-mode').enable(app, io, redisClient);
 }).call(this);

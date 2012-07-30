@@ -4,7 +4,7 @@
  */
 
 module.exports = {
-    enable : function(io, redis) {
+    enable : function(app, io, redis) {
 
         var activeBoards = [];
 
@@ -65,28 +65,63 @@ module.exports = {
             godio.emit('active-boards', activeBoards);
         }
 
-        letGodsBeInvisible(redis);
+        letGodsBeInvisible(godp(redis));
+        onlyGodsCanViewStats(app, godp(redis));
     }
 };
+
+/** Returns an isGod function which takes a user name and call fn with
+ *  whether god is true or not
+ */
+function godp(redis) {
+    return function(name, fn) {
+        redis.sismember('matisse:gods', name,
+                        function(err, i) { // i == 1 is god
+                            fn(i == 1);
+                        });
+    };
+}
 
 /**
  * God users, when joining a board, should not disturb other users.
  * No 'hello's... don't emit that event.
  */
-function letGodsBeInvisible (redis) {
-
+function letGodsBeInvisible (isGod) {
     var collaboration = require('./collaboration');
 
     collaboration.events.hello =
         (function (originalHello) {
              return function(name) {
                  var sock = this;
-                 redis.sismember('matisse:gods', name,
-                                 function (err, i) {
-                                     if(i == 0) { // not god
-                                         originalHello.call(sock, name);
-                                     }
-                                 });
+                 isGod(name, function(yes) {
+                           if(!yes) {
+                              originalHello.call(sock, name); 
+                           }
+                       });
              };
          })(collaboration.events.hello);
+}
+
+/**
+ * Send unauthorized status for non-god users
+ */
+function onlyGodsCanViewStats(app, isGod) {
+    var User = require('../models/UserModel');
+
+    app.get('/internal/stats.html', 
+            function (req, res, next) {
+                var auth = req.session.auth;
+                if(!auth) {
+                    res.send("Unauthorized", 403);
+                } else {
+                    isGod(new User().getUserFromSession(auth).name,
+                          function(yes) {
+                              if(yes) {
+                                  next();
+                              } else {
+                                  res.send("Unauthorized", 403);
+                              }
+                          });
+                }
+            });
 }
