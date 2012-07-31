@@ -75,6 +75,12 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers",
 					var actObj = canvas.getActiveObject();
 					var val = $("#" + i).val();
 					/* set the property of drawing object with this user input value */
+
+                                        if(!parseFloat(val) && (i === 'scaleX' || i === 'scaleY')) {
+                                            // scale being 0 is troublesome... so making it very small
+                                            val = '0.01';
+                                        }
+
 					actObj.set(i, val);
 					if (i === 'angle') {
 						actObj.setAngle(val);
