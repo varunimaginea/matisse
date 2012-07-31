@@ -361,22 +361,6 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 				},
 				applyProperties: function (props) {
 					objproperties._applyProperties(props);
-					$("#proptable").append("<tr id = 'txtrow'><td id= 'txttd' valign='top'><label style = 'text-align:right; vertical-align:top' id='labl' for='txtarea'>text:</label></td><td><textarea id='txtarea' cols= '10' style='height:75px'>hello</textarea> </td></tr>");
-					var txt_area = document.getElementById("txtarea");
-					txt_area.innerHTML = canvas.getActiveObject().text;
-					txt_area.onkeyup = function (e) {
-						canvas.getActiveObject().text = this.value;
-						matisse.comm.sendDrawMsg({
-							action: "modified",
-							args: [{
-								uid: canvas.getActiveObject().uid,
-								object: canvas.getActiveObject(),
-								text: canvas.getActiveObject().text
-							}]
-						});
-						canvas.getActiveObject().setCoords();
-						canvas.renderAll();
-					};
 				},
 				properties: [{
 					name: 'left',
@@ -427,6 +411,13 @@ require(["matisse", "matisse.main", "matisse.palettes", "matisse.palettes.proper
 						(args.obj).set("angle", args.property);
 					},
 					defaultvalue: 0
+				}, {
+					name: 'text',
+					type: 'string',
+					action: function (args) {
+						(args.obj).set("text", args.property);
+					},
+					defaultvalue: 'sample'
 				}]
 			},
 			line: {

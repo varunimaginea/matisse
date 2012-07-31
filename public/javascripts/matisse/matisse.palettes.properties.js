@@ -32,7 +32,9 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers",
 				/* if property is of type fill or stroke attach keypressed_letterNumber method to keypress event*/
 				if (i === "fill" || i === "stroke") {
 					var inputTag = "<input style='width:100px' onKeyPress = keyPressed_letterNumber()  class= 'color' id='" + i + "' value='" + val + "'></input></div>";
-				} else { /* if property is of type  other than fill or stroke attach keyPressed_numbersOnly method to keypress event*/
+				} else if(i === 'text') {
+                                    var inputTag = "<textarea cols=10 style='height:75px' id='" + i + "'>" + val + "</textarea>";
+                                } else { /* if property is of type  other than fill or stroke attach keyPressed_numbersOnly method to keypress event*/
 					var inputTag = "<input type='text' style='width:100px' onKeyPress = keyPressed_numbersOnly() id='" + i + "' value='" + val + "'></input>";
 				}
 				var $propTableDiv = $("#proptable");
