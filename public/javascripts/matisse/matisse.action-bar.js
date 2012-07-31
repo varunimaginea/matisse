@@ -428,6 +428,18 @@ define(["matisse", "matisse.util"], function (matisse, util) {
             });
             actionBar.stateUpdated(selected_group_obj_array, "modified");
         },
+        handlemakeSameWidthAction: function (group, items) {
+            group.forEachObject(
+                function(o) {
+                    o.set({ width: items[0].width, scaleX: items[0].scaleX });
+                });
+        },
+        handlemakeSameHeightAction: function (group, items) {
+            group.forEachObject(
+                function(o) {
+                    o.set({ height: items[0].height, scaleY: items[0].scaleY });
+                });
+        },
         handleExportJsonAction: function () {
             var exportedJSON = JSON.stringify(canvas);
             popup('popUpDiv', 'closediv', 350, 150);

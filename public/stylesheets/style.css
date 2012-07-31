@@ -885,7 +885,7 @@ dashboardLeftThumbnail {
 /************** Right Hand Side Menu Actions -- End -- ****************/
 
 /************** Quick Action Menu -- Start -- ************************/
-.menu-arrow-top{ border-color: transparent transparent #FFFFFF; border-style: solid; border-width: 10px; display: block; left: 8px; position: relative; top: -4px; width: 0;}
+.menu-arrow-top{ border-color: transparent transparent #FFFFFF; border-style: solid; border-width: 10px; display: block; left: -20px; position: relative; top: -4px; width: 0;}
 .m-align-list { background-color: #FFFFFF; border-radius: 4px 4px 4px 4px;  box-shadow: 0 0 5px #888888; display: none; height: auto; position: absolute; top: 34px; width: 204px; z-index: 1035;}
 .m-quick-edit,.m-quick-edit-group{display:none;top:30px; left:380px; cursor:pointer; padding: 2px; box-shadow: 0 0 5px #888888; -moz-box-shadow: 0 0 5px #888888; -webkit-box-shadow: 0 0 5px #888888; background-color: #FFFFFF; border-radius: 4px 4px 4px 4px; position: absolute; height: 25px; width: auto;}
 .m-quick-edit > span:not(:last-child),.m-quick-edit-group > span:not(:last-child) {border-right: 1px solid #CCCCCC;}
