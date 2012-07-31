@@ -42,7 +42,7 @@ define(["matisse", "matisse.util", "matisse.ui", "matisse.toolbuttons.handlers",
 				var inBox = $("#" + i);
 				/* disable width and height input boxes, so that user is not allowed to set width and height */
 				if(i === "width" || i === "height") {
-					inBox.prop('disabled', true);
+                                    inBox.closest('tr').hide();
 				}
 				/* when focus is on any input boxes handle drawing element updates*/
 				$(":input").focus(function () {

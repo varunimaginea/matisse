@@ -357,7 +357,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         handlealignLeftAction: function (selected_group, selected_group_obj_array) {
             // Align Left
             $.each(selected_group_obj_array, function (index, value) {
-                var xpos = 0 - (selected_group.get("width") / 2) + value.width / 2;
+                var xpos = 0 - (selected_group.getWidth() / 2) + value.getWidth() / 2;
                 value.set("left", xpos);
             });
             actionBar.stateUpdated(selected_group_obj_array, "modified");
@@ -365,7 +365,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         handlealignRightAction: function (selected_group, selected_group_obj_array) {
             // Align Right
             $.each(selected_group_obj_array, function (index, value) {
-                var xpos = 0 + (selected_group.get("width") / 2) - value.width / 2;
+                var xpos = 0 + (selected_group.getWidth() / 2) - value.getWidth() / 2;
                 value.set("left", xpos);
             });
             actionBar.stateUpdated(selected_group_obj_array, "modified");
@@ -373,7 +373,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         handlealignTopAction: function (selected_group, selected_group_obj_array) {
             // Align Top
             $.each(selected_group_obj_array, function (index, value) {
-                var ypos = 0 - (selected_group.get("height") / 2) + value.height / 2;
+                var ypos = 0 - (selected_group.getHeight() / 2) + value.getHeight() / 2;
                 value.set("top", ypos);
             });
             actionBar.stateUpdated(selected_group_obj_array, "modified");
@@ -381,7 +381,7 @@ define(["matisse", "matisse.util"], function (matisse, util) {
         handlealignBottomAction: function (selected_group, selected_group_obj_array) {
             // Align Bottom
             $.each(selected_group_obj_array, function (index, value) {
-                var ypos = 0 + (selected_group.get("height") / 2) - value.height / 2;
+                var ypos = 0 + (selected_group.getHeight() / 2) - value.getHeight() / 2;
                 value.set("top", ypos);
             });
             actionBar.stateUpdated(selected_group_obj_array, "modified");
