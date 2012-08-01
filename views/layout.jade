@@ -227,7 +227,7 @@ html
           div(id='footer')
            div(class='footerInner')
              div(class='footerMenu')
-               a(href='/about') About Us
+               a(href='/about', style='display: none;') About Us
                a(href='https://github.com/Imaginea/matisse/wiki') Matisse Wiki
                a(href='https://github.com/Imaginea/matisse') Github Repository
                a(href='https://github.com/Imaginea/matisse/issues') Bug Tracker
@@ -243,7 +243,7 @@ html
                   div(class='controls')
                     input(name='whiteboardName', id="name", type="text", placeholder="Name")
                     div(id='nameError') Please enter a valid name!
-                div(class='control-group', id="containerlist")
+                div(class='control-group', id="containerlist", style='display:none')
                   label(class='control-label', for='containerListInput') Container type:
                   div(class='controls')
                     select(name='container', id="containers")
@@ -253,7 +253,7 @@ html
                       option(value="ipad", id="iPad") iPad
                       option(value="blackberry", id="BlackBerry") BlackBerry
                       option(value="browser", id="Browser") Browser
-                div(class='control-group', id="layoutList")
+                div(class='control-group', id="layoutList", style='display:none')
                   label(class='control-label', for='layoutListInput') Template:
                   div(class='controls')
                     select(name='layout', id="layouts")
@@ -265,11 +265,11 @@ html
                         option(value="two_column_header_footer", id="two_column_header_footer") Two_Column_Header_Footer
                         option(value="three_column_header", id="three_column_header") Three_Column_Header
                         option(value="three_column_header_footer", id="three_column_header_footer") Three_Column_Header_Footer
-                div(class='control-group', id="canvaswidth")
+                div(class='control-group', id="canvaswidth", style='display:none')
                   label(class='control-label', for='canvasWidth') Canvas Width:
                   div(class='controls')
                     input(name='canvasWidth', id="canvasWidth", type="text", value="1024")
-                div(class='control-group', id="canvasheight")
+                div(class='control-group', id="canvasheight", style='display:none')
                   label(class='control-label', for='canvasWidth') Canvas Height:
                   div(class='controls')
                     input(name='canvasHeight', id="canvasHeight", type="text", value="768")
