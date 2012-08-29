@@ -50,8 +50,10 @@ iShell = {};
         this.initialize = function() {
             knownCommands['getShapes'] =  getShapes;
             knownCommands['getBoard'] =  getBoard;
+            knownCommands['getBoards'] =  getBoards;
             knownCommands['getUsers'] =  getUsers;
             knownCommands['writeShapes'] =  writeShapes;
+            knownCommands['countBoards'] =  countBoards;
             knownCommands['eval'] = evalArgs;
             knownCommands['help'] = getHelp;
 
@@ -69,7 +71,7 @@ iShell = {};
         };
 
         function showAll(model, criteria) {
-            model.find(criteria, 
+            forAll(model, criteria, 
                        function(err, ids) {                           
                            console.log('Found: ' + ids.length);
                            ids.forEach(function(id) {
@@ -78,6 +80,18 @@ iShell = {};
                                                       });
                                        });
                        });
+        }
+
+        function countAll(model, criteria) {
+            forAll(model, criteria, 
+                       function(err, ids) {                           
+                           console.log('Found: ' + ids.length);
+                       }
+                  );
+        }
+
+        function forAll(model, criteria, callback) {
+            model.find(criteria, callback);
         }
 
         function getShapes(boardUrl) {
@@ -90,6 +104,14 @@ iShell = {};
 
         function getUsers() {
             showAll(UserModel);
+        }
+
+        function countBoards() {
+            countAll(UserModel);
+        }
+
+        function getBoards(boardUrl) {
+            showAll(BoardModel);
         }
 
         function writeShapes(cmdArgs) {
