@@ -2,12 +2,12 @@
 
 ### About
 
-This is a express.js app with socket.io plugin. 
+This is a express.js app with socket.io plugin.
 
 Currently, the server only acts as a message broadcaster, i.e. it receives a message from the client and sends it out to all other clients.
 
 ### Client API
-The com.js library provides for an abstraction over the internal messaging API. 
+The com.js library provides for an abstraction over the internal messaging API.
 
 It has one method 'sendDrawMsg' to send data from the client. To receive data you must implement matisse.onDrawEvent.
 
@@ -16,8 +16,8 @@ See the views/index.jade for example written in [jade](http://jade-lang.com/) te
 See index.html in this directory for a vanilla html example.
 
 ### How to Run this app?
-1) To run this application you need to install [node.js](http://nodejs.org) and 
-   also install npm. 
+1) To run this application you need to install [node.js](http://nodejs.org) and
+   also install npm.
 
 2) Install Redis Server
 
@@ -46,7 +46,10 @@ See index.html in this directory for a vanilla html example.
 > var socket = io.connect('http://localhost'); //change it to server ip or local ip for testing from other machines
 >
 
-6) Then you can run 
+6) Everyauth package has been included in the git repository since the original everyauth package version 0.2.28 contains the deprecated url
+for twitter.
+
+7) Then you can run
 
 >
 > $ node app.js
